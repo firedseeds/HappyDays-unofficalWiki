@@ -164,10 +164,6 @@ npx serve .
       "title": "欢迎来到 HappyDays非官方文档",
       "description": "把散落在聊天、会议与脑海里的经验，种成一片随时可以查阅的森林。",
       "emoji": "🌱",
-      "author": {
-        "name": "林知夏",
-        "role": "知识运营"
-      },
       "updated": "2026-10-21",
       "readingTime": 6,
       "tags": ["必读", "新成员", "团队文化"],
@@ -213,8 +209,6 @@ npx serve .
 | `title` | string | 文章标题 |
 | `description` | string | 文章摘要 |
 | `emoji` | string | 文章图标 |
-| `author.name` | string | 作者显示名称 |
-| `author.role` | string | 作者角色 |
 | `updated` | string | 最后更新日期，格式 `YYYY-MM-DD` |
 | `readingTime` | integer | 预计阅读时间，单位为分钟 |
 | `tags` | string[] | 文章标签，可为空数组 |
@@ -264,7 +258,6 @@ var docs = {
     emoji: "🌿",
     category: "handbook",
     excerpt: "账号、设备与第一周日程，一页说清楚。",
-    author: { name: "林知夏", role: "知识运营", initial: "知" },
     updated: "2026-11-01",
     reading: 5,
     tags: ["入职", "新成员"],

@@ -3,8 +3,6 @@ title: "团队协作手册"
 description: "我们的沟通方式、会议原则、文档文化与反馈习惯。"
 topic: "团队协作"
 topic_id: "team"
-author: "沈观澜"
-author_role: "团队负责人"
 updated: "2026-10-12"
 reading_time: 9
 emoji: "🤝"

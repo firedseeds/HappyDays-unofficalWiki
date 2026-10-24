@@ -52,10 +52,6 @@
       "title": "欢迎来到 HappyDays非官方文档",
       "description": "把散落在聊天、会议与脑海里的经验，种成一片随时可以查阅的森林。",
       "emoji": "🌱",
-      "author": {
-        "name": "林知夏",
-        "role": "知识运营"
-      },
       "updated": "2026-10-21",
       "readingTime": 6,
       "tags": [
@@ -73,10 +69,6 @@
       "title": "快速开始",
       "description": "5 分钟完成账号设置、加入空间，并写下你的第一篇团队文档。",
       "emoji": "🚀",
-      "author": {
-        "name": "周予安",
-        "role": "产品经理"
-      },
       "updated": "2026-10-18",
       "readingTime": 4,
       "tags": [
@@ -93,10 +85,6 @@
       "title": "产品使用指南",
       "description": "从编辑、组织到发布，系统掌握 HappyDays非官方文档的核心工作流。",
       "emoji": "📘",
-      "author": {
-        "name": "周予安",
-        "role": "产品经理"
-      },
       "updated": "2026-10-19",
       "readingTime": 12,
       "tags": [
@@ -114,10 +102,6 @@
       "title": "常见问题",
       "description": "关于账号、权限、导入导出与协作的常见疑问，先在这里找找答案。",
       "emoji": "💡",
-      "author": {
-        "name": "许棠",
-        "role": "客户成功"
-      },
       "updated": "2026-10-16",
       "readingTime": 5,
       "tags": [
@@ -134,10 +118,6 @@
       "title": "更新日志",
       "description": "记录每一次值得被看见的改进，以及我们为什么这样改。",
       "emoji": "🧭",
-      "author": {
-        "name": "周予安",
-        "role": "产品经理"
-      },
       "updated": "2026-10-22",
       "readingTime": 3,
       "tags": [
@@ -154,10 +134,6 @@
       "title": "团队协作手册",
       "description": "我们的沟通方式、会议原则、文档文化与反馈习惯。",
       "emoji": "🤝",
-      "author": {
-        "name": "沈观澜",
-        "role": "团队负责人"
-      },
       "updated": "2026-10-12",
       "readingTime": 9,
       "tags": [
@@ -175,10 +151,6 @@
       "title": "设计规范",
       "description": "HappyDays 产品的色彩、字体、间距与组件使用准则，让界面保持安静而清晰。",
       "emoji": "🎨",
-      "author": {
-        "name": "顾青",
-        "role": "设计负责人"
-      },
       "updated": "2026-10-15",
       "readingTime": 11,
       "tags": [
@@ -196,10 +168,6 @@
       "title": "API 接入指南",
       "description": "通过 REST API 读取文档、同步内容，并把 HappyDays非官方文档接入你的工作流。",
       "emoji": "⌘",
-      "author": {
-        "name": "陆行舟",
-        "role": "平台工程师"
-      },
       "updated": "2026-10-20",
       "readingTime": 10,
       "tags": [

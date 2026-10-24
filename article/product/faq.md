@@ -3,8 +3,6 @@ title: "常见问题"
 description: "关于账号、权限、导入导出与协作的常见疑问，先在这里找找答案。"
 topic: "产品手册"
 topic_id: "product"
-author: "许棠"
-author_role: "客户成功"
 updated: "2026-10-16"
 reading_time: 5
 emoji: "💡"

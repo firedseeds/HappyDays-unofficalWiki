@@ -3,8 +3,6 @@ title: "快速开始"
 description: "5 分钟完成账号设置、加入空间，并写下你的第一篇团队文档。"
 topic: "开始使用"
 topic_id: "start"
-author: "周予安"
-author_role: "产品经理"
 updated: "2026-10-18"
 reading_time: 4
 emoji: "🚀"
@@ -66,7 +64,6 @@ tags:
 3. 提交后在群里 @ 值班同学
 
 ## 维护者
-- 负责人：周予安
 - 最近更新：2026-10-18
 ```
 

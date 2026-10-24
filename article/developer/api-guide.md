@@ -3,8 +3,6 @@ title: "API 接入指南"
 description: "通过 REST API 读取文档、同步内容，并把 HappyDays非官方文档接入你的工作流。"
 topic: "开发者"
 topic_id: "developer"
-author: "陆行舟"
-author_role: "平台工程师"
 updated: "2026-10-20"
 reading_time: 10
 emoji: "⌘"
@@ -97,7 +95,7 @@ console.log(data.map(doc => doc.title));
 GET /v1/docs?limit=20&cursor=eyJvZmZzZXQiOjIwfQ&status=published&tag=api
 ```
 
-支持的过滤参数包括 `status`、`tag`、`updated_since` 和 `author_id`。多个过滤条件之间是「与」关系，`limit` 最大为 100。
+支持的过滤参数包括 `status`、`tag`、`updated_since`。多个过滤条件之间是「与」关系，`limit` 最大为 100。
 
 ## 错误处理
 

@@ -3,8 +3,6 @@ title: "更新日志"
 description: "记录每一次值得被看见的改进，以及我们为什么这样改。"
 topic: "产品手册"
 topic_id: "product"
-author: "周予安"
-author_role: "产品经理"
 updated: "2026-10-22"
 reading_time: 3
 emoji: "🧭"

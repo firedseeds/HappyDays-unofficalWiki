@@ -39,7 +39,6 @@ window.HAPPYDAYS_WIKI = (function () {
       emoji: "🌱",
       category: "start",
       excerpt: "把散落在聊天、会议与脑海里的经验，种成一片随时可以查阅的森林。",
-      author: { name: "林知夏", role: "知识运营", initial: "知" },
       updated: "2026-10-21",
       reading: 6,
       tags: ["必读", "新成员", "团队文化"],
@@ -202,7 +201,7 @@ window.HAPPYDAYS_WIKI = (function () {
             <p>任何成员都可以创建草稿。先在对应空间写清楚，再邀请一位相关同学做第一次评审。</p>
           </div>
         </div>
-        <p class="muted">最后更新：2026 年 10 月 21 日 · 维护者：林知夏</p>
+        <p class="muted">最后更新：2026 年 10 月 21 日</p>
       `
     },
 
@@ -211,7 +210,6 @@ window.HAPPYDAYS_WIKI = (function () {
       emoji: "🚀",
       category: "start",
       excerpt: "5 分钟完成账号设置、加入空间，并写下你的第一篇团队文档。",
-      author: { name: "周予安", role: "产品经理", initial: "安" },
       updated: "2026-10-18",
       reading: 4,
       tags: ["新手指南", "5 分钟"],
@@ -270,7 +268,6 @@ window.HAPPYDAYS_WIKI = (function () {
 3. 提交后在群里 @ 值班同学
 
 ## 维护者
-- 负责人：周予安
 - 最近更新：2026-10-18</code></pre>
         </div>
 
@@ -330,7 +327,6 @@ window.HAPPYDAYS_WIKI = (function () {
       emoji: "📘",
       category: "product",
       excerpt: "从编辑、组织到发布，系统掌握 HappyDays非官方文档的核心工作流。",
-      author: { name: "周予安", role: "产品经理", initial: "安" },
       updated: "2026-10-19",
       reading: 12,
       tags: ["产品", "使用指南", "权限"],
@@ -343,7 +339,7 @@ window.HAPPYDAYS_WIKI = (function () {
           <table>
             <thead><tr><th>状态</th><th>谁可以查看</th><th>适合放什么</th></tr></thead>
             <tbody>
-              <tr><td><strong>草稿</strong></td><td>作者与协作者</td><td>尚未验证的想法、半成品、个人笔记</td></tr>
+              <tr><td><strong>草稿</strong></td><td>创建者与协作者</td><td>尚未验证的想法、半成品、个人笔记</td></tr>
               <tr><td><strong>已发布</strong></td><td>按可见范围决定</td><td>可被依赖的流程、说明、决策记录</td></tr>
               <tr><td><strong>已归档</strong></td><td>保留可查，默认不展示</td><td>已被替代的方案、阶段性项目材料</td></tr>
             </tbody>
@@ -435,7 +431,6 @@ window.HAPPYDAYS_WIKI = (function () {
       emoji: "💡",
       category: "product",
       excerpt: "关于账号、权限、导入导出与协作的常见疑问，先在这里找找答案。",
-      author: { name: "许棠", role: "客户成功", initial: "棠" },
       updated: "2026-10-16",
       reading: 5,
       tags: ["FAQ", "支持"],
@@ -529,7 +524,6 @@ window.HAPPYDAYS_WIKI = (function () {
       emoji: "🧭",
       category: "product",
       excerpt: "记录每一次值得被看见的改进，以及我们为什么这样改。",
-      author: { name: "周予安", role: "产品经理", initial: "安" },
       updated: "2026-10-22",
       reading: 3,
       tags: ["更新", "产品动态"],
@@ -601,7 +595,6 @@ window.HAPPYDAYS_WIKI = (function () {
       emoji: "🤝",
       category: "team",
       excerpt: "我们的沟通方式、会议原则、文档文化与反馈习惯。",
-      author: { name: "沈观澜", role: "团队负责人", initial: "澜" },
       updated: "2026-10-12",
       reading: 9,
       tags: ["团队文化", "协作", "必读"],
@@ -719,7 +712,6 @@ window.HAPPYDAYS_WIKI = (function () {
       emoji: "🎨",
       category: "team",
       excerpt: "HappyDays 产品的色彩、字体、间距与组件使用准则，让界面保持安静而清晰。",
-      author: { name: "顾青", role: "设计负责人", initial: "青" },
       updated: "2026-10-15",
       reading: 11,
       tags: ["设计", "Design System", "规范"],
@@ -840,7 +832,6 @@ window.HAPPYDAYS_WIKI = (function () {
       emoji: "⌘",
       category: "developer",
       excerpt: "通过 REST API 读取文档、同步内容，并把 HappyDays非官方文档接入你的工作流。",
-      author: { name: "陆行舟", role: "平台工程师", initial: "舟" },
       updated: "2026-10-20",
       reading: 10,
       tags: ["API", "开发", "Webhook"],
@@ -936,7 +927,7 @@ console.log(data.map(doc =&gt; doc.title));</code></pre>
           </div>
           <pre><code>GET /v1/docs?limit=20&amp;cursor=eyJvZmZzZXQiOjIwfQ&amp;status=published&amp;tag=api</code></pre>
         </div>
-        <p>支持的过滤参数包括 <code>status</code>、<code>tag</code>、<code>updated_since</code> 和 <code>author_id</code>。多个过滤条件之间是「与」关系，<code>limit</code> 最大为 100。</p>
+        <p>支持的过滤参数包括 <code>status</code>、<code>tag</code>、<code>updated_since</code>。多个过滤条件之间是「与」关系，<code>limit</code> 最大为 100。</p>
 
         <h2>错误处理</h2>
         <p>所有错误都返回稳定的 JSON 结构和可追踪的 <code>request_id</code>。不要根据错误文案做逻辑判断，请使用状态码与 <code>code</code> 字段。</p>

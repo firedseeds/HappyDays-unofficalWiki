@@ -44,9 +44,6 @@
     docEmoji: document.getElementById("docEmoji"),
     docTitle: document.getElementById("docTitle"),
     docExcerpt: document.getElementById("docExcerpt"),
-    authorAvatar: document.getElementById("authorAvatar"),
-    authorName: document.getElementById("authorName"),
-    authorRole: document.getElementById("authorRole"),
     docUpdated: document.getElementById("docUpdated"),
     docReading: document.getElementById("docReading"),
     docTags: document.getElementById("docTags"),
@@ -418,9 +415,6 @@
     els.docEmoji.textContent = doc.emoji;
     els.docTitle.textContent = doc.title;
     els.docExcerpt.textContent = doc.excerpt;
-    els.authorAvatar.textContent = doc.author.initial;
-    els.authorName.textContent = doc.author.name;
-    els.authorRole.textContent = doc.author.role;
     els.docUpdated.textContent = formatDate(doc.updated) + "更新";
     els.docReading.textContent = "约 " + doc.reading + " 分钟阅读";
     els.colophonUpdated.textContent = "最后更新于 " + formatShortDate(doc.updated);
