@@ -6,7 +6,7 @@
     "team": "HappyDays 团队",
     "tagline": "团队知识库",
     "language": "zh-CN",
-    "domain": "example.con"
+    "domain": "127.0.0.1:8000"
   },
   "topicCount": 9,
   "articleCount": 29,
