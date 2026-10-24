@@ -8,7 +8,7 @@ reading_time: 1
 emoji: "🌱"
 order: 7
 slug: "first-money"
-source: "https://example.con/#/doc/first-money"
+source: "https://127.0.0.1:8000/#/doc/first-money"
 tags:
 ---
 

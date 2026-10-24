@@ -8,7 +8,7 @@ reading_time: 1
 emoji: "📜"
 order: 17
 slug: "world-map"
-source: "https://example.con/#/doc/world-map"
+source: "https://127.0.0.1:8000/#/doc/world-map"
 tags:
 ---
 

@@ -35,6 +35,9 @@
     reading: document.getElementById("fieldReading"),
     tags: document.getElementById("fieldTags"),
     description: document.getElementById("fieldDescription"),
+    author: document.getElementById("fieldAuthor"),
+    signatureCount: document.getElementById("signatureCount"),
+    signatureList: document.getElementById("signatureList"),
     body: document.getElementById("fieldBody"),
     previewBody: document.getElementById("previewBody"),
     previewStatus: document.getElementById("previewStatus"),
@@ -65,6 +68,83 @@
     previewTimer: null,
     toastTimer: null
   };
+
+  var AUTHOR_KEY = "happydays-editor-author";
+
+  function rememberedAuthor() {
+    try {
+      return window.localStorage.getItem(AUTHOR_KEY) || "";
+    } catch (error) {
+      return "";
+    }
+  }
+
+  function rememberAuthor(name) {
+    try {
+      window.localStorage.setItem(AUTHOR_KEY, name);
+    } catch (error) {
+      /* 本地存储不可用时仍可在当前会话署名 */
+    }
+  }
+
+  function formatSignatureTime(value) {
+    var parsed = new Date(value);
+    if (Number.isNaN(parsed.getTime())) {
+      return value || "";
+    }
+    return parsed.toLocaleString("zh-CN", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+  }
+
+  function signatureActionLabel(record) {
+    if (record.action === "create") {
+      return "创建文章";
+    }
+    if (record.action === "move") {
+      if (record.fromTopic && record.topic) {
+        return "从「" + record.fromTopic + "」移动到「" + record.topic + "」";
+      }
+      return "移动文章";
+    }
+    return "更新文章";
+  }
+
+  function renderSignatures(signatures) {
+    var records = (signatures || []).slice().reverse();
+    els.signatureCount.textContent = records.length + " 条";
+    els.signatureList.innerHTML = "";
+    if (!records.length) {
+      var empty = document.createElement("li");
+      empty.className = "signature-empty";
+      empty.textContent = "暂无署名记录；保存后会记录作者与时间。";
+      els.signatureList.appendChild(empty);
+      return;
+    }
+    records.forEach(function (record) {
+      var item = document.createElement("li");
+      item.className = "signature-item";
+      var head = document.createElement("div");
+      head.className = "signature-item-head";
+      var author = document.createElement("strong");
+      author.textContent = record.author || "匿名";
+      var time = document.createElement("time");
+      time.textContent = formatSignatureTime(record.at);
+      time.dateTime = record.at || "";
+      head.appendChild(author);
+      head.appendChild(time);
+      var meta = document.createElement("div");
+      meta.className = "signature-item-meta";
+      meta.textContent = signatureActionLabel(record);
+      item.appendChild(head);
+      item.appendChild(meta);
+      els.signatureList.appendChild(item);
+    });
+  }
 
   function request(path, options) {
     options = options || {};
@@ -386,6 +466,10 @@
     els.slug.value = article.slug;
     els.slug.readOnly = true;
     els.body.value = article.body || "";
+    var signatures = article.signatures || [];
+    var latestAuthor = signatures.length ? signatures[signatures.length - 1].author : "";
+    els.author.value = rememberedAuthor() || latestAuthor || "";
+    renderSignatures(signatures);
 
     els.formMode.textContent = "编辑文章 · #" + article.order;
     updateHeadingFromTitle();
@@ -428,6 +512,8 @@
     els.tags.value = "";
     els.slug.value = "";
     els.body.value = "## 小节标题\n\n在这里写正文。\n";
+    els.author.value = rememberedAuthor();
+    renderSignatures([]);
 
     els.formMode.textContent = "新建文章";
     els.formHeading.textContent = "新建文章";
@@ -492,9 +578,13 @@
     var description = els.description.value.trim();
     var slug = els.slug.value.trim();
     var body = els.body.value.trim();
+    var author = els.author.value.trim();
     var readingTime = Number(els.reading.value);
     var updated = els.updated.value;
 
+    if (!author) {
+      throw new Error("请填写本次署名");
+    }
     if (!title) {
       throw new Error("请填写标题");
     }
@@ -533,8 +623,10 @@
       readingTime: readingTime,
       tags: splitTags(els.tags.value),
       body: body,
+      author: author,
       topicId: els.topic.value
     };
+    rememberAuthor(author);
     if (state.mode === "new") {
       payload.slug = slug;
     }
@@ -791,6 +883,9 @@
       state.dirty = true;
       if (event.target === els.title) {
         updateHeadingFromTitle();
+      }
+      if (event.target === els.author) {
+        rememberAuthor(els.author.value.trim());
       }
       if (event.target === els.body) {
         schedulePreview();

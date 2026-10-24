@@ -8,7 +8,7 @@ reading_time: 2
 emoji: "📜"
 order: 15
 slug: "cheating-response"
-source: "https://example.con/#/doc/cheating-response"
+source: "https://127.0.0.1:8000/#/doc/cheating-response"
 tags:
 ---
 

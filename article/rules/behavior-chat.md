@@ -8,7 +8,7 @@ reading_time: 3
 emoji: "📜"
 order: 16
 slug: "behavior-chat"
-source: "https://example.con/#/doc/behavior-chat"
+source: "https://127.0.0.1:8000/#/doc/behavior-chat"
 tags:
 ---
 

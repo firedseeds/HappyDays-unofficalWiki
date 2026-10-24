@@ -8,7 +8,7 @@ reading_time: 1
 emoji: "🖼️"
 order: 30
 slug: "gallery-2"
-source: "https://example.con/#/doc/gallery-2"
+source: "https://127.0.0.1:8000/#/doc/gallery-2"
 tags:
 ---
 

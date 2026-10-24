@@ -8,7 +8,7 @@ reading_time: 1
 emoji: "📖"
 order: 24
 slug: "freedom-union"
-source: "https://example.con/#/doc/freedom-union"
+source: "https://127.0.0.1:8000/#/doc/freedom-union"
 tags:
 ---
 

@@ -57,6 +57,8 @@ python server.py
 
 - 选择并编辑已有文章
 - 修改标题、摘要、Emoji、更新时间、阅读时长、标签和 Markdown 正文
+- 保存前填写「本次署名」，每次新建或更新都会写入署名记录
+- 在编辑器内查看当前文章的署名历史（作者、时间、创建/更新/移动）
 - 实时预览 Markdown
 - 新建文章并选择任意层级的主题
 - 添加顶级主题，或在任意主题下继续添加下级主题
@@ -86,15 +88,38 @@ python server.py --host 127.0.0.1 --port 8765
 | --- | --- | --- |
 | GET | `/api/health` | 检查编辑服务是否可用 |
 | GET | `/api/state` | 获取主题和文章索引 |
-| GET | `/api/articles/<slug>` | 读取文章元数据与 Markdown 正文 |
-| PUT | `/api/articles/<slug>` | 保存已有文章，传 `topicId` 可移动主题 |
-| POST | `/api/articles` | 新建文章 |
+| GET | `/api/articles/<slug>` | 读取文章元数据、Markdown 正文与署名记录 |
+| PUT | `/api/articles/<slug>` | 保存已有文章，必须传 `author`；传 `topicId` 可移动主题 |
+| POST | `/api/articles` | 新建文章，必须传 `author` |
 | DELETE | `/api/articles/<slug>` | 删除文章及其本地图片 |
 | POST | `/api/topics` | 新建主题 |
 | DELETE | `/api/topics/<id>` | 删除空主题 |
 | POST | `/api/preview` | 将 Markdown 渲染为预览 HTML |
 
-删除文章会同时清理 `assets/image/<slug>/`；删除主题要求该主题没有直属文章、没有下级主题，且目录为空。删除文章后 `order` 可以出现空号，但仍必须唯一。
+删除文章会同时清理 `assets/image/<slug>/` 和该文章的署名记录；删除主题要求该主题没有直属文章、没有下级主题，且目录为空。删除文章后 `order` 可以出现空号，但仍必须唯一。
+
+### 署名记录
+
+署名保存在独立的 `article/edits.json`，不写入文章正文或 front matter：
+
+```json
+{
+  "version": 1,
+  "articles": {
+    "intro": [
+      {
+        "author": "维护者",
+        "at": "2026-10-25T02:15:42+08:00",
+        "action": "update",
+        "title": "简介",
+        "topic": "简介"
+      }
+    ]
+  }
+}
+```
+
+每次保存文章都会追加一条记录，`action` 为 `create`、`update` 或 `move`；移动文章时额外包含 `fromTopic`。编辑器会按时间倒序显示署名历史。
 
 ---
 
@@ -130,6 +155,7 @@ python server.py --host 127.0.0.1 --port 8765
 - 文章元数据与 Markdown 正文编辑
 - 实时 Markdown 预览
 - 新建文章与添加主题
+- 每次保存填写署名，并查看署名历史
 - 保存后自动构建 `data.js`，失败自动回滚
 
 ---
@@ -151,6 +177,7 @@ python server.py --host 127.0.0.1 --port 8765
 │  └─ image/             # 迁移文章的本地图片
 ├─ article/
 │  ├─ article.json       # 9 个主题、29 篇文章的清单
+│  ├─ edits.json         # 各文章的署名记录
 │  ├─ intro/             # 简介（1 篇）
 │  ├─ beginner/          # 新手教程（6 篇）
 │  ├─ advanced/          # 进阶教程（7 篇）
@@ -304,7 +331,9 @@ python server.py --host 127.0.0.1 --port 8765
 
 ### 外链域名
 
-`site.domain` 是站点唯一的外部域名配置，当前占位值为 `example.con`。它用于生成文章 `source`、页面 canonical / Open Graph URL，以及“分享/复制链接”和邀请链接；如果只填写域名，程序会自动补上 `https://`。
+`site.domain` 是站点唯一的外部域名配置，当前值见 `article/article.json`。它用于生成文章 `source`、页面 canonical / Open Graph URL，以及“分享/复制链接”和邀请链接；如果只填写域名，程序会自动补上 `https://`。
+
+修改 `site.domain` 后重新运行 `python build.py`（或重启 `server.py`），构建脚本会把所有文章的 JSON 与 front matter `source` 同步到新域名。
 
 文章正文中的第三方外链（例如 Minecraft Wiki、GitHub、爱发电等）属于内容本身，不会被改写为该域名。
 
@@ -332,6 +361,7 @@ python build.py
 要求 Python 3.10+，无第三方依赖。脚本会：
 
 - 读取 `article/article.json` 中的主题、站点信息和文章顺序
+- 根据 `site.domain` 同步文章 JSON 与 front matter 的 `source`
 - 扫描 `article/<topic>/<slug>.md`，解析 YAML front matter
 - 校验主题目录、slug、order、标题、摘要、标签等是否与清单一致
 - 将 Markdown 转换为站点使用的 HTML

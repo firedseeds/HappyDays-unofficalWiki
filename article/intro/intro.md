@@ -8,7 +8,7 @@ reading_time: 1
 emoji: "🚇"
 order: 1
 slug: "intro"
-source: "https://example.con/#/doc/intro"
+source: "https://127.0.0.1:8000/#/doc/intro"
 tags:
 ---
 

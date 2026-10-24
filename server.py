@@ -24,7 +24,7 @@ import subprocess
 import sys
 import threading
 import uuid
-from datetime import date
+from datetime import date, datetime
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import unquote, urlparse
@@ -35,6 +35,7 @@ import build
 ROOT = Path(__file__).resolve().parent
 ARTICLE_DIR = ROOT / "article"
 MANIFEST_PATH = ARTICLE_DIR / "article.json"
+EDITS_PATH = ARTICLE_DIR / "edits.json"
 IMAGE_DIR = ROOT / "assets" / "image"
 DATA_PATH = ROOT / "assets" / "data.js"
 BUILD_SCRIPT = ROOT / "build.py"
@@ -103,6 +104,56 @@ def article_map(manifest: dict) -> dict[str, dict]:
         if isinstance(article, dict) and isinstance(article.get("slug"), str):
             result[article["slug"]] = article
     return result
+
+
+def read_edits() -> dict:
+    if not EDITS_PATH.is_file():
+        return {"version": 1, "articles": {}}
+    try:
+        data = json.loads(EDITS_PATH.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise ApiError(500, f"无法读取 article/edits.json: {exc}")
+    if not isinstance(data, dict) or not isinstance(data.get("articles"), dict):
+        raise ApiError(500, "article/edits.json 格式无效")
+    return data
+
+
+def write_edits(edits: dict) -> None:
+    atomic_write(
+        EDITS_PATH,
+        json.dumps(edits, ensure_ascii=False, indent=2) + "\n",
+    )
+
+
+def signature_record(
+    author: str,
+    action: str,
+    title: str,
+    topic: str,
+    from_topic: str | None = None,
+) -> dict:
+    record = {
+        "author": author,
+        "at": datetime.now().astimezone().isoformat(timespec="seconds"),
+        "action": action,
+        "title": title,
+        "topic": topic,
+    }
+    if from_topic:
+        record["fromTopic"] = from_topic
+    return record
+
+
+def edits_snapshot() -> bytes | None:
+    return EDITS_PATH.read_bytes() if EDITS_PATH.is_file() else None
+
+
+def restore_edits(snapshot: bytes | None) -> None:
+    if snapshot is None:
+        if EDITS_PATH.exists():
+            EDITS_PATH.unlink()
+    else:
+        atomic_write(EDITS_PATH, snapshot.decode("utf-8"))
 
 
 def ordered_topics(topics: list[dict]) -> list[dict]:
@@ -314,6 +365,7 @@ def read_article(slug: str) -> dict:
     result = dict(record)
     result["body"] = body
     result["topicName"] = topic_map(manifest).get(record["topic"], {}).get("name", record["topic"])
+    result["signatures"] = read_edits().get("articles", {}).get(slug, [])
     return result
 
 
@@ -434,6 +486,7 @@ def update_article(slug: str, payload: dict) -> dict:
         target_topic = topics.get(topic_id)
         if target_topic is None:
             raise ApiError(400, "目标主题不存在")
+        author = require_text(payload.get("author"), "author", 60)
         fields = validate_article_fields(payload, {
             "title": record.get("title"),
             "description": record.get("description"),
@@ -457,6 +510,7 @@ def update_article(slug: str, payload: dict) -> dict:
             file_snapshot[new_path] = None
         manifest_snapshot = MANIFEST_PATH.read_bytes()
         data_snapshot = DATA_PATH.read_bytes() if DATA_PATH.is_file() else None
+        edits_snapshot_bytes = edits_snapshot()
 
         updated = dict(record)
         updated.update({
@@ -476,6 +530,17 @@ def update_article(slug: str, payload: dict) -> dict:
         refresh_manifest(manifest)
         body = relocate_markdown_paths(body, old_path, new_path)
         markdown = compose_markdown(updated, target_topic, body, manifest.get("site", {}))
+        moved = topic_id != record["topic"]
+        edits = read_edits()
+        edits.setdefault("articles", {}).setdefault(slug, []).append(
+            signature_record(
+                author,
+                "move" if moved else "update",
+                updated["title"],
+                target_topic["name"],
+                topic["name"] if moved else None,
+            )
+        )
 
         try:
             if new_path != old_path:
@@ -485,6 +550,7 @@ def update_article(slug: str, payload: dict) -> dict:
             else:
                 atomic_write(old_path, markdown)
             write_manifest(manifest)
+            write_edits(edits)
             output = run_build()
         except Exception as exc:
             if old_path.exists():
@@ -497,6 +563,7 @@ def update_article(slug: str, payload: dict) -> dict:
                 atomic_write(DATA_PATH, data_snapshot.decode("utf-8"))
             elif DATA_PATH.exists():
                 DATA_PATH.unlink()
+            restore_edits(edits_snapshot_bytes)
             if isinstance(exc, ApiError):
                 raise
             raise ApiError(500, f"保存失败：{exc}")
@@ -519,6 +586,9 @@ def delete_article(slug: str) -> dict:
         file_snapshot = path.read_bytes() if path.is_file() else None
         manifest_snapshot = MANIFEST_PATH.read_bytes()
         data_snapshot = DATA_PATH.read_bytes() if DATA_PATH.is_file() else None
+        edits_snapshot_bytes = edits_snapshot()
+        edits = read_edits()
+        edits.setdefault("articles", {}).pop(slug, None)
         image_source = (IMAGE_DIR / slug).resolve()
         image_trash = None
         try:
@@ -539,6 +609,7 @@ def delete_article(slug: str) -> dict:
             ]
             refresh_manifest(manifest)
             write_manifest(manifest)
+            write_edits(edits)
             output = run_build()
         except Exception as exc:
             if file_snapshot is not None:
@@ -551,6 +622,7 @@ def delete_article(slug: str) -> dict:
                 atomic_write(DATA_PATH, data_snapshot.decode("utf-8"))
             elif DATA_PATH.exists():
                 DATA_PATH.unlink()
+            restore_edits(edits_snapshot_bytes)
             if image_trash is not None and image_trash.exists() and not image_source.exists():
                 image_trash.rename(image_source)
             if isinstance(exc, ApiError):
@@ -644,6 +716,7 @@ def create_article(payload: dict) -> dict:
         slug = require_slug(payload.get("slug"))
         if slug in article_map(manifest):
             raise ApiError(409, "slug 已存在")
+        author = require_text(payload.get("author"), "author", 60)
         fields = validate_article_fields(payload)
         body = fields.pop("body")
         path = (ARTICLE_DIR / topic["directory"] / f"{slug}.md").resolve()
@@ -672,10 +745,21 @@ def create_article(payload: dict) -> dict:
         markdown = compose_markdown(record, topic, body, manifest.get("site", {}))
         manifest_snapshot = MANIFEST_PATH.read_bytes()
         data_snapshot = DATA_PATH.read_bytes() if DATA_PATH.is_file() else None
+        edits_snapshot_bytes = edits_snapshot()
+        edits = read_edits()
+        edits.setdefault("articles", {})[slug] = [
+            signature_record(
+                author,
+                "create",
+                record["title"],
+                topic["name"],
+            )
+        ]
 
         try:
             atomic_write(path, markdown)
             write_manifest(manifest)
+            write_edits(edits)
             output = run_build()
         except Exception as exc:
             if path.exists():
@@ -685,6 +769,7 @@ def create_article(payload: dict) -> dict:
                 atomic_write(DATA_PATH, data_snapshot.decode("utf-8"))
             elif DATA_PATH.exists():
                 DATA_PATH.unlink()
+            restore_edits(edits_snapshot_bytes)
             if isinstance(exc, ApiError):
                 raise
             raise ApiError(500, f"创建失败：{exc}")

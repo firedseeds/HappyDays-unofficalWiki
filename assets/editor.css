@@ -565,6 +565,107 @@
   grid-column: 1 / -1;
 }
 
+.signature-card {
+  margin-top: 14px;
+  padding: 16px 20px;
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  background: var(--surface);
+  box-shadow: var(--shadow-xs);
+}
+
+.signature-entry {
+  display: grid;
+  grid-template-columns: minmax(180px, 240px) minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.signature-author-field {
+  gap: 5px;
+}
+
+.signature-history {
+  min-width: 0;
+  padding-left: 22px;
+  border-left: 1px solid var(--border);
+}
+
+.signature-history-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 4px;
+  color: var(--text-tertiary);
+  font-size: 10px;
+  font-weight: 650;
+}
+
+.signature-history-head span:last-child {
+  color: var(--text-faint);
+  font-size: 9px;
+  font-weight: 400;
+}
+
+.signature-list {
+  display: flex;
+  max-height: 132px;
+  flex-direction: column;
+  gap: 0;
+  margin: 0;
+  padding: 0 4px 0 0;
+  overflow-y: auto;
+  list-style: none;
+  scrollbar-width: thin;
+}
+
+.signature-item {
+  padding: 7px 0;
+  border-top: 1px solid var(--border);
+}
+
+.signature-item:first-child {
+  border-top: 0;
+}
+
+.signature-item-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.signature-item-head strong {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text-secondary);
+  font-size: 11.5px;
+  font-weight: 650;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.signature-item-head time {
+  flex: none;
+  color: var(--text-faint);
+  font-size: 9px;
+  font-variant-numeric: tabular-nums;
+}
+
+.signature-item-meta {
+  margin-top: 2px;
+  color: var(--text-tertiary);
+  font-size: 9.5px;
+}
+
+.signature-empty {
+  padding: 13px 0 5px;
+  color: var(--text-faint);
+  font-size: 10px;
+  line-height: 1.6;
+}
+
 .editor-split {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -934,6 +1035,22 @@
   .meta-card {
     grid-template-columns: 1fr;
     padding: 15px;
+  }
+
+  .signature-card {
+    padding: 15px;
+  }
+
+  .signature-entry {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .signature-history {
+    padding-top: 13px;
+    padding-left: 0;
+    border-top: 1px solid var(--border);
+    border-left: 0;
   }
 
   .field--wide,

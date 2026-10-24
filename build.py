@@ -805,6 +805,50 @@ def build_manifest(articles: list[dict], topics: list[dict], site: dict) -> str:
     return "\n".join(lines)
 
 
+def site_origin(site: dict) -> str:
+    domain = str(site.get("domain", "")).strip().rstrip("/")
+    if not domain:
+        domain = "example.con"
+    if not domain.startswith(("http://", "https://")):
+        domain = "https://" + domain
+    return domain
+
+
+def sync_article_sources(manifest: dict, site: dict) -> int:
+    """Keep every article source in sync with the single site.domain value."""
+    origin = site_origin(site)
+    changed = 0
+    for article in manifest["articles"]:
+        slug = article.get("slug")
+        if not isinstance(slug, str):
+            continue
+        desired = f"{origin}/#/doc/{slug}"
+        if article.get("source") != desired:
+            article["source"] = desired
+            changed += 1
+        path = ARTICLE_DIR / str(article.get("file", ""))
+        if not path.is_file():
+            continue
+        text = path.read_text(encoding="utf-8")
+        updated, count = re.subn(
+            r"(?m)^source:\s*\"[^\"]*\"\s*$",
+            f'source: "{desired}"',
+            text,
+            count=1,
+        )
+        if count and updated != text:
+            with path.open("w", encoding="utf-8", newline="\n") as handle:
+                handle.write(updated)
+    if changed:
+        MANIFEST_PATH.write_text(
+            json.dumps(manifest, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+            newline="\n",
+        )
+        print(f"Synced {changed} article source URLs to {origin}")
+    return changed
+
+
 def main() -> int:
     try:
         manifest, topics, article_by_file = discover_articles()
@@ -814,6 +858,7 @@ def main() -> int:
         for field in ("name", "team", "tagline", "domain"):
             if not isinstance(site.get(field), str) or not site[field]:
                 fail(f"article/article.json 的 site.{field} 必须是非空字符串")
+        sync_article_sources(manifest, site)
         topic_by_id = {t["id"]: t for t in topics}
         articles = []
         for manifest_article in manifest["articles"]:

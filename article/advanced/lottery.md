@@ -8,7 +8,7 @@ reading_time: 1
 emoji: "🧭"
 order: 12
 slug: "lottery"
-source: "https://example.con/#/doc/lottery"
+source: "https://127.0.0.1:8000/#/doc/lottery"
 tags:
 ---
 

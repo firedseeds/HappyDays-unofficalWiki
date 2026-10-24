@@ -148,6 +148,23 @@
             </label>
           </section>
 
+          <section class="signature-card" aria-label="署名与署名记录">
+            <div class="signature-entry">
+              <label class="field signature-author-field">
+                <span>本次署名</span>
+                <input id="fieldAuthor" name="author" type="text" maxlength="60" autocomplete="name" placeholder="你的名字" required>
+                <small>保存时记录作者与时间</small>
+              </label>
+              <div class="signature-history">
+                <div class="signature-history-head">
+                  <span>署名记录</span>
+                  <span id="signatureCount">0 条</span>
+                </div>
+                <ol class="signature-list" id="signatureList"></ol>
+              </div>
+            </div>
+          </section>
+
           <div class="editor-split">
             <section class="editor-pane">
               <div class="pane-head">

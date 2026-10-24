@@ -8,7 +8,7 @@ reading_time: 1
 emoji: "🧭"
 order: 14
 slug: "town-resources"
-source: "https://example.con/#/doc/town-resources"
+source: "https://127.0.0.1:8000/#/doc/town-resources"
 tags:
 ---
 

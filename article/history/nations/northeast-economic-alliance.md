@@ -8,7 +8,7 @@ reading_time: 1
 emoji: "📖"
 order: 21
 slug: "northeast-economic-alliance"
-source: "https://example.con/#/doc/northeast-economic-alliance"
+source: "https://127.0.0.1:8000/#/doc/northeast-economic-alliance"
 tags:
 ---
 

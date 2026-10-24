@@ -8,7 +8,7 @@ reading_time: 1
 emoji: "📖"
 order: 22
 slug: "harbin-chronicle"
-source: "https://example.con/#/doc/harbin-chronicle"
+source: "https://127.0.0.1:8000/#/doc/harbin-chronicle"
 tags:
 ---
 
