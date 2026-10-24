@@ -428,6 +428,31 @@ def build_output_message(output: str) -> str:
     return output.splitlines()[-1] if output else "构建完成"
 
 
+def git_error_text(result: subprocess.CompletedProcess, fallback: str) -> str:
+    lines = []
+    for line in f"{result.stderr or ''}\n{result.stdout or ''}".splitlines():
+        value = line.strip()
+        if not value or value.lower().startswith(("warning:", "hint:")):
+            continue
+        lines.append(value)
+    return ("\n".join(lines) or fallback)[-1000:]
+
+
+def git_path_is_committable(relative: str) -> bool:
+    if (ROOT / relative).exists():
+        return True
+    result = subprocess.run(
+        ["git", "ls-files", "--", relative],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        timeout=10,
+    )
+    return result.returncode == 0 and bool(result.stdout.strip())
+
+
 def auto_commit(paths: list[Path], message: str) -> dict:
     """Create a local Git commit for the saved files. Never push."""
     if not (ROOT / ".git").exists():
@@ -439,14 +464,18 @@ def auto_commit(paths: list[Path], message: str) -> dict:
             relative = path.resolve().relative_to(ROOT.resolve()).as_posix()
         except ValueError:
             continue
-        if relative not in relative_paths:
-            relative_paths.append(relative)
+        if relative in relative_paths:
+            continue
+        if not git_path_is_committable(relative):
+            continue
+        relative_paths.append(relative)
     if not relative_paths:
         return {"committed": False, "skipped": "没有可提交的路径"}
 
+    git_options = ["-c", "core.autocrlf=false", "-c", "core.safecrlf=false"]
     try:
         add_result = subprocess.run(
-            ["git", "add", "-A", "--", *relative_paths],
+            ["git", *git_options, "add", "-A", "--", *relative_paths],
             cwd=ROOT,
             capture_output=True,
             text=True,
@@ -455,11 +484,13 @@ def auto_commit(paths: list[Path], message: str) -> dict:
             timeout=30,
         )
         if add_result.returncode != 0:
-            detail = (add_result.stderr or add_result.stdout or "git add 失败").strip()
-            return {"committed": False, "error": detail[-1000:]}
+            return {
+                "committed": False,
+                "error": git_error_text(add_result, "git add 失败"),
+            }
 
         diff_result = subprocess.run(
-            ["git", "diff", "--cached", "--quiet", "--", *relative_paths],
+            ["git", *git_options, "diff", "--cached", "--quiet", "--", *relative_paths],
             cwd=ROOT,
             capture_output=True,
             text=True,
@@ -471,7 +502,7 @@ def auto_commit(paths: list[Path], message: str) -> dict:
             return {"committed": False, "error": "无法检查 Git 暂存区"}
 
         commit_result = subprocess.run(
-            ["git", "commit", "-m", message, "--", *relative_paths],
+            ["git", *git_options, "commit", "-m", message, "--", *relative_paths],
             cwd=ROOT,
             capture_output=True,
             text=True,
@@ -480,11 +511,13 @@ def auto_commit(paths: list[Path], message: str) -> dict:
             timeout=30,
         )
         if commit_result.returncode != 0:
-            detail = (commit_result.stderr or commit_result.stdout or "git commit 失败").strip()
-            return {"committed": False, "error": detail[-1000:]}
+            return {
+                "committed": False,
+                "error": git_error_text(commit_result, "git commit 失败"),
+            }
 
         hash_result = subprocess.run(
-            ["git", "rev-parse", "--short", "HEAD"],
+            ["git", *git_options, "rev-parse", "--short", "HEAD"],
             cwd=ROOT,
             capture_output=True,
             text=True,
