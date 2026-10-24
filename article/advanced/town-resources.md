@@ -10,8 +10,6 @@ order: 14
 slug: "town-resources"
 source: "../../index.html#/doc/town-resources"
 tags:
-  - "进阶教程"
-  - "语雀迁移"
 ---
 
 # 城镇资源

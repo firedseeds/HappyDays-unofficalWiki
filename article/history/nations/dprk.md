@@ -10,9 +10,6 @@ order: 25
 slug: "dprk"
 source: "../../../index.html#/doc/dprk"
 tags:
-  - "happyday历史"
-  - "国家/城镇"
-  - "语雀迁移"
 ---
 
 # 朝鲜民主主义人民共和国DPRK

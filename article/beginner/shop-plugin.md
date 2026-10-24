@@ -10,8 +10,6 @@ order: 4
 slug: "shop-plugin"
 source: "../../index.html#/doc/shop-plugin"
 tags:
-  - "新手教程"
-  - "语雀迁移"
 ---
 
 # 商店插件

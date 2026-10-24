@@ -10,8 +10,6 @@ order: 29
 slug: "gallery-1"
 source: "../../index.html#/doc/gallery-1"
 tags:
-  - "妙妙图片集"
-  - "语雀迁移"
 ---
 
 # 请输入文本（1）

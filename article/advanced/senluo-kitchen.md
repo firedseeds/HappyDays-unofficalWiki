@@ -10,8 +10,6 @@ order: 9
 slug: "senluo-kitchen"
 source: "../../index.html#/doc/senluo-kitchen"
 tags:
-  - "进阶教程"
-  - "语雀迁移"
 ---
 
 # 森罗物语：厨房

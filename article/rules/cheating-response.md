@@ -10,8 +10,6 @@ order: 15
 slug: "cheating-response"
 source: "../../index.html#/doc/cheating-response"
 tags:
-  - "服务器规则"
-  - "语雀迁移"
 ---
 
 # 作弊与应对

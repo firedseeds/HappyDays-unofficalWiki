@@ -10,8 +10,6 @@ order: 27
 slug: "qwertyuiop"
 source: "../../../index.html#/doc/qwertyuiop"
 tags:
-  - "happyday历史"
-  - "语雀迁移"
 ---
 
 # qwertyuiop

@@ -10,8 +10,6 @@ order: 16
 slug: "behavior-chat"
 source: "../../index.html#/doc/behavior-chat"
 tags:
-  - "服务器规则"
-  - "语雀迁移"
 ---
 
 # 行为与聊天

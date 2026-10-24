@@ -10,8 +10,6 @@ order: 11
 slug: "money-making-guide"
 source: "../../index.html#/doc/money-making-guide"
 tags:
-  - "进阶教程"
-  - "语雀迁移"
 ---
 
 # 一些杂七杂八的赚钱野路子

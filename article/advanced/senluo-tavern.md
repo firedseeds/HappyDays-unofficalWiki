@@ -10,8 +10,6 @@ order: 10
 slug: "senluo-tavern"
 source: "../../index.html#/doc/senluo-tavern"
 tags:
-  - "进阶教程"
-  - "语雀迁移"
 ---
 
 # 森罗物语：酒馆

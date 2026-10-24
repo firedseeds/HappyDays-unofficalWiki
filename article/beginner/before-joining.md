@@ -10,8 +10,6 @@ order: 2
 slug: "before-joining"
 source: "../../index.html#/doc/before-joining"
 tags:
-  - "新手教程"
-  - "语雀迁移"
 ---
 
 # 进入游戏前

@@ -10,8 +10,6 @@ order: 13
 slug: "immersive-vehicles"
 source: "../../index.html#/doc/immersive-vehicles"
 tags:
-  - "进阶教程"
-  - "语雀迁移"
 ---
 
 # 沉浸车辆

@@ -10,8 +10,6 @@ order: 17
 slug: "world-map"
 source: "../../index.html#/doc/world-map"
 tags:
-  - "服务器规则"
-  - "语雀迁移"
 ---
 
 # 世界与地图

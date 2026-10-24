@@ -10,8 +10,6 @@ order: 5
 slug: "build-town"
 source: "../../index.html#/doc/build-town"
 tags:
-  - "新手教程"
-  - "语雀迁移"
 ---
 
 # 建立城邦

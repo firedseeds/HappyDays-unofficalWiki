@@ -10,8 +10,6 @@ order: 3
 slug: "first-arrival"
 source: "../../index.html#/doc/first-arrival"
 tags:
-  - "新手教程"
-  - "语雀迁移"
 ---
 
 # 初来乍到

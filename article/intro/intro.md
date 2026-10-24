@@ -10,7 +10,6 @@ order: 1
 slug: "intro"
 source: "../../index.html#/doc/intro"
 tags:
-  - "语雀迁移"
 ---
 
 # 简介

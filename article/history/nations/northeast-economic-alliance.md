@@ -10,9 +10,6 @@ order: 21
 slug: "northeast-economic-alliance"
 source: "../../../index.html#/doc/northeast-economic-alliance"
 tags:
-  - "happyday历史"
-  - "国家/城镇"
-  - "语雀迁移"
 ---
 
 # 泛东北经济同盟

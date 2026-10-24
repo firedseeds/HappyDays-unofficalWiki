@@ -10,9 +10,6 @@ order: 20
 slug: "zzx"
 source: "../../../index.html#/doc/zzx"
 tags:
-  - "happyday历史"
-  - "人物志"
-  - "语雀迁移"
 ---
 
 # zzx

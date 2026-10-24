@@ -10,8 +10,6 @@ order: 28
 slug: "alex"
 source: "../../../index.html#/doc/alex"
 tags:
-  - "happyday历史"
-  - "语雀迁移"
 ---
 
 # Alex

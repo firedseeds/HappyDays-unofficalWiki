@@ -10,8 +10,6 @@ order: 12
 slug: "lottery"
 source: "../../index.html#/doc/lottery"
 tags:
-  - "进阶教程"
-  - "语雀迁移"
 ---
 
 # 彩票

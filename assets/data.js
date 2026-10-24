@@ -89,7 +89,7 @@ window.HAPPYDAYS_WIKI = (function () {
       excerpt: "HappyDays轨道交通服务器happydays是建...",
       updated: "2026-10-25",
       reading: 1,
-      tags: ["语雀迁移"],
+      tags: [],
       content: `<h2>HappyDays轨道交通服务器</h2>
 <p><strong>happydays是建立在1:326的欧亚地图上的以建立发展城市、轨道交通及铁路建设为基础的Minecraft服务器</strong></p>
 <p><strong>游戏版本：Java 1.20.1</strong></p>
@@ -107,7 +107,7 @@ window.HAPPYDAYS_WIKI = (function () {
       excerpt: "1 - 准备1.1 配置推荐使用强劲的电脑、笔记本或手...",
       updated: "2026-10-25",
       reading: 3,
-      tags: ["新手教程", "语雀迁移"],
+      tags: [],
       content: `<h2>1 - 准备</h2>
 <p><strong>1.1 配置</strong></p>
 <p><strong>推荐使用强劲的电脑、笔记本或手机游玩</strong></p>
@@ -148,7 +148,7 @@ window.HAPPYDAYS_WIKI = (function () {
       excerpt: "1-最基本的1.1逃出出生点！！！（bushi）进入服...",
       updated: "2026-10-25",
       reading: 2,
-      tags: ["新手教程", "语雀迁移"],
+      tags: [],
       content: `<h2>1-最基本的</h2>
 <p><strong>1.1逃出出生点！！！（bushi）</strong></p>
 <p>进入服务器后，<strong>请根据聊天栏的提示</strong>进行账号注册：/reg &lt;密码&gt; &lt;重复密码&gt;</p>
@@ -179,7 +179,7 @@ window.HAPPYDAYS_WIKI = (function () {
       excerpt: "本服务器使用QuickShop插件，如何使用请看下文：...",
       updated: "2026-10-25",
       reading: 3,
-      tags: ["新手教程", "语雀迁移"],
+      tags: [],
       content: `<p>本服务器使用QuickShop插件，如何使用请看下文：</p>
 <h2>认识商店</h2>
 <h3>商店由什么组成?</h3>
@@ -243,7 +243,7 @@ window.HAPPYDAYS_WIKI = (function () {
       excerpt: "首先坐火车到你想创建/加入城镇的地方：/t join ...",
       updated: "2026-10-25",
       reading: 1,
-      tags: ["新手教程", "语雀迁移"],
+      tags: [],
       content: `<p>首先坐火车到你想<strong>创建/加入</strong>城镇的地方：</p>
 <p><code>/t join [城镇名]</code>加入城镇（如果加入的城镇<strong>未设置为开放</strong>状态，则<strong>无法加入</strong>）</p>
 <p><code>/t leave</code>退出城镇（有二次确认）</p>
@@ -261,7 +261,7 @@ window.HAPPYDAYS_WIKI = (function () {
       excerpt: "此文档在语雀中暂无正文。",
       updated: "2026-10-25",
       reading: 1,
-      tags: ["新手教程", "语雀迁移"],
+      tags: [],
       content: `<p>此文档在语雀中暂无正文。</p>`
     },
     "first-money": {
@@ -271,7 +271,7 @@ window.HAPPYDAYS_WIKI = (function () {
       excerpt: "服务器主要的赚钱方式有以下几种类型：1.修路（注意：此...",
       updated: "2026-10-25",
       reading: 1,
-      tags: ["新手教程", "语雀迁移"],
+      tags: [],
       content: `<p>服务器主要的赚钱方式有以下几种类型：</p>
 <ol class="steps"><li>修路（注意：此选项后续<strong>可能会被废止</strong>，且用且珍惜）由腐竹HAPPYAAAA向账户打钱</li><li>通过卖农作物（如小麦，马铃薯等<strong>原版作物</strong>，森罗物语的菜系不会列入收购名单！）、成品矿物（金锭、钻石等）来获得游戏币，主要收购商城在<strong>南京</strong>、<strong>秦皇岛</strong>。</li><li>在城市建立<strong>初期</strong>，腐竹HAPPYAAAA会在各个城市设置初始简单商店，可以通过卖泥土、圆石、小麦等获得初始游戏币。</li><li>当然如果你进来时zzx在线的话，你也可以找zzx索要启动资金，一般一次给5000，要求是加入zzx所在国家，并在zzx换国家时跟随。</li><li>通过帮别人打工来获得游戏币（招工栏在<strong>南京</strong>）</li></ol>`
     },
@@ -282,7 +282,7 @@ window.HAPPYDAYS_WIKI = (function () {
       excerpt: "此文档在语雀中暂无正文。",
       updated: "2026-10-25",
       reading: 1,
-      tags: ["进阶教程", "语雀迁移"],
+      tags: [],
       content: `<p>此文档在语雀中暂无正文。</p>`
     },
     "senluo-kitchen": {
@@ -292,7 +292,7 @@ window.HAPPYDAYS_WIKI = (function () {
       excerpt: "引言做饭是一门高深的艺术一、食材的获取及储存1.1植物...",
       updated: "2026-10-25",
       reading: 1,
-      tags: ["进阶教程", "语雀迁移"],
+      tags: [],
       content: `<h2>引言</h2>
 <p>做饭是一门高深的艺术</p>
 <h2>一、食材的获取及储存</h2>
@@ -328,7 +328,7 @@ window.HAPPYDAYS_WIKI = (function () {
       excerpt: "此文档在语雀中暂无正文。",
       updated: "2026-10-25",
       reading: 1,
-      tags: ["进阶教程", "语雀迁移"],
+      tags: [],
       content: `<p>此文档在语雀中暂无正文。</p>`
     },
     "money-making-guide": {
@@ -338,7 +338,7 @@ window.HAPPYDAYS_WIKI = (function () {
       excerpt: "1.钻石在南京收购价为50元/颗，但在上海港坐海洋光谱...",
       updated: "2026-10-25",
       reading: 1,
-      tags: ["进阶教程", "语雀迁移"],
+      tags: [],
       content: `<ol class="steps"><li>钻石在南京收购价为50元/颗，但在上海港坐海洋光谱号去日本东京可卖100元/颗</li><li>买东西不一定全都要在南京买，记住以下小诀窍：</li></ol>
 <p>a.武汉机铁站旁边的灯具店，比南京的便宜</p>
 <p>b.济南的木材商店卖的比南京便宜</p>
@@ -352,7 +352,7 @@ window.HAPPYDAYS_WIKI = (function () {
       excerpt: "此文档在语雀中暂无正文。",
       updated: "2026-10-25",
       reading: 1,
-      tags: ["进阶教程", "语雀迁移"],
+      tags: [],
       content: `<p>此文档在语雀中暂无正文。</p>`
     },
     "immersive-vehicles": {
@@ -362,7 +362,7 @@ window.HAPPYDAYS_WIKI = (function () {
       excerpt: "当然，服务器是有载具的，不能合成",
       updated: "2026-10-25",
       reading: 1,
-      tags: ["进阶教程", "语雀迁移"],
+      tags: [],
       content: `<p>当然，服务器是有载具的，不能合成</p>`
     },
     "town-resources": {
@@ -372,7 +372,7 @@ window.HAPPYDAYS_WIKI = (function () {
       excerpt: "可以使用/t或/town查看城镇资源（没有则未勘探）资...",
       updated: "2026-10-25",
       reading: 1,
-      tags: ["进阶教程", "语雀迁移"],
+      tags: [],
       content: `<p>可以使用<code>/t</code>或<code>/town</code>查看城镇资源（没有则<strong>未勘探</strong>）</p>
 <h3>资源机制</h3>
 <p>每当到<strong>中午的12点</strong>，资源就会产出。</p>
@@ -388,7 +388,7 @@ window.HAPPYDAYS_WIKI = (function () {
       excerpt: "作弊与应对1.1 作弊客户端和其他修改可以在原本的整合...",
       updated: "2026-10-25",
       reading: 2,
-      tags: ["服务器规则", "语雀迁移"],
+      tags: [],
       content: `<p>1.1 作弊客户端和其他修改</p>
 <p><strong>可以在原本的整合包上安装以下mod（暂时）：</strong></p>
 <blockquote>
@@ -413,7 +413,7 @@ window.HAPPYDAYS_WIKI = (function () {
       excerpt: "2.1 命名国家名称：可以是虚构的，尽量不要与当前的国...",
       updated: "2026-10-25",
       reading: 3,
-      tags: ["服务器规则", "语雀迁移"],
+      tags: [],
       content: `<p><code>2.1 命名</code></p>
 <blockquote>
 <p>国家名称：<strong>可以是虚构的</strong>，尽量不要与当前的国家同名，可以使用不敏感的朝代命名，可以以非敏感地区、省或其他具有明确边界的大地理区域命名。 城镇名称：<strong>不能不恰当、包含粗俗用语或令人反感</strong>。 国家、城镇名称应由<strong>汉字（简体/繁体/新字体）或英文字母</strong>组成，禁止其他符号的使用。 玩家的用户名、昵称、皮肤和 Towny 头衔称号等<strong>不得露骨、色情或包含其他不恰当内容</strong>。</p>
@@ -463,7 +463,7 @@ window.HAPPYDAYS_WIKI = (function () {
       excerpt: "3.1 在城镇周围破坏土地玩家不得在城镇周围破坏土地。...",
       updated: "2026-10-25",
       reading: 1,
-      tags: ["服务器规则", "语雀迁移"],
+      tags: [],
       content: `<p><code>3.1 在城镇周围破坏土地</code></p>
 <blockquote>
 <p>玩家<strong>不得在城镇周围破坏土地</strong>。 违反此规则的玩家将会受到<strong>道德的谴责</strong></p>
@@ -493,7 +493,7 @@ window.HAPPYDAYS_WIKI = (function () {
       excerpt: "人物简介：入服时间：2026年8月8日担任职务：",
       updated: "2026-10-25",
       reading: 1,
-      tags: ["happyday历史", "人物志", "语雀迁移"],
+      tags: [],
       content: `<h2>人物简介：</h2>
 <p><strong>入服时间：</strong></p>
 <p><strong>2026年8月8日</strong></p>
@@ -514,7 +514,7 @@ window.HAPPYDAYS_WIKI = (function () {
       excerpt: "人物简介入服时间2233：2026年5月19日 233...",
       updated: "2026-10-25",
       reading: 1,
-      tags: ["happyday历史", "人物志", "语雀迁移"],
+      tags: [],
       content: `<h2>人物简介</h2>
 <p><strong>入服时间</strong></p>
 <p><strong>2233：2026年5月19日</strong></p>
@@ -539,7 +539,7 @@ window.HAPPYDAYS_WIKI = (function () {
       excerpt: "主要事迹：把Alex带进服务器（详见神人堂）连续发展了...",
       updated: "2026-10-25",
       reading: 1,
-      tags: ["happyday历史", "人物志", "语雀迁移"],
+      tags: [],
       content: `<h2>主要事迹：</h2>
 <ol class="steps"><li>把Alex带进服务器 （详见神人堂）</li><li>连续发展了哈尔滨长达2.5月(截至26/9/27)</li><li>在日内瓦承建了朝鲜，日本大使馆</li></ol>
 <h2>人物简介</h2>
@@ -569,7 +569,7 @@ window.HAPPYDAYS_WIKI = (function () {
       excerpt: "此文档在语雀中暂无正文。",
       updated: "2026-10-25",
       reading: 1,
-      tags: ["happyday历史", "国家/城镇", "语雀迁移"],
+      tags: [],
       content: `<p>此文档在语雀中暂无正文。</p>`
     },
     "harbin-chronicle": {
@@ -579,7 +579,7 @@ window.HAPPYDAYS_WIKI = (function () {
       excerpt: "详见zzx人物志",
       updated: "2026-10-25",
       reading: 1,
-      tags: ["happyday历史", "国家/城镇", "语雀迁移"],
+      tags: [],
       content: `<p>详见zzx人物志</p>`
     },
     "rhodes-island": {
@@ -589,7 +589,7 @@ window.HAPPYDAYS_WIKI = (function () {
       excerpt: "此文档在语雀中暂无正文。",
       updated: "2026-10-25",
       reading: 1,
-      tags: ["happyday历史", "国家/城镇", "语雀迁移"],
+      tags: [],
       content: `<p>此文档在语雀中暂无正文。</p>`
     },
     "freedom-union": {
@@ -599,7 +599,7 @@ window.HAPPYDAYS_WIKI = (function () {
       excerpt: "此国家由 瑞士联邦 和 CALIFORNIA 合并而成...",
       updated: "2026-10-25",
       reading: 1,
-      tags: ["happyday历史", "国家/城镇", "语雀迁移"],
+      tags: [],
       content: `<p>此国家由 瑞士联邦 和 CALIFORNIA 合并而成，目前是由盐城的LICE_K担任国家元首，各个成员城市组成联邦委员会，为目前HAPPYDAYS第一大国，共有26人（人员名称太多了，我懒得写awa）</p>
 <p>国家发展：以盐城和日内瓦为中心发展</p>
 <p>国家成就：1.开创了登山旅行行业，开辟了欧洲荒地，是瑞士成为欧洲与亚洲往来唯一枢纽</p>
@@ -612,7 +612,7 @@ window.HAPPYDAYS_WIKI = (function () {
       excerpt: "国家成员：233，zzx(已经叛逃)国家发展：233原...",
       updated: "2026-10-25",
       reading: 1,
-      tags: ["happyday历史", "国家/城镇", "语雀迁移"],
+      tags: [],
       content: `<p>国家成员：233，zzx(已经叛逃)</p>
 <p>国家发展：</p>
 <p>233原话：当时第1条轨道其实是从日本进口的 从大连接过来的 现在大连到平壤那么绕就是因为这个 然后被4a拆了 还帮忙换成矿车轨道了</p>
@@ -630,7 +630,7 @@ window.HAPPYDAYS_WIKI = (function () {
       excerpt: "神人简介入服时间（魔童降世）2026年8月14日神人评...",
       updated: "2026-10-25",
       reading: 2,
-      tags: ["happyday历史", "语雀迁移"],
+      tags: [],
       content: `<h2>神人简介</h2>
 <p><strong>入服时间（魔童降世）</strong></p>
 <p><strong>2026年8月14日</strong></p>
@@ -652,7 +652,7 @@ window.HAPPYDAYS_WIKI = (function () {
       excerpt: "被zzx带进来的神人，进来不到两天就把火车给实体化了，...",
       updated: "2026-10-25",
       reading: 1,
-      tags: ["happyday历史", "语雀迁移"],
+      tags: [],
       content: `<p>被zzx带进来的神人，进来不到两天就把火车给实体化了，那个中午是人类史上最黑暗的一个中午。</p>
 <p>他凭借一己之力就让服务器的哈鲁线，停运了2~3小时，后面约45天被拆的火车不会停留在长春。</p>
 <p>在拆火车的前一天，他在秦皇岛拆车站的金属梁、活板门、砖楼梯等材料，后向土豆解释为缺少建筑材料</p>
@@ -667,7 +667,7 @@ window.HAPPYDAYS_WIKI = (function () {
       excerpt: "妙妙图片集图片记录。",
       updated: "2026-10-25",
       reading: 1,
-      tags: ["妙妙图片集", "语雀迁移"],
+      tags: [],
       content: `<p><img src="assets/image/gallery-1/1790487129758-2ff84a0b-2112-447e-8ab4-6956cd113527.jpeg" alt="图片" loading="lazy" decoding="async"></p>`
     },
     "gallery-2": {
@@ -677,7 +677,7 @@ window.HAPPYDAYS_WIKI = (function () {
       excerpt: "妙妙图片集图片记录。",
       updated: "2026-10-25",
       reading: 1,
-      tags: ["妙妙图片集", "语雀迁移"],
+      tags: [],
       content: `<p><img src="assets/image/gallery-2/1791127683915-48391af4-0c07-4bb6-b1a3-b051fbaef2d9.png" alt="图片" loading="lazy" decoding="async"></p>`
     }
   };

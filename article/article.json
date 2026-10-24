@@ -111,9 +111,7 @@
       "emoji": "🚇",
       "updated": "2026-10-25",
       "readingTime": 1,
-      "tags": [
-        "语雀迁移"
-      ],
+      "tags": [],
       "file": "intro/intro.md",
       "source": "../index.html#/doc/intro"
     },
@@ -126,10 +124,7 @@
       "emoji": "🌱",
       "updated": "2026-10-25",
       "readingTime": 3,
-      "tags": [
-        "新手教程",
-        "语雀迁移"
-      ],
+      "tags": [],
       "file": "beginner/before-joining.md",
       "source": "../index.html#/doc/before-joining"
     },
@@ -142,10 +137,7 @@
       "emoji": "🌱",
       "updated": "2026-10-25",
       "readingTime": 2,
-      "tags": [
-        "新手教程",
-        "语雀迁移"
-      ],
+      "tags": [],
       "file": "beginner/first-arrival.md",
       "source": "../index.html#/doc/first-arrival"
     },
@@ -158,10 +150,7 @@
       "emoji": "🌱",
       "updated": "2026-10-25",
       "readingTime": 3,
-      "tags": [
-        "新手教程",
-        "语雀迁移"
-      ],
+      "tags": [],
       "file": "beginner/shop-plugin.md",
       "source": "../index.html#/doc/shop-plugin"
     },
@@ -174,10 +163,7 @@
       "emoji": "🌱",
       "updated": "2026-10-25",
       "readingTime": 1,
-      "tags": [
-        "新手教程",
-        "语雀迁移"
-      ],
+      "tags": [],
       "file": "beginner/build-town.md",
       "source": "../index.html#/doc/build-town"
     },
@@ -190,10 +176,7 @@
       "emoji": "🌱",
       "updated": "2026-10-25",
       "readingTime": 1,
-      "tags": [
-        "新手教程",
-        "语雀迁移"
-      ],
+      "tags": [],
       "file": "beginner/about-nations.md",
       "source": "../index.html#/doc/about-nations"
     },
@@ -206,10 +189,7 @@
       "emoji": "🌱",
       "updated": "2026-10-25",
       "readingTime": 1,
-      "tags": [
-        "新手教程",
-        "语雀迁移"
-      ],
+      "tags": [],
       "file": "beginner/first-money.md",
       "source": "../index.html#/doc/first-money"
     },
@@ -222,10 +202,7 @@
       "emoji": "🧭",
       "updated": "2026-10-25",
       "readingTime": 1,
-      "tags": [
-        "进阶教程",
-        "语雀迁移"
-      ],
+      "tags": [],
       "file": "advanced/resource-world-nether.md",
       "source": "../index.html#/doc/resource-world-nether"
     },
@@ -238,10 +215,7 @@
       "emoji": "🧭",
       "updated": "2026-10-25",
       "readingTime": 1,
-      "tags": [
-        "进阶教程",
-        "语雀迁移"
-      ],
+      "tags": [],
       "file": "advanced/senluo-kitchen.md",
       "source": "../index.html#/doc/senluo-kitchen"
     },
@@ -254,10 +228,7 @@
       "emoji": "🧭",
       "updated": "2026-10-25",
       "readingTime": 1,
-      "tags": [
-        "进阶教程",
-        "语雀迁移"
-      ],
+      "tags": [],
       "file": "advanced/senluo-tavern.md",
       "source": "../index.html#/doc/senluo-tavern"
     },
@@ -270,10 +241,7 @@
       "emoji": "🧭",
       "updated": "2026-10-25",
       "readingTime": 1,
-      "tags": [
-        "进阶教程",
-        "语雀迁移"
-      ],
+      "tags": [],
       "file": "advanced/money-making-guide.md",
       "source": "../index.html#/doc/money-making-guide"
     },
@@ -286,10 +254,7 @@
       "emoji": "🧭",
       "updated": "2026-10-25",
       "readingTime": 1,
-      "tags": [
-        "进阶教程",
-        "语雀迁移"
-      ],
+      "tags": [],
       "file": "advanced/lottery.md",
       "source": "../index.html#/doc/lottery"
     },
@@ -302,10 +267,7 @@
       "emoji": "🧭",
       "updated": "2026-10-25",
       "readingTime": 1,
-      "tags": [
-        "进阶教程",
-        "语雀迁移"
-      ],
+      "tags": [],
       "file": "advanced/immersive-vehicles.md",
       "source": "../index.html#/doc/immersive-vehicles"
     },
@@ -318,10 +280,7 @@
       "emoji": "🧭",
       "updated": "2026-10-25",
       "readingTime": 1,
-      "tags": [
-        "进阶教程",
-        "语雀迁移"
-      ],
+      "tags": [],
       "file": "advanced/town-resources.md",
       "source": "../index.html#/doc/town-resources"
     },
@@ -334,10 +293,7 @@
       "emoji": "📜",
       "updated": "2026-10-25",
       "readingTime": 2,
-      "tags": [
-        "服务器规则",
-        "语雀迁移"
-      ],
+      "tags": [],
       "file": "rules/cheating-response.md",
       "source": "../index.html#/doc/cheating-response"
     },
@@ -350,10 +306,7 @@
       "emoji": "📜",
       "updated": "2026-10-25",
       "readingTime": 3,
-      "tags": [
-        "服务器规则",
-        "语雀迁移"
-      ],
+      "tags": [],
       "file": "rules/behavior-chat.md",
       "source": "../index.html#/doc/behavior-chat"
     },
@@ -366,10 +319,7 @@
       "emoji": "📜",
       "updated": "2026-10-25",
       "readingTime": 1,
-      "tags": [
-        "服务器规则",
-        "语雀迁移"
-      ],
+      "tags": [],
       "file": "rules/world-map.md",
       "source": "../index.html#/doc/world-map"
     },
@@ -382,11 +332,7 @@
       "emoji": "📖",
       "updated": "2026-10-25",
       "readingTime": 1,
-      "tags": [
-        "happyday历史",
-        "人物志",
-        "语雀迁移"
-      ],
+      "tags": [],
       "file": "history/people/matopiraphai.md",
       "source": "../index.html#/doc/matopiraphai"
     },
@@ -399,11 +345,7 @@
       "emoji": "📖",
       "updated": "2026-10-25",
       "readingTime": 1,
-      "tags": [
-        "happyday历史",
-        "人物志",
-        "语雀迁移"
-      ],
+      "tags": [],
       "file": "history/people/233-2233.md",
       "source": "../index.html#/doc/233-2233"
     },
@@ -416,11 +358,7 @@
       "emoji": "📖",
       "updated": "2026-10-25",
       "readingTime": 1,
-      "tags": [
-        "happyday历史",
-        "人物志",
-        "语雀迁移"
-      ],
+      "tags": [],
       "file": "history/people/zzx.md",
       "source": "../index.html#/doc/zzx"
     },
@@ -433,11 +371,7 @@
       "emoji": "📖",
       "updated": "2026-10-25",
       "readingTime": 1,
-      "tags": [
-        "happyday历史",
-        "国家/城镇",
-        "语雀迁移"
-      ],
+      "tags": [],
       "file": "history/nations/northeast-economic-alliance.md",
       "source": "../index.html#/doc/northeast-economic-alliance"
     },
@@ -450,11 +384,7 @@
       "emoji": "📖",
       "updated": "2026-10-25",
       "readingTime": 1,
-      "tags": [
-        "happyday历史",
-        "国家/城镇",
-        "语雀迁移"
-      ],
+      "tags": [],
       "file": "history/nations/harbin-chronicle.md",
       "source": "../index.html#/doc/harbin-chronicle"
     },
@@ -467,11 +397,7 @@
       "emoji": "📖",
       "updated": "2026-10-25",
       "readingTime": 1,
-      "tags": [
-        "happyday历史",
-        "国家/城镇",
-        "语雀迁移"
-      ],
+      "tags": [],
       "file": "history/nations/rhodes-island.md",
       "source": "../index.html#/doc/rhodes-island"
     },
@@ -484,11 +410,7 @@
       "emoji": "📖",
       "updated": "2026-10-25",
       "readingTime": 1,
-      "tags": [
-        "happyday历史",
-        "国家/城镇",
-        "语雀迁移"
-      ],
+      "tags": [],
       "file": "history/nations/freedom-union.md",
       "source": "../index.html#/doc/freedom-union"
     },
@@ -501,11 +423,7 @@
       "emoji": "📖",
       "updated": "2026-10-25",
       "readingTime": 1,
-      "tags": [
-        "happyday历史",
-        "国家/城镇",
-        "语雀迁移"
-      ],
+      "tags": [],
       "file": "history/nations/dprk.md",
       "source": "../index.html#/doc/dprk"
     },
@@ -518,10 +436,7 @@
       "emoji": "📖",
       "updated": "2026-10-25",
       "readingTime": 2,
-      "tags": [
-        "happyday历史",
-        "语雀迁移"
-      ],
+      "tags": [],
       "file": "history/godman/qwertyuiop.md",
       "source": "../index.html#/doc/qwertyuiop"
     },
@@ -534,10 +449,7 @@
       "emoji": "📖",
       "updated": "2026-10-25",
       "readingTime": 1,
-      "tags": [
-        "happyday历史",
-        "语雀迁移"
-      ],
+      "tags": [],
       "file": "history/godman/alex.md",
       "source": "../index.html#/doc/alex"
     },
@@ -550,10 +462,7 @@
       "emoji": "🖼️",
       "updated": "2026-10-25",
       "readingTime": 1,
-      "tags": [
-        "妙妙图片集",
-        "语雀迁移"
-      ],
+      "tags": [],
       "file": "gallery/gallery-1.md",
       "source": "../index.html#/doc/gallery-1"
     },
@@ -566,10 +475,7 @@
       "emoji": "🖼️",
       "updated": "2026-10-25",
       "readingTime": 1,
-      "tags": [
-        "妙妙图片集",
-        "语雀迁移"
-      ],
+      "tags": [],
       "file": "gallery/gallery-2.md",
       "source": "../index.html#/doc/gallery-2"
     }

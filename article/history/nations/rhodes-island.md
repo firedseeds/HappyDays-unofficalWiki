@@ -10,9 +10,6 @@ order: 23
 slug: "rhodes-island"
 source: "../../../index.html#/doc/rhodes-island"
 tags:
-  - "happyday历史"
-  - "国家/城镇"
-  - "语雀迁移"
 ---
 
 # 罗德岛

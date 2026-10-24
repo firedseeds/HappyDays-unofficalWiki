@@ -10,9 +10,6 @@ order: 24
 slug: "freedom-union"
 source: "../../../index.html#/doc/freedom-union"
 tags:
-  - "happyday历史"
-  - "国家/城镇"
-  - "语雀迁移"
 ---
 
 # 自由联邦共同体 Freedom Union

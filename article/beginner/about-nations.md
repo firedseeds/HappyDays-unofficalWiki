@@ -10,8 +10,6 @@ order: 6
 slug: "about-nations"
 source: "../../index.html#/doc/about-nations"
 tags:
-  - "新手教程"
-  - "语雀迁移"
 ---
 
 # 关于国家

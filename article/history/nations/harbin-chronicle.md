@@ -10,9 +10,6 @@ order: 22
 slug: "harbin-chronicle"
 source: "../../../index.html#/doc/harbin-chronicle"
 tags:
-  - "happyday历史"
-  - "国家/城镇"
-  - "语雀迁移"
 ---
 
 # 哈尔滨地方志

@@ -10,8 +10,6 @@ order: 7
 slug: "first-money"
 source: "../../index.html#/doc/first-money"
 tags:
-  - "新手教程"
-  - "语雀迁移"
 ---
 
 # 第一桶金

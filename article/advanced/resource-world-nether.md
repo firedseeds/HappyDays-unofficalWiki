@@ -10,8 +10,6 @@ order: 8
 slug: "resource-world-nether"
 source: "../../index.html#/doc/resource-world-nether"
 tags:
-  - "进阶教程"
-  - "语雀迁移"
 ---
 
 # 资源世界/下界
