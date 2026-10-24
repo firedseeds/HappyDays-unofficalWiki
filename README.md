@@ -2,7 +2,7 @@
 
 一个类似语雀文档体验的 **纯静态团队知识库**。没有前端框架和第三方依赖，文章通过 `build.py` 生成 `assets/data.js`；同时提供一个基于 Python 标准库的本地编辑服务，可以在浏览器中编辑文章、创建主题和预览 Markdown。
 
-页面以「左侧知识树 + 中间长文阅读 + 右侧页面目录」为核心，内置 8 篇可切换的示例文档、全文搜索、主题切换和响应式布局。
+页面以「左侧知识树 + 中间长文阅读 + 右侧页面目录」为核心，支持多主题文档、全文搜索、主题切换和响应式布局。当前知识库已清空，等待导入新的文档。
 
 ---
 
@@ -91,8 +91,8 @@ python server.py --host 127.0.0.1 --port 8765
 
 ### 阅读与导航
 
-- 知识库目录树，按「开始使用 / 产品手册 / 团队协作 / 开发者」分组，可折叠并记住状态
-- 基于 URL hash 的文档路由，例如 `#/doc/api-guide`，可直接分享、刷新和前进后退
+- 知识库目录树，按主题分组，可折叠并记住状态
+- 基于 URL hash 的文档路由，例如 `#/doc/<slug>`，可直接分享、刷新和前进后退
 - 自动生成右侧页面目录（TOC），滚动时高亮当前章节
 - 顶部阅读进度、百分比、回到顶部
 - 上一篇 / 下一篇、当前目录与面包屑
@@ -136,23 +136,14 @@ python server.py --host 127.0.0.1 --port 8765
 │  ├─ editor.css         # 内容管理界面样式
 │  ├─ data.js            # 由 build.py 生成的文章数据（请勿直接编辑）
 │  ├─ app.js             # 路由、搜索、目录、主题与交互
-│  └─ editor.js          # 内容管理界面逻辑
+│  ├─ editor.js          # 内容管理界面逻辑
+│  └─ image/             # 迁移文章的本地图片
 ├─ article/
-│  ├─ article.json       # 主题、文章索引与元数据的机器可读清单
-│  ├─ start/             # 开始使用
-│  │  ├─ welcome.md
-│  │  └─ quickstart.md
-│  ├─ product/           # 产品手册
-│  │  ├─ product-guide.md
-│  │  ├─ faq.md
-│  │  └─ changelog.md
-│  ├─ team/              # 团队协作
-│  │  ├─ team-handbook.md
-│  │  └─ design-system.md
-│  └─ developer/         # 开发者
-│     └─ api-guide.md
+│  └─ article.json       # 当前为空，等待迁移
 └─ README.md
 ```
+
+迁移文章时，图片统一放入 `assets/image/<slug>/`，Markdown 中使用相对路径引用。
 
 ---
 
@@ -162,23 +153,16 @@ python server.py --host 127.0.0.1 --port 8765
 
 - **格式标识**：`happydays-article-manifest`
 - **当前版本**：`1`
-- **当前主题数**：4
-- **当前文章数**：8
-- **最近更新**：`2026-10-22`
+- **当前主题数**：0
+- **当前文章数**：0
+- **最近更新**：`2026-10-24`
 - **文件路径**：`article/article.json`
 
-主题文件夹名使用稳定的主题 ID，而不是中文显示名：
-
-| 主题 ID | 显示名称 | 目录 |
-| --- | --- | --- |
-| `start` | 开始使用 | `article/start/` |
-| `product` | 产品手册 | `article/product/` |
-| `team` | 团队协作 | `article/team/` |
-| `developer` | 开发者 | `article/developer/` |
+主题文件夹名使用稳定的主题 ID，而不是中文显示名；每个主题的 `directory` 字段决定 Markdown 子目录。
 
 ### 格式示例
 
-以下为节选示例，实际文件包含全部 4 个主题和 8 篇文章：
+以下为格式示例，使用示例主题和文章展示字段结构；当前清单中的 `topics` 与 `articles` 均为空：
 
 ```jsonc
 {
@@ -328,8 +312,7 @@ python build.py
 每篇文章必须位于 `article/<topic-id>/` 下。主题 ID 与目录名必须一致，例如：
 
 ```text
-article/start/quickstart.md
-article/product/faq.md
+article/handbook/onboarding.md
 ```
 
 新增主题时，同时在 `article/article.json` 的 `topics` 中添加记录，并设置 `id`、`name`、`description`、`directory`、`order` 和 `articleCount`。

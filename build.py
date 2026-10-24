@@ -479,9 +479,9 @@ def discover_articles() -> tuple[dict, list[dict], dict[Path, dict]]:
         fail("article/article.json 的 format 不是 happydays-article-manifest")
     topics = manifest.get("topics")
     articles = manifest.get("articles")
-    if not isinstance(topics, list) or not topics:
+    if not isinstance(topics, list):
         fail("article/article.json 缺少 topics 数组")
-    if not isinstance(articles, list) or not articles:
+    if not isinstance(articles, list):
         fail("article/article.json 缺少 articles 数组")
     if manifest.get("topicCount") != len(topics):
         fail("article/article.json: topicCount 与 topics.length 不一致")
@@ -684,7 +684,12 @@ def build_manifest(articles: list[dict], topics: list[dict], site: dict) -> str:
             "  };",
             "",
             "  var allIds = [",
-            "    " + ", ".join(js_string(article["slug"]) for article in articles),
+        ]
+    )
+    if articles:
+        lines.append("    " + ", ".join(js_string(article["slug"]) for article in articles))
+    lines.extend(
+        [
             "  ];",
             "",
             "  return {",

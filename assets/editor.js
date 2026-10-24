@@ -16,6 +16,8 @@
     offlineState: document.getElementById("offlineState"),
     retryConnection: document.getElementById("retryConnection"),
     emptyState: document.getElementById("emptyState"),
+    emptyTitle: document.getElementById("emptyTitle"),
+    emptyDescription: document.getElementById("emptyDescription"),
     form: document.getElementById("articleForm"),
     formMode: document.getElementById("formMode"),
     formHeading: document.getElementById("formHeading"),
@@ -164,6 +166,13 @@
   function renderSidebar() {
     els.articleCount.textContent = state.articles.length + " 篇";
     els.topicList.innerHTML = "";
+    if (!state.topics.length) {
+      var emptyTopics = document.createElement("div");
+      emptyTopics.className = "editor-topic-empty";
+      emptyTopics.innerHTML = "<strong>还没有主题</strong><span>点击「添加主题」开始整理内容。</span>";
+      els.topicList.appendChild(emptyTopics);
+      return;
+    }
     state.topics.forEach(function (topic) {
       var articles = state.articles.filter(function (article) {
         return article.topic === topic.id;
@@ -652,6 +661,10 @@
       if (state.articles.length) {
         return openArticle(state.articles[0].slug, true);
       }
+      els.emptyTitle.textContent = "还没有文章";
+      els.emptyDescription.textContent = state.topics.length
+        ? "选择左侧主题下的文章，或点击「新建文章」开始写作。"
+        : "先在左侧点击「添加主题」，再创建第一篇文章。";
       els.emptyState.hidden = false;
       els.form.hidden = true;
       els.offlineState.hidden = true;

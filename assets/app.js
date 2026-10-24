@@ -248,6 +248,16 @@
   function renderSidebar() {
     els.docCount.textContent = allIds.length + " 篇";
 
+    if (!categories.length) {
+      els.docTree.innerHTML =
+        '<div class="tree-empty">' +
+        "<strong>还没有主题</strong>" +
+        "<span>通过内容管理添加第一个主题。</span>" +
+        "</div>";
+      setActiveTree();
+      return;
+    }
+
     els.docTree.innerHTML = categories.map(function (category) {
       var isCollapsed = collapsedCategories.has(category.id);
       var docItems = category.docs.map(function (id) {
@@ -397,6 +407,7 @@
       return;
     }
 
+    document.body.classList.remove("is-empty-library");
     var category = categoryFor(id);
     var previousId = state.currentId;
     var shouldMoveFocus = !initial && previousId !== null;
@@ -453,21 +464,79 @@
     });
   }
 
+  function renderEmptyLibrary() {
+    state.currentId = null;
+    state.activeHeading = "";
+    state.tocHeadings = [];
+    document.body.classList.add("is-empty-library");
+    document.title = "知识库准备中 · HappyDays非官方文档";
+
+    els.crumbCategory.textContent = "知识库";
+    els.crumbTitle.textContent = "等待迁移";
+    els.docCategory.textContent = "准备中";
+    els.docEmoji.textContent = "🌱";
+    els.docTitle.textContent = "知识库正在准备中";
+    els.docExcerpt.textContent = "所有文章与主题已清空。创建第一个主题，或迁移新的文档。";
+    els.docUpdated.textContent = "等待内容";
+    els.docReading.textContent = "0 篇文章";
+    els.docTags.innerHTML = "";
+    els.editBtn.href = "editor.html";
+
+    els.docBody.innerHTML =
+      '<div class="empty-library">' +
+      '<span class="empty-library-eyebrow">EMPTY LIBRARY</span>' +
+      '<div class="empty-library-mark" aria-hidden="true">🌱</div>' +
+      '<p class="empty-library-title">从第一个主题开始</p>' +
+      '<p>目前还没有文章或主题。打开内容管理，先创建一个主题，再添加第一篇文档。</p>' +
+      '<div class="empty-library-actions">' +
+      '<a class="doc-button" href="editor.html">打开内容管理' +
+      icon("arrow-right") +
+      "</a>" +
+      "</div>" +
+      '<p class="empty-library-note">编辑功能需要通过 <code>python server.py</code> 启动本地服务。</p>' +
+      "</div>";
+
+    els.tocNav.innerHTML = '<p class="toc-empty">本页暂无小节</p>';
+    els.readingProgress.style.width = "0%";
+    els.readingPercent.textContent = "0%";
+    els.colophonUpdated.textContent = "等待内容迁移";
+    els.prevDoc.removeAttribute("href");
+    els.prevDocTitle.textContent = "";
+    els.prevDoc.setAttribute("aria-disabled", "true");
+    els.nextDoc.removeAttribute("href");
+    els.nextDocTitle.textContent = "";
+    els.nextDoc.setAttribute("aria-disabled", "true");
+    els.pageAnnouncement.textContent = "知识库当前为空";
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }
+
   function route(initial) {
+    if (!allIds.length) {
+      var cleanUrl = window.location.pathname + window.location.search;
+      try {
+        window.history.replaceState(null, "", cleanUrl);
+      } catch (error) {
+        /* 某些 file:// 环境不支持 replaceState */
+      }
+      renderEmptyLibrary();
+      return;
+    }
+
     var id = currentRouteId();
     var valid = id && docs[id];
 
     if (!valid) {
-      var replacement = "#/doc/welcome";
+      var fallbackId = allIds[0];
+      var replacement = "#/doc/" + fallbackId;
       try {
         window.history.replaceState(null, "", replacement);
       } catch (error) {
         /* 某些 file:// 环境不支持 replaceState */
         window.location.hash = replacement;
       }
-      id = "welcome";
-      if (initial !== true && currentRouteId() !== "welcome") {
-        renderDocument("welcome", false);
+      id = fallbackId;
+      if (initial !== true && currentRouteId() !== fallbackId) {
+        renderDocument(fallbackId, false);
         return;
       }
     }
@@ -828,6 +897,14 @@
     var normalized = query.trim().toLowerCase();
     state.activeResult = 0;
 
+    if (!state.searchIndex.length) {
+      els.searchResults.innerHTML =
+        '<div class="search-empty"><strong>知识库还是空的</strong>' +
+        "添加文章后就可以在这里搜索标题、标签和正文。</div>";
+      els.searchInput.removeAttribute("aria-activedescendant");
+      return;
+    }
+
     if (!normalized) {
       var recent = recentDocs().slice(0, 4);
       var items = recent.map(function (id) {
@@ -964,7 +1041,7 @@
         closeToc(true);
       } else if (action === "invite") {
         var base = window.location.href.split("#")[0];
-        copyText(base + "#/doc/welcome").then(function (success) {
+        copyText(base).then(function (success) {
           showToast(success ? "邀请链接已复制，发给伙伴即可加入" : "复制失败，请手动复制页面链接");
         });
       } else if (action === "copy-link") {
