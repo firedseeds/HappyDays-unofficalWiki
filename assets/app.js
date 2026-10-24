@@ -177,19 +177,42 @@
   }
 
   function categoryLabel(category) {
-    if (category && category.parentId) {
-      var parent = CATEGORY_BY_ID[category.parentId];
-      if (parent) {
-        return parent.name + " / " + category.name;
-      }
+    if (!category) {
+      return "未分类";
     }
-    return category ? category.name : "未分类";
+    var names = [];
+    var current = category;
+    var seen = {};
+    while (current) {
+      if (seen[current.id]) {
+        break;
+      }
+      seen[current.id] = true;
+      names.unshift(current.name);
+      current = current.parentId ? CATEGORY_BY_ID[current.parentId] : null;
+    }
+    return names.join(" / ");
   }
 
   function subtreeDocCount(category) {
     return category.docs.length + childCategories(category.id).reduce(function (total, child) {
-      return total + child.docs.length;
+      return total + subtreeDocCount(child);
     }, 0);
+  }
+
+  function categoryChain(category) {
+    var chain = [];
+    var current = category;
+    var seen = {};
+    while (current) {
+      if (seen[current.id]) {
+        break;
+      }
+      seen[current.id] = true;
+      chain.unshift(current.id);
+      current = current.parentId ? CATEGORY_BY_ID[current.parentId] : null;
+    }
+    return chain;
   }
 
   function clamp(number, min, max) {
@@ -289,29 +312,18 @@
     }).join("");
   }
 
-  function renderCategory(category, isChild) {
+  function renderCategory(category, depth) {
     var isCollapsed = collapsedCategories.has(category.id);
     var docItems = renderDocItems(category);
     var children = childCategories(category.id);
-    var count = isChild ? category.docs.length : subtreeDocCount(category);
-    var toggleId = "tree-" + (isChild ? "list-" : "body-") + category.id;
-    var className = "tree-group" + (isChild ? " tree-group--child" : "") +
+    var count = subtreeDocCount(category);
+    var toggleId = "tree-body-" + category.id;
+    var className = "tree-group" + (depth > 0 ? " tree-group--child" : "") +
       (isCollapsed ? " is-collapsed" : "");
-
-    if (isChild) {
-      return '<div class="' + className + '" data-category="' + category.id + '">' +
-        '<button class="tree-group-head tree-group-head--child" type="button" data-category-toggle="' + category.id +
-        '" aria-expanded="' + (!isCollapsed) + '" aria-controls="' + toggleId + '">' +
-        icon("chevron-down", "tree-chevron") +
-        '<span class="tree-group-label">' + escapeHTML(category.name) + "</span>" +
-        '<span class="tree-group-count">' + count + "</span>" +
-        "</button>" +
-        '<ul class="tree-list tree-list--nested" id="' + toggleId + '">' + docItems + "</ul>" +
-        "</div>";
-    }
+    var headClass = "tree-group-head" + (depth > 0 ? " tree-group-head--child" : "");
 
     return '<div class="' + className + '" data-category="' + category.id + '">' +
-      '<button class="tree-group-head" type="button" data-category-toggle="' + category.id +
+      '<button class="' + headClass + '" type="button" data-category-toggle="' + category.id +
       '" aria-expanded="' + (!isCollapsed) + '" aria-controls="' + toggleId + '">' +
       icon("chevron-down", "tree-chevron") +
       '<span class="tree-group-label">' + escapeHTML(category.name) + "</span>" +
@@ -320,7 +332,7 @@
       '<div class="tree-group-body" id="' + toggleId + '">' +
       '<ul class="tree-list">' + docItems + "</ul>" +
       children.map(function (child) {
-        return renderCategory(child, true);
+        return renderCategory(child, depth + 1);
       }).join("") +
       "</div></div>";
   }
@@ -339,7 +351,7 @@
     }
 
     els.docTree.innerHTML = topCategories().map(function (category) {
-      return renderCategory(category, false);
+      return renderCategory(category, 0);
     }).join("");
 
     setActiveTree();
@@ -352,13 +364,7 @@
 
     var current = docs[state.currentId];
     var currentCategory = CATEGORY_BY_ID[current.category];
-    var categoryIds = [];
-    if (currentCategory && currentCategory.parentId) {
-      categoryIds.push(currentCategory.parentId);
-    }
-    if (currentCategory) {
-      categoryIds.push(currentCategory.id);
-    }
+    var categoryIds = categoryChain(currentCategory);
 
     categoryIds.forEach(function (categoryId) {
       var group = els.docTree.querySelector('[data-category="' + categoryId + '"]');

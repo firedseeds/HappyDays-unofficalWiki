@@ -45,7 +45,7 @@ window.HAPPYDAYS_WIKI = (function () {
       description: "服务器的人物、国家与历史记录。",
       parentId: null,
       order: 5,
-      docs: ["qwertyuiop", "alex"]
+      docs: []
     },
     {
       id: "people",
@@ -69,7 +69,7 @@ window.HAPPYDAYS_WIKI = (function () {
       description: "服务器里各种神人",
       parentId: "history",
       order: 3,
-      docs: []
+      docs: ["qwertyuiop", "alex"]
     },
     {
       id: "gallery",
@@ -619,15 +619,14 @@ window.HAPPYDAYS_WIKI = (function () {
 <p>国家成就：发展到了300w元，建筑居然是零！</p>
 <p><img src="assets/image/dprk/1790489592276-56c0efb6-087d-4d5a-9028-397eb757b968.png" alt="图片" loading="lazy" decoding="async"></p>
 <p>26年10月7日更新：</p>
-<ol class="steps"><li>zzx蟠桃了</li><li>新建巨型建筑柳京饭店，共51层</li></ol>
-<p>3。不要叛逃（——zzx</p>
+<ol class="steps"><li>zzx蟠桃了</li><li>新建巨型建筑柳京饭店，共51层</li><li>不要叛逃（——zzx</li></ol>
 <p>26年10月8日更新：</p>
 <ol class="steps"><li>将军指正柳京饭店为55层\\o/\\o/\\o/</li></ol>`
     },
     "qwertyuiop": {
       title: "qwertyuiop",
       emoji: "📖",
-      category: "history",
+      category: "godman",
       excerpt: "神人简介入服时间（魔童降世）2026年8月14日神人评...",
       updated: "2026-10-25",
       reading: 2,
@@ -649,7 +648,7 @@ window.HAPPYDAYS_WIKI = (function () {
     "alex": {
       title: "Alex",
       emoji: "📖",
-      category: "history",
+      category: "godman",
       excerpt: "被zzx带进来的神人，进来不到两天就把火车给实体化了，...",
       updated: "2026-10-25",
       reading: 1,

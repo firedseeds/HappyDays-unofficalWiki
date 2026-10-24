@@ -167,10 +167,28 @@
     return state.articles.filter(function (article) {
       return article.topic === topic.id;
     }).length + childTopics(topic.id).reduce(function (total, child) {
-      return total + state.articles.filter(function (article) {
-        return article.topic === child.id;
-      }).length;
+      return total + subtreeArticleCount(child);
     }, 0);
+  }
+
+  function orderedTopicEntries() {
+    var entries = [];
+
+    function append(topic, depth) {
+      entries.push({ topic: topic, depth: depth });
+      childTopics(topic.id).forEach(function (child) {
+        append(child, depth + 1);
+      });
+    }
+
+    topTopics().forEach(function (topic) {
+      append(topic, 0);
+    });
+    return entries;
+  }
+
+  function topicOptionLabel(entry) {
+    return "　".repeat(entry.depth) + (entry.depth ? "↳ " : "") + entry.topic.name;
   }
 
   function currentTopicOptions(selectedId) {
@@ -183,19 +201,12 @@
       els.topic.disabled = true;
       return;
     }
-    topTopics().forEach(function (topic) {
+    orderedTopicEntries().forEach(function (entry) {
       var option = document.createElement("option");
-      option.value = topic.id;
-      option.textContent = topic.name;
-      option.selected = topic.id === selectedId;
+      option.value = entry.topic.id;
+      option.textContent = topicOptionLabel(entry);
+      option.selected = entry.topic.id === selectedId;
       els.topic.appendChild(option);
-      childTopics(topic.id).forEach(function (child) {
-        var childOption = document.createElement("option");
-        childOption.value = child.id;
-        childOption.textContent = "　↳ " + child.name;
-        childOption.selected = child.id === selectedId;
-        els.topic.appendChild(childOption);
-      });
     });
   }
 
@@ -226,6 +237,50 @@
     return list;
   }
 
+  function renderTopicNode(topic, depth) {
+    var children = childTopics(topic.id);
+    var articles = state.articles.filter(function (article) {
+      return article.topic === topic.id;
+    });
+    var group = document.createElement("section");
+    group.className = depth === 0 ? "topic-group" : "topic-subgroup";
+
+    var head = document.createElement("div");
+    head.className = depth === 0 ? "topic-group-head" : "topic-subgroup-head";
+    var name = document.createElement("span");
+    name.className = depth === 0 ? "topic-group-name" : "topic-subgroup-name";
+    name.textContent = topic.name;
+    name.title = topic.name;
+    var count = document.createElement("span");
+    count.className = depth === 0 ? "topic-group-count" : "topic-subgroup-count";
+    count.textContent = subtreeArticleCount(topic);
+    var addChild = document.createElement("button");
+    addChild.type = "button";
+    addChild.className = "topic-add-child";
+    addChild.dataset.parentId = topic.id;
+    addChild.title = "添加下级主题";
+    addChild.setAttribute("aria-label", "在「" + topic.name + "」下添加下级主题");
+    addChild.textContent = "+";
+    head.appendChild(name);
+    head.appendChild(count);
+    head.appendChild(addChild);
+    if (!articles.length && !children.length) {
+      head.appendChild(createTopicDeleteButton(topic));
+    }
+
+    group.appendChild(head);
+    if (articles.length) {
+      group.appendChild(renderTopicArticles(articles, ""));
+    }
+    children.forEach(function (child) {
+      group.appendChild(renderTopicNode(child, depth + 1));
+    });
+    if (!articles.length && !children.length) {
+      group.appendChild(renderTopicArticles([], "暂无文章"));
+    }
+    return group;
+  }
+
   function renderSidebar() {
     els.articleCount.textContent = state.articles.length + " 篇";
     els.topicList.innerHTML = "";
@@ -237,74 +292,7 @@
       return;
     }
     topTopics().forEach(function (topic) {
-      var children = childTopics(topic.id);
-      var articles = state.articles.filter(function (article) {
-        return article.topic === topic.id;
-      });
-      var group = document.createElement("section");
-      group.className = "topic-group";
-
-      var head = document.createElement("div");
-      head.className = "topic-group-head";
-      var name = document.createElement("span");
-      name.className = "topic-group-name";
-      name.textContent = topic.name;
-      name.title = topic.name;
-      var count = document.createElement("span");
-      count.className = "topic-group-count";
-      count.textContent = subtreeArticleCount(topic);
-      var addChild = document.createElement("button");
-      addChild.type = "button";
-      addChild.className = "topic-add-child";
-      addChild.dataset.parentId = topic.id;
-      addChild.title = "添加二级主题";
-      addChild.setAttribute("aria-label", "在「" + topic.name + "」下添加二级主题");
-      addChild.textContent = "+";
-      head.appendChild(name);
-      head.appendChild(count);
-      head.appendChild(addChild);
-      if (!articles.length && !children.length) {
-        head.appendChild(createTopicDeleteButton(topic));
-      }
-
-      group.appendChild(head);
-      if (articles.length) {
-        group.appendChild(renderTopicArticles(articles, ""));
-      }
-      children.forEach(function (child) {
-        var childGroup = document.createElement("section");
-        childGroup.className = "topic-subgroup";
-        var childHead = document.createElement("div");
-        childHead.className = "topic-subgroup-head";
-        var childName = document.createElement("span");
-        childName.className = "topic-subgroup-name";
-        childName.textContent = child.name;
-        childName.title = child.name;
-        var childCount = document.createElement("span");
-        childCount.className = "topic-subgroup-count";
-        childCount.textContent = state.articles.filter(function (article) {
-          return article.topic === child.id;
-        }).length;
-        childHead.appendChild(childName);
-        childHead.appendChild(childCount);
-        if (!state.articles.some(function (article) {
-          return article.topic === child.id;
-        })) {
-          childHead.appendChild(createTopicDeleteButton(child));
-        }
-        childGroup.appendChild(childHead);
-        childGroup.appendChild(renderTopicArticles(
-          state.articles.filter(function (article) {
-            return article.topic === child.id;
-          }),
-          "暂无文章"
-        ));
-        group.appendChild(childGroup);
-      });
-      if (!articles.length && !children.length) {
-        group.appendChild(renderTopicArticles([], "暂无文章"));
-      }
-      els.topicList.appendChild(group);
+      els.topicList.appendChild(renderTopicNode(topic, 0));
     });
   }
 
@@ -702,17 +690,17 @@
 
   function populateTopicParents(selectedId) {
     els.topicParent.innerHTML = '<option value="">作为顶级主题</option>';
-    topTopics().forEach(function (topic) {
+    orderedTopicEntries().forEach(function (entry) {
       var option = document.createElement("option");
-      option.value = topic.id;
-      option.textContent = topic.name;
+      option.value = entry.topic.id;
+      option.textContent = topicOptionLabel(entry);
       els.topicParent.appendChild(option);
     });
     els.topicParent.value = selectedId || "";
   }
 
   function updateTopicDialogMode() {
-    els.topicDialogTitle.textContent = els.topicParent.value ? "创建二级主题" : "创建主题";
+    els.topicDialogTitle.textContent = els.topicParent.value ? "创建下级主题" : "创建主题";
   }
 
   function openTopicDialog(parentId) {

@@ -1,14 +1,14 @@
 ---
 title: "qwertyuiop"
 description: "神人简介入服时间（魔童降世）2026年8月14日神人评..."
-topic: "happyday历史"
-topic_id: "history"
+topic: "神人堂"
+topic_id: "godman"
 updated: "2026-10-25"
 reading_time: 2
 emoji: "📖"
 order: 27
 slug: "qwertyuiop"
-source: "../../index.html#/doc/qwertyuiop"
+source: "../../../index.html#/doc/qwertyuiop"
 tags:
   - "happyday历史"
   - "语雀迁移"

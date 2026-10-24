@@ -542,8 +542,6 @@ def discover_articles() -> tuple[dict, list[dict], dict[Path, dict]]:
             parent = topic_by_id.get(parent_id)
             if parent is None:
                 fail(f"主题 {topic['id']} 的父主题 {parent_id} 不存在")
-            if parent.get("parentId"):
-                fail(f"主题 {topic['id']} 不能嵌套在二级主题 {parent_id} 下")
             expected_directory = f"{parent['directory']}/{topic['id']}"
         else:
             expected_directory = topic["id"]
@@ -552,6 +550,18 @@ def discover_articles() -> tuple[dict, list[dict], dict[Path, dict]]:
                 f"主题 {topic['id']} 的目录应为 {expected_directory}，"
                 f"实际为 {topic['directory']}"
             )
+
+    for topic in topics:
+        seen = set()
+        current = topic
+        while current.get("parentId"):
+            parent_id = current["parentId"]
+            if parent_id in seen:
+                fail(f"主题层级存在循环引用: {topic['id']}")
+            seen.add(parent_id)
+            current = topic_by_id.get(parent_id)
+            if current is None:
+                break
 
     article_by_file: dict[Path, dict] = {}
     seen_slugs = set()
@@ -686,7 +696,7 @@ def parse_article(path: Path, manifest_article: dict, topics: dict, articles_by_
 def ordered_topics(topics: list[dict]) -> list[dict]:
     top_level = [topic for topic in topics if not topic.get("parentId")]
     top_level.sort(key=lambda topic: (topic["order"], topic["id"]))
-    children = {}
+    children: dict[str, list[dict]] = {}
     for topic in topics:
         parent_id = topic.get("parentId")
         if parent_id:
@@ -694,9 +704,15 @@ def ordered_topics(topics: list[dict]) -> list[dict]:
     for items in children.values():
         items.sort(key=lambda topic: (topic["order"], topic["id"]))
     ordered = []
+
+    def append_children(parent_id: str) -> None:
+        for child in children.get(parent_id, []):
+            ordered.append(child)
+            append_children(child["id"])
+
     for topic in top_level:
         ordered.append(topic)
-        ordered.extend(children.get(topic["id"], []))
+        append_children(topic["id"])
     return ordered
 
 

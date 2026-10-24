@@ -1,14 +1,14 @@
 ---
 title: "Alex"
 description: "被zzx带进来的神人，进来不到两天就把火车给实体化了，..."
-topic: "happyday历史"
-topic_id: "history"
+topic: "神人堂"
+topic_id: "godman"
 updated: "2026-10-25"
 reading_time: 1
 emoji: "📖"
 order: 28
 slug: "alex"
-source: "../../index.html#/doc/alex"
+source: "../../../index.html#/doc/alex"
 tags:
   - "happyday历史"
   - "语雀迁移"

@@ -538,10 +538,6 @@ kbd {
   height: 11px;
 }
 
-.tree-group--child.is-collapsed > .tree-list {
-  display: none;
-}
-
 .tree-list--nested {
   margin-bottom: 5px;
 }

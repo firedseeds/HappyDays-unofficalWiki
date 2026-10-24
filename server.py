@@ -116,9 +116,15 @@ def ordered_topics(topics: list[dict]) -> list[dict]:
     for items in children.values():
         items.sort(key=lambda topic: (int(topic.get("order", 0)), str(topic.get("id"))))
     ordered = []
+
+    def append_children(parent_id: str) -> None:
+        for child in children.get(parent_id, []):
+            ordered.append(child)
+            append_children(child["id"])
+
     for topic in top_level:
         ordered.append(topic)
-        ordered.extend(children.get(topic["id"], []))
+        append_children(topic["id"])
     return ordered
 
 
@@ -577,7 +583,7 @@ def delete_topic(topic_id: str) -> dict:
         if children:
             raise ApiError(
                 409,
-                f"主题「{topic['name']}」下还有 {len(children)} 个二级主题，请先删除二级主题",
+                f"主题「{topic['name']}」下还有 {len(children)} 个下级主题，请先删除下级主题",
             )
         directory = (ARTICLE_DIR / topic["directory"]).resolve()
         try:
@@ -703,8 +709,6 @@ def create_topic(payload: dict) -> dict:
             parent = topics.get(parent_id)
             if parent is None:
                 raise ApiError(400, "父主题不存在")
-            if parent.get("parentId"):
-                raise ApiError(400, "只支持一级子主题，不能在二级主题下继续添加")
             directory_name = f"{parent['directory']}/{topic_id}"
         else:
             directory_name = topic_id

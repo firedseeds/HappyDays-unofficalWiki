@@ -58,7 +58,7 @@
       "order": 5,
       "description": "服务器的人物、国家与历史记录。",
       "emoji": "📖",
-      "articleCount": 2,
+      "articleCount": 0,
       "parentId": null
     },
     {
@@ -88,7 +88,7 @@
       "directory": "history/godman",
       "parentId": "history",
       "order": 3,
-      "articleCount": 0
+      "articleCount": 2
     },
     {
       "id": "gallery",
@@ -512,7 +512,7 @@
     {
       "slug": "qwertyuiop",
       "order": 27,
-      "topic": "history",
+      "topic": "godman",
       "title": "qwertyuiop",
       "description": "神人简介入服时间（魔童降世）2026年8月14日神人评...",
       "emoji": "📖",
@@ -522,13 +522,13 @@
         "happyday历史",
         "语雀迁移"
       ],
-      "file": "history/qwertyuiop.md",
+      "file": "history/godman/qwertyuiop.md",
       "source": "../index.html#/doc/qwertyuiop"
     },
     {
       "slug": "alex",
       "order": 28,
-      "topic": "history",
+      "topic": "godman",
       "title": "Alex",
       "description": "被zzx带进来的神人，进来不到两天就把火车给实体化了，...",
       "emoji": "📖",
@@ -538,7 +538,7 @@
         "happyday历史",
         "语雀迁移"
       ],
-      "file": "history/alex.md",
+      "file": "history/godman/alex.md",
       "source": "../index.html#/doc/alex"
     },
     {

@@ -2,7 +2,7 @@
 
 一个类似语雀文档体验的 **纯静态团队知识库**。没有前端框架和第三方依赖，文章通过 `build.py` 生成 `assets/data.js`；同时提供一个基于 Python 标准库的本地编辑服务，可以在浏览器中编辑文章、创建主题和预览 Markdown。
 
-页面以「左侧知识树 + 中间长文阅读 + 右侧页面目录」为核心，支持多主题文档、全文搜索、主题切换和响应式布局。当前知识库已从语雀迁入 29 篇文章，包含 9 个主题（7 个顶级主题、2 个二级主题）。
+页面以「左侧知识树 + 中间长文阅读 + 右侧页面目录」为核心，支持多主题文档、全文搜索、主题切换和响应式布局。当前知识库已从语雀迁入 29 篇文章，包含 9 个主题（6 个顶级主题、3 个下级主题）。
 
 ---
 
@@ -56,12 +56,12 @@ python server.py
 - 选择并编辑已有文章
 - 修改标题、摘要、Emoji、更新时间、阅读时长、标签和 Markdown 正文
 - 实时预览 Markdown
-- 新建文章并选择顶级主题或二级主题
-- 添加顶级主题，或在任意顶级主题下添加二级主题
-- 在编辑器侧边栏的主题标题旁点击 `+`，可快速添加该主题下的二级主题
+- 新建文章并选择任意层级的主题
+- 添加顶级主题，或在任意主题下继续添加下级主题
+- 在编辑器侧边栏的主题标题旁点击 `+`，可快速添加该主题的下级主题
 - 修改文章所属主题；保存时自动移动 Markdown 文件，并更新 `topic`、`topic_id`、`source` 和本地图片相对路径
 - 删除文章及其本地图片
-- 删除空主题（没有直属文章和二级主题）
+- 删除空主题（没有直属文章和下级主题）
 - 保存时同步更新 Markdown front matter、`article/article.json`，并自动运行 `build.py` 生成 `assets/data.js`
 - 构建失败时返回具体错误，并回滚 Markdown、清单和 `data.js`
 
@@ -91,7 +91,7 @@ python server.py --host 127.0.0.1 --port 8765
 | DELETE | `/api/topics/<id>` | 删除空主题 |
 | POST | `/api/preview` | 将 Markdown 渲染为预览 HTML |
 
-删除文章会同时清理 `assets/image/<slug>/`；删除主题要求该主题没有直属文章、没有二级主题，且目录为空。删除文章后 `order` 可以出现空号，但仍必须唯一。
+删除文章会同时清理 `assets/image/<slug>/`；删除主题要求该主题没有直属文章、没有下级主题，且目录为空。删除文章后 `order` 可以出现空号，但仍必须唯一。
 
 ---
 
@@ -99,7 +99,7 @@ python server.py --host 127.0.0.1 --port 8765
 
 ### 阅读与导航
 
-- 知识库目录树，按主题分组，可折叠并记住状态
+- 知识库目录树，按主题分组，支持任意层级、可折叠并记住状态
 - 基于 URL hash 的文档路由，例如 `#/doc/<slug>`，可直接分享、刷新和前进后退
 - 自动生成右侧页面目录（TOC），滚动时高亮当前章节
 - 顶部阅读进度、百分比、回到顶部
@@ -152,15 +152,15 @@ python server.py --host 127.0.0.1 --port 8765
 │  ├─ beginner/          # 新手教程（6 篇）
 │  ├─ advanced/          # 进阶教程（7 篇）
 │  ├─ rules/             # 服务器规则（3 篇）
-│  ├─ history/           # happyday历史（直属 2 篇）
+│  ├─ history/           # happyday历史（直属 0 篇）
 │  │  ├─ people/         # 人物志（3 篇）
-│  │  └─ nations/        # 国家/城镇（5 篇）
-│  ├─ gallery/           # 妙妙图片集（2 篇）
-│  └─ godman/            # 神人堂（0 篇，待补充）
+│  │  ├─ nations/        # 国家/城镇（5 篇）
+│  │  └─ godman/         # 神人堂（2 篇）
+│  └─ gallery/           # 妙妙图片集（2 篇）
 └─ README.md
 ```
 
-迁移文章时，图片统一放入 `assets/image/<slug>/`，Markdown 中使用相对路径引用。二级主题的文章放在 `article/<顶级主题>/<二级主题>/` 下。
+迁移文章时，图片统一放入 `assets/image/<slug>/`，Markdown 中使用相对路径引用。主题可以多层嵌套，文章放在对应主题的目录下，例如 `article/history/people/`。
 
 ## 语雀迁移
 
@@ -176,7 +176,7 @@ python server.py --host 127.0.0.1 --port 8765
 
 - **格式标识**：`happydays-article-manifest`
 - **当前版本**：`1`
-- **当前主题数**：9（7 个顶级主题、2 个二级主题）
+- **当前主题数**：9（6 个顶级主题、3 个下级主题）
 - **当前文章数**：29
 - **最近更新**：`2026-10-25`
 - **文件路径**：`article/article.json`
@@ -267,7 +267,7 @@ python server.py --host 127.0.0.1 --port 8765
 | `topicCount` | integer | 主题总数，必须等于 `topics.length` |
 | `articleCount` | integer | 文章总数，必须等于 `articles.length` |
 | `lastUpdated` | string | 所有文章 `updated` 中的最大日期，格式 `YYYY-MM-DD` |
-| `topics` | array | 主题对象列表，先按顶级主题 `order`、再按同级子主题 `order` 排列 |
+| `topics` | array | 主题对象列表，按树形顺序排列：顶级主题后紧跟其所有下级主题 |
 | `articles` | array | 文章对象列表，按 `order` 升序排列 |
 
 ### 主题字段
@@ -277,12 +277,12 @@ python server.py --host 127.0.0.1 --port 8765
 | `id` | string | 主题唯一标识，也是文章 `topic` 的引用值 |
 | `name` | string | 主题显示名称，例如 `开始使用` |
 | `description` | string | 主题说明 |
-| `directory` | string | 主题在 `article/` 下的相对路径；二级主题为 `parent/child` |
-| `parentId` | string \| null | 父主题 ID；`null` 表示顶级主题，最多支持一层子主题 |
+| `directory` | string | 主题在 `article/` 下的相对路径，可多层嵌套，例如 `history/people` |
+| `parentId` | string \| null | 父主题 ID；`null` 表示顶级主题，可继续嵌套任意层级 |
 | `order` | integer | 同一父级下的展示顺序，从 `1` 开始 |
-| `articleCount` | integer | 该主题下的直接文章数，不包含子主题文章 |
+| `articleCount` | integer | 该主题下的直接文章数，不包含下级主题文章 |
 
-二级主题的 `directory` 必须为 `父主题目录/子主题ID`，且不能继续嵌套第三级。`topicCount` 和文章总数都包含二级主题。
+主题的 `directory` 必须为 `父主题目录/主题ID`；`topicCount` 和文章总数都包含所有层级主题。构建时会校验父主题存在且不存在循环引用。
 
 ### 文章字段
 
