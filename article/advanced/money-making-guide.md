@@ -7,8 +7,8 @@ updated: "2026-10-25"
 reading_time: 1
 emoji: "🧭"
 order: 11
-slug: "wdc66iz1zh7uf9qt"
-source: "../../index.html#/doc/wdc66iz1zh7uf9qt"
+slug: "money-making-guide"
+source: "../../index.html#/doc/money-making-guide"
 tags:
   - "进阶教程"
   - "语雀迁移"

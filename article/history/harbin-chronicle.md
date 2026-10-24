@@ -7,8 +7,8 @@ updated: "2026-10-25"
 reading_time: 1
 emoji: "📖"
 order: 22
-slug: "kci8fcfq50bayle8"
-source: "../../index.html#/doc/kci8fcfq50bayle8"
+slug: "harbin-chronicle"
+source: "../../index.html#/doc/harbin-chronicle"
 tags:
   - "happyday历史"
   - "国家/城镇"

@@ -68,7 +68,7 @@
   ],
   "articles": [
     {
-      "slug": "lbm7l8qr2lo5inoe",
+      "slug": "intro",
       "order": 1,
       "topic": "intro",
       "title": "简介",
@@ -79,11 +79,11 @@
       "tags": [
         "语雀迁移"
       ],
-      "file": "intro/lbm7l8qr2lo5inoe.md",
-      "source": "../index.html#/doc/lbm7l8qr2lo5inoe"
+      "file": "intro/intro.md",
+      "source": "../index.html#/doc/intro"
     },
     {
-      "slug": "qg58speht2e47nhs",
+      "slug": "before-joining",
       "order": 2,
       "topic": "beginner",
       "title": "进入游戏前",
@@ -95,11 +95,11 @@
         "新手教程",
         "语雀迁移"
       ],
-      "file": "beginner/qg58speht2e47nhs.md",
-      "source": "../index.html#/doc/qg58speht2e47nhs"
+      "file": "beginner/before-joining.md",
+      "source": "../index.html#/doc/before-joining"
     },
     {
-      "slug": "xueivzgcgnv2egf3",
+      "slug": "first-arrival",
       "order": 3,
       "topic": "beginner",
       "title": "初来乍到",
@@ -111,11 +111,11 @@
         "新手教程",
         "语雀迁移"
       ],
-      "file": "beginner/xueivzgcgnv2egf3.md",
-      "source": "../index.html#/doc/xueivzgcgnv2egf3"
+      "file": "beginner/first-arrival.md",
+      "source": "../index.html#/doc/first-arrival"
     },
     {
-      "slug": "rvqc0xc1igubzaz5",
+      "slug": "shop-plugin",
       "order": 4,
       "topic": "beginner",
       "title": "商店插件",
@@ -127,11 +127,11 @@
         "新手教程",
         "语雀迁移"
       ],
-      "file": "beginner/rvqc0xc1igubzaz5.md",
-      "source": "../index.html#/doc/rvqc0xc1igubzaz5"
+      "file": "beginner/shop-plugin.md",
+      "source": "../index.html#/doc/shop-plugin"
     },
     {
-      "slug": "wzd3p3hnih3hnf0b",
+      "slug": "build-town",
       "order": 5,
       "topic": "beginner",
       "title": "建立城邦",
@@ -143,11 +143,11 @@
         "新手教程",
         "语雀迁移"
       ],
-      "file": "beginner/wzd3p3hnih3hnf0b.md",
-      "source": "../index.html#/doc/wzd3p3hnih3hnf0b"
+      "file": "beginner/build-town.md",
+      "source": "../index.html#/doc/build-town"
     },
     {
-      "slug": "dmagi2zbs3zagrgx",
+      "slug": "about-nations",
       "order": 6,
       "topic": "beginner",
       "title": "关于国家",
@@ -159,11 +159,11 @@
         "新手教程",
         "语雀迁移"
       ],
-      "file": "beginner/dmagi2zbs3zagrgx.md",
-      "source": "../index.html#/doc/dmagi2zbs3zagrgx"
+      "file": "beginner/about-nations.md",
+      "source": "../index.html#/doc/about-nations"
     },
     {
-      "slug": "hv3mqxwgrmyg025y",
+      "slug": "first-money",
       "order": 7,
       "topic": "beginner",
       "title": "第一桶金",
@@ -175,11 +175,11 @@
         "新手教程",
         "语雀迁移"
       ],
-      "file": "beginner/hv3mqxwgrmyg025y.md",
-      "source": "../index.html#/doc/hv3mqxwgrmyg025y"
+      "file": "beginner/first-money.md",
+      "source": "../index.html#/doc/first-money"
     },
     {
-      "slug": "yh4tcrcleg2xg3n5",
+      "slug": "resource-world-nether",
       "order": 8,
       "topic": "advanced",
       "title": "资源世界/下界",
@@ -191,11 +191,11 @@
         "进阶教程",
         "语雀迁移"
       ],
-      "file": "advanced/yh4tcrcleg2xg3n5.md",
-      "source": "../index.html#/doc/yh4tcrcleg2xg3n5"
+      "file": "advanced/resource-world-nether.md",
+      "source": "../index.html#/doc/resource-world-nether"
     },
     {
-      "slug": "ngcy62fx7hh7ska8",
+      "slug": "senluo-kitchen",
       "order": 9,
       "topic": "advanced",
       "title": "森罗物语：厨房",
@@ -207,11 +207,11 @@
         "进阶教程",
         "语雀迁移"
       ],
-      "file": "advanced/ngcy62fx7hh7ska8.md",
-      "source": "../index.html#/doc/ngcy62fx7hh7ska8"
+      "file": "advanced/senluo-kitchen.md",
+      "source": "../index.html#/doc/senluo-kitchen"
     },
     {
-      "slug": "tw133gls37p4vtqd",
+      "slug": "senluo-tavern",
       "order": 10,
       "topic": "advanced",
       "title": "森罗物语：酒馆",
@@ -223,11 +223,11 @@
         "进阶教程",
         "语雀迁移"
       ],
-      "file": "advanced/tw133gls37p4vtqd.md",
-      "source": "../index.html#/doc/tw133gls37p4vtqd"
+      "file": "advanced/senluo-tavern.md",
+      "source": "../index.html#/doc/senluo-tavern"
     },
     {
-      "slug": "wdc66iz1zh7uf9qt",
+      "slug": "money-making-guide",
       "order": 11,
       "topic": "advanced",
       "title": "一些杂七杂八的赚钱野路子",
@@ -239,11 +239,11 @@
         "进阶教程",
         "语雀迁移"
       ],
-      "file": "advanced/wdc66iz1zh7uf9qt.md",
-      "source": "../index.html#/doc/wdc66iz1zh7uf9qt"
+      "file": "advanced/money-making-guide.md",
+      "source": "../index.html#/doc/money-making-guide"
     },
     {
-      "slug": "gtogpaa0zmpf8gx4",
+      "slug": "lottery",
       "order": 12,
       "topic": "advanced",
       "title": "彩票",
@@ -255,11 +255,11 @@
         "进阶教程",
         "语雀迁移"
       ],
-      "file": "advanced/gtogpaa0zmpf8gx4.md",
-      "source": "../index.html#/doc/gtogpaa0zmpf8gx4"
+      "file": "advanced/lottery.md",
+      "source": "../index.html#/doc/lottery"
     },
     {
-      "slug": "oun8y8897w43s4sh",
+      "slug": "immersive-vehicles",
       "order": 13,
       "topic": "advanced",
       "title": "沉浸车辆",
@@ -271,11 +271,11 @@
         "进阶教程",
         "语雀迁移"
       ],
-      "file": "advanced/oun8y8897w43s4sh.md",
-      "source": "../index.html#/doc/oun8y8897w43s4sh"
+      "file": "advanced/immersive-vehicles.md",
+      "source": "../index.html#/doc/immersive-vehicles"
     },
     {
-      "slug": "uswuzhk4cv6l80xb",
+      "slug": "town-resources",
       "order": 14,
       "topic": "advanced",
       "title": "城镇资源",
@@ -287,11 +287,11 @@
         "进阶教程",
         "语雀迁移"
       ],
-      "file": "advanced/uswuzhk4cv6l80xb.md",
-      "source": "../index.html#/doc/uswuzhk4cv6l80xb"
+      "file": "advanced/town-resources.md",
+      "source": "../index.html#/doc/town-resources"
     },
     {
-      "slug": "zlw32gy9cdcbv028",
+      "slug": "cheating-response",
       "order": 15,
       "topic": "rules",
       "title": "作弊与应对",
@@ -303,11 +303,11 @@
         "服务器规则",
         "语雀迁移"
       ],
-      "file": "rules/zlw32gy9cdcbv028.md",
-      "source": "../index.html#/doc/zlw32gy9cdcbv028"
+      "file": "rules/cheating-response.md",
+      "source": "../index.html#/doc/cheating-response"
     },
     {
-      "slug": "gv7ocwch9n5e7bi5",
+      "slug": "behavior-chat",
       "order": 16,
       "topic": "rules",
       "title": "行为与聊天",
@@ -319,11 +319,11 @@
         "服务器规则",
         "语雀迁移"
       ],
-      "file": "rules/gv7ocwch9n5e7bi5.md",
-      "source": "../index.html#/doc/gv7ocwch9n5e7bi5"
+      "file": "rules/behavior-chat.md",
+      "source": "../index.html#/doc/behavior-chat"
     },
     {
-      "slug": "iumpymli5his92ew",
+      "slug": "world-map",
       "order": 17,
       "topic": "rules",
       "title": "世界与地图",
@@ -335,11 +335,11 @@
         "服务器规则",
         "语雀迁移"
       ],
-      "file": "rules/iumpymli5his92ew.md",
-      "source": "../index.html#/doc/iumpymli5his92ew"
+      "file": "rules/world-map.md",
+      "source": "../index.html#/doc/world-map"
     },
     {
-      "slug": "wgdvb5m0xu9sz4dt",
+      "slug": "matopiraphai",
       "order": 18,
       "topic": "history",
       "title": "Matopiraphai",
@@ -352,11 +352,11 @@
         "人物志",
         "语雀迁移"
       ],
-      "file": "history/wgdvb5m0xu9sz4dt.md",
-      "source": "../index.html#/doc/wgdvb5m0xu9sz4dt"
+      "file": "history/matopiraphai.md",
+      "source": "../index.html#/doc/matopiraphai"
     },
     {
-      "slug": "sssqqsna58o8g523",
+      "slug": "233-2233",
       "order": 19,
       "topic": "history",
       "title": "233&2233",
@@ -369,11 +369,11 @@
         "人物志",
         "语雀迁移"
       ],
-      "file": "history/sssqqsna58o8g523.md",
-      "source": "../index.html#/doc/sssqqsna58o8g523"
+      "file": "history/233-2233.md",
+      "source": "../index.html#/doc/233-2233"
     },
     {
-      "slug": "mem2ldfox7vpfegb",
+      "slug": "zzx",
       "order": 20,
       "topic": "history",
       "title": "zzx",
@@ -386,11 +386,11 @@
         "人物志",
         "语雀迁移"
       ],
-      "file": "history/mem2ldfox7vpfegb.md",
-      "source": "../index.html#/doc/mem2ldfox7vpfegb"
+      "file": "history/zzx.md",
+      "source": "../index.html#/doc/zzx"
     },
     {
-      "slug": "tsam4cy3tuocpr34",
+      "slug": "northeast-economic-alliance",
       "order": 21,
       "topic": "history",
       "title": "泛东北经济同盟",
@@ -403,11 +403,11 @@
         "国家/城镇",
         "语雀迁移"
       ],
-      "file": "history/tsam4cy3tuocpr34.md",
-      "source": "../index.html#/doc/tsam4cy3tuocpr34"
+      "file": "history/northeast-economic-alliance.md",
+      "source": "../index.html#/doc/northeast-economic-alliance"
     },
     {
-      "slug": "kci8fcfq50bayle8",
+      "slug": "harbin-chronicle",
       "order": 22,
       "topic": "history",
       "title": "哈尔滨地方志",
@@ -420,11 +420,11 @@
         "国家/城镇",
         "语雀迁移"
       ],
-      "file": "history/kci8fcfq50bayle8.md",
-      "source": "../index.html#/doc/kci8fcfq50bayle8"
+      "file": "history/harbin-chronicle.md",
+      "source": "../index.html#/doc/harbin-chronicle"
     },
     {
-      "slug": "xs8c67w9mz9okg3e",
+      "slug": "rhodes-island",
       "order": 23,
       "topic": "history",
       "title": "罗德岛",
@@ -437,11 +437,11 @@
         "国家/城镇",
         "语雀迁移"
       ],
-      "file": "history/xs8c67w9mz9okg3e.md",
-      "source": "../index.html#/doc/xs8c67w9mz9okg3e"
+      "file": "history/rhodes-island.md",
+      "source": "../index.html#/doc/rhodes-island"
     },
     {
-      "slug": "vasp7kvkwa15pzrk",
+      "slug": "freedom-union",
       "order": 24,
       "topic": "history",
       "title": "自由联邦共同体 Freedom Union",
@@ -454,11 +454,11 @@
         "国家/城镇",
         "语雀迁移"
       ],
-      "file": "history/vasp7kvkwa15pzrk.md",
-      "source": "../index.html#/doc/vasp7kvkwa15pzrk"
+      "file": "history/freedom-union.md",
+      "source": "../index.html#/doc/freedom-union"
     },
     {
-      "slug": "cdzr3tzaoxmh7at8",
+      "slug": "dprk",
       "order": 25,
       "topic": "history",
       "title": "朝鲜民主主义人民共和国DPRK",
@@ -471,11 +471,11 @@
         "国家/城镇",
         "语雀迁移"
       ],
-      "file": "history/cdzr3tzaoxmh7at8.md",
-      "source": "../index.html#/doc/cdzr3tzaoxmh7at8"
+      "file": "history/dprk.md",
+      "source": "../index.html#/doc/dprk"
     },
     {
-      "slug": "oma9oegz8eok8g8c",
+      "slug": "hall-of-legends",
       "order": 26,
       "topic": "history",
       "title": "神人堂",
@@ -487,11 +487,11 @@
         "happyday历史",
         "语雀迁移"
       ],
-      "file": "history/oma9oegz8eok8g8c.md",
-      "source": "../index.html#/doc/oma9oegz8eok8g8c"
+      "file": "history/hall-of-legends.md",
+      "source": "../index.html#/doc/hall-of-legends"
     },
     {
-      "slug": "gni2e5189goed7me",
+      "slug": "qwertyuiop",
       "order": 27,
       "topic": "history",
       "title": "qwertyuiop",
@@ -503,11 +503,11 @@
         "happyday历史",
         "语雀迁移"
       ],
-      "file": "history/gni2e5189goed7me.md",
-      "source": "../index.html#/doc/gni2e5189goed7me"
+      "file": "history/qwertyuiop.md",
+      "source": "../index.html#/doc/qwertyuiop"
     },
     {
-      "slug": "cm6zdy85lcisc07b",
+      "slug": "alex",
       "order": 28,
       "topic": "history",
       "title": "Alex",
@@ -519,11 +519,11 @@
         "happyday历史",
         "语雀迁移"
       ],
-      "file": "history/cm6zdy85lcisc07b.md",
-      "source": "../index.html#/doc/cm6zdy85lcisc07b"
+      "file": "history/alex.md",
+      "source": "../index.html#/doc/alex"
     },
     {
-      "slug": "poluwruhqqicpylb",
+      "slug": "gallery-1",
       "order": 29,
       "topic": "gallery",
       "title": "请输入文本（1）",
@@ -535,11 +535,11 @@
         "妙妙图片集",
         "语雀迁移"
       ],
-      "file": "gallery/poluwruhqqicpylb.md",
-      "source": "../index.html#/doc/poluwruhqqicpylb"
+      "file": "gallery/gallery-1.md",
+      "source": "../index.html#/doc/gallery-1"
     },
     {
-      "slug": "ucm0b05r6eignfis",
+      "slug": "gallery-2",
       "order": 30,
       "topic": "gallery",
       "title": "请输入文本（2）",
@@ -551,8 +551,8 @@
         "妙妙图片集",
         "语雀迁移"
       ],
-      "file": "gallery/ucm0b05r6eignfis.md",
-      "source": "../index.html#/doc/ucm0b05r6eignfis"
+      "file": "gallery/gallery-2.md",
+      "source": "../index.html#/doc/gallery-2"
     }
   ]
 }

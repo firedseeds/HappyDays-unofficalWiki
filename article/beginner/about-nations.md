@@ -7,8 +7,8 @@ updated: "2026-10-25"
 reading_time: 1
 emoji: "🌱"
 order: 6
-slug: "dmagi2zbs3zagrgx"
-source: "../../index.html#/doc/dmagi2zbs3zagrgx"
+slug: "about-nations"
+source: "../../index.html#/doc/about-nations"
 tags:
   - "新手教程"
   - "语雀迁移"

@@ -7,8 +7,8 @@ updated: "2026-10-25"
 reading_time: 2
 emoji: "📜"
 order: 15
-slug: "zlw32gy9cdcbv028"
-source: "../../index.html#/doc/zlw32gy9cdcbv028"
+slug: "cheating-response"
+source: "../../index.html#/doc/cheating-response"
 tags:
   - "服务器规则"
   - "语雀迁移"

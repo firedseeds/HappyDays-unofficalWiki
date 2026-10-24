@@ -7,8 +7,8 @@ updated: "2026-10-25"
 reading_time: 2
 emoji: "📖"
 order: 27
-slug: "gni2e5189goed7me"
-source: "../../index.html#/doc/gni2e5189goed7me"
+slug: "qwertyuiop"
+source: "../../index.html#/doc/qwertyuiop"
 tags:
   - "happyday历史"
   - "语雀迁移"

@@ -7,8 +7,8 @@ updated: "2026-10-25"
 reading_time: 3
 emoji: "🌱"
 order: 2
-slug: "qg58speht2e47nhs"
-source: "../../index.html#/doc/qg58speht2e47nhs"
+slug: "before-joining"
+source: "../../index.html#/doc/before-joining"
 tags:
   - "新手教程"
   - "语雀迁移"

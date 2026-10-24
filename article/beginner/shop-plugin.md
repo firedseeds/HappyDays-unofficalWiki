@@ -7,8 +7,8 @@ updated: "2026-10-25"
 reading_time: 3
 emoji: "🌱"
 order: 4
-slug: "rvqc0xc1igubzaz5"
-source: "../../index.html#/doc/rvqc0xc1igubzaz5"
+slug: "shop-plugin"
+source: "../../index.html#/doc/shop-plugin"
 tags:
   - "新手教程"
   - "语雀迁移"
@@ -46,11 +46,11 @@ tags:
 
 附图片：
 
-![图片](../../assets/image/rvqc0xc1igubzaz5/1791685253432-31a89a9d-3435-4d36-ba14-7ca91e0d21f5.png)
+![图片](../../assets/image/shop-plugin/1791685253432-31a89a9d-3435-4d36-ba14-7ca91e0d21f5.png)
 
-![图片](../../assets/image/rvqc0xc1igubzaz5/1791685270659-4d84db2c-2a8b-48db-b00d-01135a6a5d2a.png)
+![图片](../../assets/image/shop-plugin/1791685270659-4d84db2c-2a8b-48db-b00d-01135a6a5d2a.png)
 
-![图片](../../assets/image/rvqc0xc1igubzaz5/1791650194339-5f0c5587-87a3-411c-ba8c-b1ef869acb63.png)
+![图片](../../assets/image/shop-plugin/1791650194339-5f0c5587-87a3-411c-ba8c-b1ef869acb63.png)
 
 **注:模组物品只会显示其命名空间，如图二**
 

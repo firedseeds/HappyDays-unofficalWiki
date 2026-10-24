@@ -7,8 +7,8 @@ updated: "2026-10-25"
 reading_time: 1
 emoji: "🌱"
 order: 7
-slug: "hv3mqxwgrmyg025y"
-source: "../../index.html#/doc/hv3mqxwgrmyg025y"
+slug: "first-money"
+source: "../../index.html#/doc/first-money"
 tags:
   - "新手教程"
   - "语雀迁移"

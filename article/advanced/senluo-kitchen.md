@@ -7,8 +7,8 @@ updated: "2026-10-25"
 reading_time: 1
 emoji: "🧭"
 order: 9
-slug: "ngcy62fx7hh7ska8"
-source: "../../index.html#/doc/ngcy62fx7hh7ska8"
+slug: "senluo-kitchen"
+source: "../../index.html#/doc/senluo-kitchen"
 tags:
   - "进阶教程"
   - "语雀迁移"

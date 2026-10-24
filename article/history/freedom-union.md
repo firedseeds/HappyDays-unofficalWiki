@@ -7,8 +7,8 @@ updated: "2026-10-25"
 reading_time: 1
 emoji: "📖"
 order: 24
-slug: "vasp7kvkwa15pzrk"
-source: "../../index.html#/doc/vasp7kvkwa15pzrk"
+slug: "freedom-union"
+source: "../../index.html#/doc/freedom-union"
 tags:
   - "happyday历史"
   - "国家/城镇"

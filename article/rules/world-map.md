@@ -7,8 +7,8 @@ updated: "2026-10-25"
 reading_time: 1
 emoji: "📜"
 order: 17
-slug: "iumpymli5his92ew"
-source: "../../index.html#/doc/iumpymli5his92ew"
+slug: "world-map"
+source: "../../index.html#/doc/world-map"
 tags:
   - "服务器规则"
   - "语雀迁移"

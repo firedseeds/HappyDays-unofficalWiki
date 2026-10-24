@@ -7,8 +7,8 @@ updated: "2026-10-25"
 reading_time: 1
 emoji: "📖"
 order: 25
-slug: "cdzr3tzaoxmh7at8"
-source: "../../index.html#/doc/cdzr3tzaoxmh7at8"
+slug: "dprk"
+source: "../../index.html#/doc/dprk"
 tags:
   - "happyday历史"
   - "国家/城镇"
@@ -25,7 +25,7 @@ tags:
 
 国家成就：发展到了300w元，建筑居然是零！
 
-![图片](../../assets/image/cdzr3tzaoxmh7at8/1790489592276-56c0efb6-087d-4d5a-9028-397eb757b968.png)
+![图片](../../assets/image/dprk/1790489592276-56c0efb6-087d-4d5a-9028-397eb757b968.png)
 
 26年10月7日更新：
 

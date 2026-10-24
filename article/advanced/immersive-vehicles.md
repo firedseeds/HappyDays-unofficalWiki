@@ -7,8 +7,8 @@ updated: "2026-10-25"
 reading_time: 1
 emoji: "🧭"
 order: 13
-slug: "oun8y8897w43s4sh"
-source: "../../index.html#/doc/oun8y8897w43s4sh"
+slug: "immersive-vehicles"
+source: "../../index.html#/doc/immersive-vehicles"
 tags:
   - "进阶教程"
   - "语雀迁移"

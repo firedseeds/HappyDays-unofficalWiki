@@ -7,8 +7,8 @@ updated: "2026-10-25"
 reading_time: 2
 emoji: "🌱"
 order: 3
-slug: "xueivzgcgnv2egf3"
-source: "../../index.html#/doc/xueivzgcgnv2egf3"
+slug: "first-arrival"
+source: "../../index.html#/doc/first-arrival"
 tags:
   - "新手教程"
   - "语雀迁移"

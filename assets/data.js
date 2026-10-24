@@ -11,42 +11,42 @@ window.HAPPYDAYS_WIKI = (function () {
       id: "intro",
       name: "简介",
       description: "HappyDays 服务器与知识库概览。",
-      docs: ["lbm7l8qr2lo5inoe"]
+      docs: ["intro"]
     },
     {
       id: "beginner",
       name: "新手教程",
       description: "进入服务器前的准备、初来乍到与基础玩法。",
-      docs: ["qg58speht2e47nhs", "xueivzgcgnv2egf3", "rvqc0xc1igubzaz5", "wzd3p3hnih3hnf0b", "dmagi2zbs3zagrgx", "hv3mqxwgrmyg025y"]
+      docs: ["before-joining", "first-arrival", "shop-plugin", "build-town", "about-nations", "first-money"]
     },
     {
       id: "advanced",
       name: "进阶教程",
       description: "资源、经济、载具与城镇发展。",
-      docs: ["yh4tcrcleg2xg3n5", "ngcy62fx7hh7ska8", "tw133gls37p4vtqd", "wdc66iz1zh7uf9qt", "gtogpaa0zmpf8gx4", "oun8y8897w43s4sh", "uswuzhk4cv6l80xb"]
+      docs: ["resource-world-nether", "senluo-kitchen", "senluo-tavern", "money-making-guide", "lottery", "immersive-vehicles", "town-resources"]
     },
     {
       id: "rules",
       name: "服务器规则",
       description: "服务器行为规范、作弊处理与地图规则。",
-      docs: ["zlw32gy9cdcbv028", "gv7ocwch9n5e7bi5", "iumpymli5his92ew"]
+      docs: ["cheating-response", "behavior-chat", "world-map"]
     },
     {
       id: "history",
       name: "happyday历史",
       description: "服务器的人物、国家与历史记录。",
-      docs: ["wgdvb5m0xu9sz4dt", "sssqqsna58o8g523", "mem2ldfox7vpfegb", "tsam4cy3tuocpr34", "kci8fcfq50bayle8", "xs8c67w9mz9okg3e", "vasp7kvkwa15pzrk", "cdzr3tzaoxmh7at8", "oma9oegz8eok8g8c", "gni2e5189goed7me", "cm6zdy85lcisc07b"]
+      docs: ["matopiraphai", "233-2233", "zzx", "northeast-economic-alliance", "harbin-chronicle", "rhodes-island", "freedom-union", "dprk", "hall-of-legends", "qwertyuiop", "alex"]
     },
     {
       id: "gallery",
       name: "妙妙图片集",
       description: "服务器截图与图片记录。",
-      docs: ["poluwruhqqicpylb", "ucm0b05r6eignfis"]
+      docs: ["gallery-1", "gallery-2"]
     }
   ];
 
   var docs = {
-    "lbm7l8qr2lo5inoe": {
+    "intro": {
       title: "简介",
       emoji: "🚇",
       category: "intro",
@@ -64,7 +64,7 @@ window.HAPPYDAYS_WIKI = (function () {
 <p><strong>腐竹：HAPPYAAAAA</strong></p>
 <p><strong>管理员：Crazytudou、Burnkey、smillfox、fish</strong></p>`
     },
-    "qg58speht2e47nhs": {
+    "before-joining": {
       title: "进入游戏前",
       emoji: "🌱",
       category: "beginner",
@@ -105,7 +105,7 @@ window.HAPPYDAYS_WIKI = (function () {
 <p><strong>②</strong>点击<strong>添加服务器</strong>，输入服务器IP地址n3-22.yxsjmc.cn:20999</p>
 <p><strong>至此，你学会了怎么进入服务器👏🏻</strong></p>`
     },
-    "xueivzgcgnv2egf3": {
+    "first-arrival": {
       title: "初来乍到",
       emoji: "🌱",
       category: "beginner",
@@ -136,7 +136,7 @@ window.HAPPYDAYS_WIKI = (function () {
 <ol class="steps"><li>哈鲁线： 哈尔滨 - 长春 - 沈阳 - 秦皇岛 - 北京 - 济南</li><li>中央环线: 连云港 - 南京 - 武汉 - 重庆 - 西安 - 三门峡 - 郑州 - 济南 - 连云港</li><li>西南环线：广州 - 南宁 - 昆明 - 成都 - 重庆 - 长沙 - 广州</li><li>西连线： 大连 - 秦皇岛 - 北京 - 呼和浩特 - 西安</li><li>沪广线： 上海 - 南京 - 武汉 - 长沙 - 广州</li><li>川藏线： 成都 - 拉萨 - 纳木错</li></ol>
 <p><strong>至此，你初步了解了这个世界👏🏻</strong></p>`
     },
-    "rvqc0xc1igubzaz5": {
+    "shop-plugin": {
       title: "商店插件",
       emoji: "🌱",
       category: "beginner",
@@ -159,9 +159,9 @@ window.HAPPYDAYS_WIKI = (function () {
 <p><strong> [物品名称]</strong></p>
 <p><strong>单价 ：$[金额]</strong></p>
 <p>附图片：</p>
-<p><img src="assets/image/rvqc0xc1igubzaz5/1791685253432-31a89a9d-3435-4d36-ba14-7ca91e0d21f5.png" alt="图片" loading="lazy" decoding="async"></p>
-<p><img src="assets/image/rvqc0xc1igubzaz5/1791685270659-4d84db2c-2a8b-48db-b00d-01135a6a5d2a.png" alt="图片" loading="lazy" decoding="async"></p>
-<p><img src="assets/image/rvqc0xc1igubzaz5/1791650194339-5f0c5587-87a3-411c-ba8c-b1ef869acb63.png" alt="图片" loading="lazy" decoding="async"></p>
+<p><img src="assets/image/shop-plugin/1791685253432-31a89a9d-3435-4d36-ba14-7ca91e0d21f5.png" alt="图片" loading="lazy" decoding="async"></p>
+<p><img src="assets/image/shop-plugin/1791685270659-4d84db2c-2a8b-48db-b00d-01135a6a5d2a.png" alt="图片" loading="lazy" decoding="async"></p>
+<p><img src="assets/image/shop-plugin/1791650194339-5f0c5587-87a3-411c-ba8c-b1ef869acb63.png" alt="图片" loading="lazy" decoding="async"></p>
 <p><strong>注:模组物品只会显示其命名空间，如图二</strong></p>
 <h2>店主操作</h2>
 <h3>设置商店</h3>
@@ -200,7 +200,7 @@ window.HAPPYDAYS_WIKI = (function () {
 <ol class="steps"><li>买东西时一定要看物品预览，当心被骗！</li></ol>
 <p>zzx买的”钻石"（）——zzx</p>`
     },
-    "wzd3p3hnih3hnf0b": {
+    "build-town": {
       title: "建立城邦",
       emoji: "🌱",
       category: "beginner",
@@ -218,7 +218,7 @@ window.HAPPYDAYS_WIKI = (function () {
 <p><code>/t withdraw [金额]</code>从城镇银行<strong>取钱</strong></p>
 <p><code>/t delete</code> 可删除已生成的城镇</p>`
     },
-    "dmagi2zbs3zagrgx": {
+    "about-nations": {
       title: "关于国家",
       emoji: "🌱",
       category: "beginner",
@@ -228,7 +228,7 @@ window.HAPPYDAYS_WIKI = (function () {
       tags: ["新手教程", "语雀迁移"],
       content: `<p>此文档在语雀中暂无正文。</p>`
     },
-    "hv3mqxwgrmyg025y": {
+    "first-money": {
       title: "第一桶金",
       emoji: "🌱",
       category: "beginner",
@@ -239,7 +239,7 @@ window.HAPPYDAYS_WIKI = (function () {
       content: `<p>服务器主要的赚钱方式有以下几种类型：</p>
 <ol class="steps"><li>修路（注意：此选项后续<strong>可能会被废止</strong>，且用且珍惜）由腐竹HAPPYAAAA向账户打钱</li><li>通过卖农作物（如小麦，马铃薯等<strong>原版作物</strong>，森罗物语的菜系不会列入收购名单！）、成品矿物（金锭、钻石等）来获得游戏币，主要收购商城在<strong>南京</strong>、<strong>秦皇岛</strong>。</li><li>在城市建立<strong>初期</strong>，腐竹HAPPYAAAA会在各个城市设置初始简单商店，可以通过卖泥土、圆石、小麦等获得初始游戏币。</li><li>当然如果你进来时zzx在线的话，你也可以找zzx索要启动资金，一般一次给5000，要求是加入zzx所在国家，并在zzx换国家时跟随。</li><li>通过帮别人打工来获得游戏币（招工栏在<strong>南京</strong>）</li></ol>`
     },
-    "yh4tcrcleg2xg3n5": {
+    "resource-world-nether": {
       title: "资源世界/下界",
       emoji: "🧭",
       category: "advanced",
@@ -249,7 +249,7 @@ window.HAPPYDAYS_WIKI = (function () {
       tags: ["进阶教程", "语雀迁移"],
       content: `<p>此文档在语雀中暂无正文。</p>`
     },
-    "ngcy62fx7hh7ska8": {
+    "senluo-kitchen": {
       title: "森罗物语：厨房",
       emoji: "🧭",
       category: "advanced",
@@ -285,7 +285,7 @@ window.HAPPYDAYS_WIKI = (function () {
 <p><strong>3.2工具</strong></p>
 <p><strong>3.3装备</strong></p>`
     },
-    "tw133gls37p4vtqd": {
+    "senluo-tavern": {
       title: "森罗物语：酒馆",
       emoji: "🧭",
       category: "advanced",
@@ -295,7 +295,7 @@ window.HAPPYDAYS_WIKI = (function () {
       tags: ["进阶教程", "语雀迁移"],
       content: `<p>此文档在语雀中暂无正文。</p>`
     },
-    "wdc66iz1zh7uf9qt": {
+    "money-making-guide": {
       title: "一些杂七杂八的赚钱野路子",
       emoji: "🧭",
       category: "advanced",
@@ -309,7 +309,7 @@ window.HAPPYDAYS_WIKI = (function () {
 <p>c.连云港机铁站旁边的HAPPY杂货铺和染料店，售价比南京便宜</p>
 <ol class="steps"><li>除了挖钻石，也别忘了黄金（南京价30元/个）</li></ol>`
     },
-    "gtogpaa0zmpf8gx4": {
+    "lottery": {
       title: "彩票",
       emoji: "🧭",
       category: "advanced",
@@ -319,7 +319,7 @@ window.HAPPYDAYS_WIKI = (function () {
       tags: ["进阶教程", "语雀迁移"],
       content: `<p>此文档在语雀中暂无正文。</p>`
     },
-    "oun8y8897w43s4sh": {
+    "immersive-vehicles": {
       title: "沉浸车辆",
       emoji: "🧭",
       category: "advanced",
@@ -329,7 +329,7 @@ window.HAPPYDAYS_WIKI = (function () {
       tags: ["进阶教程", "语雀迁移"],
       content: `<p>当然，服务器是有载具的，不能合成</p>`
     },
-    "uswuzhk4cv6l80xb": {
+    "town-resources": {
       title: "城镇资源",
       emoji: "🧭",
       category: "advanced",
@@ -345,7 +345,7 @@ window.HAPPYDAYS_WIKI = (function () {
 <h3>领取资源</h3>
 <ol class="steps"><li>首先站在<strong>你城镇的土地</strong>里，执行<code>/t resources collect</code></li><li>资源会放置在你的<strong>背包</strong>中，位置不够时则放置一部分，重新领取请重新执行</li></ol>`
     },
-    "zlw32gy9cdcbv028": {
+    "cheating-response": {
       title: "作弊与应对",
       emoji: "📜",
       category: "rules",
@@ -370,7 +370,7 @@ window.HAPPYDAYS_WIKI = (function () {
 <p>1.4 多账号不推荐使用小号。每个玩家最多<strong>只能注册2个帐户</strong>。如果你<strong>使用妙妙方法（加速器，vpn等）</strong>绕过了2个账户的限制，<strong>腐竹大概率也发现不了（bushi），但还是建议不要使用，附赠图片：</strong></p>
 <p>1.5 故意影响服务器管理以<strong>刷屏、撒泼、辱骂</strong>等方式在任何媒体、游戏内骚扰服务器管理团队的情况。 将视其严重情况进行<strong>禁言、警告以及封禁</strong>的处罚。</p>`
     },
-    "gv7ocwch9n5e7bi5": {
+    "behavior-chat": {
       title: "行为与聊天",
       emoji: "📜",
       category: "rules",
@@ -420,7 +420,7 @@ window.HAPPYDAYS_WIKI = (function () {
 <p>您<strong>不得出售游戏内物品或服务</strong>以换取现实生活中的金钱，反之亦然。</p>
 </blockquote>`
     },
-    "iumpymli5his92ew": {
+    "world-map": {
       title: "世界与地图",
       emoji: "📜",
       category: "rules",
@@ -450,7 +450,7 @@ window.HAPPYDAYS_WIKI = (function () {
 <p>现在还没有人做地图画，欢迎制作，<strong>如建筑/项目资金不足，可以找zzx对其进行投资</strong></p>
 </blockquote>`
     },
-    "wgdvb5m0xu9sz4dt": {
+    "matopiraphai": {
       title: "Matopiraphai",
       emoji: "📖",
       category: "history",
@@ -471,7 +471,7 @@ window.HAPPYDAYS_WIKI = (function () {
 <p><strong>巅峰（）</strong></p>
 <p><strong>末期（）</strong></p>`
     },
-    "sssqqsna58o8g523": {
+    "233-2233": {
       title: "233&2233",
       emoji: "📖",
       category: "history",
@@ -496,7 +496,7 @@ window.HAPPYDAYS_WIKI = (function () {
 <p><strong>巅峰（）</strong></p>
 <p><strong>末期（）</strong></p>`
     },
-    "mem2ldfox7vpfegb": {
+    "zzx": {
       title: "zzx",
       emoji: "📖",
       category: "history",
@@ -526,7 +526,7 @@ window.HAPPYDAYS_WIKI = (function () {
 <p><strong>巅峰（）</strong></p>
 <p><strong>末期（）</strong></p>`
     },
-    "tsam4cy3tuocpr34": {
+    "northeast-economic-alliance": {
       title: "泛东北经济同盟",
       emoji: "📖",
       category: "history",
@@ -536,7 +536,7 @@ window.HAPPYDAYS_WIKI = (function () {
       tags: ["happyday历史", "国家/城镇", "语雀迁移"],
       content: `<p>此文档在语雀中暂无正文。</p>`
     },
-    "kci8fcfq50bayle8": {
+    "harbin-chronicle": {
       title: "哈尔滨地方志",
       emoji: "📖",
       category: "history",
@@ -546,7 +546,7 @@ window.HAPPYDAYS_WIKI = (function () {
       tags: ["happyday历史", "国家/城镇", "语雀迁移"],
       content: `<p>详见zzx人物志</p>`
     },
-    "xs8c67w9mz9okg3e": {
+    "rhodes-island": {
       title: "罗德岛",
       emoji: "📖",
       category: "history",
@@ -556,7 +556,7 @@ window.HAPPYDAYS_WIKI = (function () {
       tags: ["happyday历史", "国家/城镇", "语雀迁移"],
       content: `<p>此文档在语雀中暂无正文。</p>`
     },
-    "vasp7kvkwa15pzrk": {
+    "freedom-union": {
       title: "自由联邦共同体 Freedom Union",
       emoji: "📖",
       category: "history",
@@ -569,7 +569,7 @@ window.HAPPYDAYS_WIKI = (function () {
 <p>国家成就：1.开创了登山旅行行业，开辟了欧洲荒地，是瑞士成为欧洲与亚洲往来唯一枢纽</p>
 <ol class="steps"><li>是亚欧大铁路欧洲段终点，并以此为跳板前往北欧西欧等地区</li><li>开创了服务器房地产行业</li><li>拥有欧洲唯一一个国际机场，以及欧洲唯一前往中国大陆交通方式</li><li>开创了服务器最早的快递物流行业</li><li>拥有全服务器最庞大的经济组织以及中央银行（自联中央银行）</li></ol>`
     },
-    "cdzr3tzaoxmh7at8": {
+    "dprk": {
       title: "朝鲜民主主义人民共和国DPRK",
       emoji: "📖",
       category: "history",
@@ -581,14 +581,14 @@ window.HAPPYDAYS_WIKI = (function () {
 <p>国家发展：</p>
 <p>233原话：当时第1条轨道其实是从日本进口的 从大连接过来的 现在大连到平壤那么绕就是因为这个 然后被4a拆了 还帮忙换成矿车轨道了</p>
 <p>国家成就：发展到了300w元，建筑居然是零！</p>
-<p><img src="assets/image/cdzr3tzaoxmh7at8/1790489592276-56c0efb6-087d-4d5a-9028-397eb757b968.png" alt="图片" loading="lazy" decoding="async"></p>
+<p><img src="assets/image/dprk/1790489592276-56c0efb6-087d-4d5a-9028-397eb757b968.png" alt="图片" loading="lazy" decoding="async"></p>
 <p>26年10月7日更新：</p>
 <ol class="steps"><li>zzx蟠桃了</li><li>新建巨型建筑柳京饭店，共51层</li></ol>
 <p>3。不要叛逃（——zzx</p>
 <p>26年10月8日更新：</p>
 <ol class="steps"><li>将军指正柳京饭店为55层\\o/\\o/\\o/</li></ol>`
     },
-    "oma9oegz8eok8g8c": {
+    "hall-of-legends": {
       title: "神人堂",
       emoji: "📖",
       category: "history",
@@ -598,7 +598,7 @@ window.HAPPYDAYS_WIKI = (function () {
       tags: ["happyday历史", "语雀迁移"],
       content: `<p>此文档在语雀中暂无正文。</p>`
     },
-    "gni2e5189goed7me": {
+    "qwertyuiop": {
       title: "qwertyuiop",
       emoji: "📖",
       category: "history",
@@ -620,7 +620,7 @@ window.HAPPYDAYS_WIKI = (function () {
 <p>在q群发表亲日言论，被骂后仍称自己喜爱日本文化，</p>
 <p>26年10月6日晚，未经服主允许在群内宣传其他服务器，fox在晚22点16分发起投票，以10:2截止，，后在7号凌晨1点15分4a宣布踢出qwert，其在同日早约八点建立国家，早8点54分其4个qq号和三个游戏号 分别被提出被提出群聊、服务器，创下了存在时间最短国家的记录（</p>`
     },
-    "cm6zdy85lcisc07b": {
+    "alex": {
       title: "Alex",
       emoji: "📖",
       category: "history",
@@ -635,7 +635,7 @@ window.HAPPYDAYS_WIKI = (function () {
 <p><strong>fish评价：大拆除时代</strong></p>
 <p><strong>获得称号：服务器拆火车第一人。</strong></p>`
     },
-    "poluwruhqqicpylb": {
+    "gallery-1": {
       title: "请输入文本（1）",
       emoji: "🖼️",
       category: "gallery",
@@ -643,9 +643,9 @@ window.HAPPYDAYS_WIKI = (function () {
       updated: "2026-10-25",
       reading: 1,
       tags: ["妙妙图片集", "语雀迁移"],
-      content: `<p><img src="assets/image/poluwruhqqicpylb/1790487129758-2ff84a0b-2112-447e-8ab4-6956cd113527.jpeg" alt="图片" loading="lazy" decoding="async"></p>`
+      content: `<p><img src="assets/image/gallery-1/1790487129758-2ff84a0b-2112-447e-8ab4-6956cd113527.jpeg" alt="图片" loading="lazy" decoding="async"></p>`
     },
-    "ucm0b05r6eignfis": {
+    "gallery-2": {
       title: "请输入文本（2）",
       emoji: "🖼️",
       category: "gallery",
@@ -653,12 +653,12 @@ window.HAPPYDAYS_WIKI = (function () {
       updated: "2026-10-25",
       reading: 1,
       tags: ["妙妙图片集", "语雀迁移"],
-      content: `<p><img src="assets/image/ucm0b05r6eignfis/1791127683915-48391af4-0c07-4bb6-b1a3-b051fbaef2d9.png" alt="图片" loading="lazy" decoding="async"></p>`
+      content: `<p><img src="assets/image/gallery-2/1791127683915-48391af4-0c07-4bb6-b1a3-b051fbaef2d9.png" alt="图片" loading="lazy" decoding="async"></p>`
     }
   };
 
   var allIds = [
-    "lbm7l8qr2lo5inoe", "qg58speht2e47nhs", "xueivzgcgnv2egf3", "rvqc0xc1igubzaz5", "wzd3p3hnih3hnf0b", "dmagi2zbs3zagrgx", "hv3mqxwgrmyg025y", "yh4tcrcleg2xg3n5", "ngcy62fx7hh7ska8", "tw133gls37p4vtqd", "wdc66iz1zh7uf9qt", "gtogpaa0zmpf8gx4", "oun8y8897w43s4sh", "uswuzhk4cv6l80xb", "zlw32gy9cdcbv028", "gv7ocwch9n5e7bi5", "iumpymli5his92ew", "wgdvb5m0xu9sz4dt", "sssqqsna58o8g523", "mem2ldfox7vpfegb", "tsam4cy3tuocpr34", "kci8fcfq50bayle8", "xs8c67w9mz9okg3e", "vasp7kvkwa15pzrk", "cdzr3tzaoxmh7at8", "oma9oegz8eok8g8c", "gni2e5189goed7me", "cm6zdy85lcisc07b", "poluwruhqqicpylb", "ucm0b05r6eignfis"
+    "intro", "before-joining", "first-arrival", "shop-plugin", "build-town", "about-nations", "first-money", "resource-world-nether", "senluo-kitchen", "senluo-tavern", "money-making-guide", "lottery", "immersive-vehicles", "town-resources", "cheating-response", "behavior-chat", "world-map", "matopiraphai", "233-2233", "zzx", "northeast-economic-alliance", "harbin-chronicle", "rhodes-island", "freedom-union", "dprk", "hall-of-legends", "qwertyuiop", "alex", "gallery-1", "gallery-2"
   ];
 
   return {

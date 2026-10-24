@@ -7,8 +7,8 @@ updated: "2026-10-25"
 reading_time: 1
 emoji: "🧭"
 order: 14
-slug: "uswuzhk4cv6l80xb"
-source: "../../index.html#/doc/uswuzhk4cv6l80xb"
+slug: "town-resources"
+source: "../../index.html#/doc/town-resources"
 tags:
   - "进阶教程"
   - "语雀迁移"

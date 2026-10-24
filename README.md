@@ -155,6 +155,8 @@ python server.py --host 127.0.0.1 --port 8765
 
 当前内容迁自 [HappyDays [非官方文档]](https://www.yuque.com/u70546288/1145)，保留原书主题顺序与文章顺序。原书中的嵌套分组（人物志、国家/城镇）合并到 `happyday历史` 主题，并通过文章标签保留子分组信息。语雀中的空文档也会保留占位说明，方便后续补充。
 
+文章文件名使用与内容对应的英文语义 slug，例如 `before-joining.md`、`shop-plugin.md`、`cheating-response.md`、`dprk.md` 和 `gallery-1.md`。
+
 ---
 
 ## 文章 JSON 清单

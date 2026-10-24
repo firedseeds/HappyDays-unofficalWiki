@@ -7,8 +7,8 @@ updated: "2026-10-25"
 reading_time: 1
 emoji: "📖"
 order: 20
-slug: "mem2ldfox7vpfegb"
-source: "../../index.html#/doc/mem2ldfox7vpfegb"
+slug: "zzx"
+source: "../../index.html#/doc/zzx"
 tags:
   - "happyday历史"
   - "人物志"

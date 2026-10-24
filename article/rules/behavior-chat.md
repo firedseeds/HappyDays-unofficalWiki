@@ -7,8 +7,8 @@ updated: "2026-10-25"
 reading_time: 3
 emoji: "📜"
 order: 16
-slug: "gv7ocwch9n5e7bi5"
-source: "../../index.html#/doc/gv7ocwch9n5e7bi5"
+slug: "behavior-chat"
+source: "../../index.html#/doc/behavior-chat"
 tags:
   - "服务器规则"
   - "语雀迁移"

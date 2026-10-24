@@ -7,8 +7,8 @@ updated: "2026-10-25"
 reading_time: 1
 emoji: "🚇"
 order: 1
-slug: "lbm7l8qr2lo5inoe"
-source: "../../index.html#/doc/lbm7l8qr2lo5inoe"
+slug: "intro"
+source: "../../index.html#/doc/intro"
 tags:
   - "语雀迁移"
 ---

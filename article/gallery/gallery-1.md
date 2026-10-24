@@ -7,8 +7,8 @@ updated: "2026-10-25"
 reading_time: 1
 emoji: "🖼️"
 order: 29
-slug: "poluwruhqqicpylb"
-source: "../../index.html#/doc/poluwruhqqicpylb"
+slug: "gallery-1"
+source: "../../index.html#/doc/gallery-1"
 tags:
   - "妙妙图片集"
   - "语雀迁移"
@@ -16,4 +16,4 @@ tags:
 
 # 请输入文本（1）
 
-![图片](../../assets/image/poluwruhqqicpylb/1790487129758-2ff84a0b-2112-447e-8ab4-6956cd113527.jpeg)
+![图片](../../assets/image/gallery-1/1790487129758-2ff84a0b-2112-447e-8ab4-6956cd113527.jpeg)

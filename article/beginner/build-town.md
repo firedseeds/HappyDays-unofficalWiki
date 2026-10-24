@@ -7,8 +7,8 @@ updated: "2026-10-25"
 reading_time: 1
 emoji: "🌱"
 order: 5
-slug: "wzd3p3hnih3hnf0b"
-source: "../../index.html#/doc/wzd3p3hnih3hnf0b"
+slug: "build-town"
+source: "../../index.html#/doc/build-town"
 tags:
   - "新手教程"
   - "语雀迁移"

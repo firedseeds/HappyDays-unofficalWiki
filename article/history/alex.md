@@ -7,8 +7,8 @@ updated: "2026-10-25"
 reading_time: 1
 emoji: "📖"
 order: 28
-slug: "cm6zdy85lcisc07b"
-source: "../../index.html#/doc/cm6zdy85lcisc07b"
+slug: "alex"
+source: "../../index.html#/doc/alex"
 tags:
   - "happyday历史"
   - "语雀迁移"
