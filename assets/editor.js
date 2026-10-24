@@ -386,8 +386,8 @@
 
     currentTopicOptions(article.topic);
     els.topic.value = article.topic;
-    els.topic.disabled = true;
-    els.topicHint.textContent = "主题创建后不能在这里更换";
+    els.topic.disabled = false;
+    els.topicHint.textContent = "保存后会移动文章文件，并自动调整本地图片路径";
 
     els.title.value = article.title || "";
     els.description.value = article.description || "";
@@ -525,15 +525,15 @@
     if (!body) {
       throw new Error("正文不能为空");
     }
+    if (!els.topic.value) {
+      throw new Error("请选择主题");
+    }
     if (state.mode === "new") {
       if (!slug) {
         throw new Error("请填写 slug");
       }
       if (!/^[a-z0-9][a-z0-9-]{0,63}$/.test(slug)) {
         throw new Error("slug 只能包含小写字母、数字和连字符");
-      }
-      if (!els.topic.value) {
-        throw new Error("请选择主题");
       }
     }
 
@@ -544,11 +544,11 @@
       updated: updated,
       readingTime: readingTime,
       tags: splitTags(els.tags.value),
-      body: body
+      body: body,
+      topicId: els.topic.value
     };
     if (state.mode === "new") {
       payload.slug = slug;
-      payload.topicId = els.topic.value;
     }
     return payload;
   }

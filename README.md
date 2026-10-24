@@ -2,7 +2,7 @@
 
 一个类似语雀文档体验的 **纯静态团队知识库**。没有前端框架和第三方依赖，文章通过 `build.py` 生成 `assets/data.js`；同时提供一个基于 Python 标准库的本地编辑服务，可以在浏览器中编辑文章、创建主题和预览 Markdown。
 
-页面以「左侧知识树 + 中间长文阅读 + 右侧页面目录」为核心，支持多主题文档、全文搜索、主题切换和响应式布局。当前知识库已从语雀迁入 30 篇文章，包含 9 个主题（7 个顶级主题、2 个二级主题）。
+页面以「左侧知识树 + 中间长文阅读 + 右侧页面目录」为核心，支持多主题文档、全文搜索、主题切换和响应式布局。当前知识库已从语雀迁入 29 篇文章，包含 9 个主题（7 个顶级主题、2 个二级主题）。
 
 ---
 
@@ -59,6 +59,7 @@ python server.py
 - 新建文章并选择顶级主题或二级主题
 - 添加顶级主题，或在任意顶级主题下添加二级主题
 - 在编辑器侧边栏的主题标题旁点击 `+`，可快速添加该主题下的二级主题
+- 修改文章所属主题；保存时自动移动 Markdown 文件，并更新 `topic`、`topic_id`、`source` 和本地图片相对路径
 - 删除文章及其本地图片
 - 删除空主题（没有直属文章和二级主题）
 - 保存时同步更新 Markdown front matter、`article/article.json`，并自动运行 `build.py` 生成 `assets/data.js`
@@ -83,7 +84,7 @@ python server.py --host 127.0.0.1 --port 8765
 | GET | `/api/health` | 检查编辑服务是否可用 |
 | GET | `/api/state` | 获取主题和文章索引 |
 | GET | `/api/articles/<slug>` | 读取文章元数据与 Markdown 正文 |
-| PUT | `/api/articles/<slug>` | 保存已有文章 |
+| PUT | `/api/articles/<slug>` | 保存已有文章，传 `topicId` 可移动主题 |
 | POST | `/api/articles` | 新建文章 |
 | DELETE | `/api/articles/<slug>` | 删除文章及其本地图片 |
 | POST | `/api/topics` | 新建主题 |
@@ -146,12 +147,12 @@ python server.py --host 127.0.0.1 --port 8765
 │  ├─ editor.js          # 内容管理界面逻辑
 │  └─ image/             # 迁移文章的本地图片
 ├─ article/
-│  ├─ article.json       # 9 个主题、30 篇文章的清单
+│  ├─ article.json       # 9 个主题、29 篇文章的清单
 │  ├─ intro/             # 简介（1 篇）
 │  ├─ beginner/          # 新手教程（6 篇）
 │  ├─ advanced/          # 进阶教程（7 篇）
 │  ├─ rules/             # 服务器规则（3 篇）
-│  ├─ history/           # happyday历史（直属 3 篇）
+│  ├─ history/           # happyday历史（直属 2 篇）
 │  │  ├─ people/         # 人物志（3 篇）
 │  │  └─ nations/        # 国家/城镇（5 篇）
 │  ├─ gallery/           # 妙妙图片集（2 篇）
@@ -176,7 +177,7 @@ python server.py --host 127.0.0.1 --port 8765
 - **格式标识**：`happydays-article-manifest`
 - **当前版本**：`1`
 - **当前主题数**：9（7 个顶级主题、2 个二级主题）
-- **当前文章数**：30
+- **当前文章数**：29
 - **最近更新**：`2026-10-25`
 - **文件路径**：`article/article.json`
 

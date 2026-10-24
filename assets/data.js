@@ -45,7 +45,7 @@ window.HAPPYDAYS_WIKI = (function () {
       description: "服务器的人物、国家与历史记录。",
       parentId: null,
       order: 5,
-      docs: ["hall-of-legends", "qwertyuiop", "alex"]
+      docs: ["qwertyuiop", "alex"]
     },
     {
       id: "people",
@@ -64,20 +64,20 @@ window.HAPPYDAYS_WIKI = (function () {
       docs: ["northeast-economic-alliance", "harbin-chronicle", "rhodes-island", "freedom-union", "dprk"]
     },
     {
+      id: "godman",
+      name: "神人堂",
+      description: "服务器里各种神人",
+      parentId: "history",
+      order: 3,
+      docs: []
+    },
+    {
       id: "gallery",
       name: "妙妙图片集",
       description: "服务器截图与图片记录。",
       parentId: null,
       order: 6,
       docs: ["gallery-1", "gallery-2"]
-    },
-    {
-      id: "godman",
-      name: "神人堂",
-      description: "服务器内各种神人",
-      parentId: null,
-      order: 7,
-      docs: []
     }
   ];
 
@@ -624,16 +624,6 @@ window.HAPPYDAYS_WIKI = (function () {
 <p>26年10月8日更新：</p>
 <ol class="steps"><li>将军指正柳京饭店为55层\\o/\\o/\\o/</li></ol>`
     },
-    "hall-of-legends": {
-      title: "神人堂",
-      emoji: "📖",
-      category: "history",
-      excerpt: "此文档在语雀中暂无正文。",
-      updated: "2026-10-25",
-      reading: 1,
-      tags: ["happyday历史", "语雀迁移"],
-      content: `<p>此文档在语雀中暂无正文。</p>`
-    },
     "qwertyuiop": {
       title: "qwertyuiop",
       emoji: "📖",
@@ -694,7 +684,7 @@ window.HAPPYDAYS_WIKI = (function () {
   };
 
   var allIds = [
-    "intro", "before-joining", "first-arrival", "shop-plugin", "build-town", "about-nations", "first-money", "resource-world-nether", "senluo-kitchen", "senluo-tavern", "money-making-guide", "lottery", "immersive-vehicles", "town-resources", "cheating-response", "behavior-chat", "world-map", "matopiraphai", "233-2233", "zzx", "northeast-economic-alliance", "harbin-chronicle", "rhodes-island", "freedom-union", "dprk", "hall-of-legends", "qwertyuiop", "alex", "gallery-1", "gallery-2"
+    "intro", "before-joining", "first-arrival", "shop-plugin", "build-town", "about-nations", "first-money", "resource-world-nether", "senluo-kitchen", "senluo-tavern", "money-making-guide", "lottery", "immersive-vehicles", "town-resources", "cheating-response", "behavior-chat", "world-map", "matopiraphai", "233-2233", "zzx", "northeast-economic-alliance", "harbin-chronicle", "rhodes-island", "freedom-union", "dprk", "qwertyuiop", "alex", "gallery-1", "gallery-2"
   ];
 
   return {

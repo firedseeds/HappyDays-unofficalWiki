@@ -8,7 +8,7 @@
     "language": "zh-CN"
   },
   "topicCount": 9,
-  "articleCount": 30,
+  "articleCount": 29,
   "lastUpdated": "2026-10-25",
   "topics": [
     {
@@ -58,7 +58,7 @@
       "order": 5,
       "description": "服务器的人物、国家与历史记录。",
       "emoji": "📖",
-      "articleCount": 3,
+      "articleCount": 2,
       "parentId": null
     },
     {
@@ -82,6 +82,15 @@
       "articleCount": 5
     },
     {
+      "id": "godman",
+      "name": "神人堂",
+      "description": "服务器里各种神人",
+      "directory": "history/godman",
+      "parentId": "history",
+      "order": 3,
+      "articleCount": 0
+    },
+    {
       "id": "gallery",
       "name": "妙妙图片集",
       "directory": "gallery",
@@ -90,14 +99,6 @@
       "emoji": "🖼️",
       "articleCount": 2,
       "parentId": null
-    },
-    {
-      "id": "godman",
-      "name": "神人堂",
-      "description": "服务器内各种神人",
-      "directory": "godman",
-      "order": 7,
-      "articleCount": 0
     }
   ],
   "articles": [
@@ -507,22 +508,6 @@
       ],
       "file": "history/nations/dprk.md",
       "source": "../index.html#/doc/dprk"
-    },
-    {
-      "slug": "hall-of-legends",
-      "order": 26,
-      "topic": "history",
-      "title": "神人堂",
-      "description": "此文档在语雀中暂无正文。",
-      "emoji": "📖",
-      "updated": "2026-10-25",
-      "readingTime": 1,
-      "tags": [
-        "happyday历史",
-        "语雀迁移"
-      ],
-      "file": "history/hall-of-legends.md",
-      "source": "../index.html#/doc/hall-of-legends"
     },
     {
       "slug": "qwertyuiop",

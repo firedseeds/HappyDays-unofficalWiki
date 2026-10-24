@@ -362,6 +362,46 @@ def build_output_message(output: str) -> str:
     return output.splitlines()[-1] if output else "构建完成"
 
 
+def relocate_markdown_paths(markdown: str, old_path: Path, new_path: Path) -> str:
+    if old_path.parent == new_path.parent:
+        return markdown
+    old_parent = old_path.parent.resolve()
+    new_parent = new_path.parent.resolve()
+    root = ROOT.resolve()
+
+    def relocate(target: str) -> str:
+        if not target or target.startswith(
+            ("#", "/", "//", "http://", "https://", "mailto:", "data:")
+        ):
+            return target
+        clean, separator, fragment = target.partition("#")
+        if not clean:
+            return target
+        resolved = (old_parent / clean).resolve()
+        try:
+            resolved.relative_to(root)
+        except ValueError:
+            return target
+        relative = os.path.relpath(resolved, new_parent).replace("\\", "/")
+        return relative + (separator + fragment if separator else "")
+
+    image_pattern = re.compile(
+        r"(!\[[^\]]*\]\()([^)\s]+)(\s+[\"'][^\"']*[\"'])?(\))"
+    )
+    link_pattern = re.compile(
+        r"(?<!!)(\[[^\]]+\]\()([^)\s]+)(\s+[\"'][^\"']*[\"'])?(\))"
+    )
+    markdown = image_pattern.sub(
+        lambda match: match.group(1) + relocate(match.group(2)) + (match.group(3) or "") + match.group(4),
+        markdown,
+    )
+    markdown = link_pattern.sub(
+        lambda match: match.group(1) + relocate(match.group(2)) + (match.group(3) or "") + match.group(4),
+        markdown,
+    )
+    return markdown
+
+
 def update_article(slug: str, payload: dict) -> dict:
     with LOCK:
         manifest = read_manifest()
@@ -373,6 +413,13 @@ def update_article(slug: str, payload: dict) -> dict:
         topic = topics.get(record["topic"])
         if topic is None:
             raise ApiError(500, "文章主题不存在")
+        topic_id = payload.get("topicId", record["topic"])
+        if not isinstance(topic_id, str):
+            raise ApiError(400, "topicId 必须是字符串")
+        topic_id = require_text(topic_id, "topicId", 64)
+        target_topic = topics.get(topic_id)
+        if target_topic is None:
+            raise ApiError(400, "目标主题不存在")
         fields = validate_article_fields(payload, {
             "title": record.get("title"),
             "description": record.get("description"),
@@ -382,8 +429,18 @@ def update_article(slug: str, payload: dict) -> dict:
             "tags": record.get("tags"),
         })
         body = fields.pop("body")
-        path = article_path(record)
-        file_snapshot = {path: path.read_text(encoding="utf-8") if path.is_file() else None}
+        old_path = article_path(record)
+        new_file = f"{target_topic['directory']}/{slug}.md"
+        new_path = (ARTICLE_DIR / new_file).resolve()
+        try:
+            new_path.relative_to(ARTICLE_DIR.resolve())
+        except ValueError:
+            raise ApiError(400, "目标文章路径无效")
+        if new_path != old_path and new_path.exists():
+            raise ApiError(409, "目标主题下已存在同名文章文件")
+        file_snapshot = {old_path: old_path.read_bytes() if old_path.is_file() else None}
+        if new_path != old_path:
+            file_snapshot[new_path] = None
         manifest_snapshot = MANIFEST_PATH.read_bytes()
         data_snapshot = DATA_PATH.read_bytes() if DATA_PATH.is_file() else None
 
@@ -395,19 +452,31 @@ def update_article(slug: str, payload: dict) -> dict:
             "updated": fields["updated"],
             "readingTime": fields["reading_time"],
             "tags": fields["tags"],
+            "topic": topic_id,
+            "file": new_file,
         })
         for index, item in enumerate(manifest["articles"]):
             if item.get("slug") == slug:
                 manifest["articles"][index] = updated
                 break
         refresh_manifest(manifest)
-        markdown = compose_markdown(updated, topic, body)
+        body = relocate_markdown_paths(body, old_path, new_path)
+        markdown = compose_markdown(updated, target_topic, body)
 
         try:
-            atomic_write(path, markdown)
+            if new_path != old_path:
+                atomic_write(new_path, markdown)
+                if old_path.exists():
+                    old_path.unlink()
+            else:
+                atomic_write(old_path, markdown)
             write_manifest(manifest)
             output = run_build()
         except Exception as exc:
+            if old_path.exists():
+                old_path.unlink()
+            if new_path != old_path and new_path.exists():
+                new_path.unlink()
             restore_files(file_snapshot)
             atomic_write(MANIFEST_PATH, manifest_snapshot.decode("utf-8"))
             if data_snapshot is not None:
