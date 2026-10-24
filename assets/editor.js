@@ -13,6 +13,8 @@
     topicList: document.getElementById("topicList"),
     newArticleBtn: document.getElementById("newArticleBtn"),
     newTopicBtn: document.getElementById("newTopicBtn"),
+    importArticleBtn: document.getElementById("importArticleBtn"),
+    importFileInput: document.getElementById("importFileInput"),
     offlineState: document.getElementById("offlineState"),
     retryConnection: document.getElementById("retryConnection"),
     emptyState: document.getElementById("emptyState"),
@@ -401,6 +403,7 @@
     els.saveBtn.disabled = busy;
     els.previewBtn.disabled = busy;
     els.deleteArticleBtn.disabled = busy;
+    els.importArticleBtn.disabled = busy || state.topics.length === 0;
     els.saveLabel.textContent = busy
       ? "保存中…"
       : (state.mode === "new" ? "创建并构建" : "保存并构建");
@@ -451,12 +454,194 @@
     els.form.hidden = true;
     els.newArticleBtn.disabled = true;
     els.newTopicBtn.disabled = true;
+    els.importArticleBtn.disabled = true;
   }
 
   function updateHeadingFromTitle() {
     els.formHeading.textContent = els.title.value.trim() || "未命名文章";
     document.title = (els.title.value.trim() || "新建文章") + " · 内容管理";
   }
+
+  function parseImportedValue(raw) {
+    var value = raw.trim();
+    if ((value.charAt(0) === '"' && value.charAt(value.length - 1) === '"') ||
+        (value.charAt(0) === "'" && value.charAt(value.length - 1) === "'")) {
+      try {
+        return JSON.parse(value);
+      } catch (error) {
+        return value.slice(1, -1);
+      }
+    }
+    if (/^-?\d+$/.test(value)) {
+      return Number(value);
+    }
+    if (value === "true" || value === "false") {
+      return value === "true";
+    }
+    return value;
+  }
+
+  function parseImportedMarkdown(text) {
+    var source = text.replace(/^\uFEFF/, "").replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+    var meta = {};
+    var body = source;
+    if (source.indexOf("---\n") === 0) {
+      var end = source.indexOf("\n---\n", 4);
+      if (end !== -1) {
+        var header = source.slice(4, end);
+        body = source.slice(end + 5);
+        var listKey = null;
+        header.split("\n").forEach(function (line) {
+          if (!line.trim() || line.trim().charAt(0) === "#") {
+            return;
+          }
+          if (/^\s*-\s+/.test(line)) {
+            if (listKey && Array.isArray(meta[listKey])) {
+              meta[listKey].push(parseImportedValue(line.replace(/^\s*-\s+/, "")));
+            }
+            return;
+          }
+          var colon = line.indexOf(":");
+          if (colon === -1) {
+            return;
+          }
+          var key = line.slice(0, colon).trim();
+          var value = line.slice(colon + 1).trim();
+          if (!key) {
+            return;
+          }
+          if (!value) {
+            meta[key] = [];
+            listKey = key;
+          } else {
+            meta[key] = parseImportedValue(value);
+            listKey = null;
+          }
+        });
+      }
+    }
+
+    var lines = body.split("\n");
+    var firstIndex = -1;
+    for (var index = 0; index < lines.length; index += 1) {
+      if (lines[index].trim()) {
+        firstIndex = index;
+        break;
+      }
+    }
+    var heading = "";
+    if (firstIndex !== -1 && /^#\s+/.test(lines[firstIndex])) {
+      heading = lines[firstIndex].replace(/^#\s+/, "").trim();
+      lines.splice(firstIndex, 1);
+    }
+    body = lines.join("\n").trim();
+    var title = String(meta.title || heading || "").trim();
+    var description = String(meta.description || "").trim();
+    if (!description) {
+      var paragraph = [];
+      body.split("\n").some(function (line) {
+        var value = line.trim();
+        if (!value) {
+          return paragraph.length > 0;
+        }
+        if (value.charAt(0) === "#" || value.indexOf("```") === 0 || value.indexOf("- ") === 0 || value.indexOf(">") === 0) {
+          return paragraph.length > 0;
+        }
+        paragraph.push(value);
+        return false;
+      });
+      description = paragraph.join(" ")
+        .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+        .replace(/[*_`]/g, "")
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+    var tags = [];
+    if (Array.isArray(meta.tags)) {
+      tags = meta.tags;
+    } else if (typeof meta.tags === "string" && meta.tags) {
+      tags = meta.tags.split(/[,，]/);
+    }
+    var updated = /^\d{4}-\d{2}-\d{2}$/.test(String(meta.updated || ""))
+      ? String(meta.updated)
+      : localToday();
+    var reading = Number(meta.reading_time);
+    if (!Number.isFinite(reading) || reading < 1) {
+      reading = Math.max(1, Math.min(240, Math.ceil(body.replace(/\s+/g, "").length / 500)));
+    } else {
+      reading = Math.min(240, Math.round(reading));
+    }
+    return {
+      title: title.slice(0, 200),
+      description: description.slice(0, 500),
+      emoji: String(meta.emoji || "📄").slice(0, 8),
+      updated: updated,
+      reading: reading,
+      tags: tags.join(", "),
+      body: body
+    };
+  }
+
+  function validateImportFilename(filename) {
+    var match = /^(.+)\.md$/i.exec(filename);
+    if (!match) {
+      return { error: "只支持 .md 文件" };
+    }
+    var stem = match[1];
+    if (!/^[A-Za-z0-9][A-Za-z0-9-]*$/.test(stem)) {
+      return { error: "导入失败：文件名只能包含英文字母、数字和连字符，不能包含中文、空格或下划线" };
+    }
+    var slug = stem.toLowerCase();
+    if (slug.length > 64) {
+      return { error: "导入失败：文件名不能超过 64 个字符" };
+    }
+    if (state.articles.some(function (article) {
+      return article.slug === slug;
+    })) {
+      return { error: "导入失败：已存在 slug 为「" + slug + "」的文章" };
+    }
+    return { slug: slug };
+  }
+
+  function importMarkdownFile(file) {
+    var validation = validateImportFilename(file.name);
+    if (validation.error) {
+      showToast(validation.error, "error");
+      return;
+    }
+    if (!state.topics.length) {
+      showToast("请先添加一个主题", "error");
+      return;
+    }
+    if (!confirmDiscard()) {
+      return;
+    }
+    var reader = new FileReader();
+    reader.onerror = function () {
+      showToast("读取文件失败，请重试", "error");
+    };
+    reader.onload = function () {
+      var imported = parseImportedMarkdown(String(reader.result || ""));
+      var topicId = state.mode === "edit" && state.currentArticle
+        ? state.currentArticle.topic
+        : null;
+      startNewArticle(topicId, true);
+      els.title.value = imported.title || validation.slug;
+      els.description.value = imported.description || "从 Markdown 文件导入。";
+      els.emoji.value = imported.emoji;
+      els.updated.value = imported.updated;
+      els.reading.value = imported.reading;
+      els.tags.value = imported.tags;
+      els.slug.value = validation.slug;
+      els.body.value = imported.body || "## 内容\n\n";
+      state.dirty = true;
+      updateHeadingFromTitle();
+      refreshPreview();
+      showToast("已导入 " + file.name + "，请确认主题和内容后保存", "success");
+    };
+    reader.readAsText(file, "UTF-8");
+  }
+
 
   function fillForm(article) {
     state.loading = true;
@@ -497,8 +682,8 @@
     refreshPreview();
   }
 
-  function startNewArticle(topicId) {
-    if (!confirmDiscard()) {
+  function startNewArticle(topicId, skipConfirm) {
+    if (!skipConfirm && !confirmDiscard()) {
       return;
     }
     if (!state.topics.length) {
@@ -563,6 +748,7 @@
       renderSidebar();
       els.newArticleBtn.disabled = state.topics.length === 0;
       els.newTopicBtn.disabled = false;
+      els.importArticleBtn.disabled = state.topics.length === 0;
       setConnection("on", "本地编辑服务已连接");
       if (!els.form.hidden && state.mode === "new") {
         var selected = els.topic.value;
@@ -882,6 +1068,16 @@
     els.newTopicBtn.addEventListener("click", function () {
       openTopicDialog();
     });
+    els.importArticleBtn.addEventListener("click", function () {
+      els.importFileInput.click();
+    });
+    els.importFileInput.addEventListener("change", function () {
+      var file = els.importFileInput.files && els.importFileInput.files[0];
+      els.importFileInput.value = "";
+      if (file) {
+        importMarkdownFile(file);
+      }
+    });
     els.deleteArticleBtn.addEventListener("click", deleteCurrentArticle);
     els.retryConnection.addEventListener("click", function () {
       boot();
@@ -951,6 +1147,7 @@
     setConnection("idle", "连接中…");
     els.newArticleBtn.disabled = true;
     els.newTopicBtn.disabled = true;
+    els.importArticleBtn.disabled = true;
     setFormAlert("");
     fetchState().then(function () {
       var rawHash = decodeURIComponent(window.location.hash.replace(/^#/, ""));
