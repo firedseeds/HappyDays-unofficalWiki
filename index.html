@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="HappyDays非官方文档 —— HappyDays 团队的产品手册、协作指南与工程实践。">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#141b17" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="HappyDays非官方文档 · 团队知识库">
+  <meta property="og:description" content="把散落在聊天、会议与脑海里的经验，种成一片随时可以查阅的森林。">
+  <title>HappyDays非官方文档 · 团队知识库</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='17' fill='%230b9b6d'/%3E%3Cpath d='M17 23c8-4 16-3 20 1v25c-4-4-12-5-20-1V23Z' fill='white' opacity='.96'/%3E%3Cpath d='M47 23c-8-4-16-3-20 1v25c4-4 12-5 20-1V23Z' fill='white' opacity='.7'/%3E%3C/svg%3E">
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem('happydays-theme');
+        if (saved === 'dark' || saved === 'light') {
+          document.documentElement.setAttribute('data-theme', saved);
+        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      } catch (error) { /* 本地存储不可用时保持默认主题 */ }
+    })();
+  </script>
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <button class="skip-link" id="skipToContent" type="button">跳到正文</button>
+  <noscript>
+    <div class="noscript-note">HappyDays非官方文档需要启用 JavaScript 才能加载文档内容、搜索和目录。请在浏览器设置中启用后刷新页面。</div>
+  </noscript>
+  <div class="reading-progress" aria-hidden="true"><span id="readingProgress"></span></div>
+
+  <div class="sidebar-backdrop" id="sidebarBackdrop" data-action="close-sidebar" aria-hidden="true"></div>
+
+  <div class="app">
+    <aside class="sidebar" id="sidebar" aria-label="知识库导航">
+      <div class="sidebar-head">
+        <a class="brand" href="#/doc/welcome" aria-label="HappyDays非官方文档首页">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 36 36" focusable="false">
+              <defs>
+                <linearGradient id="brandGradient" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#18b57f"></stop>
+                  <stop offset="100%" stop-color="#078a5f"></stop>
+                </linearGradient>
+              </defs>
+              <rect width="36" height="36" rx="11" fill="url(#brandGradient)"></rect>
+              <path d="M9.5 12.6c4.6-2.3 8.7-1.7 11 0v13.1c-2.3-1.7-6.4-2.3-11 0V12.6Z" fill="#fff" opacity=".97"></path>
+              <path d="M26.5 12.6c-4.6-2.3-8.7-1.7-11 0v13.1c2.3-1.7 6.4-2.3 11 0V12.6Z" fill="#fff" opacity=".68"></path>
+              <path d="M18 15.2v10.6" stroke="#078a5f" stroke-width="1.2" stroke-linecap="round" opacity=".5"></path>
+            </svg>
+          </span>
+          <span class="brand-copy">
+            <span class="brand-name">HappyDays</span>
+            <span class="brand-suffix">非官方文档</span>
+          </span>
+        </a>
+        <button class="icon-button sidebar-close" id="sidebarClose" type="button" aria-label="收起侧边栏">
+          <svg class="icon" aria-hidden="true"><use href="#i-chevron-left"></use></svg>
+        </button>
+      </div>
+
+      <button class="search-trigger" id="sidebarSearch" type="button" aria-label="搜索知识库" aria-haspopup="dialog" aria-keyshortcuts="Control+K Meta+K">
+        <svg class="icon" aria-hidden="true"><use href="#i-search"></use></svg>
+        <span>搜索知识库</span>
+        <kbd><span class="mod-key">Ctrl</span>&nbsp;K</kbd>
+      </button>
+
+      <div class="sidebar-scroll">
+        <div class="quick-nav" aria-label="快捷入口">
+          <a class="quick-link" href="#/doc/welcome" data-doc="welcome">
+            <svg class="icon" aria-hidden="true"><use href="#i-home"></use></svg>
+            <span>知识库首页</span>
+          </a>
+          <a class="quick-link" href="#/doc/changelog" data-doc="changelog">
+            <svg class="icon" aria-hidden="true"><use href="#i-history"></use></svg>
+            <span>更新日志</span>
+            <span class="quick-badge">新</span>
+          </a>
+        </div>
+
+        <div class="nav-section">
+          <div class="nav-section-head">
+            <span class="nav-section-title">知识库</span>
+            <span class="nav-section-count" id="docCount">8 篇</span>
+          </div>
+          <nav class="doc-tree" id="docTree" aria-label="文档树"></nav>
+        </div>
+
+        <div class="invite-card">
+          <div class="invite-art" aria-hidden="true">
+            <span class="invite-leaf invite-leaf--one"></span>
+            <span class="invite-leaf invite-leaf--two"></span>
+            <span class="invite-dot"></span>
+          </div>
+          <p class="invite-title">一起把经验留下来</p>
+          <p class="invite-text">邀请伙伴加入空间，共同编辑、评论与成长。</p>
+          <button class="invite-button" type="button" data-action="invite">
+            <svg class="icon" aria-hidden="true"><use href="#i-user-plus"></use></svg>
+            复制邀请链接
+          </button>
+        </div>
+      </div>
+
+      <div class="sidebar-foot">
+        <span class="profile-avatar" aria-hidden="true">知</span>
+        <span class="profile-copy">
+          <span class="profile-name">林知夏</span>
+          <span class="profile-role"><i class="status-dot"></i>空间管理员</span>
+        </span>
+        <span class="profile-more" title="当前账号：林知夏" aria-hidden="true">···</span>
+      </div>
+    </aside>
+
+    <div class="app-main">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="icon-button menu-button" id="sidebarToggle" type="button" aria-label="展开侧边栏" aria-controls="sidebar" aria-expanded="true">
+            <svg class="icon" aria-hidden="true"><use href="#i-menu"></use></svg>
+          </button>
+          <nav class="breadcrumbs" aria-label="面包屑">
+            <a class="crumb-home" href="#/doc/welcome">HappyDays 团队</a>
+            <svg class="crumb-chevron" aria-hidden="true"><use href="#i-chevron-right"></use></svg>
+            <span class="crumb-category" id="crumbCategory">开始使用</span>
+            <svg class="crumb-chevron crumb-chevron--last" aria-hidden="true"><use href="#i-chevron-right"></use></svg>
+            <span class="crumb-current" id="crumbTitle">欢迎来到 HappyDays非官方文档</span>
+          </nav>
+        </div>
+
+        <div class="topbar-actions">
+          <span class="sync-pill" aria-label="所有更改已保存">
+            <svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg>
+            <span>已保存</span>
+          </span>
+          <button class="top-action favorite-btn" id="favoriteBtn" type="button" aria-pressed="false">
+            <svg class="icon" aria-hidden="true"><use href="#i-star"></use></svg>
+            <span class="action-label">收藏</span>
+          </button>
+          <button class="top-action" id="shareBtn" type="button" aria-label="分享当前文档">
+            <svg class="icon" aria-hidden="true"><use href="#i-share"></use></svg>
+            <span class="action-label">分享</span>
+          </button>
+          <button class="icon-button outline-trigger" id="outlineBtn" type="button" aria-label="打开页面目录" aria-controls="tocPanel" aria-expanded="false">
+            <svg class="icon" aria-hidden="true"><use href="#i-list"></use></svg>
+          </button>
+          <button class="icon-button theme-toggle" id="themeBtn" type="button" aria-label="切换到深色模式">
+            <svg class="icon icon-sun" aria-hidden="true"><use href="#i-sun"></use></svg>
+            <svg class="icon icon-moon" aria-hidden="true"><use href="#i-moon"></use></svg>
+          </button>
+          <button class="icon-button" id="moreBtn" type="button" aria-label="更多页面操作" aria-haspopup="true" aria-expanded="false">
+            <svg class="icon" aria-hidden="true"><use href="#i-more"></use></svg>
+          </button>
+          <div class="more-menu" id="moreMenu" hidden>
+            <p class="menu-eyebrow">页面操作</p>
+            <button class="menu-item" type="button" data-action="copy-link">
+              <svg class="icon" aria-hidden="true"><use href="#i-link"></use></svg>
+              <span>复制页面链接</span>
+            </button>
+            <button class="menu-item" type="button" data-action="print">
+              <svg class="icon" aria-hidden="true"><use href="#i-printer"></use></svg>
+              <span>打印 / 导出 PDF</span>
+            </button>
+            <button class="menu-item" type="button" data-action="wide">
+              <svg class="icon" aria-hidden="true"><use href="#i-wide"></use></svg>
+              <span>宽屏阅读</span>
+              <span class="menu-state" id="wideState">关</span>
+            </button>
+            <div class="menu-divider"></div>
+            <p class="menu-tip">提示：按 <kbd>Esc</kbd> 可关闭此菜单</p>
+          </div>
+        </div>
+      </header>
+
+      <main class="main" id="mainContent">
+        <div class="doc-layout">
+          <article class="doc" id="docRoot" aria-labelledby="docTitle">
+            <header class="doc-header">
+              <div class="doc-kicker">
+                <span class="doc-category" id="docCategory">开始使用</span>
+                <span class="doc-type">知识库文档</span>
+              </div>
+              <div class="doc-emoji" id="docEmoji" aria-hidden="true">🌱</div>
+              <h1 class="doc-title" id="docTitle">欢迎来到 HappyDays非官方文档</h1>
+              <p class="doc-excerpt" id="docExcerpt"></p>
+              <div class="doc-meta">
+                <span class="author-avatar" id="authorAvatar" aria-hidden="true">林</span>
+                <span class="meta-author">
+                  <strong id="authorName">林知夏</strong>
+                  <span id="authorRole">知识运营</span>
+                </span>
+                <span class="meta-divider" aria-hidden="true"></span>
+                <span class="meta-item">
+                  <svg class="icon" aria-hidden="true"><use href="#i-clock"></use></svg>
+                  <span id="docUpdated">2026 年 10 月 21 日更新</span>
+                </span>
+                <span class="meta-item">
+                  <svg class="icon" aria-hidden="true"><use href="#i-read"></use></svg>
+                  <span id="docReading">约 6 分钟阅读</span>
+                </span>
+              </div>
+              <div class="doc-tags" id="docTags"></div>
+            </header>
+
+            <div class="doc-body" id="docBody"></div>
+
+            <footer class="doc-footer" id="docFooter">
+              <div class="feedback-card">
+                <div class="feedback-copy">
+                  <strong>这篇文档对你有帮助吗？</strong>
+                  <span id="feedbackNote">你的反馈会帮助我们把知识写得更好。</span>
+                </div>
+                <div class="feedback-actions">
+                  <button class="feedback-button" type="button" data-feedback="yes">
+                    <svg class="icon" aria-hidden="true"><use href="#i-thumb-up"></use></svg>
+                    <span>有帮助</span>
+                  </button>
+                  <button class="feedback-button" type="button" data-feedback="no">
+                    <svg class="icon" aria-hidden="true"><use href="#i-thumb-down"></use></svg>
+                    <span>需改进</span>
+                  </button>
+                </div>
+              </div>
+
+              <nav class="page-nav" aria-label="上一篇与下一篇">
+                <a class="page-nav-link page-nav-prev" id="prevDoc" href="#/doc/welcome">
+                  <span class="page-nav-direction">
+                    <svg class="icon" aria-hidden="true"><use href="#i-arrow-left"></use></svg>
+                    上一篇
+                  </span>
+                  <span class="page-nav-title" id="prevDocTitle">—</span>
+                </a>
+                <a class="page-nav-link page-nav-next" id="nextDoc" href="#/doc/quickstart">
+                  <span class="page-nav-direction">
+                    下一篇
+                    <svg class="icon" aria-hidden="true"><use href="#i-arrow-right"></use></svg>
+                  </span>
+                  <span class="page-nav-title" id="nextDocTitle">—</span>
+                </a>
+              </nav>
+
+              <p class="doc-colophon">
+                <span>HappyDays非官方文档</span>
+                <span class="colophon-dot" aria-hidden="true"></span>
+                <span>由 HappyDays 团队共同维护</span>
+                <span class="colophon-dot" aria-hidden="true"></span>
+                <span id="colophonUpdated">最后更新于 2026.10.21</span>
+              </p>
+            </footer>
+          </article>
+
+          <aside class="toc" id="tocPanel" aria-label="本页目录">
+            <div class="toc-sticky">
+              <div class="toc-head">
+                <span class="toc-label">本页目录</span>
+                <span class="toc-percent" id="readingPercent">0%</span>
+              </div>
+              <nav class="toc-nav" id="tocNav" aria-label="页面标题导航"></nav>
+              <button class="toc-top" id="tocTop" type="button">
+                <svg class="icon" aria-hidden="true"><use href="#i-arrow-up"></use></svg>
+                回到顶部
+              </button>
+            </div>
+            <button class="toc-close" id="tocClose" type="button" aria-label="关闭页面目录">
+              <svg class="icon" aria-hidden="true"><use href="#i-x"></use></svg>
+            </button>
+          </aside>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div class="toc-backdrop" id="tocBackdrop" data-action="close-toc" aria-hidden="true"></div>
+
+  <div class="search-overlay" id="searchOverlay" hidden>
+    <div class="search-backdrop" data-action="close-search" aria-hidden="true"></div>
+    <section class="search-dialog" role="dialog" aria-modal="true" aria-labelledby="searchTitle">
+      <h2 class="sr-only" id="searchTitle">搜索知识库</h2>
+      <div class="search-input-row">
+        <svg class="icon search-icon" aria-hidden="true"><use href="#i-search"></use></svg>
+        <input id="searchInput" class="search-input" type="search" placeholder="搜索文档、标签或内容…" autocomplete="off" spellcheck="false" aria-label="搜索知识库" aria-controls="searchResults" aria-autocomplete="list" aria-haspopup="listbox">
+        <kbd class="search-esc">Esc</kbd>
+      </div>
+      <div class="search-results" id="searchResults" role="listbox" aria-label="搜索建议" aria-live="polite"></div>
+      <div class="search-footer">
+        <span class="search-footer-group"><kbd>↑</kbd><kbd>↓</kbd> 选择</span>
+        <span class="search-footer-group"><kbd>↵</kbd> 打开</span>
+        <span class="search-footer-brand">
+          <span class="mini-mark" aria-hidden="true"></span>
+          HappyDays非官方文档
+        </span>
+      </div>
+    </section>
+  </div>
+
+  <div class="toast-region" id="toastRegion" role="status" aria-live="polite" aria-atomic="true"></div>
+
+  <button class="back-to-top" id="backToTop" type="button" aria-label="回到顶部">
+    <svg class="icon" aria-hidden="true"><use href="#i-arrow-up"></use></svg>
+  </button>
+
+  <div class="sr-only" id="pageAnnouncement" aria-live="polite"></div>
+
+  <svg class="icon-sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+    <defs>
+      <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+      <symbol id="i-chevron-left" viewBox="0 0 24 24"><path d="m14.5 6-6 6 6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="i-chevron-right" viewBox="0 0 24 24"><path d="m9.5 6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="i-chevron-down" viewBox="0 0 24 24"><path d="m6 9.5 6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m15.5 15.5 4.2 4.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+      <symbol id="i-home" viewBox="0 0 24 24"><path d="m4 10.5 8-6.2 8 6.2v8.1a1.4 1.4 0 0 1-1.4 1.4H5.4A1.4 1.4 0 0 1 4 18.6v-8.1Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M9.3 20v-6h5.4v6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></symbol>
+      <symbol id="i-history" viewBox="0 0 24 24"><path d="M4.4 10.2A8 8 0 1 1 6 16.9M4.4 10.2V5.7m0 4.5h4.4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 7.9V12l2.8 1.8" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M12 7.7V12l2.9 1.9" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+      <symbol id="i-read" viewBox="0 0 24 24"><path d="M4 5.8c2.9-1 5.6-.8 8 1.1 2.4-1.9 5.1-2.1 8-1.1v12.4c-2.9-1-5.6-.8-8 1.1-2.4-1.9-5.1-2.1-8-1.1V5.8Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M12 7v12" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+      <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 3.7 2.55 5.17 5.7.83-4.12 4.02.97 5.68L12 16.72 6.9 19.4l.97-5.68L3.75 9.7l5.7-.83L12 3.7Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
+      <symbol id="i-star-filled" viewBox="0 0 24 24"><path d="m12 3.7 2.55 5.17 5.7.83-4.12 4.02.97 5.68L12 16.72 6.9 19.4l.97-5.68L3.75 9.7l5.7-.83L12 3.7Z" fill="currentColor" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></symbol>
+      <symbol id="i-share" viewBox="0 0 24 24"><circle cx="6" cy="12" r="2.6" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="18" cy="5.5" r="2.6" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="18" cy="18.5" r="2.6" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="m8.4 10.8 7.2-4M8.4 13.2l7.2 4" fill="none" stroke="currentColor" stroke-width="1.7"/></symbol>
+      <symbol id="i-more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5" fill="currentColor"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/><circle cx="19" cy="12" r="1.5" fill="currentColor"/></symbol>
+      <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M12 2.8v2.1M12 19.1v2.1M4.5 4.5 6 6M18 18l1.5 1.5M2.8 12h2.1M19.1 12h2.1M4.5 19.5 6 18M18 6l1.5-1.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+      <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20.2 14.2A8.1 8.1 0 0 1 9.8 3.8a8.1 8.1 0 1 0 10.4 10.4Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></symbol>
+      <symbol id="i-x" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="m4.8 12.4 4.6 4.6 9.8-10" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="M12 19V5m-6 6 6-6 6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="i-arrow-left" viewBox="0 0 24 24"><path d="M19 12H5m6 6-6-6 6-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><circle cx="4.4" cy="6" r="1.1" fill="currentColor"/><circle cx="4.4" cy="12" r="1.1" fill="currentColor"/><circle cx="4.4" cy="18" r="1.1" fill="currentColor"/></symbol>
+      <symbol id="i-link" viewBox="0 0 24 24"><path d="m9.7 14.3 4.6-4.6M7.1 16.9l-1 1a3.7 3.7 0 0 1-5.2-5.2l3.6-3.6a3.7 3.7 0 0 1 5.2 0M16.9 7.1l1-1a3.7 3.7 0 0 1 5.2 5.2l-3.6 3.6a3.7 3.7 0 0 1-5.2 0" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+      <symbol id="i-printer" viewBox="0 0 24 24"><path d="M7 8V3.8h10V8M7 17H4.5V9.5A1.5 1.5 0 0 1 6 8h12a1.5 1.5 0 0 1 1.5 1.5V17H17" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><rect x="7" y="14" width="10" height="6.2" rx="1" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="17.3" cy="11.4" r=".9" fill="currentColor"/></symbol>
+      <symbol id="i-wide" viewBox="0 0 24 24"><path d="M8.5 4H4v4.5M15.5 4H20v4.5M8.5 20H4v-4.5M15.5 20H20v-4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="i-thumb-up" viewBox="0 0 24 24"><path d="M7.4 10.2 11 3.8c1.5.1 2.4 1.1 2.4 2.6v3.1h4.3c1.2 0 2.1 1.1 1.8 2.3l-1.4 6.1a2 2 0 0 1-1.9 1.5H7.4M7.4 10.2V19.4M7.4 10.2H4.2v9.2h3.2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
+      <symbol id="i-thumb-down" viewBox="0 0 24 24"><path d="M16.6 13.8 13 20.2c-1.5-.1-2.4-1.1-2.4-2.6v-3.1H6.3c-1.2 0-2.1-1.1-1.8-2.3l1.4-6.1a2 2 0 0 1 1.9-1.5h8.8M16.6 13.8V4.6M16.6 13.8h3.2V4.6h-3.2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
+      <symbol id="i-user-plus" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.4" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M3.6 19.5c.5-3.2 2.5-5 5.4-5s4.9 1.8 5.4 5M18 8v6M15 11h6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+      <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M12 11v5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="7.8" r="1.05" fill="currentColor"/></symbol>
+      <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M8.7 16.4a6.8 6.8 0 1 1 6.6 0v1.2H8.7v-1.2Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9.4 20.1h5.2M10.1 17.6h3.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+      <symbol id="i-alert" viewBox="0 0 24 24"><path d="M10.5 4.3 2.9 18a1.7 1.7 0 0 0 1.5 2.5h15.2a1.7 1.7 0 0 0 1.5-2.5L13.5 4.3a1.7 1.7 0 0 0-3 0Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M12 9v4.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="16.8" r="1.05" fill="currentColor"/></symbol>
+      <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="11" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M16 8V5.9A1.9 1.9 0 0 0 14.1 4H6.9A1.9 1.9 0 0 0 5 5.9v7.2A1.9 1.9 0 0 0 6.9 15H8" fill="none" stroke="currentColor" stroke-width="1.7"/></symbol>
+      <symbol id="i-code" viewBox="0 0 24 24"><path d="m8.5 7.5-5 4.5 5 4.5M15.5 7.5l5 4.5-5 4.5M13.4 3.8l-2.8 16.4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="i-sparkle" viewBox="0 0 24 24"><path d="M12 3.5c.6 4.5 2.4 6.3 6.9 6.9-4.5.6-6.3 2.4-6.9 6.9-.6-4.5-2.4-6.3-6.9-6.9 4.5-.6 6.3-2.4 6.9-6.9Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M18.7 16.2c.25 1.85 1 2.6 2.85 2.85-1.85.25-2.6 1-2.85 2.85-.25-1.85-1-2.6-2.85-2.85 1.85-.25 2.6-1 2.85-2.85Z" fill="currentColor"/></symbol>
+    </defs>
+  </svg>
+
+  <script src="assets/data.js"></script>
+  <script src="assets/app.js"></script>
+</body>
+</html>
