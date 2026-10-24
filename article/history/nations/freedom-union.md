@@ -1,14 +1,14 @@
 ---
 title: "自由联邦共同体 Freedom Union"
 description: "此国家由 瑞士联邦 和 CALIFORNIA 合并而成..."
-topic: "happyday历史"
-topic_id: "history"
+topic: "国家/城镇"
+topic_id: "nations"
 updated: "2026-10-25"
 reading_time: 1
 emoji: "📖"
 order: 24
 slug: "freedom-union"
-source: "../../index.html#/doc/freedom-union"
+source: "../../../index.html#/doc/freedom-union"
 tags:
   - "happyday历史"
   - "国家/城镇"

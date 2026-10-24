@@ -1,14 +1,14 @@
 ---
 title: "Matopiraphai"
 description: "人物简介：入服时间：2026年8月8日担任职务："
-topic: "happyday历史"
-topic_id: "history"
+topic: "人物志"
+topic_id: "people"
 updated: "2026-10-25"
 reading_time: 1
 emoji: "📖"
 order: 18
 slug: "matopiraphai"
-source: "../../index.html#/doc/matopiraphai"
+source: "../../../index.html#/doc/matopiraphai"
 tags:
   - "happyday历史"
   - "人物志"

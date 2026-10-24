@@ -1,14 +1,14 @@
 ---
 title: "朝鲜民主主义人民共和国DPRK"
 description: "国家成员：233，zzx(已经叛逃)国家发展：233原..."
-topic: "happyday历史"
-topic_id: "history"
+topic: "国家/城镇"
+topic_id: "nations"
 updated: "2026-10-25"
 reading_time: 1
 emoji: "📖"
 order: 25
 slug: "dprk"
-source: "../../index.html#/doc/dprk"
+source: "../../../index.html#/doc/dprk"
 tags:
   - "happyday历史"
   - "国家/城镇"
@@ -25,7 +25,7 @@ tags:
 
 国家成就：发展到了300w元，建筑居然是零！
 
-![图片](../../assets/image/dprk/1790489592276-56c0efb6-087d-4d5a-9028-397eb757b968.png)
+![图片](../../../assets/image/dprk/1790489592276-56c0efb6-087d-4d5a-9028-397eb757b968.png)
 
 26年10月7日更新：
 

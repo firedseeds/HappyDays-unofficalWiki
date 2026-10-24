@@ -45,7 +45,23 @@ window.HAPPYDAYS_WIKI = (function () {
       description: "服务器的人物、国家与历史记录。",
       parentId: null,
       order: 5,
-      docs: ["matopiraphai", "233-2233", "zzx", "northeast-economic-alliance", "harbin-chronicle", "rhodes-island", "freedom-union", "dprk", "hall-of-legends", "qwertyuiop", "alex"]
+      docs: ["hall-of-legends", "qwertyuiop", "alex"]
+    },
+    {
+      id: "people",
+      name: "人物志",
+      description: "服务器玩家与人物记录。",
+      parentId: "history",
+      order: 1,
+      docs: ["matopiraphai", "233-2233", "zzx"]
+    },
+    {
+      id: "nations",
+      name: "国家/城镇",
+      description: "服务器中的国家、城镇与编年记录。",
+      parentId: "history",
+      order: 2,
+      docs: ["northeast-economic-alliance", "harbin-chronicle", "rhodes-island", "freedom-union", "dprk"]
     },
     {
       id: "gallery",
@@ -465,7 +481,7 @@ window.HAPPYDAYS_WIKI = (function () {
     "matopiraphai": {
       title: "Matopiraphai",
       emoji: "📖",
-      category: "history",
+      category: "people",
       excerpt: "人物简介：入服时间：2026年8月8日担任职务：",
       updated: "2026-10-25",
       reading: 1,
@@ -486,7 +502,7 @@ window.HAPPYDAYS_WIKI = (function () {
     "233-2233": {
       title: "233&2233",
       emoji: "📖",
-      category: "history",
+      category: "people",
       excerpt: "人物简介入服时间2233：2026年5月19日 233...",
       updated: "2026-10-25",
       reading: 1,
@@ -511,7 +527,7 @@ window.HAPPYDAYS_WIKI = (function () {
     "zzx": {
       title: "zzx",
       emoji: "📖",
-      category: "history",
+      category: "people",
       excerpt: "主要事迹：把Alex带进服务器（详见神人堂）连续发展了...",
       updated: "2026-10-25",
       reading: 1,
@@ -541,7 +557,7 @@ window.HAPPYDAYS_WIKI = (function () {
     "northeast-economic-alliance": {
       title: "泛东北经济同盟",
       emoji: "📖",
-      category: "history",
+      category: "nations",
       excerpt: "此文档在语雀中暂无正文。",
       updated: "2026-10-25",
       reading: 1,
@@ -551,7 +567,7 @@ window.HAPPYDAYS_WIKI = (function () {
     "harbin-chronicle": {
       title: "哈尔滨地方志",
       emoji: "📖",
-      category: "history",
+      category: "nations",
       excerpt: "详见zzx人物志",
       updated: "2026-10-25",
       reading: 1,
@@ -561,7 +577,7 @@ window.HAPPYDAYS_WIKI = (function () {
     "rhodes-island": {
       title: "罗德岛",
       emoji: "📖",
-      category: "history",
+      category: "nations",
       excerpt: "此文档在语雀中暂无正文。",
       updated: "2026-10-25",
       reading: 1,
@@ -571,7 +587,7 @@ window.HAPPYDAYS_WIKI = (function () {
     "freedom-union": {
       title: "自由联邦共同体 Freedom Union",
       emoji: "📖",
-      category: "history",
+      category: "nations",
       excerpt: "此国家由 瑞士联邦 和 CALIFORNIA 合并而成...",
       updated: "2026-10-25",
       reading: 1,
@@ -584,7 +600,7 @@ window.HAPPYDAYS_WIKI = (function () {
     "dprk": {
       title: "朝鲜民主主义人民共和国DPRK",
       emoji: "📖",
-      category: "history",
+      category: "nations",
       excerpt: "国家成员：233，zzx(已经叛逃)国家发展：233原...",
       updated: "2026-10-25",
       reading: 1,

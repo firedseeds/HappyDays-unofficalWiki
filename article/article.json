@@ -7,7 +7,7 @@
     "tagline": "团队知识库",
     "language": "zh-CN"
   },
-  "topicCount": 6,
+  "topicCount": 8,
   "articleCount": 30,
   "lastUpdated": "2026-10-25",
   "topics": [
@@ -58,8 +58,28 @@
       "order": 5,
       "description": "服务器的人物、国家与历史记录。",
       "emoji": "📖",
-      "articleCount": 11,
+      "articleCount": 3,
       "parentId": null
+    },
+    {
+      "id": "people",
+      "name": "人物志",
+      "description": "服务器玩家与人物记录。",
+      "directory": "history/people",
+      "parentId": "history",
+      "order": 1,
+      "emoji": "👤",
+      "articleCount": 3
+    },
+    {
+      "id": "nations",
+      "name": "国家/城镇",
+      "description": "服务器中的国家、城镇与编年记录。",
+      "directory": "history/nations",
+      "parentId": "history",
+      "order": 2,
+      "emoji": "🏙️",
+      "articleCount": 5
     },
     {
       "id": "gallery",
@@ -347,7 +367,7 @@
     {
       "slug": "matopiraphai",
       "order": 18,
-      "topic": "history",
+      "topic": "people",
       "title": "Matopiraphai",
       "description": "人物简介：入服时间：2026年8月8日担任职务：",
       "emoji": "📖",
@@ -358,13 +378,13 @@
         "人物志",
         "语雀迁移"
       ],
-      "file": "history/matopiraphai.md",
+      "file": "history/people/matopiraphai.md",
       "source": "../index.html#/doc/matopiraphai"
     },
     {
       "slug": "233-2233",
       "order": 19,
-      "topic": "history",
+      "topic": "people",
       "title": "233&2233",
       "description": "人物简介入服时间2233：2026年5月19日 233...",
       "emoji": "📖",
@@ -375,13 +395,13 @@
         "人物志",
         "语雀迁移"
       ],
-      "file": "history/233-2233.md",
+      "file": "history/people/233-2233.md",
       "source": "../index.html#/doc/233-2233"
     },
     {
       "slug": "zzx",
       "order": 20,
-      "topic": "history",
+      "topic": "people",
       "title": "zzx",
       "description": "主要事迹：把Alex带进服务器（详见神人堂）连续发展了...",
       "emoji": "📖",
@@ -392,13 +412,13 @@
         "人物志",
         "语雀迁移"
       ],
-      "file": "history/zzx.md",
+      "file": "history/people/zzx.md",
       "source": "../index.html#/doc/zzx"
     },
     {
       "slug": "northeast-economic-alliance",
       "order": 21,
-      "topic": "history",
+      "topic": "nations",
       "title": "泛东北经济同盟",
       "description": "此文档在语雀中暂无正文。",
       "emoji": "📖",
@@ -409,13 +429,13 @@
         "国家/城镇",
         "语雀迁移"
       ],
-      "file": "history/northeast-economic-alliance.md",
+      "file": "history/nations/northeast-economic-alliance.md",
       "source": "../index.html#/doc/northeast-economic-alliance"
     },
     {
       "slug": "harbin-chronicle",
       "order": 22,
-      "topic": "history",
+      "topic": "nations",
       "title": "哈尔滨地方志",
       "description": "详见zzx人物志",
       "emoji": "📖",
@@ -426,13 +446,13 @@
         "国家/城镇",
         "语雀迁移"
       ],
-      "file": "history/harbin-chronicle.md",
+      "file": "history/nations/harbin-chronicle.md",
       "source": "../index.html#/doc/harbin-chronicle"
     },
     {
       "slug": "rhodes-island",
       "order": 23,
-      "topic": "history",
+      "topic": "nations",
       "title": "罗德岛",
       "description": "此文档在语雀中暂无正文。",
       "emoji": "📖",
@@ -443,13 +463,13 @@
         "国家/城镇",
         "语雀迁移"
       ],
-      "file": "history/rhodes-island.md",
+      "file": "history/nations/rhodes-island.md",
       "source": "../index.html#/doc/rhodes-island"
     },
     {
       "slug": "freedom-union",
       "order": 24,
-      "topic": "history",
+      "topic": "nations",
       "title": "自由联邦共同体 Freedom Union",
       "description": "此国家由 瑞士联邦 和 CALIFORNIA 合并而成...",
       "emoji": "📖",
@@ -460,13 +480,13 @@
         "国家/城镇",
         "语雀迁移"
       ],
-      "file": "history/freedom-union.md",
+      "file": "history/nations/freedom-union.md",
       "source": "../index.html#/doc/freedom-union"
     },
     {
       "slug": "dprk",
       "order": 25,
-      "topic": "history",
+      "topic": "nations",
       "title": "朝鲜民主主义人民共和国DPRK",
       "description": "国家成员：233，zzx(已经叛逃)国家发展：233原...",
       "emoji": "📖",
@@ -477,7 +497,7 @@
         "国家/城镇",
         "语雀迁移"
       ],
-      "file": "history/dprk.md",
+      "file": "history/nations/dprk.md",
       "source": "../index.html#/doc/dprk"
     },
     {

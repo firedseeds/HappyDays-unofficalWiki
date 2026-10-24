@@ -1,14 +1,14 @@
 ---
 title: "zzx"
 description: "主要事迹：把Alex带进服务器（详见神人堂）连续发展了..."
-topic: "happyday历史"
-topic_id: "history"
+topic: "人物志"
+topic_id: "people"
 updated: "2026-10-25"
 reading_time: 1
 emoji: "📖"
 order: 20
 slug: "zzx"
-source: "../../index.html#/doc/zzx"
+source: "../../../index.html#/doc/zzx"
 tags:
   - "happyday历史"
   - "人物志"
