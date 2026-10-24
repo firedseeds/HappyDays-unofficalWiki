@@ -178,6 +178,7 @@
 .topic-list {
   display: flex;
   min-height: 0;
+  flex: none;
   flex-direction: column;
   gap: 15px;
   padding: 0 2px;
@@ -336,14 +337,6 @@
   color: var(--text-secondary);
   font-size: 11px;
   font-weight: 600;
-}
-
-.editor-sidebar-note {
-  margin-top: auto;
-  padding: 18px 9px 0;
-  color: var(--text-faint);
-  font-size: 9.5px;
-  line-height: 1.65;
 }
 
 .editor-main {
@@ -892,10 +885,6 @@
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 10px;
-  }
-
-  .editor-sidebar-note {
-    display: none;
   }
 
   .editor-main {
