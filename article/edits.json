@@ -2,13 +2,6 @@
   "version": 1,
   "articles": {
     "intro": [
-      {
-        "author": "zeyu_1145",
-        "at": "2026-10-25T02:19:10+08:00",
-        "action": "update",
-        "title": "简介",
-        "topic": "简介"
-      }
     ]
   }
 }
