@@ -56,8 +56,9 @@ python server.py
 - 选择并编辑已有文章
 - 修改标题、摘要、Emoji、更新时间、阅读时长、标签和 Markdown 正文
 - 实时预览 Markdown
-- 新建文章并选择目标主题
-- 添加新主题（同时创建对应的 `article/<topic-id>/` 文件夹）
+- 新建文章并选择顶级主题或二级主题
+- 添加顶级主题，或在任意顶级主题下添加二级主题
+- 在编辑器侧边栏的主题标题旁点击 `+`，可快速添加该主题下的二级主题
 - 保存时同步更新 Markdown front matter、`article/article.json`，并自动运行 `build.py` 生成 `assets/data.js`
 - 构建失败时返回具体错误，并回滚 Markdown、清单和 `data.js`
 
@@ -149,7 +150,7 @@ python server.py --host 127.0.0.1 --port 8765
 └─ README.md
 ```
 
-迁移文章时，图片统一放入 `assets/image/<slug>/`，Markdown 中使用相对路径引用。
+迁移文章时，图片统一放入 `assets/image/<slug>/`，Markdown 中使用相对路径引用。二级主题的文章放在 `article/<顶级主题>/<二级主题>/` 下。
 
 ## 语雀迁移
 
@@ -195,6 +196,7 @@ python server.py --host 127.0.0.1 --port 8765
       "name": "开始使用",
       "description": "第一次来到 HappyDays，从这里开始。",
       "directory": "start",
+      "parentId": null,
       "order": 1,
       "articleCount": 2
     },
@@ -203,6 +205,7 @@ python server.py --host 127.0.0.1 --port 8765
       "name": "产品手册",
       "description": "关于 HappyDays非官方文档的一切使用说明。",
       "directory": "product",
+      "parentId": null,
       "order": 2,
       "articleCount": 3
     },
@@ -211,6 +214,7 @@ python server.py --host 127.0.0.1 --port 8765
       "name": "团队协作",
       "description": "我们如何沟通、开会和共同写作。",
       "directory": "team",
+      "parentId": null,
       "order": 3,
       "articleCount": 2
     },
@@ -219,6 +223,7 @@ python server.py --host 127.0.0.1 --port 8765
       "name": "开发者",
       "description": "把知识库接入你的工作流。",
       "directory": "developer",
+      "parentId": null,
       "order": 4,
       "articleCount": 1
     }
@@ -252,7 +257,7 @@ python server.py --host 127.0.0.1 --port 8765
 | `topicCount` | integer | 主题总数，必须等于 `topics.length` |
 | `articleCount` | integer | 文章总数，必须等于 `articles.length` |
 | `lastUpdated` | string | 所有文章 `updated` 中的最大日期，格式 `YYYY-MM-DD` |
-| `topics` | array | 主题对象列表，按 `order` 升序排列 |
+| `topics` | array | 主题对象列表，先按顶级主题 `order`、再按同级子主题 `order` 排列 |
 | `articles` | array | 文章对象列表，按 `order` 升序排列 |
 
 ### 主题字段
@@ -262,9 +267,12 @@ python server.py --host 127.0.0.1 --port 8765
 | `id` | string | 主题唯一标识，也是文章 `topic` 的引用值 |
 | `name` | string | 主题显示名称，例如 `开始使用` |
 | `description` | string | 主题说明 |
-| `directory` | string | 主题在 `article/` 下的文件夹名 |
-| `order` | integer | 主题展示顺序，从 `1` 开始 |
-| `articleCount` | integer | 该主题下文章数量 |
+| `directory` | string | 主题在 `article/` 下的相对路径；二级主题为 `parent/child` |
+| `parentId` | string \| null | 父主题 ID；`null` 表示顶级主题，最多支持一层子主题 |
+| `order` | integer | 同一父级下的展示顺序，从 `1` 开始 |
+| `articleCount` | integer | 该主题下的直接文章数，不包含子主题文章 |
+
+二级主题的 `directory` 必须为 `父主题目录/子主题ID`，且不能继续嵌套第三级。`topicCount` 和文章总数都包含二级主题。
 
 ### 文章字段
 

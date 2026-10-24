@@ -453,6 +453,14 @@ kbd {
   margin-top: 1px;
 }
 
+.tree-group-body {
+  min-width: 0;
+}
+
+.tree-group.is-collapsed > .tree-group-body {
+  display: none;
+}
+
 .tree-group-head {
   display: flex;
   align-items: center;
@@ -482,7 +490,8 @@ kbd {
   transition: transform 180ms var(--ease);
 }
 
-.tree-group.is-collapsed .tree-chevron {
+.tree-group.is-collapsed > .tree-group-head .tree-chevron,
+.tree-group--child.is-collapsed > .tree-group-head .tree-chevron {
   transform: rotate(-90deg);
 }
 
@@ -510,8 +519,41 @@ kbd {
   list-style: none;
 }
 
-.tree-group.is-collapsed .tree-list {
+.tree-group--child {
+  margin: 1px 0 1px 10px;
+  padding-left: 6px;
+  border-left: 1px solid var(--border);
+}
+
+.tree-group-head--child {
+  height: 28px;
+  padding: 0 7px;
+  color: var(--text-tertiary);
+  font-size: 11.5px;
+  font-weight: 600;
+}
+
+.tree-group-head--child .tree-chevron {
+  width: 11px;
+  height: 11px;
+}
+
+.tree-group--child.is-collapsed > .tree-list {
   display: none;
+}
+
+.tree-list--nested {
+  margin-bottom: 5px;
+}
+
+.tree-group--child .tree-link {
+  min-height: 30px;
+  padding-left: 21px;
+  font-size: 12.5px;
+}
+
+.tree-group--child .tree-link::before {
+  left: 9px;
 }
 
 .tree-link {

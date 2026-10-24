@@ -185,6 +185,13 @@
       </div>
       <div class="dialog-body">
         <label class="field">
+          <span>所属主题</span>
+          <select id="topicParent" name="parentId">
+            <option value="">作为顶级主题</option>
+          </select>
+          <small>二级主题最多一层</small>
+        </label>
+        <label class="field">
           <span>主题 ID</span>
           <input id="topicId" name="id" type="text" maxlength="64" pattern="[a-z0-9][a-z0-9-]*" placeholder="handbook" required>
           <small>对应 article/ 下的文件夹名</small>

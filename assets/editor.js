@@ -38,7 +38,9 @@
     previewBody: document.getElementById("previewBody"),
     previewStatus: document.getElementById("previewStatus"),
     topicDialog: document.getElementById("topicDialog"),
+    topicDialogTitle: document.getElementById("topicDialogTitle"),
     topicForm: document.getElementById("topicForm"),
+    topicParent: document.getElementById("topicParent"),
     topicId: document.getElementById("topicId"),
     topicName: document.getElementById("topicName"),
     topicDescription: document.getElementById("topicDescription"),
@@ -144,6 +146,32 @@
     els.topicAlert.hidden = !message;
   }
 
+  function topTopics() {
+    return state.topics.filter(function (topic) {
+      return !topic.parentId;
+    }).sort(function (left, right) {
+      return (left.order || 0) - (right.order || 0);
+    });
+  }
+
+  function childTopics(parentId) {
+    return state.topics.filter(function (topic) {
+      return topic.parentId === parentId;
+    }).sort(function (left, right) {
+      return (left.order || 0) - (right.order || 0);
+    });
+  }
+
+  function subtreeArticleCount(topic) {
+    return state.articles.filter(function (article) {
+      return article.topic === topic.id;
+    }).length + childTopics(topic.id).reduce(function (total, child) {
+      return total + state.articles.filter(function (article) {
+        return article.topic === child.id;
+      }).length;
+    }, 0);
+  }
+
   function currentTopicOptions(selectedId) {
     els.topic.innerHTML = "";
     if (!state.topics.length) {
@@ -154,13 +182,47 @@
       els.topic.disabled = true;
       return;
     }
-    state.topics.forEach(function (topic) {
+    topTopics().forEach(function (topic) {
       var option = document.createElement("option");
       option.value = topic.id;
       option.textContent = topic.name;
       option.selected = topic.id === selectedId;
       els.topic.appendChild(option);
+      childTopics(topic.id).forEach(function (child) {
+        var childOption = document.createElement("option");
+        childOption.value = child.id;
+        childOption.textContent = "　↳ " + child.name;
+        childOption.selected = child.id === selectedId;
+        els.topic.appendChild(childOption);
+      });
     });
+  }
+
+  function renderTopicArticles(articles, emptyText) {
+    var list = document.createElement("ul");
+    list.className = "topic-articles";
+    if (!articles.length && emptyText) {
+      var empty = document.createElement("li");
+      empty.className = "topic-empty";
+      empty.textContent = emptyText;
+      list.appendChild(empty);
+      return list;
+    }
+    articles.forEach(function (article) {
+      var item = document.createElement("li");
+      var button = document.createElement("button");
+      button.type = "button";
+      button.className = "topic-article";
+      button.dataset.slug = article.slug;
+      button.textContent = article.title;
+      button.title = article.title;
+      if (article.slug === state.currentSlug) {
+        button.classList.add("is-active");
+      }
+      item.appendChild(button);
+      list.appendChild(item);
+    });
+    return list;
   }
 
   function renderSidebar() {
@@ -173,7 +235,8 @@
       els.topicList.appendChild(emptyTopics);
       return;
     }
-    state.topics.forEach(function (topic) {
+    topTopics().forEach(function (topic) {
+      var children = childTopics(topic.id);
       var articles = state.articles.filter(function (article) {
         return article.topic === topic.id;
       });
@@ -188,36 +251,50 @@
       name.title = topic.name;
       var count = document.createElement("span");
       count.className = "topic-group-count";
-      count.textContent = articles.length;
+      count.textContent = subtreeArticleCount(topic);
+      var addChild = document.createElement("button");
+      addChild.type = "button";
+      addChild.className = "topic-add-child";
+      addChild.dataset.parentId = topic.id;
+      addChild.title = "添加二级主题";
+      addChild.setAttribute("aria-label", "在「" + topic.name + "」下添加二级主题");
+      addChild.textContent = "+";
       head.appendChild(name);
       head.appendChild(count);
-
-      var list = document.createElement("ul");
-      list.className = "topic-articles";
-      if (!articles.length) {
-        var empty = document.createElement("li");
-        empty.className = "topic-empty";
-        empty.textContent = "暂无文章";
-        list.appendChild(empty);
-      } else {
-        articles.forEach(function (article) {
-          var item = document.createElement("li");
-          var button = document.createElement("button");
-          button.type = "button";
-          button.className = "topic-article";
-          button.dataset.slug = article.slug;
-          button.textContent = article.title;
-          button.title = article.title;
-          if (article.slug === state.currentSlug) {
-            button.classList.add("is-active");
-          }
-          item.appendChild(button);
-          list.appendChild(item);
-        });
-      }
+      head.appendChild(addChild);
 
       group.appendChild(head);
-      group.appendChild(list);
+      if (articles.length) {
+        group.appendChild(renderTopicArticles(articles, ""));
+      }
+      children.forEach(function (child) {
+        var childGroup = document.createElement("section");
+        childGroup.className = "topic-subgroup";
+        var childHead = document.createElement("div");
+        childHead.className = "topic-subgroup-head";
+        var childName = document.createElement("span");
+        childName.className = "topic-subgroup-name";
+        childName.textContent = child.name;
+        childName.title = child.name;
+        var childCount = document.createElement("span");
+        childCount.className = "topic-subgroup-count";
+        childCount.textContent = state.articles.filter(function (article) {
+          return article.topic === child.id;
+        }).length;
+        childHead.appendChild(childName);
+        childHead.appendChild(childCount);
+        childGroup.appendChild(childHead);
+        childGroup.appendChild(renderTopicArticles(
+          state.articles.filter(function (article) {
+            return article.topic === child.id;
+          }),
+          "暂无文章"
+        ));
+        group.appendChild(childGroup);
+      });
+      if (!articles.length && !children.length) {
+        group.appendChild(renderTopicArticles([], "暂无文章"));
+      }
       els.topicList.appendChild(group);
     });
   }
@@ -525,8 +602,25 @@
     });
   }
 
-  function openTopicDialog() {
+  function populateTopicParents(selectedId) {
+    els.topicParent.innerHTML = '<option value="">作为顶级主题</option>';
+    topTopics().forEach(function (topic) {
+      var option = document.createElement("option");
+      option.value = topic.id;
+      option.textContent = topic.name;
+      els.topicParent.appendChild(option);
+    });
+    els.topicParent.value = selectedId || "";
+  }
+
+  function updateTopicDialogMode() {
+    els.topicDialogTitle.textContent = els.topicParent.value ? "创建二级主题" : "创建主题";
+  }
+
+  function openTopicDialog(parentId) {
     els.topicForm.reset();
+    populateTopicParents(typeof parentId === "string" ? parentId : "");
+    updateTopicDialogMode();
     setTopicAlert("");
     els.topicDialog.showModal();
     window.setTimeout(function () {
@@ -543,7 +637,8 @@
     var payload = {
       id: els.topicId.value.trim(),
       name: els.topicName.value.trim(),
-      description: els.topicDescription.value.trim()
+      description: els.topicDescription.value.trim(),
+      parentId: els.topicParent.value || null
     };
     if (!payload.id || !/^[a-z0-9][a-z0-9-]{0,63}$/.test(payload.id)) {
       setTopicAlert("主题 ID 只能包含小写字母、数字和连字符");
@@ -574,6 +669,11 @@
 
   function bindEvents() {
     els.topicList.addEventListener("click", function (event) {
+      var addChild = event.target.closest(".topic-add-child");
+      if (addChild) {
+        openTopicDialog(addChild.dataset.parentId);
+        return;
+      }
       var button = event.target.closest(".topic-article");
       if (button) {
         openArticle(button.dataset.slug, false);
@@ -583,10 +683,13 @@
     els.newArticleBtn.addEventListener("click", function () {
       startNewArticle();
     });
-    els.newTopicBtn.addEventListener("click", openTopicDialog);
+    els.newTopicBtn.addEventListener("click", function () {
+      openTopicDialog();
+    });
     els.retryConnection.addEventListener("click", function () {
       boot();
     });
+    els.topicParent.addEventListener("change", updateTopicDialogMode);
 
     els.form.addEventListener("submit", saveArticle);
     els.form.addEventListener("input", function (event) {

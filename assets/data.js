@@ -11,36 +11,48 @@ window.HAPPYDAYS_WIKI = (function () {
       id: "intro",
       name: "简介",
       description: "HappyDays 服务器与知识库概览。",
+      parentId: null,
+      order: 1,
       docs: ["intro"]
     },
     {
       id: "beginner",
       name: "新手教程",
       description: "进入服务器前的准备、初来乍到与基础玩法。",
+      parentId: null,
+      order: 2,
       docs: ["before-joining", "first-arrival", "shop-plugin", "build-town", "about-nations", "first-money"]
     },
     {
       id: "advanced",
       name: "进阶教程",
       description: "资源、经济、载具与城镇发展。",
+      parentId: null,
+      order: 3,
       docs: ["resource-world-nether", "senluo-kitchen", "senluo-tavern", "money-making-guide", "lottery", "immersive-vehicles", "town-resources"]
     },
     {
       id: "rules",
       name: "服务器规则",
       description: "服务器行为规范、作弊处理与地图规则。",
+      parentId: null,
+      order: 4,
       docs: ["cheating-response", "behavior-chat", "world-map"]
     },
     {
       id: "history",
       name: "happyday历史",
       description: "服务器的人物、国家与历史记录。",
+      parentId: null,
+      order: 5,
       docs: ["matopiraphai", "233-2233", "zzx", "northeast-economic-alliance", "harbin-chronicle", "rhodes-island", "freedom-union", "dprk", "hall-of-legends", "qwertyuiop", "alex"]
     },
     {
       id: "gallery",
       name: "妙妙图片集",
       description: "服务器截图与图片记录。",
+      parentId: null,
+      order: 6,
       docs: ["gallery-1", "gallery-2"]
     }
   ];

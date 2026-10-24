@@ -156,7 +156,40 @@
   }
 
   function categoryFor(id) {
-    return CATEGORY_BY_ID[docs[id].category] || { name: "未分类", id: "" };
+    var category = CATEGORY_BY_ID[docs[id].category];
+    return category || { name: "未分类", id: "", parentId: null };
+  }
+
+  function topCategories() {
+    return categories.filter(function (category) {
+      return !category.parentId;
+    }).sort(function (left, right) {
+      return (left.order || 0) - (right.order || 0);
+    });
+  }
+
+  function childCategories(parentId) {
+    return categories.filter(function (category) {
+      return category.parentId === parentId;
+    }).sort(function (left, right) {
+      return (left.order || 0) - (right.order || 0);
+    });
+  }
+
+  function categoryLabel(category) {
+    if (category && category.parentId) {
+      var parent = CATEGORY_BY_ID[category.parentId];
+      if (parent) {
+        return parent.name + " / " + category.name;
+      }
+    }
+    return category ? category.name : "未分类";
+  }
+
+  function subtreeDocCount(category) {
+    return category.docs.length + childCategories(category.id).reduce(function (total, child) {
+      return total + child.docs.length;
+    }, 0);
   }
 
   function clamp(number, min, max) {
@@ -245,6 +278,53 @@
      Sidebar tree
      ------------------------------------------------------- */
 
+  function renderDocItems(category) {
+    return category.docs.map(function (id) {
+      var doc = docs[id];
+      return '<li class="tree-item">' +
+        '<a class="tree-link" href="#/doc/' + id + '" data-doc="' + id + '">' +
+        '<span class="tree-emoji" aria-hidden="true">' + doc.emoji + "</span>" +
+        '<span class="tree-link-title">' + escapeHTML(doc.title) + "</span>" +
+        "</a></li>";
+    }).join("");
+  }
+
+  function renderCategory(category, isChild) {
+    var isCollapsed = collapsedCategories.has(category.id);
+    var docItems = renderDocItems(category);
+    var children = childCategories(category.id);
+    var count = isChild ? category.docs.length : subtreeDocCount(category);
+    var toggleId = "tree-" + (isChild ? "list-" : "body-") + category.id;
+    var className = "tree-group" + (isChild ? " tree-group--child" : "") +
+      (isCollapsed ? " is-collapsed" : "");
+
+    if (isChild) {
+      return '<div class="' + className + '" data-category="' + category.id + '">' +
+        '<button class="tree-group-head tree-group-head--child" type="button" data-category-toggle="' + category.id +
+        '" aria-expanded="' + (!isCollapsed) + '" aria-controls="' + toggleId + '">' +
+        icon("chevron-down", "tree-chevron") +
+        '<span class="tree-group-label">' + escapeHTML(category.name) + "</span>" +
+        '<span class="tree-group-count">' + count + "</span>" +
+        "</button>" +
+        '<ul class="tree-list tree-list--nested" id="' + toggleId + '">' + docItems + "</ul>" +
+        "</div>";
+    }
+
+    return '<div class="' + className + '" data-category="' + category.id + '">' +
+      '<button class="tree-group-head" type="button" data-category-toggle="' + category.id +
+      '" aria-expanded="' + (!isCollapsed) + '" aria-controls="' + toggleId + '">' +
+      icon("chevron-down", "tree-chevron") +
+      '<span class="tree-group-label">' + escapeHTML(category.name) + "</span>" +
+      '<span class="tree-group-count">' + count + "</span>" +
+      "</button>" +
+      '<div class="tree-group-body" id="' + toggleId + '">' +
+      '<ul class="tree-list">' + docItems + "</ul>" +
+      children.map(function (child) {
+        return renderCategory(child, true);
+      }).join("") +
+      "</div></div>";
+  }
+
   function renderSidebar() {
     els.docCount.textContent = allIds.length + " 篇";
 
@@ -258,27 +338,8 @@
       return;
     }
 
-    els.docTree.innerHTML = categories.map(function (category) {
-      var isCollapsed = collapsedCategories.has(category.id);
-      var docItems = category.docs.map(function (id) {
-        var doc = docs[id];
-        return '<li class="tree-item">' +
-          '<a class="tree-link" href="#/doc/' + id + '" data-doc="' + id + '">' +
-          '<span class="tree-emoji" aria-hidden="true">' + doc.emoji + "</span>" +
-          '<span class="tree-link-title">' + escapeHTML(doc.title) + "</span>" +
-          "</a></li>";
-      }).join("");
-
-      return '<div class="tree-group' + (isCollapsed ? " is-collapsed" : "") +
-        '" data-category="' + category.id + '">' +
-        '<button class="tree-group-head" type="button" data-category-toggle="' + category.id +
-        '" aria-expanded="' + (!isCollapsed) + '" aria-controls="tree-list-' + category.id + '">' +
-        icon("chevron-down", "tree-chevron") +
-        '<span class="tree-group-label">' + escapeHTML(category.name) + "</span>" +
-        '<span class="tree-group-count">' + category.docs.length + "</span>" +
-        "</button>" +
-        '<ul class="tree-list" id="tree-list-' + category.id + '">' + docItems + "</ul>" +
-        "</div>";
+    els.docTree.innerHTML = topCategories().map(function (category) {
+      return renderCategory(category, false);
     }).join("");
 
     setActiveTree();
@@ -290,15 +351,30 @@
     }
 
     var current = docs[state.currentId];
-    var group = els.docTree.querySelector('[data-category="' + current.category + '"]');
+    var currentCategory = CATEGORY_BY_ID[current.category];
+    var categoryIds = [];
+    if (currentCategory && currentCategory.parentId) {
+      categoryIds.push(currentCategory.parentId);
+    }
+    if (currentCategory) {
+      categoryIds.push(currentCategory.id);
+    }
 
-    if (group && group.classList.contains("is-collapsed")) {
-      group.classList.remove("is-collapsed");
-      var toggle = group.querySelector("[data-category-toggle]");
-      if (toggle) {
-        toggle.setAttribute("aria-expanded", "true");
+    categoryIds.forEach(function (categoryId) {
+      var group = els.docTree.querySelector('[data-category="' + categoryId + '"]');
+      if (!group) {
+        return;
       }
-      collapsedCategories.delete(current.category);
+      if (group.classList.contains("is-collapsed")) {
+        group.classList.remove("is-collapsed");
+        var toggle = group.querySelector("[data-category-toggle]");
+        if (toggle) {
+          toggle.setAttribute("aria-expanded", "true");
+        }
+        collapsedCategories.delete(categoryId);
+      }
+    });
+    if (categoryIds.length) {
       writeJSON(STORAGE.collapsed, Array.from(collapsedCategories));
     }
 
@@ -415,9 +491,9 @@
     state.activeHeading = "";
 
     document.title = doc.title + " · HappyDays非官方文档";
-    els.crumbCategory.textContent = category.name;
+    els.crumbCategory.textContent = categoryLabel(category);
     els.crumbTitle.textContent = doc.title;
-    els.docCategory.textContent = category.name;
+    els.docCategory.textContent = categoryLabel(category);
     els.docEmoji.textContent = doc.emoji;
     els.docTitle.textContent = doc.title;
     els.docExcerpt.textContent = doc.excerpt;
@@ -807,7 +883,7 @@
         emoji: doc.emoji,
         excerpt: doc.excerpt,
         tags: doc.tags,
-        category: categoryFor(id).name,
+        category: categoryLabel(categoryFor(id)),
         text: plainText(doc.content)
       };
     });

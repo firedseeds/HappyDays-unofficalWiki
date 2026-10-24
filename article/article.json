@@ -18,7 +18,8 @@
       "order": 1,
       "description": "HappyDays 服务器与知识库概览。",
       "emoji": "🚇",
-      "articleCount": 1
+      "articleCount": 1,
+      "parentId": null
     },
     {
       "id": "beginner",
@@ -27,7 +28,8 @@
       "order": 2,
       "description": "进入服务器前的准备、初来乍到与基础玩法。",
       "emoji": "🌱",
-      "articleCount": 6
+      "articleCount": 6,
+      "parentId": null
     },
     {
       "id": "advanced",
@@ -36,7 +38,8 @@
       "order": 3,
       "description": "资源、经济、载具与城镇发展。",
       "emoji": "🧭",
-      "articleCount": 7
+      "articleCount": 7,
+      "parentId": null
     },
     {
       "id": "rules",
@@ -45,7 +48,8 @@
       "order": 4,
       "description": "服务器行为规范、作弊处理与地图规则。",
       "emoji": "📜",
-      "articleCount": 3
+      "articleCount": 3,
+      "parentId": null
     },
     {
       "id": "history",
@@ -54,7 +58,8 @@
       "order": 5,
       "description": "服务器的人物、国家与历史记录。",
       "emoji": "📖",
-      "articleCount": 11
+      "articleCount": 11,
+      "parentId": null
     },
     {
       "id": "gallery",
@@ -63,7 +68,8 @@
       "order": 6,
       "description": "服务器截图与图片记录。",
       "emoji": "🖼️",
-      "articleCount": 2
+      "articleCount": 2,
+      "parentId": null
     }
   ],
   "articles": [

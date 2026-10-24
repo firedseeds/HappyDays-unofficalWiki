@@ -536,6 +536,23 @@ def discover_articles() -> tuple[dict, list[dict], dict[Path, dict]]:
             fail(f"主题 ID 重复: {topic['id']}")
         topic_by_id[topic["id"]] = topic
 
+    for topic in topics:
+        parent_id = topic.get("parentId")
+        if parent_id:
+            parent = topic_by_id.get(parent_id)
+            if parent is None:
+                fail(f"主题 {topic['id']} 的父主题 {parent_id} 不存在")
+            if parent.get("parentId"):
+                fail(f"主题 {topic['id']} 不能嵌套在二级主题 {parent_id} 下")
+            expected_directory = f"{parent['directory']}/{topic['id']}"
+        else:
+            expected_directory = topic["id"]
+        if topic["directory"] != expected_directory:
+            fail(
+                f"主题 {topic['id']} 的目录应为 {expected_directory}，"
+                f"实际为 {topic['directory']}"
+            )
+
     article_by_file: dict[Path, dict] = {}
     seen_slugs = set()
     for article in articles:
@@ -557,7 +574,7 @@ def discover_articles() -> tuple[dict, list[dict], dict[Path, dict]]:
 
     found_markdown = {
         path.resolve()
-        for path in ARTICLE_DIR.glob("*/*.md")
+        for path in ARTICLE_DIR.rglob("*.md")
         if path.is_file()
     }
     expected_markdown = set(article_by_file)
@@ -611,7 +628,8 @@ def parse_article(path: Path, manifest_article: dict, topics: dict, articles_by_
     if topic_id not in topics:
         fail(f"{relative_path}: topic_id {topic_id!r} 不在 article.json 的 topics 中")
     topic = topics[topic_id]
-    if path.parent.name != topic["directory"]:
+    relative_directory = path.parent.relative_to(ARTICLE_DIR).as_posix()
+    if relative_directory != topic["directory"]:
         fail(f"{relative_path}: 文件必须位于 article/{topic['directory']}/")
 
     if front["slug"] != path.stem:
@@ -665,7 +683,25 @@ def parse_article(path: Path, manifest_article: dict, topics: dict, articles_by_
     }
 
 
+def ordered_topics(topics: list[dict]) -> list[dict]:
+    top_level = [topic for topic in topics if not topic.get("parentId")]
+    top_level.sort(key=lambda topic: (topic["order"], topic["id"]))
+    children = {}
+    for topic in topics:
+        parent_id = topic.get("parentId")
+        if parent_id:
+            children.setdefault(parent_id, []).append(topic)
+    for items in children.values():
+        items.sort(key=lambda topic: (topic["order"], topic["id"]))
+    ordered = []
+    for topic in top_level:
+        ordered.append(topic)
+        ordered.extend(children.get(topic["id"], []))
+    return ordered
+
+
 def build_manifest(articles: list[dict], topics: list[dict], site: dict) -> str:
+    topics = ordered_topics(topics)
     by_topic: dict[str, list[dict]] = {topic["id"]: [] for topic in topics}
     for article in articles:
         by_topic[article["topic"]].append(article)
@@ -691,12 +727,15 @@ def build_manifest(articles: list[dict], topics: list[dict], site: dict) -> str:
     ]
     for index, topic in enumerate(topics):
         docs = [article["slug"] for article in by_topic[topic["id"]]]
+        parent_id = topic.get("parentId")
         lines.extend(
             [
                 "    {",
                 f"      id: {js_string(topic['id'])},",
                 f"      name: {js_string(topic['name'])},",
                 f"      description: {js_string(topic['description'])},",
+                f"      parentId: {js_string(parent_id) if parent_id else 'null'},",
+                f"      order: {topic['order']},",
                 f"      docs: [{', '.join(js_string(slug) for slug in docs)}]",
                 "    }" + ("," if index < len(topics) - 1 else ""),
             ]
@@ -767,7 +806,7 @@ def main() -> int:
             fail("article.json 的 order 必须从 1 开始且连续")
         content = build_manifest(
             articles,
-            sorted(topics, key=lambda topic: topic["order"]),
+            topics,
             site,
         )
         with OUTPUT_PATH.open("w", encoding="utf-8", newline="\n") as handle:

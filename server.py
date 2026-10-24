@@ -102,10 +102,27 @@ def article_map(manifest: dict) -> dict[str, dict]:
     return result
 
 
+def ordered_topics(topics: list[dict]) -> list[dict]:
+    top_level = [topic for topic in topics if not topic.get("parentId")]
+    top_level.sort(key=lambda topic: (int(topic.get("order", 0)), str(topic.get("id"))))
+    children: dict[str, list[dict]] = {}
+    for topic in topics:
+        parent_id = topic.get("parentId")
+        if parent_id:
+            children.setdefault(parent_id, []).append(topic)
+    for items in children.values():
+        items.sort(key=lambda topic: (int(topic.get("order", 0)), str(topic.get("id"))))
+    ordered = []
+    for topic in top_level:
+        ordered.append(topic)
+        ordered.extend(children.get(topic["id"], []))
+    return ordered
+
+
 def refresh_manifest(manifest: dict) -> None:
     topics = [topic for topic in manifest["topics"] if isinstance(topic, dict)]
     articles = [article for article in manifest["articles"] if isinstance(article, dict)]
-    topics.sort(key=lambda topic: (int(topic.get("order", 0)), str(topic.get("id"))))
+    topics = ordered_topics(topics)
     articles.sort(key=lambda article: (int(article.get("order", 0)), str(article.get("slug"))))
 
     counts: dict[str, int] = {}
@@ -231,6 +248,8 @@ def validate_article_fields(payload: dict, defaults: dict | None = None) -> dict
 
 
 def compose_markdown(record: dict, topic: dict, body: str) -> str:
+    depth = len(Path(record["file"]).parts)
+    source = "../" * depth + f"index.html#/doc/{record['slug']}"
     frontmatter = [
         "---",
         f"title: {json.dumps(record['title'], ensure_ascii=False)}",
@@ -242,7 +261,7 @@ def compose_markdown(record: dict, topic: dict, body: str) -> str:
         f"emoji: {json.dumps(record['emoji'], ensure_ascii=False)}",
         f"order: {record['order']}",
         f"slug: {json.dumps(record['slug'], ensure_ascii=False)}",
-        f"source: \"../../index.html#/doc/{record['slug']}\"",
+        f"source: \"{source}\"",
         "tags:",
     ]
     for tag in record["tags"]:
@@ -283,7 +302,9 @@ def read_article(slug: str) -> dict:
 
 def public_state(manifest: dict) -> dict:
     topics = [dict(topic) for topic in manifest["topics"]]
-    topics.sort(key=lambda topic: (int(topic.get("order", 0)), topic["id"]))
+    for topic in topics:
+        topic["parentId"] = topic.get("parentId") or None
+    topics = ordered_topics(topics)
     articles = []
     for article in sorted(manifest["articles"], key=lambda item: (int(item.get("order", 0)), item["slug"])):
         item = dict(article)
@@ -470,20 +491,41 @@ def create_topic(payload: dict) -> dict:
         topic_id = require_slug(payload.get("id"), "id")
         name = require_text(payload.get("name"), "name", 80)
         description = require_text(payload.get("description"), "description", 300)
-        if topic_id in topic_map(manifest):
+        parent_raw = payload.get("parentId")
+        parent_id = None
+        if parent_raw not in (None, ""):
+            parent_id = require_text(parent_raw, "parentId", 64)
+        topics = topic_map(manifest)
+        if topic_id in topics:
             raise ApiError(409, "主题 ID 已存在")
         existing_names = {str(topic.get("name", "")).casefold() for topic in manifest["topics"]}
         if name.casefold() in existing_names:
             raise ApiError(409, "主题名称已存在")
-        directory = ARTICLE_DIR / topic_id
+        parent = None
+        if parent_id:
+            parent = topics.get(parent_id)
+            if parent is None:
+                raise ApiError(400, "父主题不存在")
+            if parent.get("parentId"):
+                raise ApiError(400, "只支持一级子主题，不能在二级主题下继续添加")
+            directory_name = f"{parent['directory']}/{topic_id}"
+        else:
+            directory_name = topic_id
+        directory = ARTICLE_DIR / directory_name
         if directory.exists():
             raise ApiError(409, "主题目录已存在")
-        next_order = max((int(topic.get("order", 0)) for topic in manifest["topics"]), default=0) + 1
+        sibling_orders = [
+            int(topic.get("order", 0))
+            for topic in manifest["topics"]
+            if (topic.get("parentId") or None) == parent_id
+        ]
+        next_order = max(sibling_orders, default=0) + 1
         topic = {
             "id": topic_id,
             "name": name,
             "description": description,
-            "directory": topic_id,
+            "directory": directory_name,
+            "parentId": parent_id,
             "order": next_order,
             "articleCount": 0,
         }
