@@ -919,14 +919,22 @@ def main() -> int:
     args = parser.parse_args()
     if args.host not in ("127.0.0.1", "localhost"):
         print("警告：编辑器没有认证，建议只绑定 127.0.0.1。", file=sys.stderr)
+
+    try:
+        build_message = build_output_message(run_build())
+        print(f"启动前自动构建：{build_message}", flush=True)
+    except ApiError as exc:
+        print(f"启动前构建失败：{exc.message}", file=sys.stderr, flush=True)
+        return 1
+
     try:
         httpd = EditorServer((args.host, args.port), EditorHandler)
     except OSError as exc:
-        print(f"无法启动服务：{exc}", file=sys.stderr)
+        print(f"无法启动服务：{exc}", file=sys.stderr, flush=True)
         return 1
-    print(f"HappyDays Wiki 编辑器已启动：http://{args.host}:{args.port}/editor.html")
-    print(f"阅读站点：http://{args.host}:{args.port}/")
-    print("按 Ctrl+C 停止。")
+    print(f"HappyDays Wiki 编辑器已启动：http://{args.host}:{args.port}/editor.html", flush=True)
+    print(f"阅读站点：http://{args.host}:{args.port}/", flush=True)
+    print("按 Ctrl+C 停止。", flush=True)
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:

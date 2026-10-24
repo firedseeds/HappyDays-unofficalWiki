@@ -49,7 +49,7 @@ python server.py
 - 阅读站点：`http://127.0.0.1:8000/`
 - 内容管理：`http://127.0.0.1:8000/editor.html`
 
-编辑服务运行时，阅读页顶栏会出现「编辑」入口。
+编辑服务运行时，阅读页顶栏会出现「编辑」入口。每次启动 `server.py` 都会先自动运行 `build.py`；如果构建失败，服务不会启动并会输出具体错误。
 
 ### 支持的操作
 
@@ -63,6 +63,7 @@ python server.py
 - 删除文章及其本地图片
 - 删除空主题（没有直属文章和下级主题）
 - 保存时同步更新 Markdown front matter、`article/article.json`，并自动运行 `build.py` 生成 `assets/data.js`
+- 启动 `server.py` 时自动执行一次构建
 - 构建失败时返回具体错误，并回滚 Markdown、清单和 `data.js`
 
 ### 安全说明
