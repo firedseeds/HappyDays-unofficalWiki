@@ -59,6 +59,8 @@ python server.py
 - 新建文章并选择顶级主题或二级主题
 - 添加顶级主题，或在任意顶级主题下添加二级主题
 - 在编辑器侧边栏的主题标题旁点击 `+`，可快速添加该主题下的二级主题
+- 删除文章及其本地图片
+- 删除空主题（没有直属文章和二级主题）
 - 保存时同步更新 Markdown front matter、`article/article.json`，并自动运行 `build.py` 生成 `assets/data.js`
 - 构建失败时返回具体错误，并回滚 Markdown、清单和 `data.js`
 
@@ -83,8 +85,12 @@ python server.py --host 127.0.0.1 --port 8765
 | GET | `/api/articles/<slug>` | 读取文章元数据与 Markdown 正文 |
 | PUT | `/api/articles/<slug>` | 保存已有文章 |
 | POST | `/api/articles` | 新建文章 |
+| DELETE | `/api/articles/<slug>` | 删除文章及其本地图片 |
 | POST | `/api/topics` | 新建主题 |
+| DELETE | `/api/topics/<id>` | 删除空主题 |
 | POST | `/api/preview` | 将 Markdown 渲染为预览 HTML |
+
+删除文章会同时清理 `assets/image/<slug>/`；删除主题要求该主题没有直属文章、没有二级主题，且目录为空。删除文章后 `order` 可以出现空号，但仍必须唯一。
 
 ---
 
@@ -282,7 +288,7 @@ python server.py --host 127.0.0.1 --port 8765
 | 字段 | 类型 | 说明 |
 | --- | --- | --- |
 | `slug` | string | 唯一标识，与 Markdown 文件名去扩展名后一致 |
-| `order` | integer | 全站阅读顺序，从 `1` 开始 |
+| `order` | integer | 全站阅读顺序，必须为正整数且唯一；删除文章后允许空号 |
 | `topic` | string | 所属主题的 `topics[].id` |
 | `title` | string | 文章标题 |
 | `description` | string | 文章摘要 |

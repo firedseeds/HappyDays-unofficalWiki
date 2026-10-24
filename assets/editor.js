@@ -25,6 +25,7 @@
     previewBtn: document.getElementById("previewBtn"),
     saveBtn: document.getElementById("saveBtn"),
     saveLabel: document.getElementById("saveLabel"),
+    deleteArticleBtn: document.getElementById("deleteArticleBtn"),
     title: document.getElementById("fieldTitle"),
     topic: document.getElementById("fieldTopic"),
     topicHint: document.getElementById("topicHint"),
@@ -262,6 +263,9 @@
       head.appendChild(name);
       head.appendChild(count);
       head.appendChild(addChild);
+      if (!articles.length && !children.length) {
+        head.appendChild(createTopicDeleteButton(topic));
+      }
 
       group.appendChild(head);
       if (articles.length) {
@@ -283,6 +287,11 @@
         }).length;
         childHead.appendChild(childName);
         childHead.appendChild(childCount);
+        if (!state.articles.some(function (article) {
+          return article.topic === child.id;
+        })) {
+          childHead.appendChild(createTopicDeleteButton(child));
+        }
         childGroup.appendChild(childHead);
         childGroup.appendChild(renderTopicArticles(
           state.articles.filter(function (article) {
@@ -310,9 +319,38 @@
     state.saving = busy;
     els.saveBtn.disabled = busy;
     els.previewBtn.disabled = busy;
+    els.deleteArticleBtn.disabled = busy;
     els.saveLabel.textContent = busy
       ? "保存中…"
       : (state.mode === "new" ? "创建并构建" : "保存并构建");
+  }
+
+  function showEmptyState() {
+    state.mode = null;
+    state.currentSlug = null;
+    state.currentArticle = null;
+    state.dirty = false;
+    els.emptyTitle.textContent = "还没有文章";
+    els.emptyDescription.textContent = state.topics.length
+      ? "选择左侧主题下的文章，或点击「新建文章」开始写作。"
+      : "先在左侧点击「添加主题」，再创建第一篇文章。";
+    els.emptyState.hidden = false;
+    els.form.hidden = true;
+    els.offlineState.hidden = true;
+    els.deleteArticleBtn.hidden = true;
+    setActiveArticle();
+    history.replaceState(null, "", "#new");
+  }
+
+  function createTopicDeleteButton(topic) {
+    var button = document.createElement("button");
+    button.type = "button";
+    button.className = "topic-delete";
+    button.dataset.topicId = topic.id;
+    button.title = "删除主题";
+    button.setAttribute("aria-label", "删除主题「" + topic.name + "」");
+    button.innerHTML = '<svg class="icon" aria-hidden="true"><use href="#i-trash"></use></svg>';
+    return button;
   }
 
   function confirmDiscard() {
@@ -365,6 +403,7 @@
     updateHeadingFromTitle();
     setFormAlert("");
     showEditor();
+    els.deleteArticleBtn.hidden = false;
     setBusy(false);
     setActiveArticle();
     history.replaceState(null, "", "#" + encodeURIComponent(article.slug));
@@ -407,6 +446,7 @@
     document.title = "新建文章 · 内容管理";
     setFormAlert("");
     showEditor();
+    els.deleteArticleBtn.hidden = true;
     setBusy(false);
     setActiveArticle();
     history.replaceState(null, "", "#new");
@@ -555,6 +595,64 @@
     });
   }
 
+  function deleteCurrentArticle() {
+    if (!state.currentSlug || !state.currentArticle || state.saving) {
+      return;
+    }
+    var title = state.currentArticle.title;
+    if (!window.confirm("确定删除文章「" + title + "」吗？\n\nMarkdown 文件和本地图片会被删除，此操作不可撤销。")) {
+      return;
+    }
+    els.deleteArticleBtn.disabled = true;
+    request("/api/articles/" + encodeURIComponent(state.currentSlug), {
+      method: "DELETE"
+    }).then(function (result) {
+      state.dirty = false;
+      return fetchState().then(function () {
+        showToast(result.message || "文章已删除", "success");
+        if (state.articles.length) {
+          return openArticle(state.articles[0].slug, true);
+        }
+        showEmptyState();
+      });
+    }).catch(function (error) {
+      showToast(error.message, "error");
+    }).finally(function () {
+      els.deleteArticleBtn.disabled = false;
+    });
+  }
+
+  function deleteTopic(topicId, trigger) {
+    var topic = state.topics.filter(function (item) {
+      return item.id === topicId;
+    })[0];
+    if (!topic || state.saving) {
+      return;
+    }
+    if (!window.confirm("确定删除主题「" + topic.name + "」吗？\n\n只有空主题可以删除，此操作不可撤销。")) {
+      return;
+    }
+    if (trigger) {
+      trigger.disabled = true;
+    }
+    request("/api/topics/" + encodeURIComponent(topicId), {
+      method: "DELETE"
+    }).then(function (result) {
+      return fetchState().then(function () {
+        showToast(result.message || "主题已删除", "success");
+        if (!state.topics.length) {
+          showEmptyState();
+        }
+      });
+    }).catch(function (error) {
+      showToast(error.message, "error");
+    }).finally(function () {
+      if (trigger) {
+        trigger.disabled = false;
+      }
+    });
+  }
+
   function schedulePreview() {
     window.clearTimeout(state.previewTimer);
     state.previewTimer = window.setTimeout(refreshPreview, 450);
@@ -669,6 +767,11 @@
 
   function bindEvents() {
     els.topicList.addEventListener("click", function (event) {
+      var deleteButton = event.target.closest(".topic-delete");
+      if (deleteButton) {
+        deleteTopic(deleteButton.dataset.topicId, deleteButton);
+        return;
+      }
       var addChild = event.target.closest(".topic-add-child");
       if (addChild) {
         openTopicDialog(addChild.dataset.parentId);
@@ -686,6 +789,7 @@
     els.newTopicBtn.addEventListener("click", function () {
       openTopicDialog();
     });
+    els.deleteArticleBtn.addEventListener("click", deleteCurrentArticle);
     els.retryConnection.addEventListener("click", function () {
       boot();
     });
@@ -764,13 +868,7 @@
       if (state.articles.length) {
         return openArticle(state.articles[0].slug, true);
       }
-      els.emptyTitle.textContent = "还没有文章";
-      els.emptyDescription.textContent = state.topics.length
-        ? "选择左侧主题下的文章，或点击「新建文章」开始写作。"
-        : "先在左侧点击「添加主题」，再创建第一篇文章。";
-      els.emptyState.hidden = false;
-      els.form.hidden = true;
-      els.offlineState.hidden = true;
+      showEmptyState();
       return null;
     }).catch(function (error) {
       showOffline();

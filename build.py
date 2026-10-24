@@ -802,8 +802,11 @@ def main() -> int:
             path = (ARTICLE_DIR / manifest_article["file"]).resolve()
             articles.append(parse_article(path, manifest_article, topic_by_id, article_by_file))
         articles.sort(key=lambda article: article["order"])
-        if [article["order"] for article in articles] != list(range(1, len(articles) + 1)):
-            fail("article.json 的 order 必须从 1 开始且连续")
+        orders = [article["order"] for article in articles]
+        if any(not isinstance(order, int) or order < 1 for order in orders):
+            fail("article.json 的 order 必须为正整数")
+        if len(set(orders)) != len(orders):
+            fail("article.json 的 order 不能重复")
         content = build_manifest(
             articles,
             topics,

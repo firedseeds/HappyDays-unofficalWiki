@@ -19,9 +19,11 @@ import argparse
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 import threading
+import uuid
 from datetime import date
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -33,6 +35,7 @@ import build
 ROOT = Path(__file__).resolve().parent
 ARTICLE_DIR = ROOT / "article"
 MANIFEST_PATH = ARTICLE_DIR / "article.json"
+IMAGE_DIR = ROOT / "assets" / "image"
 DATA_PATH = ROOT / "assets" / "data.js"
 BUILD_SCRIPT = ROOT / "build.py"
 MAX_REQUEST_BYTES = 2 * 1024 * 1024
@@ -422,6 +425,131 @@ def update_article(slug: str, payload: dict) -> dict:
         }
 
 
+def delete_article(slug: str) -> dict:
+    with LOCK:
+        manifest = read_manifest()
+        records = article_map(manifest)
+        record = records.get(slug)
+        if record is None:
+            raise ApiError(404, "文章不存在")
+        path = article_path(record)
+        file_snapshot = path.read_bytes() if path.is_file() else None
+        manifest_snapshot = MANIFEST_PATH.read_bytes()
+        data_snapshot = DATA_PATH.read_bytes() if DATA_PATH.is_file() else None
+        image_source = (IMAGE_DIR / slug).resolve()
+        image_trash = None
+        try:
+            image_source.relative_to(IMAGE_DIR.resolve())
+        except ValueError:
+            raise ApiError(400, "文章图片目录无效")
+        if image_source.is_dir():
+            image_trash = image_source.with_name(
+                f".{image_source.name}.deleting-{uuid.uuid4().hex}"
+            )
+            image_source.rename(image_trash)
+
+        try:
+            if path.exists():
+                path.unlink()
+            manifest["articles"] = [
+                item for item in manifest["articles"] if item.get("slug") != slug
+            ]
+            refresh_manifest(manifest)
+            write_manifest(manifest)
+            output = run_build()
+        except Exception as exc:
+            if file_snapshot is not None:
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_bytes(file_snapshot)
+            elif path.exists():
+                path.unlink()
+            atomic_write(MANIFEST_PATH, manifest_snapshot.decode("utf-8"))
+            if data_snapshot is not None:
+                atomic_write(DATA_PATH, data_snapshot.decode("utf-8"))
+            elif DATA_PATH.exists():
+                DATA_PATH.unlink()
+            if image_trash is not None and image_trash.exists() and not image_source.exists():
+                image_trash.rename(image_source)
+            if isinstance(exc, ApiError):
+                raise
+            raise ApiError(500, f"删除文章失败：{exc}")
+
+        if image_trash is not None:
+            try:
+                shutil.rmtree(image_trash)
+            except OSError as exc:
+                print(f"警告：无法清理图片目录 {image_trash}: {exc}", file=sys.stderr)
+
+        return {
+            "ok": True,
+            "slug": slug,
+            "message": build_output_message(output),
+        }
+
+
+def delete_topic(topic_id: str) -> dict:
+    with LOCK:
+        manifest = read_manifest()
+        topics = topic_map(manifest)
+        topic = topics.get(topic_id)
+        if topic is None:
+            raise ApiError(404, "主题不存在")
+        direct_articles = [
+            article for article in manifest["articles"] if article.get("topic") == topic_id
+        ]
+        if direct_articles:
+            raise ApiError(
+                409,
+                f"主题「{topic['name']}」下还有 {len(direct_articles)} 篇文章，请先删除或移动文章",
+            )
+        children = [
+            item for item in manifest["topics"] if item.get("parentId") == topic_id
+        ]
+        if children:
+            raise ApiError(
+                409,
+                f"主题「{topic['name']}」下还有 {len(children)} 个二级主题，请先删除二级主题",
+            )
+        directory = (ARTICLE_DIR / topic["directory"]).resolve()
+        try:
+            directory.relative_to(ARTICLE_DIR.resolve())
+        except ValueError:
+            raise ApiError(500, "主题目录无效")
+        if directory.exists() and any(directory.iterdir()):
+            raise ApiError(409, "主题目录不为空，请先清理目录中的文件")
+
+        manifest_snapshot = MANIFEST_PATH.read_bytes()
+        data_snapshot = DATA_PATH.read_bytes() if DATA_PATH.is_file() else None
+        try:
+            manifest["topics"] = [
+                item for item in manifest["topics"] if item.get("id") != topic_id
+            ]
+            refresh_manifest(manifest)
+            write_manifest(manifest)
+            output = run_build()
+        except Exception as exc:
+            atomic_write(MANIFEST_PATH, manifest_snapshot.decode("utf-8"))
+            if data_snapshot is not None:
+                atomic_write(DATA_PATH, data_snapshot.decode("utf-8"))
+            elif DATA_PATH.exists():
+                DATA_PATH.unlink()
+            if isinstance(exc, ApiError):
+                raise
+            raise ApiError(500, f"删除主题失败：{exc}")
+
+        if directory.exists():
+            try:
+                directory.rmdir()
+            except OSError as exc:
+                print(f"警告：无法删除空目录 {directory}: {exc}", file=sys.stderr)
+
+        return {
+            "ok": True,
+            "topicId": topic_id,
+            "message": build_output_message(output),
+        }
+
+
 def create_article(payload: dict) -> dict:
     with LOCK:
         manifest = read_manifest()
@@ -681,6 +809,23 @@ class EditorHandler(SimpleHTTPRequestHandler):
             if path == "/api/preview":
                 payload = self.read_json()
                 self.send_json(200, preview_markdown(payload))
+                return
+            raise ApiError(404, "接口不存在")
+        except ApiError as exc:
+            self.send_json(exc.status, {"error": exc.message})
+        except Exception as exc:
+            self.send_json(500, {"error": f"服务器错误：{exc}"})
+
+    def do_DELETE(self) -> None:
+        path = unquote(urlparse(self.path).path)
+        try:
+            article_match = re.fullmatch(r"/api/articles/([a-z0-9-]+)", path)
+            if article_match:
+                self.send_json(200, delete_article(article_match.group(1)))
+                return
+            topic_match = re.fullmatch(r"/api/topics/([a-z0-9-]+)", path)
+            if topic_match:
+                self.send_json(200, delete_topic(topic_match.group(1)))
                 return
             raise ApiError(404, "接口不存在")
         except ApiError as exc:
