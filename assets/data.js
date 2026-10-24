@@ -267,8 +267,8 @@ window.HAPPYDAYS_WIKI = (function () {
       updated: "2026-10-25",
       reading: 1,
       tags: [],
-      signatures: [],
-      content: `<p>此文档在语雀中暂无正文。</p>`
+      signatures: [{"author": "zzx", "at": "2026-10-25T03:28:29+08:00", "action": "update", "title": "关于国家", "topic": "新手教程"}, {"author": "zzx", "at": "2026-10-25T03:29:06+08:00", "action": "update", "title": "关于国家", "topic": "新手教程"}, {"author": "zzx", "at": "2026-10-25T03:30:06+08:00", "action": "update", "title": "关于国家", "topic": "新手教程"}, {"author": "zzx", "at": "2026-10-25T03:32:31+08:00", "action": "update", "title": "关于国家", "topic": "新手教程"}, {"author": "zzx", "at": "2026-10-25T03:32:37+08:00", "action": "update", "title": "关于国家", "topic": "新手教程"}, {"author": "zzx", "at": "2026-10-25T03:32:42+08:00", "action": "update", "title": "关于国家", "topic": "新手教程"}, {"author": "zzx_1145", "at": "2026-10-25T03:34:54+08:00", "action": "update", "title": "关于国家", "topic": "新手教程"}],
+      content: `<p>/n join 泛东北经济联盟1145</p>`
     },
     "first-money": {
       title: "第一桶金",
