@@ -1,8 +1,8 @@
 ---
 title: "快速开始"
 description: "5 分钟完成账号设置、加入空间，并写下你的第一篇团队文档。"
-category: "开始使用"
-category_id: "start"
+topic: "开始使用"
+topic_id: "start"
 author: "周予安"
 author_role: "产品经理"
 updated: "2026-10-18"
@@ -10,7 +10,7 @@ reading_time: 4
 emoji: "🚀"
 order: 2
 slug: "quickstart"
-source: "../index.html#/doc/quickstart"
+source: "../../index.html#/doc/quickstart"
 tags:
   - "新手指南"
   - "5 分钟"
@@ -100,5 +100,5 @@ tags:
 
 ## 接下来
 
-- 📘 [产品使用指南](./product-guide.md) — 深入了解文档组织、权限模型与协作能力。
-- 🤝 [团队协作手册](./team-handbook.md) — 了解我们如何沟通、开会和给彼此反馈。
+- 📘 [产品使用指南](../product/product-guide.md) — 深入了解文档组织、权限模型与协作能力。
+- 🤝 [团队协作手册](../team/team-handbook.md) — 了解我们如何沟通、开会和给彼此反馈。

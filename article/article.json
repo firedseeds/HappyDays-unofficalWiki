@@ -7,19 +7,51 @@
     "tagline": "团队知识库",
     "language": "zh-CN"
   },
+  "topicCount": 4,
   "articleCount": 8,
   "lastUpdated": "2026-10-22",
+  "topics": [
+    {
+      "id": "start",
+      "name": "开始使用",
+      "description": "第一次来到 HappyDays，从这里开始。",
+      "directory": "start",
+      "order": 1,
+      "articleCount": 2
+    },
+    {
+      "id": "product",
+      "name": "产品手册",
+      "description": "关于 HappyDays非官方文档的一切使用说明。",
+      "directory": "product",
+      "order": 2,
+      "articleCount": 3
+    },
+    {
+      "id": "team",
+      "name": "团队协作",
+      "description": "我们如何沟通、开会和共同写作。",
+      "directory": "team",
+      "order": 3,
+      "articleCount": 2
+    },
+    {
+      "id": "developer",
+      "name": "开发者",
+      "description": "把知识库接入你的工作流。",
+      "directory": "developer",
+      "order": 4,
+      "articleCount": 1
+    }
+  ],
   "articles": [
     {
       "slug": "welcome",
       "order": 1,
+      "topic": "start",
       "title": "欢迎来到 HappyDays非官方文档",
       "description": "把散落在聊天、会议与脑海里的经验，种成一片随时可以查阅的森林。",
       "emoji": "🌱",
-      "category": {
-        "id": "start",
-        "name": "开始使用"
-      },
       "author": {
         "name": "林知夏",
         "role": "知识运营"
@@ -31,19 +63,16 @@
         "新成员",
         "团队文化"
       ],
-      "file": "welcome.md",
+      "file": "start/welcome.md",
       "source": "../index.html#/doc/welcome"
     },
     {
       "slug": "quickstart",
       "order": 2,
+      "topic": "start",
       "title": "快速开始",
       "description": "5 分钟完成账号设置、加入空间，并写下你的第一篇团队文档。",
       "emoji": "🚀",
-      "category": {
-        "id": "start",
-        "name": "开始使用"
-      },
       "author": {
         "name": "周予安",
         "role": "产品经理"
@@ -54,19 +83,16 @@
         "新手指南",
         "5 分钟"
       ],
-      "file": "quickstart.md",
+      "file": "start/quickstart.md",
       "source": "../index.html#/doc/quickstart"
     },
     {
       "slug": "product-guide",
       "order": 3,
+      "topic": "product",
       "title": "产品使用指南",
       "description": "从编辑、组织到发布，系统掌握 HappyDays非官方文档的核心工作流。",
       "emoji": "📘",
-      "category": {
-        "id": "product",
-        "name": "产品手册"
-      },
       "author": {
         "name": "周予安",
         "role": "产品经理"
@@ -78,19 +104,16 @@
         "使用指南",
         "权限"
       ],
-      "file": "product-guide.md",
+      "file": "product/product-guide.md",
       "source": "../index.html#/doc/product-guide"
     },
     {
       "slug": "faq",
       "order": 4,
+      "topic": "product",
       "title": "常见问题",
       "description": "关于账号、权限、导入导出与协作的常见疑问，先在这里找找答案。",
       "emoji": "💡",
-      "category": {
-        "id": "product",
-        "name": "产品手册"
-      },
       "author": {
         "name": "许棠",
         "role": "客户成功"
@@ -101,19 +124,16 @@
         "FAQ",
         "支持"
       ],
-      "file": "faq.md",
+      "file": "product/faq.md",
       "source": "../index.html#/doc/faq"
     },
     {
       "slug": "changelog",
       "order": 5,
+      "topic": "product",
       "title": "更新日志",
       "description": "记录每一次值得被看见的改进，以及我们为什么这样改。",
       "emoji": "🧭",
-      "category": {
-        "id": "product",
-        "name": "产品手册"
-      },
       "author": {
         "name": "周予安",
         "role": "产品经理"
@@ -124,19 +144,16 @@
         "更新",
         "产品动态"
       ],
-      "file": "changelog.md",
+      "file": "product/changelog.md",
       "source": "../index.html#/doc/changelog"
     },
     {
       "slug": "team-handbook",
       "order": 6,
+      "topic": "team",
       "title": "团队协作手册",
       "description": "我们的沟通方式、会议原则、文档文化与反馈习惯。",
       "emoji": "🤝",
-      "category": {
-        "id": "team",
-        "name": "团队协作"
-      },
       "author": {
         "name": "沈观澜",
         "role": "团队负责人"
@@ -148,19 +165,16 @@
         "协作",
         "必读"
       ],
-      "file": "team-handbook.md",
+      "file": "team/team-handbook.md",
       "source": "../index.html#/doc/team-handbook"
     },
     {
       "slug": "design-system",
       "order": 7,
+      "topic": "team",
       "title": "设计规范",
       "description": "HappyDays 产品的色彩、字体、间距与组件使用准则，让界面保持安静而清晰。",
       "emoji": "🎨",
-      "category": {
-        "id": "team",
-        "name": "团队协作"
-      },
       "author": {
         "name": "顾青",
         "role": "设计负责人"
@@ -172,19 +186,16 @@
         "Design System",
         "规范"
       ],
-      "file": "design-system.md",
+      "file": "team/design-system.md",
       "source": "../index.html#/doc/design-system"
     },
     {
       "slug": "api-guide",
       "order": 8,
+      "topic": "developer",
       "title": "API 接入指南",
       "description": "通过 REST API 读取文档、同步内容，并把 HappyDays非官方文档接入你的工作流。",
       "emoji": "⌘",
-      "category": {
-        "id": "developer",
-        "name": "开发者"
-      },
       "author": {
         "name": "陆行舟",
         "role": "平台工程师"
@@ -196,7 +207,7 @@
         "开发",
         "Webhook"
       ],
-      "file": "api-guide.md",
+      "file": "developer/api-guide.md",
       "source": "../index.html#/doc/api-guide"
     }
   ]

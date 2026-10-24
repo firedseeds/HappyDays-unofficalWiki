@@ -1,8 +1,8 @@
 ---
 title: "产品使用指南"
 description: "从编辑、组织到发布，系统掌握 HappyDays非官方文档的核心工作流。"
-category: "产品手册"
-category_id: "product"
+topic: "产品手册"
+topic_id: "product"
 author: "周予安"
 author_role: "产品经理"
 updated: "2026-10-19"
@@ -10,7 +10,7 @@ reading_time: 12
 emoji: "📘"
 order: 3
 slug: "product-guide"
-source: "../index.html#/doc/product-guide"
+source: "../../index.html#/doc/product-guide"
 tags:
   - "产品"
   - "使用指南"

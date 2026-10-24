@@ -1,8 +1,8 @@
 ---
 title: "设计规范"
 description: "HappyDays 产品的色彩、字体、间距与组件使用准则，让界面保持安静而清晰。"
-category: "团队协作"
-category_id: "team"
+topic: "团队协作"
+topic_id: "team"
 author: "顾青"
 author_role: "设计负责人"
 updated: "2026-10-15"
@@ -10,7 +10,7 @@ reading_time: 11
 emoji: "🎨"
 order: 7
 slug: "design-system"
-source: "../index.html#/doc/design-system"
+source: "../../index.html#/doc/design-system"
 tags:
   - "设计"
   - "Design System"

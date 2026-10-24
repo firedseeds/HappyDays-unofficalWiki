@@ -1,8 +1,8 @@
 ---
 title: "API 接入指南"
 description: "通过 REST API 读取文档、同步内容，并把 HappyDays非官方文档接入你的工作流。"
-category: "开发者"
-category_id: "developer"
+topic: "开发者"
+topic_id: "developer"
 author: "陆行舟"
 author_role: "平台工程师"
 updated: "2026-10-20"
@@ -10,7 +10,7 @@ reading_time: 10
 emoji: "⌘"
 order: 8
 slug: "api-guide"
-source: "../index.html#/doc/api-guide"
+source: "../../index.html#/doc/api-guide"
 tags:
   - "API"
   - "开发"

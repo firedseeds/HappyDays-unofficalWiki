@@ -67,8 +67,19 @@ npx serve .
 │  ├─ data.js            # 分类、文档元数据与全部正文
 │  └─ app.js             # 路由、搜索、目录、主题与交互
 ├─ article/
-│  ├─ article.json       # 文章索引与元数据的机器可读清单
-│  └─ *.md               # 按 slug 命名的 Markdown 文章正文
+│  ├─ article.json       # 主题、文章索引与元数据的机器可读清单
+│  ├─ start/             # 开始使用
+│  │  ├─ welcome.md
+│  │  └─ quickstart.md
+│  ├─ product/           # 产品手册
+│  │  ├─ product-guide.md
+│  │  ├─ faq.md
+│  │  └─ changelog.md
+│  ├─ team/              # 团队协作
+│  │  ├─ team-handbook.md
+│  │  └─ design-system.md
+│  └─ developer/         # 开发者
+│     └─ api-guide.md
 └─ README.md
 ```
 
@@ -76,17 +87,27 @@ npx serve .
 
 ## 文章 JSON 清单
 
-`article/article.json` 是文章目录的机器可读清单，用于脚本、静态站点生成器或其他工具读取文章元数据。它只保存索引和元数据，不重复正文；正文以同目录下的 Markdown 文件为准。
+`article/article.json` 是文章目录的机器可读清单，用于脚本、静态站点生成器或其他工具读取**主题**和文章元数据。它只保存索引和元数据，不重复正文；正文按主题分组存放在同名子目录中。
 
 - **格式标识**：`happydays-article-manifest`
 - **当前版本**：`1`
+- **当前主题数**：4
 - **当前文章数**：8
 - **最近更新**：`2026-10-22`
 - **文件路径**：`article/article.json`
 
+主题文件夹名使用稳定的主题 ID，而不是中文显示名：
+
+| 主题 ID | 显示名称 | 目录 |
+| --- | --- | --- |
+| `start` | 开始使用 | `article/start/` |
+| `product` | 产品手册 | `article/product/` |
+| `team` | 团队协作 | `article/team/` |
+| `developer` | 开发者 | `article/developer/` |
+
 ### 格式示例
 
-以下为节选示例，实际文件包含全部 8 篇文章：
+以下为节选示例，实际文件包含全部 4 个主题和 8 篇文章：
 
 ```jsonc
 {
@@ -98,19 +119,51 @@ npx serve .
     "tagline": "团队知识库",
     "language": "zh-CN"
   },
+  "topicCount": 4,
   "articleCount": 8,
   "lastUpdated": "2026-10-22",
+  "topics": [
+    {
+      "id": "start",
+      "name": "开始使用",
+      "description": "第一次来到 HappyDays，从这里开始。",
+      "directory": "start",
+      "order": 1,
+      "articleCount": 2
+    },
+    {
+      "id": "product",
+      "name": "产品手册",
+      "description": "关于 HappyDays非官方文档的一切使用说明。",
+      "directory": "product",
+      "order": 2,
+      "articleCount": 3
+    },
+    {
+      "id": "team",
+      "name": "团队协作",
+      "description": "我们如何沟通、开会和共同写作。",
+      "directory": "team",
+      "order": 3,
+      "articleCount": 2
+    },
+    {
+      "id": "developer",
+      "name": "开发者",
+      "description": "把知识库接入你的工作流。",
+      "directory": "developer",
+      "order": 4,
+      "articleCount": 1
+    }
+  ],
   "articles": [
     {
       "slug": "welcome",
       "order": 1,
+      "topic": "start",
       "title": "欢迎来到 HappyDays非官方文档",
       "description": "把散落在聊天、会议与脑海里的经验，种成一片随时可以查阅的森林。",
       "emoji": "🌱",
-      "category": {
-        "id": "start",
-        "name": "开始使用"
-      },
       "author": {
         "name": "林知夏",
         "role": "知识运营"
@@ -118,7 +171,7 @@ npx serve .
       "updated": "2026-10-21",
       "readingTime": 6,
       "tags": ["必读", "新成员", "团队文化"],
-      "file": "welcome.md",
+      "file": "start/welcome.md",
       "source": "../index.html#/doc/welcome"
     }
     // 其余文章结构相同，按 order 升序排列
@@ -133,9 +186,22 @@ npx serve .
 | `format` | string | 固定值 `happydays-article-manifest` |
 | `version` | integer | 清单格式版本，当前为 `1` |
 | `site` | object | 站点信息，包含 `name`、`team`、`tagline`、`language` |
+| `topicCount` | integer | 主题总数，必须等于 `topics.length` |
 | `articleCount` | integer | 文章总数，必须等于 `articles.length` |
 | `lastUpdated` | string | 所有文章 `updated` 中的最大日期，格式 `YYYY-MM-DD` |
+| `topics` | array | 主题对象列表，按 `order` 升序排列 |
 | `articles` | array | 文章对象列表，按 `order` 升序排列 |
+
+### 主题字段
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `id` | string | 主题唯一标识，也是文章 `topic` 的引用值 |
+| `name` | string | 主题显示名称，例如 `开始使用` |
+| `description` | string | 主题说明 |
+| `directory` | string | 主题在 `article/` 下的文件夹名 |
+| `order` | integer | 主题展示顺序，从 `1` 开始 |
+| `articleCount` | integer | 该主题下文章数量 |
 
 ### 文章字段
 
@@ -143,26 +209,30 @@ npx serve .
 | --- | --- | --- |
 | `slug` | string | 唯一标识，与 Markdown 文件名去扩展名后一致 |
 | `order` | integer | 全站阅读顺序，从 `1` 开始 |
+| `topic` | string | 所属主题的 `topics[].id` |
 | `title` | string | 文章标题 |
 | `description` | string | 文章摘要 |
 | `emoji` | string | 文章图标 |
-| `category.id` | string | 分类 ID |
-| `category.name` | string | 分类显示名称 |
 | `author.name` | string | 作者显示名称 |
 | `author.role` | string | 作者角色 |
 | `updated` | string | 最后更新日期，格式 `YYYY-MM-DD` |
 | `readingTime` | integer | 预计阅读时间，单位为分钟 |
 | `tags` | string[] | 文章标签，可为空数组 |
-| `file` | string | Markdown 文件名，相对于 `article/` 目录 |
-| `source` | string | 在线页面地址，相对于 `article/` 目录 |
+| `file` | string | Markdown 文件路径，相对于 `article/` 目录 |
+| `source` | string | 在线页面地址，相对于 `article/article.json` |
+
+每篇 Markdown 的 front matter 同时包含 `topic`（显示名称）和 `topic_id`（主题 ID），与 JSON 中文章的 `topic` 字段对应。Markdown 的 `source` 相对于文章文件所在目录，JSON 的 `source` 则相对于 `article/article.json`。
 
 ### 维护规则
 
 1. 所有字段均为必填，不使用 `null`。
-2. `file` 指向的文章必须存在；`slug` 必须与文件名主体一致。
-3. `articleCount` 必须等于 `articles.length`，`lastUpdated` 必须等于最新文章的 `updated`。
-4. 新增或删除文章时，同时更新 Markdown 文件和本清单。
-5. `order` 决定 JSON 中的阅读顺序，建议与站点目录顺序保持一致。
+2. `topics[].id` 唯一，`topics[].directory` 必须与主题文件夹名一致。
+3. 每篇文章的 `topic` 必须存在于 `topics[].id` 中。
+4. `file` 必须存在，且必须等于 `topics[].directory + "/" + slug + ".md"`。
+5. `articleCount` 必须等于 `articles.length`，`topicCount` 必须等于 `topics.length`，每个主题的 `articleCount` 必须等于该主题下的实际文章数。
+6. `lastUpdated` 必须等于所有文章 `updated` 的最大值。
+7. 新增或删除文章时，同时移动/创建 Markdown 文件、更新 front matter，并更新本清单。
+8. `order` 分别决定主题和文章的展示顺序，建议与站点目录顺序保持一致。
 
 ---
 
@@ -170,7 +240,7 @@ npx serve .
 
 所有内容都在 `assets/data.js` 中。
 
-### 1. 添加分类
+### 1. 添加主题（分类）
 
 ```js
 var categories = [
@@ -184,7 +254,7 @@ var categories = [
 ];
 ```
 
-### 2. 添加文档
+### 2. 添加文章
 
 ```js
 var docs = {
@@ -219,6 +289,8 @@ var docs = {
 ```
 
 > `category` 必须对应 `categories` 中的某个 `id`，并确保该分类的 `docs` 数组包含新文档 ID。文档顺序即上一篇 / 下一篇的顺序。
+>
+> 导出 Markdown 时，请将文章放入 `article/<category-id>/<slug>.md`，并同步更新 `article/article.json` 的 `topics`、文章 `topic` 与 `file` 字段。
 
 ---
 

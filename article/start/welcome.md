@@ -1,8 +1,8 @@
 ---
 title: "欢迎来到 HappyDays非官方文档"
 description: "把散落在聊天、会议与脑海里的经验，种成一片随时可以查阅的森林。"
-category: "开始使用"
-category_id: "start"
+topic: "开始使用"
+topic_id: "start"
 author: "林知夏"
 author_role: "知识运营"
 updated: "2026-10-21"
@@ -10,7 +10,7 @@ reading_time: 6
 emoji: "🌱"
 order: 1
 slug: "welcome"
-source: "../index.html#/doc/welcome"
+source: "../../index.html#/doc/welcome"
 tags:
   - "必读"
   - "新成员"
@@ -47,8 +47,8 @@ HappyDays 是一支相信「好产品来自好协作」的小团队。我们把�
 无论你是产品、设计、研发还是运营，都可以从下面三条路径之一进入。不必按顺序读完，按你手头的问题去找答案。
 
 - 🚀 [我是新成员](./quickstart.md) — 用 5 分钟完成设置，认识编辑器，写下第一篇文档。
-- 🤝 [我刚加入团队](./team-handbook.md) — 了解我们的沟通方式、会议原则，以及如何给反馈。
-- 📘 [我想用得更熟练](./product-guide.md) — 掌握文档组织、权限设置和让知识保持鲜活的技巧。
+- 🤝 [我刚加入团队](../team/team-handbook.md) — 了解我们的沟通方式、会议原则，以及如何给反馈。
+- 📘 [我想用得更熟练](../product/product-guide.md) — 掌握文档组织、权限设置和让知识保持鲜活的技巧。
 
 ## 知识地图
 
@@ -93,7 +93,7 @@ HappyDays 是一支相信「好产品来自好协作」的小团队。我们把�
 
 ## 需要帮助
 
-如果这篇文档没有回答你的问题，可以先在[常见问题](./faq.md)中找找；仍然卡住，就到 `#wiki-help` 频道提问，并附上你所在的页面与操作步骤。
+如果这篇文档没有回答你的问题，可以先在[常见问题](../product/faq.md)中找找；仍然卡住，就到 `#wiki-help` 频道提问，并附上你所在的页面与操作步骤。
 
 ### 发现内容过期？
 

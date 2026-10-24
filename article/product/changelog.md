@@ -1,8 +1,8 @@
 ---
 title: "更新日志"
 description: "记录每一次值得被看见的改进，以及我们为什么这样改。"
-category: "产品手册"
-category_id: "product"
+topic: "产品手册"
+topic_id: "product"
 author: "周予安"
 author_role: "产品经理"
 updated: "2026-10-22"
@@ -10,7 +10,7 @@ reading_time: 3
 emoji: "🧭"
 order: 5
 slug: "changelog"
-source: "../index.html#/doc/changelog"
+source: "../../index.html#/doc/changelog"
 tags:
   - "更新"
   - "产品动态"
