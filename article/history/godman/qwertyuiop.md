@@ -8,7 +8,7 @@ reading_time: 2
 emoji: "📖"
 order: 27
 slug: "qwertyuiop"
-source: "../../../index.html#/doc/qwertyuiop"
+source: "https://example.con/#/doc/qwertyuiop"
 tags:
 ---
 

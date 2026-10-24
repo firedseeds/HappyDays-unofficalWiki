@@ -194,6 +194,7 @@ python server.py --host 127.0.0.1 --port 8765
     "name": "HappyDays非官方文档",
     "team": "HappyDays 团队",
     "tagline": "团队知识库",
+    "domain": "example.con",
     "language": "zh-CN"
   },
   "topicCount": 4,
@@ -249,7 +250,7 @@ python server.py --host 127.0.0.1 --port 8765
       "readingTime": 6,
       "tags": ["必读", "新成员", "团队文化"],
       "file": "start/welcome.md",
-      "source": "../index.html#/doc/welcome"
+      "source": "https://example.con/#/doc/welcome"
     }
     // 其余文章结构相同，按 order 升序排列
   ]
@@ -262,7 +263,7 @@ python server.py --host 127.0.0.1 --port 8765
 | --- | --- | --- |
 | `format` | string | 固定值 `happydays-article-manifest` |
 | `version` | integer | 清单格式版本，当前为 `1` |
-| `site` | object | 站点信息，包含 `name`、`team`、`tagline`、`language` |
+| `site` | object | 站点信息，包含 `name`、`team`、`tagline`、`domain`、`language` |
 | `topicCount` | integer | 主题总数，必须等于 `topics.length` |
 | `articleCount` | integer | 文章总数，必须等于 `articles.length` |
 | `lastUpdated` | string | 所有文章 `updated` 中的最大日期，格式 `YYYY-MM-DD` |
@@ -297,9 +298,15 @@ python server.py --host 127.0.0.1 --port 8765
 | `readingTime` | integer | 预计阅读时间，单位为分钟 |
 | `tags` | string[] | 文章标签，可为空数组 |
 | `file` | string | Markdown 文件路径，相对于 `article/` 目录 |
-| `source` | string | 在线页面地址，相对于 `article/article.json` |
+| `source` | string | 由 `site.domain` 生成的绝对页面地址 |
 
-每篇 Markdown 的 front matter 同时包含 `topic`（显示名称）和 `topic_id`（主题 ID），与 JSON 中文章的 `topic` 字段对应。Markdown 的 `source` 相对于文章文件所在目录，JSON 的 `source` 则相对于 `article/article.json`。
+每篇 Markdown 的 front matter 同时包含 `topic`（显示名称）和 `topic_id`（主题 ID），与 JSON 中文章的 `topic` 字段对应。Markdown 与 JSON 的 `source` 现在都使用 `https://<site.domain>/#/doc/<slug>` 形式的绝对地址。
+
+### 外链域名
+
+`site.domain` 是站点唯一的外部域名配置，当前占位值为 `example.con`。它用于生成文章 `source`、页面 canonical / Open Graph URL，以及“分享/复制链接”和邀请链接；如果只填写域名，程序会自动补上 `https://`。
+
+文章正文中的第三方外链（例如 Minecraft Wiki、GitHub、爱发电等）属于内容本身，不会被改写为该域名。
 
 ### 维护规则
 
@@ -361,7 +368,7 @@ reading_time: 5
 emoji: "🌿"
 order: 9
 slug: "onboarding"
-source: "../../index.html#/doc/onboarding"
+source: "https://example.con/#/doc/onboarding"
 tags:
   - "入职"
   - "新成员"
@@ -400,7 +407,7 @@ tags:
   "readingTime": 5,
   "tags": ["入职", "新成员"],
   "file": "handbook/onboarding.md",
-  "source": "../index.html#/doc/onboarding"
+  "source": "https://example.con/#/doc/onboarding"
 }
 ```
 

@@ -8,7 +8,7 @@ reading_time: 2
 emoji: "🌱"
 order: 3
 slug: "first-arrival"
-source: "../../index.html#/doc/first-arrival"
+source: "https://example.con/#/doc/first-arrival"
 tags:
 ---
 

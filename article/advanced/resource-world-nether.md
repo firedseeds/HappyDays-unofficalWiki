@@ -8,7 +8,7 @@ reading_time: 1
 emoji: "🧭"
 order: 8
 slug: "resource-world-nether"
-source: "../../index.html#/doc/resource-world-nether"
+source: "https://example.con/#/doc/resource-world-nether"
 tags:
 ---
 

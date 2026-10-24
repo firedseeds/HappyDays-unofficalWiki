@@ -690,7 +690,9 @@ window.HAPPYDAYS_WIKI = (function () {
     site: {
       name: "HappyDays非官方文档",
       team: "HappyDays 团队",
-      tagline: "团队知识库"
+      tagline: "团队知识库",
+      domain: "example.con",
+      language: "zh-CN"
     },
     categories: categories,
     docs: docs,

@@ -5,7 +5,8 @@
     "name": "HappyDays非官方文档",
     "team": "HappyDays 团队",
     "tagline": "团队知识库",
-    "language": "zh-CN"
+    "language": "zh-CN",
+    "domain": "example.con"
   },
   "topicCount": 9,
   "articleCount": 29,
@@ -113,7 +114,7 @@
       "readingTime": 1,
       "tags": [],
       "file": "intro/intro.md",
-      "source": "../index.html#/doc/intro"
+      "source": "https://example.con/#/doc/intro"
     },
     {
       "slug": "before-joining",
@@ -126,7 +127,7 @@
       "readingTime": 3,
       "tags": [],
       "file": "beginner/before-joining.md",
-      "source": "../index.html#/doc/before-joining"
+      "source": "https://example.con/#/doc/before-joining"
     },
     {
       "slug": "first-arrival",
@@ -139,7 +140,7 @@
       "readingTime": 2,
       "tags": [],
       "file": "beginner/first-arrival.md",
-      "source": "../index.html#/doc/first-arrival"
+      "source": "https://example.con/#/doc/first-arrival"
     },
     {
       "slug": "shop-plugin",
@@ -152,7 +153,7 @@
       "readingTime": 3,
       "tags": [],
       "file": "beginner/shop-plugin.md",
-      "source": "../index.html#/doc/shop-plugin"
+      "source": "https://example.con/#/doc/shop-plugin"
     },
     {
       "slug": "build-town",
@@ -165,7 +166,7 @@
       "readingTime": 1,
       "tags": [],
       "file": "beginner/build-town.md",
-      "source": "../index.html#/doc/build-town"
+      "source": "https://example.con/#/doc/build-town"
     },
     {
       "slug": "about-nations",
@@ -178,7 +179,7 @@
       "readingTime": 1,
       "tags": [],
       "file": "beginner/about-nations.md",
-      "source": "../index.html#/doc/about-nations"
+      "source": "https://example.con/#/doc/about-nations"
     },
     {
       "slug": "first-money",
@@ -191,7 +192,7 @@
       "readingTime": 1,
       "tags": [],
       "file": "beginner/first-money.md",
-      "source": "../index.html#/doc/first-money"
+      "source": "https://example.con/#/doc/first-money"
     },
     {
       "slug": "resource-world-nether",
@@ -204,7 +205,7 @@
       "readingTime": 1,
       "tags": [],
       "file": "advanced/resource-world-nether.md",
-      "source": "../index.html#/doc/resource-world-nether"
+      "source": "https://example.con/#/doc/resource-world-nether"
     },
     {
       "slug": "senluo-kitchen",
@@ -217,7 +218,7 @@
       "readingTime": 1,
       "tags": [],
       "file": "advanced/senluo-kitchen.md",
-      "source": "../index.html#/doc/senluo-kitchen"
+      "source": "https://example.con/#/doc/senluo-kitchen"
     },
     {
       "slug": "senluo-tavern",
@@ -230,7 +231,7 @@
       "readingTime": 1,
       "tags": [],
       "file": "advanced/senluo-tavern.md",
-      "source": "../index.html#/doc/senluo-tavern"
+      "source": "https://example.con/#/doc/senluo-tavern"
     },
     {
       "slug": "money-making-guide",
@@ -243,7 +244,7 @@
       "readingTime": 1,
       "tags": [],
       "file": "advanced/money-making-guide.md",
-      "source": "../index.html#/doc/money-making-guide"
+      "source": "https://example.con/#/doc/money-making-guide"
     },
     {
       "slug": "lottery",
@@ -256,7 +257,7 @@
       "readingTime": 1,
       "tags": [],
       "file": "advanced/lottery.md",
-      "source": "../index.html#/doc/lottery"
+      "source": "https://example.con/#/doc/lottery"
     },
     {
       "slug": "immersive-vehicles",
@@ -269,7 +270,7 @@
       "readingTime": 1,
       "tags": [],
       "file": "advanced/immersive-vehicles.md",
-      "source": "../index.html#/doc/immersive-vehicles"
+      "source": "https://example.con/#/doc/immersive-vehicles"
     },
     {
       "slug": "town-resources",
@@ -282,7 +283,7 @@
       "readingTime": 1,
       "tags": [],
       "file": "advanced/town-resources.md",
-      "source": "../index.html#/doc/town-resources"
+      "source": "https://example.con/#/doc/town-resources"
     },
     {
       "slug": "cheating-response",
@@ -295,7 +296,7 @@
       "readingTime": 2,
       "tags": [],
       "file": "rules/cheating-response.md",
-      "source": "../index.html#/doc/cheating-response"
+      "source": "https://example.con/#/doc/cheating-response"
     },
     {
       "slug": "behavior-chat",
@@ -308,7 +309,7 @@
       "readingTime": 3,
       "tags": [],
       "file": "rules/behavior-chat.md",
-      "source": "../index.html#/doc/behavior-chat"
+      "source": "https://example.con/#/doc/behavior-chat"
     },
     {
       "slug": "world-map",
@@ -321,7 +322,7 @@
       "readingTime": 1,
       "tags": [],
       "file": "rules/world-map.md",
-      "source": "../index.html#/doc/world-map"
+      "source": "https://example.con/#/doc/world-map"
     },
     {
       "slug": "matopiraphai",
@@ -334,7 +335,7 @@
       "readingTime": 1,
       "tags": [],
       "file": "history/people/matopiraphai.md",
-      "source": "../index.html#/doc/matopiraphai"
+      "source": "https://example.con/#/doc/matopiraphai"
     },
     {
       "slug": "233-2233",
@@ -347,7 +348,7 @@
       "readingTime": 1,
       "tags": [],
       "file": "history/people/233-2233.md",
-      "source": "../index.html#/doc/233-2233"
+      "source": "https://example.con/#/doc/233-2233"
     },
     {
       "slug": "zzx",
@@ -360,7 +361,7 @@
       "readingTime": 1,
       "tags": [],
       "file": "history/people/zzx.md",
-      "source": "../index.html#/doc/zzx"
+      "source": "https://example.con/#/doc/zzx"
     },
     {
       "slug": "northeast-economic-alliance",
@@ -373,7 +374,7 @@
       "readingTime": 1,
       "tags": [],
       "file": "history/nations/northeast-economic-alliance.md",
-      "source": "../index.html#/doc/northeast-economic-alliance"
+      "source": "https://example.con/#/doc/northeast-economic-alliance"
     },
     {
       "slug": "harbin-chronicle",
@@ -386,7 +387,7 @@
       "readingTime": 1,
       "tags": [],
       "file": "history/nations/harbin-chronicle.md",
-      "source": "../index.html#/doc/harbin-chronicle"
+      "source": "https://example.con/#/doc/harbin-chronicle"
     },
     {
       "slug": "rhodes-island",
@@ -399,7 +400,7 @@
       "readingTime": 1,
       "tags": [],
       "file": "history/nations/rhodes-island.md",
-      "source": "../index.html#/doc/rhodes-island"
+      "source": "https://example.con/#/doc/rhodes-island"
     },
     {
       "slug": "freedom-union",
@@ -412,7 +413,7 @@
       "readingTime": 1,
       "tags": [],
       "file": "history/nations/freedom-union.md",
-      "source": "../index.html#/doc/freedom-union"
+      "source": "https://example.con/#/doc/freedom-union"
     },
     {
       "slug": "dprk",
@@ -425,7 +426,7 @@
       "readingTime": 1,
       "tags": [],
       "file": "history/nations/dprk.md",
-      "source": "../index.html#/doc/dprk"
+      "source": "https://example.con/#/doc/dprk"
     },
     {
       "slug": "qwertyuiop",
@@ -438,7 +439,7 @@
       "readingTime": 2,
       "tags": [],
       "file": "history/godman/qwertyuiop.md",
-      "source": "../index.html#/doc/qwertyuiop"
+      "source": "https://example.con/#/doc/qwertyuiop"
     },
     {
       "slug": "alex",
@@ -451,7 +452,7 @@
       "readingTime": 1,
       "tags": [],
       "file": "history/godman/alex.md",
-      "source": "../index.html#/doc/alex"
+      "source": "https://example.con/#/doc/alex"
     },
     {
       "slug": "gallery-1",
@@ -464,7 +465,7 @@
       "readingTime": 1,
       "tags": [],
       "file": "gallery/gallery-1.md",
-      "source": "../index.html#/doc/gallery-1"
+      "source": "https://example.con/#/doc/gallery-1"
     },
     {
       "slug": "gallery-2",
@@ -477,7 +478,7 @@
       "readingTime": 1,
       "tags": [],
       "file": "gallery/gallery-2.md",
-      "source": "../index.html#/doc/gallery-2"
+      "source": "https://example.con/#/doc/gallery-2"
     }
   ]
 }

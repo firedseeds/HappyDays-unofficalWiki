@@ -8,7 +8,7 @@ reading_time: 1
 emoji: "🚇"
 order: 1
 slug: "intro"
-source: "../../index.html#/doc/intro"
+source: "https://example.con/#/doc/intro"
 tags:
 ---
 

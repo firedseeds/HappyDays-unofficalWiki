@@ -8,7 +8,7 @@ reading_time: 1
 emoji: "📖"
 order: 28
 slug: "alex"
-source: "../../../index.html#/doc/alex"
+source: "https://example.con/#/doc/alex"
 tags:
 ---
 

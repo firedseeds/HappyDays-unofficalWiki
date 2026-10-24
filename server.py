@@ -256,9 +256,17 @@ def validate_article_fields(payload: dict, defaults: dict | None = None) -> dict
     }
 
 
-def compose_markdown(record: dict, topic: dict, body: str) -> str:
-    depth = len(Path(record["file"]).parts)
-    source = "../" * depth + f"index.html#/doc/{record['slug']}"
+def site_origin(site: dict) -> str:
+    domain = str(site.get("domain", "")).strip().rstrip("/")
+    if not domain:
+        domain = "example.con"
+    if not domain.startswith(("http://", "https://")):
+        domain = "https://" + domain
+    return domain
+
+
+def compose_markdown(record: dict, topic: dict, body: str, site: dict) -> str:
+    source = f"{site_origin(site)}/#/doc/{record['slug']}"
     frontmatter = [
         "---",
         f"title: {json.dumps(record['title'], ensure_ascii=False)}",
@@ -467,7 +475,7 @@ def update_article(slug: str, payload: dict) -> dict:
                 break
         refresh_manifest(manifest)
         body = relocate_markdown_paths(body, old_path, new_path)
-        markdown = compose_markdown(updated, target_topic, body)
+        markdown = compose_markdown(updated, target_topic, body, manifest.get("site", {}))
 
         try:
             if new_path != old_path:
@@ -657,11 +665,11 @@ def create_article(payload: dict) -> dict:
             "readingTime": fields["reading_time"],
             "tags": fields["tags"],
             "file": f"{topic['directory']}/{slug}.md",
-            "source": f"../index.html#/doc/{slug}",
+            "source": f"{site_origin(manifest.get('site', {}))}/#/doc/{slug}",
         }
         manifest["articles"].append(record)
         refresh_manifest(manifest)
-        markdown = compose_markdown(record, topic, body)
+        markdown = compose_markdown(record, topic, body, manifest.get("site", {}))
         manifest_snapshot = MANIFEST_PATH.read_bytes()
         data_snapshot = DATA_PATH.read_bytes() if DATA_PATH.is_file() else None
 

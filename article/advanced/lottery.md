@@ -8,7 +8,7 @@ reading_time: 1
 emoji: "🧭"
 order: 12
 slug: "lottery"
-source: "../../index.html#/doc/lottery"
+source: "https://example.con/#/doc/lottery"
 tags:
 ---
 

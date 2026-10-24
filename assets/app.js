@@ -14,6 +14,32 @@
   var categories = wiki.categories;
   var docs = wiki.docs;
   var allIds = wiki.allIds;
+  var site = wiki.site || {};
+
+  function siteRoot() {
+    var domain = String(site.domain || "").trim().replace(/\/+$/, "");
+    if (!domain) {
+      return window.location.href.split("#")[0].replace(/\/+$/, "");
+    }
+    if (!/^https?:\/\//i.test(domain)) {
+      domain = "https://" + domain;
+    }
+    return domain;
+  }
+
+  function externalDocUrl(id) {
+    return siteRoot() + "/#/doc/" + encodeURIComponent(id);
+  }
+
+  function setExternalUrl(id) {
+    var url = id ? externalDocUrl(id) : siteRoot() + "/";
+    if (els.ogUrl) {
+      els.ogUrl.setAttribute("content", url);
+    }
+    if (els.canonicalLink) {
+      els.canonicalLink.setAttribute("href", url);
+    }
+  }
 
   var CATEGORY_BY_ID = {};
   categories.forEach(function (category) {
@@ -61,6 +87,8 @@
     backToTop: document.getElementById("backToTop"),
     editBtn: document.getElementById("editBtn"),
     shareBtn: document.getElementById("shareBtn"),
+    ogUrl: document.getElementById("ogUrl"),
+    canonicalLink: document.getElementById("canonicalLink"),
     themeBtn: document.getElementById("themeBtn"),
     moreBtn: document.getElementById("moreBtn"),
     moreMenu: document.getElementById("moreMenu"),
@@ -288,11 +316,12 @@
   }
 
   function copyPageLink() {
-    copyText(window.location.href).then(function (success) {
+    var url = state.currentId ? externalDocUrl(state.currentId) : siteRoot() + "/";
+    copyText(url).then(function (success) {
       if (success) {
         showToast("页面链接已复制");
       } else {
-        window.prompt("复制页面链接", window.location.href);
+        window.prompt("复制页面链接", url);
       }
     });
   }
@@ -497,6 +526,7 @@
     state.activeHeading = "";
 
     document.title = doc.title + " · HappyDays非官方文档";
+    setExternalUrl(id);
     els.crumbCategory.textContent = categoryLabel(category);
     els.crumbTitle.textContent = doc.title;
     els.docCategory.textContent = categoryLabel(category);
@@ -552,6 +582,7 @@
     state.tocHeadings = [];
     document.body.classList.add("is-empty-library");
     document.title = "知识库准备中 · HappyDays非官方文档";
+    setExternalUrl(null);
 
     els.crumbCategory.textContent = "知识库";
     els.crumbTitle.textContent = "等待迁移";
@@ -1122,7 +1153,7 @@
       } else if (action === "close-toc") {
         closeToc(true);
       } else if (action === "invite") {
-        var base = window.location.href.split("#")[0];
+        var base = siteRoot() + "/";
         copyText(base).then(function (success) {
           showToast(success ? "邀请链接已复制，发给伙伴即可加入" : "复制失败，请手动复制页面链接");
         });

@@ -790,7 +790,9 @@ def build_manifest(articles: list[dict], topics: list[dict], site: dict) -> str:
             "    site: {",
             "      name: " + js_string(site["name"]) + ",",
             "      team: " + js_string(site["team"]) + ",",
-            "      tagline: " + js_string(site["tagline"]),
+            "      tagline: " + js_string(site["tagline"]) + ",",
+            "      domain: " + js_string(site["domain"]) + ",",
+            "      language: " + js_string(site.get("language", "zh-CN")),
             "    },",
             "    categories: categories,",
             "    docs: docs,",
@@ -809,7 +811,7 @@ def main() -> int:
         site = manifest.get("site")
         if not isinstance(site, dict):
             fail("article/article.json 缺少 site 对象")
-        for field in ("name", "team", "tagline"):
+        for field in ("name", "team", "tagline", "domain"):
             if not isinstance(site.get(field), str) or not site[field]:
                 fail(f"article/article.json 的 site.{field} 必须是非空字符串")
         topic_by_id = {t["id"]: t for t in topics}
