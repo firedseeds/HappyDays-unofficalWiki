@@ -66,8 +66,103 @@ npx serve .
 │  ├─ styles.css         # 设计系统、布局、组件、响应式与打印样式
 │  ├─ data.js            # 分类、文档元数据与全部正文
 │  └─ app.js             # 路由、搜索、目录、主题与交互
+├─ article/
+│  ├─ article.json       # 文章索引与元数据的机器可读清单
+│  └─ *.md               # 按 slug 命名的 Markdown 文章正文
 └─ README.md
 ```
+
+---
+
+## 文章 JSON 清单
+
+`article/article.json` 是文章目录的机器可读清单，用于脚本、静态站点生成器或其他工具读取文章元数据。它只保存索引和元数据，不重复正文；正文以同目录下的 Markdown 文件为准。
+
+- **格式标识**：`happydays-article-manifest`
+- **当前版本**：`1`
+- **当前文章数**：8
+- **最近更新**：`2026-10-22`
+- **文件路径**：`article/article.json`
+
+### 格式示例
+
+以下为节选示例，实际文件包含全部 8 篇文章：
+
+```jsonc
+{
+  "format": "happydays-article-manifest",
+  "version": 1,
+  "site": {
+    "name": "HappyDays非官方文档",
+    "team": "HappyDays 团队",
+    "tagline": "团队知识库",
+    "language": "zh-CN"
+  },
+  "articleCount": 8,
+  "lastUpdated": "2026-10-22",
+  "articles": [
+    {
+      "slug": "welcome",
+      "order": 1,
+      "title": "欢迎来到 HappyDays非官方文档",
+      "description": "把散落在聊天、会议与脑海里的经验，种成一片随时可以查阅的森林。",
+      "emoji": "🌱",
+      "category": {
+        "id": "start",
+        "name": "开始使用"
+      },
+      "author": {
+        "name": "林知夏",
+        "role": "知识运营"
+      },
+      "updated": "2026-10-21",
+      "readingTime": 6,
+      "tags": ["必读", "新成员", "团队文化"],
+      "file": "welcome.md",
+      "source": "../index.html#/doc/welcome"
+    }
+    // 其余文章结构相同，按 order 升序排列
+  ]
+}
+```
+
+### 顶层字段
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `format` | string | 固定值 `happydays-article-manifest` |
+| `version` | integer | 清单格式版本，当前为 `1` |
+| `site` | object | 站点信息，包含 `name`、`team`、`tagline`、`language` |
+| `articleCount` | integer | 文章总数，必须等于 `articles.length` |
+| `lastUpdated` | string | 所有文章 `updated` 中的最大日期，格式 `YYYY-MM-DD` |
+| `articles` | array | 文章对象列表，按 `order` 升序排列 |
+
+### 文章字段
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `slug` | string | 唯一标识，与 Markdown 文件名去扩展名后一致 |
+| `order` | integer | 全站阅读顺序，从 `1` 开始 |
+| `title` | string | 文章标题 |
+| `description` | string | 文章摘要 |
+| `emoji` | string | 文章图标 |
+| `category.id` | string | 分类 ID |
+| `category.name` | string | 分类显示名称 |
+| `author.name` | string | 作者显示名称 |
+| `author.role` | string | 作者角色 |
+| `updated` | string | 最后更新日期，格式 `YYYY-MM-DD` |
+| `readingTime` | integer | 预计阅读时间，单位为分钟 |
+| `tags` | string[] | 文章标签，可为空数组 |
+| `file` | string | Markdown 文件名，相对于 `article/` 目录 |
+| `source` | string | 在线页面地址，相对于 `article/` 目录 |
+
+### 维护规则
+
+1. 所有字段均为必填，不使用 `null`。
+2. `file` 指向的文章必须存在；`slug` 必须与文件名主体一致。
+3. `articleCount` 必须等于 `articles.length`，`lastUpdated` 必须等于最新文章的 `updated`。
+4. 新增或删除文章时，同时更新 Markdown 文件和本清单。
+5. `order` 决定 JSON 中的阅读顺序，建议与站点目录顺序保持一致。
 
 ---
 
