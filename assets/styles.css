@@ -1234,9 +1234,14 @@ kbd {
 }
 
 .doc-body img {
+  display: block;
   max-width: 100%;
   height: auto;
+  margin: 20px 0;
+  border: 1px solid var(--border);
   border-radius: 12px;
+  background: var(--surface);
+  box-shadow: var(--shadow-xs);
 }
 
 .doc-body .lede {

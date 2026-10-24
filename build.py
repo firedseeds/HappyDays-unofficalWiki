@@ -148,13 +148,35 @@ class MarkdownRenderer:
 
     def inline(self, text: str) -> str:
         code_spans: list[str] = []
+        image_spans: list[str] = []
 
         def stash_code(match: re.Match) -> str:
             code_spans.append("<code>" + escape_text(match.group(1)) + "</code>")
             return f"\x00{len(code_spans) - 1}\x00"
 
+        def stash_image(match: re.Match) -> str:
+            alt = match.group(1)
+            src = html_lib.unescape(match.group(2).strip())
+            title = match.group(3)
+            source = self.resolve_image_src(src)
+            alt_text = html_lib.escape(html_lib.unescape(alt), quote=True)
+            attributes = (
+                f' src="{html_lib.escape(source, quote=True)}"'
+                f' alt="{alt_text}"'
+                ' loading="lazy" decoding="async"'
+            )
+            if title:
+                attributes += f' title="{html_lib.escape(title, quote=True)}"'
+            image_spans.append(f"<img{attributes}>")
+            return f"\x00img{len(image_spans) - 1}\x00"
+
         text = re.sub(r"`([^`\n]+)`", stash_code, text)
         text = escape_text(text)
+        text = re.sub(
+            r"!\[([^\]]*)\]\(([^)\s]+)(?:\s+[\"']([^\"']*)[\"'])?\)",
+            stash_image,
+            text,
+        )
         text = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", text, flags=re.S)
         text = re.sub(r"(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)", r"<em>\1</em>", text, flags=re.S)
 
@@ -167,7 +189,24 @@ class MarkdownRenderer:
         text = re.sub(r"\[([^\]]+)\]\(([^)]+)\)", replace_link, text)
         for index, fragment in enumerate(code_spans):
             text = text.replace(f"\x00{index}\x00", fragment)
+        for index, fragment in enumerate(image_spans):
+            text = text.replace(f"\x00img{index}\x00", fragment)
         return text
+
+    def resolve_image_src(self, src: str) -> str:
+        src = src.strip()
+        if not src:
+            fail(f"{self.relative(self.current_file)}: 图片缺少地址")
+        if src.startswith(("http://", "https://", "data:", "//")):
+            return src
+        target = (self.current_file.parent / src).resolve()
+        try:
+            target.relative_to(ROOT.resolve())
+        except ValueError:
+            fail(f"{self.relative(self.current_file)}: 图片指向项目之外: {src}")
+        if not target.is_file():
+            fail(f"{self.relative(self.current_file)}: 图片文件不存在: {src}")
+        return target.relative_to(ROOT.resolve()).as_posix()
 
     def resolve_href(self, href: str) -> str:
         href = href.strip()

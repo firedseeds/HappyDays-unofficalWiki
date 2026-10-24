@@ -1,0 +1,40 @@
+---
+title: "朝鲜民主主义人民共和国DPRK"
+description: "国家成员：233，zzx(已经叛逃)国家发展：233原..."
+topic: "happyday历史"
+topic_id: "history"
+updated: "2026-10-25"
+reading_time: 1
+emoji: "📖"
+order: 25
+slug: "cdzr3tzaoxmh7at8"
+source: "../../index.html#/doc/cdzr3tzaoxmh7at8"
+tags:
+  - "happyday历史"
+  - "国家/城镇"
+  - "语雀迁移"
+---
+
+# 朝鲜民主主义人民共和国DPRK
+
+国家成员：233，zzx(已经叛逃)
+
+国家发展：
+
+233原话：当时第1条轨道其实是从日本进口的 从大连接过来的 现在大连到平壤那么绕就是因为这个 然后被4a拆了 还帮忙换成矿车轨道了
+
+国家成就：发展到了300w元，建筑居然是零！
+
+![图片](../../assets/image/cdzr3tzaoxmh7at8/1790489592276-56c0efb6-087d-4d5a-9028-397eb757b968.png)
+
+26年10月7日更新：
+
+1. zzx蟠桃了
+
+2. 新建巨型建筑柳京饭店，共51层
+
+3。不要叛逃（——zzx
+
+26年10月8日更新：
+
+1. 将军指正柳京饭店为55层\o/\o/\o/

@@ -7,9 +7,552 @@
     "tagline": "团队知识库",
     "language": "zh-CN"
   },
-  "topicCount": 0,
-  "articleCount": 0,
-  "lastUpdated": "2026-10-24",
-  "topics": [],
-  "articles": []
+  "topicCount": 6,
+  "articleCount": 30,
+  "lastUpdated": "2026-10-25",
+  "topics": [
+    {
+      "id": "intro",
+      "name": "简介",
+      "directory": "intro",
+      "order": 1,
+      "description": "HappyDays 服务器与知识库概览。",
+      "emoji": "🚇",
+      "articleCount": 1
+    },
+    {
+      "id": "beginner",
+      "name": "新手教程",
+      "directory": "beginner",
+      "order": 2,
+      "description": "进入服务器前的准备、初来乍到与基础玩法。",
+      "emoji": "🌱",
+      "articleCount": 6
+    },
+    {
+      "id": "advanced",
+      "name": "进阶教程",
+      "directory": "advanced",
+      "order": 3,
+      "description": "资源、经济、载具与城镇发展。",
+      "emoji": "🧭",
+      "articleCount": 7
+    },
+    {
+      "id": "rules",
+      "name": "服务器规则",
+      "directory": "rules",
+      "order": 4,
+      "description": "服务器行为规范、作弊处理与地图规则。",
+      "emoji": "📜",
+      "articleCount": 3
+    },
+    {
+      "id": "history",
+      "name": "happyday历史",
+      "directory": "history",
+      "order": 5,
+      "description": "服务器的人物、国家与历史记录。",
+      "emoji": "📖",
+      "articleCount": 11
+    },
+    {
+      "id": "gallery",
+      "name": "妙妙图片集",
+      "directory": "gallery",
+      "order": 6,
+      "description": "服务器截图与图片记录。",
+      "emoji": "🖼️",
+      "articleCount": 2
+    }
+  ],
+  "articles": [
+    {
+      "slug": "lbm7l8qr2lo5inoe",
+      "order": 1,
+      "topic": "intro",
+      "title": "简介",
+      "description": "HappyDays轨道交通服务器happydays是建...",
+      "emoji": "🚇",
+      "updated": "2026-10-25",
+      "readingTime": 1,
+      "tags": [
+        "语雀迁移"
+      ],
+      "file": "intro/lbm7l8qr2lo5inoe.md",
+      "source": "../index.html#/doc/lbm7l8qr2lo5inoe"
+    },
+    {
+      "slug": "qg58speht2e47nhs",
+      "order": 2,
+      "topic": "beginner",
+      "title": "进入游戏前",
+      "description": "1 - 准备1.1 配置推荐使用强劲的电脑、笔记本或手...",
+      "emoji": "🌱",
+      "updated": "2026-10-25",
+      "readingTime": 3,
+      "tags": [
+        "新手教程",
+        "语雀迁移"
+      ],
+      "file": "beginner/qg58speht2e47nhs.md",
+      "source": "../index.html#/doc/qg58speht2e47nhs"
+    },
+    {
+      "slug": "xueivzgcgnv2egf3",
+      "order": 3,
+      "topic": "beginner",
+      "title": "初来乍到",
+      "description": "1-最基本的1.1逃出出生点！！！（bushi）进入服...",
+      "emoji": "🌱",
+      "updated": "2026-10-25",
+      "readingTime": 2,
+      "tags": [
+        "新手教程",
+        "语雀迁移"
+      ],
+      "file": "beginner/xueivzgcgnv2egf3.md",
+      "source": "../index.html#/doc/xueivzgcgnv2egf3"
+    },
+    {
+      "slug": "rvqc0xc1igubzaz5",
+      "order": 4,
+      "topic": "beginner",
+      "title": "商店插件",
+      "description": "本服务器使用QuickShop插件，如何使用请看下文：...",
+      "emoji": "🌱",
+      "updated": "2026-10-25",
+      "readingTime": 3,
+      "tags": [
+        "新手教程",
+        "语雀迁移"
+      ],
+      "file": "beginner/rvqc0xc1igubzaz5.md",
+      "source": "../index.html#/doc/rvqc0xc1igubzaz5"
+    },
+    {
+      "slug": "wzd3p3hnih3hnf0b",
+      "order": 5,
+      "topic": "beginner",
+      "title": "建立城邦",
+      "description": "首先坐火车到你想创建/加入城镇的地方：/t join ...",
+      "emoji": "🌱",
+      "updated": "2026-10-25",
+      "readingTime": 1,
+      "tags": [
+        "新手教程",
+        "语雀迁移"
+      ],
+      "file": "beginner/wzd3p3hnih3hnf0b.md",
+      "source": "../index.html#/doc/wzd3p3hnih3hnf0b"
+    },
+    {
+      "slug": "dmagi2zbs3zagrgx",
+      "order": 6,
+      "topic": "beginner",
+      "title": "关于国家",
+      "description": "此文档在语雀中暂无正文。",
+      "emoji": "🌱",
+      "updated": "2026-10-25",
+      "readingTime": 1,
+      "tags": [
+        "新手教程",
+        "语雀迁移"
+      ],
+      "file": "beginner/dmagi2zbs3zagrgx.md",
+      "source": "../index.html#/doc/dmagi2zbs3zagrgx"
+    },
+    {
+      "slug": "hv3mqxwgrmyg025y",
+      "order": 7,
+      "topic": "beginner",
+      "title": "第一桶金",
+      "description": "服务器主要的赚钱方式有以下几种类型：1.修路（注意：此...",
+      "emoji": "🌱",
+      "updated": "2026-10-25",
+      "readingTime": 1,
+      "tags": [
+        "新手教程",
+        "语雀迁移"
+      ],
+      "file": "beginner/hv3mqxwgrmyg025y.md",
+      "source": "../index.html#/doc/hv3mqxwgrmyg025y"
+    },
+    {
+      "slug": "yh4tcrcleg2xg3n5",
+      "order": 8,
+      "topic": "advanced",
+      "title": "资源世界/下界",
+      "description": "此文档在语雀中暂无正文。",
+      "emoji": "🧭",
+      "updated": "2026-10-25",
+      "readingTime": 1,
+      "tags": [
+        "进阶教程",
+        "语雀迁移"
+      ],
+      "file": "advanced/yh4tcrcleg2xg3n5.md",
+      "source": "../index.html#/doc/yh4tcrcleg2xg3n5"
+    },
+    {
+      "slug": "ngcy62fx7hh7ska8",
+      "order": 9,
+      "topic": "advanced",
+      "title": "森罗物语：厨房",
+      "description": "引言做饭是一门高深的艺术一、食材的获取及储存1.1植物...",
+      "emoji": "🧭",
+      "updated": "2026-10-25",
+      "readingTime": 1,
+      "tags": [
+        "进阶教程",
+        "语雀迁移"
+      ],
+      "file": "advanced/ngcy62fx7hh7ska8.md",
+      "source": "../index.html#/doc/ngcy62fx7hh7ska8"
+    },
+    {
+      "slug": "tw133gls37p4vtqd",
+      "order": 10,
+      "topic": "advanced",
+      "title": "森罗物语：酒馆",
+      "description": "此文档在语雀中暂无正文。",
+      "emoji": "🧭",
+      "updated": "2026-10-25",
+      "readingTime": 1,
+      "tags": [
+        "进阶教程",
+        "语雀迁移"
+      ],
+      "file": "advanced/tw133gls37p4vtqd.md",
+      "source": "../index.html#/doc/tw133gls37p4vtqd"
+    },
+    {
+      "slug": "wdc66iz1zh7uf9qt",
+      "order": 11,
+      "topic": "advanced",
+      "title": "一些杂七杂八的赚钱野路子",
+      "description": "1.钻石在南京收购价为50元/颗，但在上海港坐海洋光谱...",
+      "emoji": "🧭",
+      "updated": "2026-10-25",
+      "readingTime": 1,
+      "tags": [
+        "进阶教程",
+        "语雀迁移"
+      ],
+      "file": "advanced/wdc66iz1zh7uf9qt.md",
+      "source": "../index.html#/doc/wdc66iz1zh7uf9qt"
+    },
+    {
+      "slug": "gtogpaa0zmpf8gx4",
+      "order": 12,
+      "topic": "advanced",
+      "title": "彩票",
+      "description": "此文档在语雀中暂无正文。",
+      "emoji": "🧭",
+      "updated": "2026-10-25",
+      "readingTime": 1,
+      "tags": [
+        "进阶教程",
+        "语雀迁移"
+      ],
+      "file": "advanced/gtogpaa0zmpf8gx4.md",
+      "source": "../index.html#/doc/gtogpaa0zmpf8gx4"
+    },
+    {
+      "slug": "oun8y8897w43s4sh",
+      "order": 13,
+      "topic": "advanced",
+      "title": "沉浸车辆",
+      "description": "当然，服务器是有载具的，不能合成",
+      "emoji": "🧭",
+      "updated": "2026-10-25",
+      "readingTime": 1,
+      "tags": [
+        "进阶教程",
+        "语雀迁移"
+      ],
+      "file": "advanced/oun8y8897w43s4sh.md",
+      "source": "../index.html#/doc/oun8y8897w43s4sh"
+    },
+    {
+      "slug": "uswuzhk4cv6l80xb",
+      "order": 14,
+      "topic": "advanced",
+      "title": "城镇资源",
+      "description": "可以使用/t或/town查看城镇资源（没有则未勘探）资...",
+      "emoji": "🧭",
+      "updated": "2026-10-25",
+      "readingTime": 1,
+      "tags": [
+        "进阶教程",
+        "语雀迁移"
+      ],
+      "file": "advanced/uswuzhk4cv6l80xb.md",
+      "source": "../index.html#/doc/uswuzhk4cv6l80xb"
+    },
+    {
+      "slug": "zlw32gy9cdcbv028",
+      "order": 15,
+      "topic": "rules",
+      "title": "作弊与应对",
+      "description": "作弊与应对1.1 作弊客户端和其他修改可以在原本的整合...",
+      "emoji": "📜",
+      "updated": "2026-10-25",
+      "readingTime": 2,
+      "tags": [
+        "服务器规则",
+        "语雀迁移"
+      ],
+      "file": "rules/zlw32gy9cdcbv028.md",
+      "source": "../index.html#/doc/zlw32gy9cdcbv028"
+    },
+    {
+      "slug": "gv7ocwch9n5e7bi5",
+      "order": 16,
+      "topic": "rules",
+      "title": "行为与聊天",
+      "description": "2.1 命名国家名称：可以是虚构的，尽量不要与当前的国...",
+      "emoji": "📜",
+      "updated": "2026-10-25",
+      "readingTime": 3,
+      "tags": [
+        "服务器规则",
+        "语雀迁移"
+      ],
+      "file": "rules/gv7ocwch9n5e7bi5.md",
+      "source": "../index.html#/doc/gv7ocwch9n5e7bi5"
+    },
+    {
+      "slug": "iumpymli5his92ew",
+      "order": 17,
+      "topic": "rules",
+      "title": "世界与地图",
+      "description": "3.1 在城镇周围破坏土地玩家不得在城镇周围破坏土地。...",
+      "emoji": "📜",
+      "updated": "2026-10-25",
+      "readingTime": 1,
+      "tags": [
+        "服务器规则",
+        "语雀迁移"
+      ],
+      "file": "rules/iumpymli5his92ew.md",
+      "source": "../index.html#/doc/iumpymli5his92ew"
+    },
+    {
+      "slug": "wgdvb5m0xu9sz4dt",
+      "order": 18,
+      "topic": "history",
+      "title": "Matopiraphai",
+      "description": "人物简介：入服时间：2026年8月8日担任职务：",
+      "emoji": "📖",
+      "updated": "2026-10-25",
+      "readingTime": 1,
+      "tags": [
+        "happyday历史",
+        "人物志",
+        "语雀迁移"
+      ],
+      "file": "history/wgdvb5m0xu9sz4dt.md",
+      "source": "../index.html#/doc/wgdvb5m0xu9sz4dt"
+    },
+    {
+      "slug": "sssqqsna58o8g523",
+      "order": 19,
+      "topic": "history",
+      "title": "233&2233",
+      "description": "人物简介入服时间2233：2026年5月19日 233...",
+      "emoji": "📖",
+      "updated": "2026-10-25",
+      "readingTime": 1,
+      "tags": [
+        "happyday历史",
+        "人物志",
+        "语雀迁移"
+      ],
+      "file": "history/sssqqsna58o8g523.md",
+      "source": "../index.html#/doc/sssqqsna58o8g523"
+    },
+    {
+      "slug": "mem2ldfox7vpfegb",
+      "order": 20,
+      "topic": "history",
+      "title": "zzx",
+      "description": "主要事迹：把Alex带进服务器（详见神人堂）连续发展了...",
+      "emoji": "📖",
+      "updated": "2026-10-25",
+      "readingTime": 1,
+      "tags": [
+        "happyday历史",
+        "人物志",
+        "语雀迁移"
+      ],
+      "file": "history/mem2ldfox7vpfegb.md",
+      "source": "../index.html#/doc/mem2ldfox7vpfegb"
+    },
+    {
+      "slug": "tsam4cy3tuocpr34",
+      "order": 21,
+      "topic": "history",
+      "title": "泛东北经济同盟",
+      "description": "此文档在语雀中暂无正文。",
+      "emoji": "📖",
+      "updated": "2026-10-25",
+      "readingTime": 1,
+      "tags": [
+        "happyday历史",
+        "国家/城镇",
+        "语雀迁移"
+      ],
+      "file": "history/tsam4cy3tuocpr34.md",
+      "source": "../index.html#/doc/tsam4cy3tuocpr34"
+    },
+    {
+      "slug": "kci8fcfq50bayle8",
+      "order": 22,
+      "topic": "history",
+      "title": "哈尔滨地方志",
+      "description": "详见zzx人物志",
+      "emoji": "📖",
+      "updated": "2026-10-25",
+      "readingTime": 1,
+      "tags": [
+        "happyday历史",
+        "国家/城镇",
+        "语雀迁移"
+      ],
+      "file": "history/kci8fcfq50bayle8.md",
+      "source": "../index.html#/doc/kci8fcfq50bayle8"
+    },
+    {
+      "slug": "xs8c67w9mz9okg3e",
+      "order": 23,
+      "topic": "history",
+      "title": "罗德岛",
+      "description": "此文档在语雀中暂无正文。",
+      "emoji": "📖",
+      "updated": "2026-10-25",
+      "readingTime": 1,
+      "tags": [
+        "happyday历史",
+        "国家/城镇",
+        "语雀迁移"
+      ],
+      "file": "history/xs8c67w9mz9okg3e.md",
+      "source": "../index.html#/doc/xs8c67w9mz9okg3e"
+    },
+    {
+      "slug": "vasp7kvkwa15pzrk",
+      "order": 24,
+      "topic": "history",
+      "title": "自由联邦共同体 Freedom Union",
+      "description": "此国家由 瑞士联邦 和 CALIFORNIA 合并而成...",
+      "emoji": "📖",
+      "updated": "2026-10-25",
+      "readingTime": 1,
+      "tags": [
+        "happyday历史",
+        "国家/城镇",
+        "语雀迁移"
+      ],
+      "file": "history/vasp7kvkwa15pzrk.md",
+      "source": "../index.html#/doc/vasp7kvkwa15pzrk"
+    },
+    {
+      "slug": "cdzr3tzaoxmh7at8",
+      "order": 25,
+      "topic": "history",
+      "title": "朝鲜民主主义人民共和国DPRK",
+      "description": "国家成员：233，zzx(已经叛逃)国家发展：233原...",
+      "emoji": "📖",
+      "updated": "2026-10-25",
+      "readingTime": 1,
+      "tags": [
+        "happyday历史",
+        "国家/城镇",
+        "语雀迁移"
+      ],
+      "file": "history/cdzr3tzaoxmh7at8.md",
+      "source": "../index.html#/doc/cdzr3tzaoxmh7at8"
+    },
+    {
+      "slug": "oma9oegz8eok8g8c",
+      "order": 26,
+      "topic": "history",
+      "title": "神人堂",
+      "description": "此文档在语雀中暂无正文。",
+      "emoji": "📖",
+      "updated": "2026-10-25",
+      "readingTime": 1,
+      "tags": [
+        "happyday历史",
+        "语雀迁移"
+      ],
+      "file": "history/oma9oegz8eok8g8c.md",
+      "source": "../index.html#/doc/oma9oegz8eok8g8c"
+    },
+    {
+      "slug": "gni2e5189goed7me",
+      "order": 27,
+      "topic": "history",
+      "title": "qwertyuiop",
+      "description": "神人简介入服时间（魔童降世）2026年8月14日神人评...",
+      "emoji": "📖",
+      "updated": "2026-10-25",
+      "readingTime": 2,
+      "tags": [
+        "happyday历史",
+        "语雀迁移"
+      ],
+      "file": "history/gni2e5189goed7me.md",
+      "source": "../index.html#/doc/gni2e5189goed7me"
+    },
+    {
+      "slug": "cm6zdy85lcisc07b",
+      "order": 28,
+      "topic": "history",
+      "title": "Alex",
+      "description": "被zzx带进来的神人，进来不到两天就把火车给实体化了，...",
+      "emoji": "📖",
+      "updated": "2026-10-25",
+      "readingTime": 1,
+      "tags": [
+        "happyday历史",
+        "语雀迁移"
+      ],
+      "file": "history/cm6zdy85lcisc07b.md",
+      "source": "../index.html#/doc/cm6zdy85lcisc07b"
+    },
+    {
+      "slug": "poluwruhqqicpylb",
+      "order": 29,
+      "topic": "gallery",
+      "title": "请输入文本（1）",
+      "description": "妙妙图片集图片记录。",
+      "emoji": "🖼️",
+      "updated": "2026-10-25",
+      "readingTime": 1,
+      "tags": [
+        "妙妙图片集",
+        "语雀迁移"
+      ],
+      "file": "gallery/poluwruhqqicpylb.md",
+      "source": "../index.html#/doc/poluwruhqqicpylb"
+    },
+    {
+      "slug": "ucm0b05r6eignfis",
+      "order": 30,
+      "topic": "gallery",
+      "title": "请输入文本（2）",
+      "description": "妙妙图片集图片记录。",
+      "emoji": "🖼️",
+      "updated": "2026-10-25",
+      "readingTime": 1,
+      "tags": [
+        "妙妙图片集",
+        "语雀迁移"
+      ],
+      "file": "gallery/ucm0b05r6eignfis.md",
+      "source": "../index.html#/doc/ucm0b05r6eignfis"
+    }
+  ]
 }
