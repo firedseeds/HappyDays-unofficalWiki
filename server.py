@@ -428,6 +428,78 @@ def build_output_message(output: str) -> str:
     return output.splitlines()[-1] if output else "构建完成"
 
 
+def auto_commit(paths: list[Path], message: str) -> dict:
+    """Create a local Git commit for the saved files. Never push."""
+    if not (ROOT / ".git").exists():
+        return {"committed": False, "skipped": "当前目录不是 Git 仓库"}
+
+    relative_paths = []
+    for path in paths:
+        try:
+            relative = path.resolve().relative_to(ROOT.resolve()).as_posix()
+        except ValueError:
+            continue
+        if relative not in relative_paths:
+            relative_paths.append(relative)
+    if not relative_paths:
+        return {"committed": False, "skipped": "没有可提交的路径"}
+
+    try:
+        add_result = subprocess.run(
+            ["git", "add", "-A", "--", *relative_paths],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            timeout=30,
+        )
+        if add_result.returncode != 0:
+            detail = (add_result.stderr or add_result.stdout or "git add 失败").strip()
+            return {"committed": False, "error": detail[-1000:]}
+
+        diff_result = subprocess.run(
+            ["git", "diff", "--cached", "--quiet", "--", *relative_paths],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            timeout=30,
+        )
+        if diff_result.returncode == 0:
+            return {"committed": False, "skipped": "没有文件变更"}
+        if diff_result.returncode != 1:
+            return {"committed": False, "error": "无法检查 Git 暂存区"}
+
+        commit_result = subprocess.run(
+            ["git", "commit", "-m", message, "--", *relative_paths],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            timeout=30,
+        )
+        if commit_result.returncode != 0:
+            detail = (commit_result.stderr or commit_result.stdout or "git commit 失败").strip()
+            return {"committed": False, "error": detail[-1000:]}
+
+        hash_result = subprocess.run(
+            ["git", "rev-parse", "--short", "HEAD"],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            timeout=10,
+        )
+        commit_hash = (hash_result.stdout or "").strip() if hash_result.returncode == 0 else ""
+        return {"committed": True, "hash": commit_hash, "message": message}
+    except FileNotFoundError:
+        return {"committed": False, "skipped": "未找到 Git 命令"}
+    except subprocess.TimeoutExpired:
+        return {"committed": False, "error": "Git 操作超时"}
+
+
 def relocate_markdown_paths(markdown: str, old_path: Path, new_path: Path) -> str:
     if old_path.parent == new_path.parent:
         return markdown
@@ -568,10 +640,20 @@ def update_article(slug: str, payload: dict) -> dict:
                 raise
             raise ApiError(500, f"保存失败：{exc}")
 
+        commit_message = (
+            f"docs: 移动「{updated['title']}」到「{target_topic['name']}」（{author}）"
+            if moved
+            else f"docs: 更新「{updated['title']}」（{author}）"
+        )
+        commit = auto_commit(
+            [old_path, new_path, MANIFEST_PATH, DATA_PATH, EDITS_PATH],
+            commit_message,
+        )
         return {
             "ok": True,
             "article": updated,
             "message": build_output_message(output),
+            "commit": commit,
         }
 
 
@@ -635,10 +717,15 @@ def delete_article(slug: str) -> dict:
             except OSError as exc:
                 print(f"警告：无法清理图片目录 {image_trash}: {exc}", file=sys.stderr)
 
+        commit = auto_commit(
+            [path, MANIFEST_PATH, DATA_PATH, EDITS_PATH, image_source],
+            f"docs: 删除「{record['title']}」",
+        )
         return {
             "ok": True,
             "slug": slug,
             "message": build_output_message(output),
+            "commit": commit,
         }
 
 
@@ -774,10 +861,15 @@ def create_article(payload: dict) -> dict:
                 raise
             raise ApiError(500, f"创建失败：{exc}")
 
+        commit = auto_commit(
+            [path, MANIFEST_PATH, DATA_PATH, EDITS_PATH],
+            f"docs: 新建「{record['title']}」（{author}）",
+        )
         return {
             "ok": True,
             "article": record,
             "message": build_output_message(output),
+            "commit": commit,
         }
 
 

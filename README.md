@@ -67,6 +67,7 @@ python server.py
 - 删除文章及其本地图片
 - 删除空主题（没有直属文章和下级主题）
 - 保存时同步更新 Markdown front matter、`article/article.json`，并自动运行 `build.py` 生成 `assets/data.js`
+- 保存或删除成功后自动在本地创建 Git commit；不会自动 push
 - 启动 `server.py` 时自动执行一次构建
 - 构建失败时返回具体错误，并回滚 Markdown、清单和 `data.js`
 
@@ -97,6 +98,16 @@ python server.py --host 127.0.0.1 --port 8765
 | POST | `/api/preview` | 将 Markdown 渲染为预览 HTML |
 
 删除文章会同时清理 `assets/image/<slug>/` 和该文章的署名记录；删除主题要求该主题没有直属文章、没有下级主题，且目录为空。删除文章后 `order` 可以出现空号，但仍必须唯一。
+
+### 自动 Git 提交
+
+文章新建、更新、移动或删除成功后，`server.py` 会自动对本次变更的文件执行本地 `git commit`，包括文章 Markdown、`article/article.json`、`assets/data.js` 和 `article/edits.json`。
+
+- **只提交本地，不会执行 `git push`**
+- 只提交本次操作涉及的路径，不会提交工作区中其他未暂存改动
+- 提交信息包含操作类型、文章标题和署名，例如 `docs: 更新「简介」（zeyu_1145）`
+- 当前目录不是 Git 仓库、没有 Git 命令或提交失败时，文章仍会保存，编辑器会提示提交失败
+- 自动提交不会推送到 GitHub，需要时请手动执行 `git push`
 
 ### 署名记录
 
@@ -157,7 +168,7 @@ python server.py --host 127.0.0.1 --port 8765
 - 实时 Markdown 预览
 - 新建文章与添加主题
 - 每次保存填写署名，并查看署名历史
-- 保存后自动构建 `data.js`，失败自动回滚
+- 保存后自动构建 `data.js` 并创建本地 Git commit，失败自动回滚
 
 ---
 

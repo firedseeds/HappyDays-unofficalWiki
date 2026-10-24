@@ -217,6 +217,19 @@
     }, 3400);
   }
 
+  function resultMessage(result, fallback) {
+    var message = result.message || fallback;
+    if (result.commit && result.commit.committed) {
+      message += result.commit.hash
+        ? " · 已本地提交 " + result.commit.hash
+        : " · 已本地提交";
+    } else if (result.commit && result.commit.error) {
+      var detail = String(result.commit.error).split("\n")[0];
+      message += " · 本地提交失败：" + detail;
+    }
+    return message;
+  }
+
   function setFormAlert(message) {
     els.formAlert.textContent = message || "";
     els.formAlert.hidden = !message;
@@ -662,10 +675,10 @@
       return fetchState().then(function () {
         if (result.article && result.article.slug) {
           return openArticle(result.article.slug, true).then(function () {
-            showToast(result.message || "已保存并重新构建", "success");
+            showToast(resultMessage(result, "已保存并重新构建"), "success");
           });
         }
-        showToast(result.message || "已保存并重新构建", "success");
+        showToast(resultMessage(result, "已保存并重新构建"), "success");
       });
     }).catch(function (error) {
       setFormAlert(error.message);
@@ -689,7 +702,7 @@
     }).then(function (result) {
       state.dirty = false;
       return fetchState().then(function () {
-        showToast(result.message || "文章已删除", "success");
+        showToast(resultMessage(result, "文章已删除"), "success");
         if (state.articles.length) {
           return openArticle(state.articles[0].slug, true);
         }
