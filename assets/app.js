@@ -59,6 +59,7 @@
     readingProgress: document.getElementById("readingProgress"),
     readingPercent: document.getElementById("readingPercent"),
     backToTop: document.getElementById("backToTop"),
+    editBtn: document.getElementById("editBtn"),
     shareBtn: document.getElementById("shareBtn"),
     themeBtn: document.getElementById("themeBtn"),
     moreBtn: document.getElementById("moreBtn"),
@@ -415,6 +416,7 @@
     els.docTags.innerHTML = doc.tags.map(function (tag) {
       return '<span class="doc-tag">' + escapeHTML(tag) + "</span>";
     }).join("");
+    els.editBtn.href = "editor.html#" + encodeURIComponent(id);
 
     els.docBody.innerHTML = doc.content;
     els.docBody.querySelectorAll("thead th").forEach(function (headingCell) {
@@ -1243,6 +1245,16 @@
     renderSidebar();
     buildSearchIndex();
     bindEvents();
+
+    fetch("api/health", { cache: "no-store" }).then(function (response) {
+      return response.ok ? response.json() : null;
+    }).then(function (data) {
+      if (data && data.ok) {
+        els.editBtn.hidden = false;
+      }
+    }).catch(function () {
+      /* 静态托管或 file:// 下没有编辑服务，保持入口隐藏 */
+    });
 
     var storedCollapsed = readString(STORAGE.sidebar, "0") === "1";
     if (storedCollapsed && !isMobileNav()) {

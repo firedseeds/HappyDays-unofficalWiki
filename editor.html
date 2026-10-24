@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <title>内容管理 · HappyDays非官方文档</title>
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem('happydays-theme');
+        if (saved === 'dark' || saved === 'light') {
+          document.documentElement.setAttribute('data-theme', saved);
+        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      } catch (error) { /* 本地存储不可用时保持默认主题 */ }
+    })();
+  </script>
+  <link rel="stylesheet" href="assets/styles.css">
+  <link rel="stylesheet" href="assets/editor.css">
+</head>
+<body class="editor-page">
+  <div class="editor-app">
+    <header class="editor-topbar">
+      <a class="editor-brand" href="index.html" aria-label="返回 HappyDays非官方文档">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 36 36" focusable="false">
+            <defs>
+              <linearGradient id="editorBrandGradient" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#18b57f"></stop>
+                <stop offset="100%" stop-color="#078a5f"></stop>
+              </linearGradient>
+            </defs>
+            <rect width="36" height="36" rx="11" fill="url(#editorBrandGradient)"></rect>
+            <path d="M9.5 12.6c4.6-2.3 8.7-1.7 11 0v13.1c-2.3-1.7-6.4-2.3-11 0V12.6Z" fill="#fff" opacity=".97"></path>
+            <path d="M26.5 12.6c-4.6-2.3-8.7-1.7-11 0v13.1c2.3-1.7 6.4-2.3 11 0V12.6Z" fill="#fff" opacity=".68"></path>
+          </svg>
+        </span>
+        <span class="editor-brand-copy">
+          <span class="editor-brand-name">HappyDays</span>
+          <span class="editor-brand-suffix">内容管理</span>
+        </span>
+      </a>
+      <div class="editor-top-actions">
+        <span class="connection" id="connection"><i></i><span id="connectionText">连接中…</span></span>
+        <a class="editor-back" href="index.html">
+          <svg class="icon" aria-hidden="true"><use href="#i-arrow-left"></use></svg>
+          返回阅读
+        </a>
+      </div>
+    </header>
+
+    <div class="editor-layout">
+      <aside class="editor-sidebar" aria-label="文章列表">
+        <div class="editor-sidebar-head">
+          <span>文章库</span>
+          <span id="articleCount">—</span>
+        </div>
+        <div class="editor-sidebar-actions">
+          <button class="editor-btn editor-btn--primary" id="newArticleBtn" type="button" disabled>
+            <svg class="icon" aria-hidden="true"><use href="#i-plus"></use></svg>
+            新建文章
+          </button>
+          <button class="editor-btn" id="newTopicBtn" type="button" disabled>
+            <svg class="icon" aria-hidden="true"><use href="#i-folder-plus"></use></svg>
+            添加主题
+          </button>
+        </div>
+        <nav class="topic-list" id="topicList" aria-label="主题与文章"></nav>
+        <p class="editor-sidebar-note">保存后会自动运行 build.py，并重新生成 data.js。</p>
+      </aside>
+
+      <main class="editor-main">
+        <section class="editor-offline" id="offlineState" hidden>
+          <div class="offline-mark" aria-hidden="true">!</div>
+          <h1>需要启动编辑服务</h1>
+          <p>浏览器无法直接写入 Markdown。请在项目根目录运行本地 Python 服务，然后通过服务地址打开本页面。</p>
+          <pre><code>python server.py</code></pre>
+          <p class="offline-url">http://127.0.0.1:8000/editor.html</p>
+          <button class="editor-btn editor-btn--primary" id="retryConnection" type="button">重新连接</button>
+        </section>
+
+        <section class="editor-empty" id="emptyState" hidden>
+          <div class="empty-icon" aria-hidden="true">✎</div>
+          <h1>选择一篇文章开始编辑</h1>
+          <p>也可以新建文章，或先创建一个主题。</p>
+        </section>
+
+        <form class="article-form" id="articleForm" novalidate hidden>
+          <div class="form-head">
+            <div>
+              <p class="form-eyebrow" id="formMode">编辑文章</p>
+              <h1 class="form-heading" id="formHeading">—</h1>
+            </div>
+            <div class="form-actions">
+              <button class="editor-btn" id="previewBtn" type="button">
+                <svg class="icon" aria-hidden="true"><use href="#i-eye"></use></svg>
+                刷新预览
+              </button>
+              <button class="editor-btn editor-btn--primary" id="saveBtn" type="submit">
+                <svg class="icon" aria-hidden="true"><use href="#i-save"></use></svg>
+                <span id="saveLabel">保存并构建</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="form-alert" id="formAlert" hidden role="alert"></div>
+
+          <section class="meta-card" aria-label="文章元数据">
+            <label class="field field--wide">
+              <span>标题</span>
+              <input id="fieldTitle" name="title" type="text" maxlength="200" autocomplete="off" required>
+            </label>
+            <label class="field">
+              <span>主题</span>
+              <select id="fieldTopic" name="topicId"></select>
+              <small id="topicHint">主题创建后不能在这里更换</small>
+            </label>
+            <label class="field">
+              <span>图标</span>
+              <input id="fieldEmoji" name="emoji" type="text" maxlength="8" autocomplete="off" required>
+            </label>
+            <label class="field">
+              <span>Slug</span>
+              <input id="fieldSlug" name="slug" type="text" maxlength="64" autocomplete="off" pattern="[a-z0-9][a-z0-9-]*" required>
+              <small>小写字母、数字和连字符</small>
+            </label>
+            <label class="field">
+              <span>更新时间</span>
+              <input id="fieldUpdated" name="updated" type="date" required>
+            </label>
+            <label class="field">
+              <span>阅读分钟</span>
+              <input id="fieldReading" name="readingTime" type="number" min="1" max="240" required>
+            </label>
+            <label class="field">
+              <span>标签</span>
+              <input id="fieldTags" name="tags" type="text" autocomplete="off" placeholder="用逗号分隔">
+            </label>
+            <label class="field field--full">
+              <span>摘要</span>
+              <textarea id="fieldDescription" name="description" rows="2" maxlength="500" required></textarea>
+            </label>
+          </section>
+
+          <div class="editor-split">
+            <section class="editor-pane">
+              <div class="pane-head">
+                <span>Markdown 正文</span>
+                <span class="pane-hint">支持表格、提示框、代码块与站内链接</span>
+              </div>
+              <textarea id="fieldBody" name="body" spellcheck="false" aria-label="Markdown 正文"></textarea>
+            </section>
+            <section class="editor-pane editor-pane--preview">
+              <div class="pane-head">
+                <span>预览</span>
+                <span class="pane-hint" id="previewStatus">等待预览</span>
+              </div>
+              <article class="preview-body doc-body" id="previewBody">
+                <p class="preview-placeholder">选择文章或开始输入，预览会显示在这里。</p>
+              </article>
+            </section>
+          </div>
+
+          <footer class="form-footer">
+            <span>保存会更新 Markdown 与 article.json，并自动生成 data.js。</span>
+            <span class="form-shortcut">Ctrl / ⌘ + S</span>
+          </footer>
+        </form>
+      </main>
+    </div>
+  </div>
+
+  <dialog class="topic-dialog" id="topicDialog" aria-labelledby="topicDialogTitle">
+    <form id="topicForm">
+      <div class="dialog-head">
+        <div>
+          <p class="form-eyebrow">新增主题</p>
+          <h2 id="topicDialogTitle">创建主题</h2>
+        </div>
+        <button class="icon-button" id="closeTopicDialog" type="button" aria-label="关闭">
+          <svg class="icon" aria-hidden="true"><use href="#i-x"></use></svg>
+        </button>
+      </div>
+      <div class="dialog-body">
+        <label class="field">
+          <span>主题 ID</span>
+          <input id="topicId" name="id" type="text" maxlength="64" pattern="[a-z0-9][a-z0-9-]*" placeholder="handbook" required>
+          <small>对应 article/ 下的文件夹名</small>
+        </label>
+        <label class="field">
+          <span>显示名称</span>
+          <input id="topicName" name="name" type="text" maxlength="80" placeholder="员工手册" required>
+        </label>
+        <label class="field">
+          <span>主题说明</span>
+          <textarea id="topicDescription" name="description" rows="3" maxlength="300" placeholder="这个主题收录什么内容？" required></textarea>
+        </label>
+        <div class="form-alert" id="topicAlert" hidden role="alert"></div>
+      </div>
+      <div class="dialog-actions">
+        <button class="editor-btn" id="cancelTopic" type="button">取消</button>
+        <button class="editor-btn editor-btn--primary" id="createTopicBtn" type="submit">
+          <svg class="icon" aria-hidden="true"><use href="#i-folder-plus"></use></svg>
+          创建主题
+        </button>
+      </div>
+    </form>
+  </dialog>
+
+  <div class="editor-toast" id="editorToast" hidden role="status" aria-live="polite"></div>
+
+  <svg class="icon-sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+    <defs>
+      <symbol id="i-arrow-left" viewBox="0 0 24 24"><path d="M19 12H5m6 6-6-6 6-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+      <symbol id="i-folder-plus" viewBox="0 0 24 24"><path d="M3.5 7.8A1.8 1.8 0 0 1 5.3 6h4l2 2.2h7.4a1.8 1.8 0 0 1 1.8 1.8v8.2a1.8 1.8 0 0 1-1.8 1.8H5.3a1.8 1.8 0 0 1-1.8-1.8V7.8Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M12 12v5M9.5 14.5h5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+      <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.8 12s3.2-6 9.2-6 9.2 6 9.2 6-3.2 6-9.2 6-9.2-6-9.2-6Z" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="2.8" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+      <symbol id="i-save" viewBox="0 0 24 24"><path d="M5 4h11l3 3v13H5V4Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8 4v6h8V4M8 20v-6h8v6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
+      <symbol id="i-x" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+      <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="11" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M16 8V5.9A1.9 1.9 0 0 0 14.1 4H6.9A1.9 1.9 0 0 0 5 5.9v7.2A1.9 1.9 0 0 0 6.9 15H8" fill="none" stroke="currentColor" stroke-width="1.7"/></symbol>
+      <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M8.7 16.4a6.8 6.8 0 1 1 6.6 0v1.2H8.7v-1.2Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9.4 20.1h5.2M10.1 17.6h3.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+      <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M12 11v5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="7.8" r="1.05" fill="currentColor"/></symbol>
+      <symbol id="i-alert" viewBox="0 0 24 24"><path d="M10.5 4.3 2.9 18a1.7 1.7 0 0 0 1.5 2.5h15.2a1.7 1.7 0 0 0 1.5-2.5L13.5 4.3a1.7 1.7 0 0 0-3 0Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M12 9v4.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="16.8" r="1.05" fill="currentColor"/></symbol>
+    </defs>
+  </svg>
+
+  <script src="assets/editor.js"></script>
+</body>
+</html>

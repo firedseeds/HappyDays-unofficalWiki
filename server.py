@@ -1,0 +1,680 @@
+#!/usr/bin/env python3
+"""Local web editor for the HappyDays article library.
+
+Run:
+    python server.py
+
+Then open:
+    http://127.0.0.1:8000/editor.html
+
+The server binds to localhost only. It exposes a small JSON API for editing
+Markdown articles, creating topics, and previewing Markdown. Every successful
+write updates article/article.json, then runs build.py to regenerate
+assets/data.js.
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import re
+import subprocess
+import sys
+import threading
+from datetime import date
+from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+from pathlib import Path
+from urllib.parse import unquote, urlparse
+
+import build
+
+
+ROOT = Path(__file__).resolve().parent
+ARTICLE_DIR = ROOT / "article"
+MANIFEST_PATH = ARTICLE_DIR / "article.json"
+DATA_PATH = ROOT / "assets" / "data.js"
+BUILD_SCRIPT = ROOT / "build.py"
+MAX_REQUEST_BYTES = 2 * 1024 * 1024
+MAX_BODY_CHARS = 800_000
+SLUG_RE = re.compile(r"^[a-z0-9][a-z0-9-]{0,63}$")
+LOCK = threading.Lock()
+
+
+class ApiError(Exception):
+    def __init__(self, status: int, message: str):
+        super().__init__(message)
+        self.status = status
+        self.message = message
+
+
+def read_manifest() -> dict:
+    if not MANIFEST_PATH.is_file():
+        raise ApiError(500, "找不到 article/article.json")
+    try:
+        manifest = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise ApiError(500, f"无法读取 article/article.json: {exc}")
+    if not isinstance(manifest, dict):
+        raise ApiError(500, "article/article.json 格式无效")
+    if not isinstance(manifest.get("topics"), list) or not isinstance(manifest.get("articles"), list):
+        raise ApiError(500, "article/article.json 缺少 topics 或 articles")
+    return manifest
+
+
+def atomic_write(path: Path, text: str) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_name(f".{path.name}.tmp-{os.getpid()}-{threading.get_ident()}")
+    try:
+        with temporary.open("w", encoding="utf-8", newline="\n") as handle:
+            handle.write(text)
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.replace(temporary, path)
+    finally:
+        if temporary.exists():
+            try:
+                temporary.unlink()
+            except OSError:
+                pass
+
+
+def write_manifest(manifest: dict) -> None:
+    atomic_write(
+        MANIFEST_PATH,
+        json.dumps(manifest, ensure_ascii=False, indent=2) + "\n",
+    )
+
+
+def topic_map(manifest: dict) -> dict[str, dict]:
+    result = {}
+    for topic in manifest["topics"]:
+        if isinstance(topic, dict) and isinstance(topic.get("id"), str):
+            result[topic["id"]] = topic
+    return result
+
+
+def article_map(manifest: dict) -> dict[str, dict]:
+    result = {}
+    for article in manifest["articles"]:
+        if isinstance(article, dict) and isinstance(article.get("slug"), str):
+            result[article["slug"]] = article
+    return result
+
+
+def refresh_manifest(manifest: dict) -> None:
+    topics = [topic for topic in manifest["topics"] if isinstance(topic, dict)]
+    articles = [article for article in manifest["articles"] if isinstance(article, dict)]
+    topics.sort(key=lambda topic: (int(topic.get("order", 0)), str(topic.get("id"))))
+    articles.sort(key=lambda article: (int(article.get("order", 0)), str(article.get("slug"))))
+
+    counts: dict[str, int] = {}
+    for article in articles:
+        topic_id = article.get("topic")
+        counts[topic_id] = counts.get(topic_id, 0) + 1
+    for topic in topics:
+        topic["articleCount"] = counts.get(topic["id"], 0)
+
+    manifest["topics"] = topics
+    manifest["articles"] = articles
+    manifest["topicCount"] = len(topics)
+    manifest["articleCount"] = len(articles)
+    dates = [str(article["updated"]) for article in articles if article.get("updated")]
+    manifest["lastUpdated"] = max(dates) if dates else date.today().isoformat()
+
+
+def require_text(value: object, field: str, max_length: int = 500, multiline: bool = False) -> str:
+    if not isinstance(value, str):
+        raise ApiError(400, f"{field} 必须是字符串")
+    if "\x00" in value:
+        raise ApiError(400, f"{field} 包含非法字符")
+    value = value.replace("\r\n", "\n").replace("\r", "\n")
+    if not multiline:
+        value = re.sub(r"\s+", " ", value)
+    value = value.strip()
+    if not value:
+        raise ApiError(400, f"{field} 不能为空")
+    if len(value) > max_length:
+        raise ApiError(400, f"{field} 不能超过 {max_length} 个字符")
+    return value
+
+
+def require_slug(value: object, field: str = "slug") -> str:
+    slug = require_text(value, field, 64)
+    if not SLUG_RE.fullmatch(slug):
+        raise ApiError(400, f"{field} 只能包含小写字母、数字和连字符，且不能以连字符开头")
+    return slug
+
+
+def require_date(value: object) -> str:
+    if not isinstance(value, str) or not re.fullmatch(r"\d{4}-\d{2}-\d{2}", value):
+        raise ApiError(400, "updated 必须是 YYYY-MM-DD")
+    try:
+        date.fromisoformat(value)
+    except ValueError:
+        raise ApiError(400, "updated 不是有效日期")
+    return value
+
+
+def require_reading_time(value: object) -> int:
+    try:
+        number = int(value)
+    except (TypeError, ValueError):
+        raise ApiError(400, "readingTime 必须是整数")
+    if number < 1 or number > 240:
+        raise ApiError(400, "readingTime 必须在 1–240 分钟之间")
+    return number
+
+
+def require_tags(value: object) -> list[str]:
+    if isinstance(value, str):
+        values = value.split(",")
+    elif isinstance(value, list):
+        values = value
+    else:
+        raise ApiError(400, "tags 必须是字符串数组")
+    tags: list[str] = []
+    seen = set()
+    for item in values:
+        if not isinstance(item, str):
+            raise ApiError(400, "tags 中每一项都必须是字符串")
+        tag = re.sub(r"\s+", " ", item).strip()
+        if not tag:
+            continue
+        if len(tag) > 32:
+            raise ApiError(400, "单个标签不能超过 32 个字符")
+        if tag not in seen:
+            seen.add(tag)
+            tags.append(tag)
+    if len(tags) > 16:
+        raise ApiError(400, "标签最多 16 个")
+    return tags
+
+
+def require_body(value: object) -> str:
+    if not isinstance(value, str):
+        raise ApiError(400, "body 必须是字符串")
+    value = value.replace("\r\n", "\n").replace("\r", "\n").strip()
+    if not value:
+        raise ApiError(400, "正文不能为空")
+    if len(value) > MAX_BODY_CHARS:
+        raise ApiError(400, f"正文不能超过 {MAX_BODY_CHARS} 个字符")
+    return value
+
+
+def validate_article_fields(payload: dict, defaults: dict | None = None) -> dict:
+    defaults = defaults or {}
+
+    def get(key: str, fallback_key: str | None = None):
+        if key in payload:
+            return payload[key]
+        if fallback_key and fallback_key in defaults:
+            return defaults[fallback_key]
+        return defaults.get(key)
+
+    title = require_text(get("title"), "title", 200)
+    description = require_text(get("description"), "description", 500)
+    emoji = require_text(get("emoji"), "emoji", 8)
+    updated = require_date(get("updated"))
+    reading_time = require_reading_time(get("readingTime", "readingTime"))
+    tags = require_tags(get("tags"))
+    body = require_body(get("body"))
+    return {
+        "title": title,
+        "description": description,
+        "emoji": emoji,
+        "updated": updated,
+        "reading_time": reading_time,
+        "tags": tags,
+        "body": body,
+    }
+
+
+def compose_markdown(record: dict, topic: dict, body: str) -> str:
+    frontmatter = [
+        "---",
+        f"title: {json.dumps(record['title'], ensure_ascii=False)}",
+        f"description: {json.dumps(record['description'], ensure_ascii=False)}",
+        f"topic: {json.dumps(topic['name'], ensure_ascii=False)}",
+        f"topic_id: {json.dumps(topic['id'], ensure_ascii=False)}",
+        f"updated: {json.dumps(record['updated'], ensure_ascii=False)}",
+        f"reading_time: {record['readingTime']}",
+        f"emoji: {json.dumps(record['emoji'], ensure_ascii=False)}",
+        f"order: {record['order']}",
+        f"slug: {json.dumps(record['slug'], ensure_ascii=False)}",
+        f"source: \"../../index.html#/doc/{record['slug']}\"",
+        "tags:",
+    ]
+    for tag in record["tags"]:
+        frontmatter.append(f"  - {json.dumps(tag, ensure_ascii=False)}")
+    frontmatter.append("---")
+    return "\n".join(frontmatter) + f"\n\n# {record['title']}\n\n{body.strip()}\n"
+
+
+def article_path(record: dict) -> Path:
+    path = (ARTICLE_DIR / record["file"]).resolve()
+    try:
+        path.relative_to(ARTICLE_DIR.resolve())
+    except ValueError:
+        raise ApiError(500, "文章路径不在 article/ 内")
+    return path
+
+
+def read_article(slug: str) -> dict:
+    manifest = read_manifest()
+    records = article_map(manifest)
+    record = records.get(slug)
+    if record is None:
+        raise ApiError(404, "文章不存在")
+    path = article_path(record)
+    if not path.is_file():
+        raise ApiError(404, "文章 Markdown 文件不存在")
+    relative = path.relative_to(ROOT).as_posix()
+    try:
+        front, body = build.split_front_matter(path.read_text(encoding="utf-8"), relative)
+        body = build.strip_title_and_excerpt(body, front["title"], front["description"], relative)
+    except build.BuildError as exc:
+        raise ApiError(500, str(exc))
+    result = dict(record)
+    result["body"] = body
+    result["topicName"] = topic_map(manifest).get(record["topic"], {}).get("name", record["topic"])
+    return result
+
+
+def public_state(manifest: dict) -> dict:
+    topics = [dict(topic) for topic in manifest["topics"]]
+    topics.sort(key=lambda topic: (int(topic.get("order", 0)), topic["id"]))
+    articles = []
+    for article in sorted(manifest["articles"], key=lambda item: (int(item.get("order", 0)), item["slug"])):
+        item = dict(article)
+        item["topicName"] = next(
+            (topic["name"] for topic in topics if topic["id"] == item.get("topic")),
+            item.get("topic", ""),
+        )
+        articles.append(item)
+    return {
+        "site": manifest.get("site", {}),
+        "topics": topics,
+        "articles": articles,
+    }
+
+
+def snapshot_files(paths: list[Path]) -> dict[Path, bytes | None]:
+    snapshot = {}
+    for path in paths:
+        snapshot[path] = path.read_bytes() if path.is_file() else None
+    return snapshot
+
+
+def restore_files(snapshot: dict[Path, bytes | None]) -> None:
+    for path, content in snapshot.items():
+        if content is None:
+            if path.exists():
+                path.unlink()
+        else:
+            atomic_write(path, content.decode("utf-8"))
+
+
+def run_build() -> str:
+    try:
+        result = subprocess.run(
+            [sys.executable, str(BUILD_SCRIPT)],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            timeout=90,
+        )
+    except subprocess.TimeoutExpired:
+        raise ApiError(500, "build.py 超时")
+    if result.returncode != 0:
+        detail = (result.stderr or result.stdout or "未知错误").strip()
+        if len(detail) > 2000:
+            detail = detail[-2000:]
+        raise ApiError(400, "构建失败：" + detail)
+    return (result.stdout or "").strip()
+
+
+def build_output_message(output: str) -> str:
+    return output.splitlines()[-1] if output else "构建完成"
+
+
+def update_article(slug: str, payload: dict) -> dict:
+    with LOCK:
+        manifest = read_manifest()
+        records = article_map(manifest)
+        record = records.get(slug)
+        if record is None:
+            raise ApiError(404, "文章不存在")
+        topics = topic_map(manifest)
+        topic = topics.get(record["topic"])
+        if topic is None:
+            raise ApiError(500, "文章主题不存在")
+        fields = validate_article_fields(payload, {
+            "title": record.get("title"),
+            "description": record.get("description"),
+            "emoji": record.get("emoji"),
+            "updated": record.get("updated"),
+            "readingTime": record.get("readingTime"),
+            "tags": record.get("tags"),
+        })
+        body = fields.pop("body")
+        path = article_path(record)
+        file_snapshot = {path: path.read_text(encoding="utf-8") if path.is_file() else None}
+        manifest_snapshot = MANIFEST_PATH.read_bytes()
+        data_snapshot = DATA_PATH.read_bytes() if DATA_PATH.is_file() else None
+
+        updated = dict(record)
+        updated.update({
+            "title": fields["title"],
+            "description": fields["description"],
+            "emoji": fields["emoji"],
+            "updated": fields["updated"],
+            "readingTime": fields["reading_time"],
+            "tags": fields["tags"],
+        })
+        for index, item in enumerate(manifest["articles"]):
+            if item.get("slug") == slug:
+                manifest["articles"][index] = updated
+                break
+        refresh_manifest(manifest)
+        markdown = compose_markdown(updated, topic, body)
+
+        try:
+            atomic_write(path, markdown)
+            write_manifest(manifest)
+            output = run_build()
+        except Exception as exc:
+            restore_files(file_snapshot)
+            atomic_write(MANIFEST_PATH, manifest_snapshot.decode("utf-8"))
+            if data_snapshot is not None:
+                atomic_write(DATA_PATH, data_snapshot.decode("utf-8"))
+            elif DATA_PATH.exists():
+                DATA_PATH.unlink()
+            if isinstance(exc, ApiError):
+                raise
+            raise ApiError(500, f"保存失败：{exc}")
+
+        return {
+            "ok": True,
+            "article": updated,
+            "message": build_output_message(output),
+        }
+
+
+def create_article(payload: dict) -> dict:
+    with LOCK:
+        manifest = read_manifest()
+        topics = topic_map(manifest)
+        topic_id = require_text(payload.get("topicId"), "topicId", 64)
+        topic = topics.get(topic_id)
+        if topic is None:
+            raise ApiError(400, "选择的主題不存在")
+        slug = require_slug(payload.get("slug"))
+        if slug in article_map(manifest):
+            raise ApiError(409, "slug 已存在")
+        fields = validate_article_fields(payload)
+        body = fields.pop("body")
+        path = (ARTICLE_DIR / topic["directory"] / f"{slug}.md").resolve()
+        try:
+            path.relative_to(ARTICLE_DIR.resolve())
+        except ValueError:
+            raise ApiError(400, "文章路径无效")
+        if path.exists():
+            raise ApiError(409, "文章文件已存在")
+        next_order = max((int(item.get("order", 0)) for item in manifest["articles"]), default=0) + 1
+        record = {
+            "slug": slug,
+            "order": next_order,
+            "topic": topic_id,
+            "title": fields["title"],
+            "description": fields["description"],
+            "emoji": fields["emoji"],
+            "updated": fields["updated"],
+            "readingTime": fields["reading_time"],
+            "tags": fields["tags"],
+            "file": f"{topic['directory']}/{slug}.md",
+            "source": f"../index.html#/doc/{slug}",
+        }
+        manifest["articles"].append(record)
+        refresh_manifest(manifest)
+        markdown = compose_markdown(record, topic, body)
+        manifest_snapshot = MANIFEST_PATH.read_bytes()
+        data_snapshot = DATA_PATH.read_bytes() if DATA_PATH.is_file() else None
+
+        try:
+            atomic_write(path, markdown)
+            write_manifest(manifest)
+            output = run_build()
+        except Exception as exc:
+            if path.exists():
+                path.unlink()
+            atomic_write(MANIFEST_PATH, manifest_snapshot.decode("utf-8"))
+            if data_snapshot is not None:
+                atomic_write(DATA_PATH, data_snapshot.decode("utf-8"))
+            elif DATA_PATH.exists():
+                DATA_PATH.unlink()
+            if isinstance(exc, ApiError):
+                raise
+            raise ApiError(500, f"创建失败：{exc}")
+
+        return {
+            "ok": True,
+            "article": record,
+            "message": build_output_message(output),
+        }
+
+
+def create_topic(payload: dict) -> dict:
+    with LOCK:
+        manifest = read_manifest()
+        topic_id = require_slug(payload.get("id"), "id")
+        name = require_text(payload.get("name"), "name", 80)
+        description = require_text(payload.get("description"), "description", 300)
+        if topic_id in topic_map(manifest):
+            raise ApiError(409, "主题 ID 已存在")
+        existing_names = {str(topic.get("name", "")).casefold() for topic in manifest["topics"]}
+        if name.casefold() in existing_names:
+            raise ApiError(409, "主题名称已存在")
+        directory = ARTICLE_DIR / topic_id
+        if directory.exists():
+            raise ApiError(409, "主题目录已存在")
+        next_order = max((int(topic.get("order", 0)) for topic in manifest["topics"]), default=0) + 1
+        topic = {
+            "id": topic_id,
+            "name": name,
+            "description": description,
+            "directory": topic_id,
+            "order": next_order,
+            "articleCount": 0,
+        }
+        manifest["topics"].append(topic)
+        refresh_manifest(manifest)
+        manifest_snapshot = MANIFEST_PATH.read_bytes()
+        data_snapshot = DATA_PATH.read_bytes() if DATA_PATH.is_file() else None
+
+        try:
+            directory.mkdir(parents=True, exist_ok=False)
+            write_manifest(manifest)
+            output = run_build()
+        except Exception as exc:
+            if directory.exists():
+                try:
+                    directory.rmdir()
+                except OSError:
+                    pass
+            atomic_write(MANIFEST_PATH, manifest_snapshot.decode("utf-8"))
+            if data_snapshot is not None:
+                atomic_write(DATA_PATH, data_snapshot.decode("utf-8"))
+            elif DATA_PATH.exists():
+                DATA_PATH.unlink()
+            if isinstance(exc, ApiError):
+                raise
+            raise ApiError(500, f"创建主题失败：{exc}")
+
+        return {
+            "ok": True,
+            "topic": topic,
+            "message": build_output_message(output),
+        }
+
+
+def preview_markdown(payload: dict) -> dict:
+    body = require_body(payload.get("body"))
+    slug = payload.get("slug")
+    topic_id = payload.get("topicId")
+    manifest = read_manifest()
+    records = article_map(manifest)
+    record = records.get(slug) if isinstance(slug, str) else None
+    if record is not None:
+        current_file = article_path(record)
+    else:
+        topics = topic_map(manifest)
+        topic = topics.get(topic_id) if isinstance(topic_id, str) else None
+        if topic is None:
+            raise ApiError(400, "预览需要有效主题")
+        safe_slug = slug if isinstance(slug, str) and SLUG_RE.fullmatch(slug) else "preview"
+        current_file = (ARTICLE_DIR / topic["directory"] / f"{safe_slug}.md").resolve()
+
+    by_file = {}
+    for article in manifest["articles"]:
+        by_file[article_path(article)] = article
+    try:
+        renderer = build.MarkdownRenderer(by_file, current_file)
+        html = renderer.render(body)
+    except build.BuildError as exc:
+        raise ApiError(400, str(exc))
+    return {"html": html}
+
+
+class EditorHandler(SimpleHTTPRequestHandler):
+    server_version = "HappyDaysEditor/1.0"
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, directory=str(ROOT), **kwargs)
+
+    def log_message(self, format_string, *args):
+        sys.stderr.write(
+            f"[{self.log_date_time_string()}] {self.client_address[0]} "
+            f"{format_string % args}\n"
+        )
+
+    def end_headers(self):
+        self.send_header("Cache-Control", "no-store")
+        super().end_headers()
+
+    def send_json(self, status: int, payload: dict) -> None:
+        data = json.dumps(payload, ensure_ascii=False).encode("utf-8")
+        self.send_response(status)
+        self.send_header("Content-Type", "application/json; charset=utf-8")
+        self.send_header("Content-Length", str(len(data)))
+        self.end_headers()
+        self.wfile.write(data)
+
+    def read_json(self) -> dict:
+        try:
+            length = int(self.headers.get("Content-Length", "0"))
+        except ValueError:
+            raise ApiError(400, "Content-Length 无效")
+        if length <= 0:
+            raise ApiError(400, "请求体不能为空")
+        if length > MAX_REQUEST_BYTES:
+            raise ApiError(413, "请求体过大")
+        raw = self.rfile.read(length)
+        if len(raw) != length:
+            raise ApiError(400, "请求体不完整")
+        try:
+            payload = json.loads(raw.decode("utf-8"))
+        except (UnicodeDecodeError, json.JSONDecodeError):
+            raise ApiError(400, "请求体必须是合法 JSON")
+        if not isinstance(payload, dict):
+            raise ApiError(400, "请求体必须是 JSON 对象")
+        return payload
+
+    def do_GET(self) -> None:
+        path = unquote(urlparse(self.path).path)
+        try:
+            with LOCK:
+                if path == "/api/health":
+                    self.send_json(200, {"ok": True, "backend": "python"})
+                    return
+                if path == "/api/state":
+                    manifest = read_manifest()
+                    self.send_json(200, public_state(manifest))
+                    return
+                match = re.fullmatch(r"/api/articles/([a-z0-9-]+)", path)
+                if match:
+                    self.send_json(200, read_article(match.group(1)))
+                    return
+            super().do_GET()
+        except ApiError as exc:
+            self.send_json(exc.status, {"error": exc.message})
+        except Exception as exc:
+            self.send_json(500, {"error": f"服务器错误：{exc}"})
+
+    def do_PUT(self) -> None:
+        path = unquote(urlparse(self.path).path)
+        match = re.fullmatch(r"/api/articles/([a-z0-9-]+)", path)
+        try:
+            if not match:
+                raise ApiError(404, "接口不存在")
+            payload = self.read_json()
+            result = update_article(match.group(1), payload)
+            self.send_json(200, result)
+        except ApiError as exc:
+            self.send_json(exc.status, {"error": exc.message})
+        except Exception as exc:
+            self.send_json(500, {"error": f"服务器错误：{exc}"})
+
+    def do_POST(self) -> None:
+        path = unquote(urlparse(self.path).path)
+        try:
+            if path == "/api/articles":
+                payload = self.read_json()
+                self.send_json(200, create_article(payload))
+                return
+            if path == "/api/topics":
+                payload = self.read_json()
+                self.send_json(200, create_topic(payload))
+                return
+            if path == "/api/preview":
+                payload = self.read_json()
+                self.send_json(200, preview_markdown(payload))
+                return
+            raise ApiError(404, "接口不存在")
+        except ApiError as exc:
+            self.send_json(exc.status, {"error": exc.message})
+        except Exception as exc:
+            self.send_json(500, {"error": f"服务器错误：{exc}"})
+
+
+class EditorServer(ThreadingHTTPServer):
+    daemon_threads = True
+    allow_reuse_address = True
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description="Run the local HappyDays Wiki editor.")
+    parser.add_argument("--host", default="127.0.0.1", help="bind host (default: 127.0.0.1)")
+    parser.add_argument("--port", type=int, default=8000, help="bind port (default: 8000)")
+    args = parser.parse_args()
+    if args.host not in ("127.0.0.1", "localhost"):
+        print("警告：编辑器没有认证，建议只绑定 127.0.0.1。", file=sys.stderr)
+    try:
+        httpd = EditorServer((args.host, args.port), EditorHandler)
+    except OSError as exc:
+        print(f"无法启动服务：{exc}", file=sys.stderr)
+        return 1
+    print(f"HappyDays Wiki 编辑器已启动：http://{args.host}:{args.port}/editor.html")
+    print(f"阅读站点：http://{args.host}:{args.port}/")
+    print("按 Ctrl+C 停止。")
+    try:
+        httpd.serve_forever()
+    except KeyboardInterrupt:
+        print("\n正在停止…")
+    finally:
+        httpd.server_close()
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

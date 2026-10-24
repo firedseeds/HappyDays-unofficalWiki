@@ -1,6 +1,6 @@
 # HappyDays非官方文档
 
-一个类似语雀文档体验的 **纯静态团队知识库**。没有前端框架和第三方依赖，文章通过 `build.py` 生成 `assets/data.js`；双击 `index.html` 即可离线阅读，也可以直接部署到 GitHub Pages、Vercel、Netlify 或任意静态服务器。
+一个类似语雀文档体验的 **纯静态团队知识库**。没有前端框架和第三方依赖，文章通过 `build.py` 生成 `assets/data.js`；同时提供一个基于 Python 标准库的本地编辑服务，可以在浏览器中编辑文章、创建主题和预览 Markdown。
 
 页面以「左侧知识树 + 中间长文阅读 + 右侧页面目录」为核心，内置 8 篇可切换的示例文档、全文搜索、主题切换和响应式布局。
 
@@ -25,6 +25,65 @@ npx serve .
 ```
 
 然后访问 `http://localhost:8080`。
+
+如需在网页中编辑文章和添加主题，请运行编辑服务：
+
+```bash
+python server.py
+```
+
+然后访问 `http://127.0.0.1:8000/editor.html`。
+
+---
+
+## 网页端编辑
+
+`server.py` 使用 Python 标准库实现，不需要 Flask、Django 或其他后端依赖。
+
+```bash
+python server.py
+```
+
+默认地址：
+
+- 阅读站点：`http://127.0.0.1:8000/`
+- 内容管理：`http://127.0.0.1:8000/editor.html`
+
+编辑服务运行时，阅读页顶栏会出现「编辑」入口。
+
+### 支持的操作
+
+- 选择并编辑已有文章
+- 修改标题、摘要、Emoji、更新时间、阅读时长、标签和 Markdown 正文
+- 实时预览 Markdown
+- 新建文章并选择目标主题
+- 添加新主题（同时创建对应的 `article/<topic-id>/` 文件夹）
+- 保存时同步更新 Markdown front matter、`article/article.json`，并自动运行 `build.py` 生成 `assets/data.js`
+- 构建失败时返回具体错误，并回滚 Markdown、清单和 `data.js`
+
+### 安全说明
+
+编辑服务没有用户认证，默认只绑定 `127.0.0.1`，适合本地使用。不要把 `server.py` 直接暴露到公网，也不要在公共服务器上长期运行。
+
+停止服务：在终端按 `Ctrl+C`。
+
+可选参数：
+
+```bash
+python server.py --host 127.0.0.1 --port 8765
+```
+
+### API
+
+| 方法 | 路径 | 用途 |
+| --- | --- | --- |
+| GET | `/api/health` | 检查编辑服务是否可用 |
+| GET | `/api/state` | 获取主题和文章索引 |
+| GET | `/api/articles/<slug>` | 读取文章元数据与 Markdown 正文 |
+| PUT | `/api/articles/<slug>` | 保存已有文章 |
+| POST | `/api/articles` | 新建文章 |
+| POST | `/api/topics` | 新建主题 |
+| POST | `/api/preview` | 将 Markdown 渲染为预览 HTML |
 
 ---
 
@@ -54,6 +113,14 @@ npx serve .
 - 无障碍语义、键盘焦点管理、`prefers-reduced-motion` 支持
 - 无外部字体、图片或 CDN 请求，完全离线可用
 
+### 网页端编辑
+
+- 本地 Python 编辑服务，无需数据库
+- 文章元数据与 Markdown 正文编辑
+- 实时 Markdown 预览
+- 新建文章与添加主题
+- 保存后自动构建 `data.js`，失败自动回滚
+
 ---
 
 ## 目录结构
@@ -61,11 +128,15 @@ npx serve .
 ```text
 .
 ├─ index.html            # 页面骨架、图标 sprite、阅读器 UI
+├─ editor.html           # 本地内容管理界面
 ├─ build.py              # 从 article/ 生成 assets/data.js
+├─ server.py             # 本地编辑服务与 JSON API
 ├─ assets/
 │  ├─ styles.css         # 设计系统、布局、组件、响应式与打印样式
+│  ├─ editor.css         # 内容管理界面样式
 │  ├─ data.js            # 由 build.py 生成的文章数据（请勿直接编辑）
-│  └─ app.js             # 路由、搜索、目录、主题与交互
+│  ├─ app.js             # 路由、搜索、目录、主题与交互
+│  └─ editor.js          # 内容管理界面逻辑
 ├─ article/
 │  ├─ article.json       # 主题、文章索引与元数据的机器可读清单
 │  ├─ start/             # 开始使用
@@ -238,7 +309,7 @@ npx serve .
 python build.py
 ```
 
-要求 Python 3.9+，无第三方依赖。脚本会：
+要求 Python 3.10+，无第三方依赖。脚本会：
 
 - 读取 `article/article.json` 中的主题、站点信息和文章顺序
 - 扫描 `article/<topic>/<slug>.md`，解析 YAML front matter
@@ -390,10 +461,13 @@ python build.py
 
 **Nginx / Apache**：直接把目录作为站点根目录。由于使用 hash 路由，不需要额外的 `try_files` 或 rewrite 规则。
 
+静态部署时不会包含可用的编辑 API，阅读页的「编辑」入口会自动隐藏；如需编辑，请在本地运行 `python server.py`。不要在公网静态服务器上直接部署 `server.py`。
+
 ---
 
 ## 说明
 
 - 搜索、主题、目录折叠等状态保存在浏览器 `localStorage` 中，不会上传到服务器。
-- 邀请链接、评论、在线编辑等需要后端的能力未包含在这个静态版本中。
+- 编辑服务默认只监听本机，没有账号与权限系统；不要将其暴露到公网。
+- 邀请链接、评论、在线多人协作等需要完整后端的能力未包含在这个版本中。
 - 全部示例文案与人物均为虚构，可自由替换。

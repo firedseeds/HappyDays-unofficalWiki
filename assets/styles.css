@@ -860,6 +860,14 @@ kbd {
   color: var(--text);
 }
 
+.edit-link {
+  color: var(--accent-strong);
+}
+
+.edit-link:hover {
+  color: var(--accent-strong);
+}
+
 .top-action .icon {
   width: 16px;
   height: 16px;
