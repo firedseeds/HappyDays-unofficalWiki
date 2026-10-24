@@ -453,7 +453,28 @@ def git_path_is_committable(relative: str) -> bool:
     return result.returncode == 0 and bool(result.stdout.strip())
 
 
-def auto_commit(paths: list[Path], message: str) -> dict:
+def git_config_value(key: str) -> str:
+    try:
+        result = subprocess.run(
+            ["git", "config", "--get", key],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            timeout=10,
+        )
+    except (FileNotFoundError, subprocess.TimeoutExpired):
+        return ""
+    return (result.stdout or "").strip() if result.returncode == 0 else ""
+
+
+def clean_git_identity(value: str | None, fallback: str) -> str:
+    cleaned = " ".join(str(value or "").split()).strip()
+    return cleaned or fallback
+
+
+def auto_commit(paths: list[Path], message: str, author: str | None = None) -> dict:
     """Create a local Git commit for the saved files. Never push."""
     if not (ROOT / ".git").exists():
         return {"committed": False, "skipped": "当前目录不是 Git 仓库"}
@@ -472,7 +493,16 @@ def auto_commit(paths: list[Path], message: str) -> dict:
     if not relative_paths:
         return {"committed": False, "skipped": "没有可提交的路径"}
 
-    git_options = ["-c", "core.autocrlf=false", "-c", "core.safecrlf=false"]
+    git_name = clean_git_identity(author, clean_git_identity(git_config_value("user.name"), "HappyDays Wiki"))
+    git_email = clean_git_identity(git_config_value("user.email"), "happydays@localhost")
+    if "@" not in git_email:
+        git_email = "happydays@localhost"
+    git_options = [
+        "-c", "core.autocrlf=false",
+        "-c", "core.safecrlf=false",
+        "-c", f"user.name={git_name}",
+        "-c", f"user.email={git_email}",
+    ]
     try:
         add_result = subprocess.run(
             ["git", *git_options, "add", "-A", "--", *relative_paths],
@@ -681,6 +711,7 @@ def update_article(slug: str, payload: dict) -> dict:
         commit = auto_commit(
             [old_path, new_path, MANIFEST_PATH, DATA_PATH, EDITS_PATH],
             commit_message,
+            author,
         )
         return {
             "ok": True,
@@ -897,6 +928,7 @@ def create_article(payload: dict) -> dict:
         commit = auto_commit(
             [path, MANIFEST_PATH, DATA_PATH, EDITS_PATH],
             f"docs: 新建「{record['title']}」（{author}）",
+            author,
         )
         return {
             "ok": True,

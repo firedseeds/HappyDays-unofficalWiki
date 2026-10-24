@@ -108,6 +108,7 @@ python server.py --host 127.0.0.1 --port 8765
 - **只提交本地，不会执行 `git push`**
 - 只提交本次操作涉及的路径，不会提交工作区中其他未暂存改动
 - 提交信息包含操作类型、文章标题和署名，例如 `docs: 更新「简介」（zeyu_1145）`
+- 自动提交使用本次署名作为 Git 作者；如果 Git 未配置 `user.name` / `user.email`，会使用署名和 `happydays@localhost` 作为兜底，不会修改仓库的 Git 配置
 - 当前目录不是 Git 仓库、没有 Git 命令或提交失败时，文章仍会保存，编辑器会提示提交失败
 - 自动提交不会推送到 GitHub，需要时请手动执行 `git push`
 
