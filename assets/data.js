@@ -70,6 +70,14 @@ window.HAPPYDAYS_WIKI = (function () {
       parentId: null,
       order: 6,
       docs: ["gallery-1", "gallery-2"]
+    },
+    {
+      id: "godman",
+      name: "神人堂",
+      description: "服务器内各种神人",
+      parentId: null,
+      order: 7,
+      docs: []
     }
   ];
 

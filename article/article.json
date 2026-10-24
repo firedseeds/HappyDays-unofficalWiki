@@ -7,7 +7,7 @@
     "tagline": "团队知识库",
     "language": "zh-CN"
   },
-  "topicCount": 8,
+  "topicCount": 9,
   "articleCount": 30,
   "lastUpdated": "2026-10-25",
   "topics": [
@@ -90,6 +90,14 @@
       "emoji": "🖼️",
       "articleCount": 2,
       "parentId": null
+    },
+    {
+      "id": "godman",
+      "name": "神人堂",
+      "description": "服务器内各种神人",
+      "directory": "godman",
+      "order": 7,
+      "articleCount": 0
     }
   ],
   "articles": [
