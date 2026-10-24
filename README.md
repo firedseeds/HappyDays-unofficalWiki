@@ -119,7 +119,7 @@ python server.py --host 127.0.0.1 --port 8765
 }
 ```
 
-每次保存文章都会追加一条记录，`action` 为 `create`、`update` 或 `move`；移动文章时额外包含 `fromTopic`。编辑器会按时间倒序显示署名历史。
+每次保存文章都会追加一条记录，`action` 为 `create`、`update` 或 `move`；移动文章时额外包含 `fromTopic`。编辑器和阅读页都会显示署名历史：阅读页头部显示最后编辑者，正文末尾显示完整记录。
 
 ---
 
@@ -127,6 +127,7 @@ python server.py --host 127.0.0.1 --port 8765
 
 ### 阅读与导航
 
+- 文章头部显示最后编辑署名，文末显示完整署名记录
 - 知识库目录树，按主题分组，支持任意层级、可折叠并记住状态
 - 基于 URL hash 的文档路由，例如 `#/doc/<slug>`，可直接分享、刷新和前进后退
 - 自动生成右侧页面目录（TOC），滚动时高亮当前章节
@@ -365,7 +366,7 @@ python build.py
 - 扫描 `article/<topic>/<slug>.md`，解析 YAML front matter
 - 校验主题目录、slug、order、标题、摘要、标签等是否与清单一致
 - 将 Markdown 转换为站点使用的 HTML
-- 生成 `assets/data.js`，包含 `categories`、`docs`、`allIds` 和 `site`
+- 生成 `assets/data.js`，包含 `categories`、`docs`、`allIds` 和 `site`；每篇文档同时带有 `signatures` 署名历史
 
 构建失败时会输出具体文件和字段，修复后重新运行即可；校验失败时不会改写 `assets/data.js`。
 

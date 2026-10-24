@@ -1124,6 +1124,83 @@ kbd {
   line-height: 1;
 }
 
+.doc-signatures {
+  margin-top: 34px;
+  padding: 15px 18px;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  background: var(--surface);
+  box-shadow: var(--shadow-xs);
+}
+
+.doc-signatures-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 5px;
+  color: var(--text-tertiary);
+  font-size: 10px;
+  font-weight: 650;
+}
+
+.doc-signatures-head span:last-child {
+  color: var(--text-faint);
+  font-size: 9px;
+  font-weight: 400;
+}
+
+.doc-signature-list {
+  display: flex;
+  max-height: 240px;
+  flex-direction: column;
+  gap: 0;
+  margin: 0;
+  padding: 0 4px 0 0;
+  overflow-y: auto;
+  list-style: none;
+  scrollbar-width: thin;
+}
+
+.doc-signature-item {
+  padding: 9px 0;
+  border-top: 1px solid var(--border);
+}
+
+.doc-signature-item:first-child {
+  border-top: 0;
+}
+
+.doc-signature-item-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.doc-signature-item-head strong {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 650;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.doc-signature-item-head time {
+  flex: none;
+  color: var(--text-faint);
+  font-size: 9.5px;
+  font-variant-numeric: tabular-nums;
+}
+
+.doc-signature-item-meta {
+  margin-top: 2px;
+  color: var(--text-tertiary);
+  font-size: 10px;
+}
+
 .doc-body {
   padding-top: 35px;
   color: var(--text-body);

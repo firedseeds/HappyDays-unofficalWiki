@@ -41,6 +41,73 @@
     }
   }
 
+  function formatSignatureTime(value) {
+    var parsed = new Date(value);
+    if (Number.isNaN(parsed.getTime())) {
+      return value || "";
+    }
+    return parsed.toLocaleString("zh-CN", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+  }
+
+  function signatureActionLabel(record) {
+    if (record.action === "create") {
+      return "创建文章";
+    }
+    if (record.action === "move") {
+      if (record.fromTopic && record.topic) {
+        return "从「" + record.fromTopic + "」移动到「" + record.topic + "」";
+      }
+      return "移动文章";
+    }
+    return "更新文章";
+  }
+
+  function renderDocSignatures(signatures) {
+    var records = (signatures || []).slice().reverse();
+    var latest = records[0];
+    els.docAuthorMeta.hidden = false;
+    if (latest) {
+      els.docAuthor.textContent = "最后编辑：" + (latest.author || "匿名");
+      els.docAuthor.title = formatSignatureTime(latest.at) + " · " + signatureActionLabel(latest);
+      els.colophonAuthor.textContent = latest.author || "匿名";
+    } else {
+      els.docAuthor.textContent = "最后编辑：" + (site.team || "HappyDays 团队");
+      els.docAuthor.title = "尚无个人署名记录";
+      els.colophonAuthor.textContent = site.team || "HappyDays 团队";
+    }
+    els.docSignatures.hidden = !records.length;
+    els.docSignatureCount.textContent = records.length ? records.length + " 次编辑" : "";
+    els.docSignatureList.innerHTML = "";
+    if (!records.length) {
+      return;
+    }
+    records.forEach(function (record) {
+      var item = document.createElement("li");
+      item.className = "doc-signature-item";
+      var head = document.createElement("div");
+      head.className = "doc-signature-item-head";
+      var author = document.createElement("strong");
+      author.textContent = record.author || "匿名";
+      var time = document.createElement("time");
+      time.textContent = formatSignatureTime(record.at);
+      time.dateTime = record.at || "";
+      head.appendChild(author);
+      head.appendChild(time);
+      var meta = document.createElement("div");
+      meta.className = "doc-signature-item-meta";
+      meta.textContent = signatureActionLabel(record);
+      item.appendChild(head);
+      item.appendChild(meta);
+      els.docSignatureList.appendChild(item);
+    });
+  }
+
   var CATEGORY_BY_ID = {};
   categories.forEach(function (category) {
     CATEGORY_BY_ID[category.id] = category;
@@ -71,6 +138,12 @@
     docUpdated: document.getElementById("docUpdated"),
     docReading: document.getElementById("docReading"),
     docTags: document.getElementById("docTags"),
+    docAuthorMeta: document.getElementById("docAuthorMeta"),
+    docAuthor: document.getElementById("docAuthor"),
+    docSignatures: document.getElementById("docSignatures"),
+    docSignatureCount: document.getElementById("docSignatureCount"),
+    docSignatureList: document.getElementById("docSignatureList"),
+    colophonAuthor: document.getElementById("colophonAuthor"),
     docBody: document.getElementById("docBody"),
     prevDoc: document.getElementById("prevDoc"),
     prevDocTitle: document.getElementById("prevDocTitle"),
@@ -539,6 +612,7 @@
     els.docTags.innerHTML = doc.tags.map(function (tag) {
       return '<span class="doc-tag">' + escapeHTML(tag) + "</span>";
     }).join("");
+    renderDocSignatures(doc.signatures || []);
     els.editBtn.href = "editor.html#" + encodeURIComponent(id);
 
     els.docBody.innerHTML = doc.content;
@@ -593,6 +667,9 @@
     els.docUpdated.textContent = "等待内容";
     els.docReading.textContent = "0 篇文章";
     els.docTags.innerHTML = "";
+    renderDocSignatures([]);
+    els.docAuthorMeta.hidden = true;
+    els.docSignatures.hidden = true;
     els.editBtn.href = "editor.html";
 
     els.docBody.innerHTML =

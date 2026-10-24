@@ -175,11 +175,23 @@
                   <svg class="icon" aria-hidden="true"><use href="#i-read"></use></svg>
                   <span id="docReading">约 6 分钟阅读</span>
                 </span>
+                <span class="meta-item" id="docAuthorMeta" hidden>
+                  <svg class="icon" aria-hidden="true"><use href="#i-edit"></use></svg>
+                  <span id="docAuthor">最后编辑：HappyDays 团队</span>
+                </span>
               </div>
               <div class="doc-tags" id="docTags"></div>
             </header>
 
             <div class="doc-body" id="docBody"></div>
+
+            <section class="doc-signatures" id="docSignatures" aria-label="署名记录" hidden>
+              <div class="doc-signatures-head">
+                <span>署名记录</span>
+                <span id="docSignatureCount"></span>
+              </div>
+              <ol class="doc-signature-list" id="docSignatureList"></ol>
+            </section>
 
             <footer class="doc-footer">
               <nav class="page-nav" aria-label="上一篇与下一篇">
@@ -202,7 +214,7 @@
               <p class="doc-colophon">
                 <span>HappyDays非官方文档</span>
                 <span class="colophon-dot" aria-hidden="true"></span>
-                <span>不知道由谁维护</span>
+                <span>由 <span id="colophonAuthor">HappyDays 团队</span> 维护</span>
                 <span class="colophon-dot" aria-hidden="true"></span>
                 <span id="colophonUpdated">最后更新于 2026.10.21</span>
               </p>

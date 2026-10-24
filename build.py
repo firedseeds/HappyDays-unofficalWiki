@@ -23,6 +23,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 ARTICLE_DIR = ROOT / "article"
 MANIFEST_PATH = ARTICLE_DIR / "article.json"
+EDITS_PATH = ARTICLE_DIR / "edits.json"
 OUTPUT_PATH = ROOT / "assets" / "data.js"
 
 REQUIRED_FRONT_MATTER = (
@@ -769,6 +770,7 @@ def build_manifest(articles: list[dict], topics: list[dict], site: dict) -> str:
                 f"      updated: {js_string(article['updated'])},",
                 f"      reading: {article['reading']},",
                 f"      tags: {js_string(article['tags'])},",
+                f"      signatures: {js_string(article.get('signatures', []))},",
                 f"      content: {js_template(article['content'])}",
                 "    }" + ("," if article_index < len(articles) - 1 else ""),
             ]
@@ -812,6 +814,18 @@ def site_origin(site: dict) -> str:
     if not domain.startswith(("http://", "https://")):
         domain = "https://" + domain
     return domain
+
+
+def read_signatures() -> dict:
+    if not EDITS_PATH.is_file():
+        return {}
+    try:
+        data = json.loads(EDITS_PATH.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        fail(f"无法读取 article/edits.json: {exc}")
+    if not isinstance(data, dict) or not isinstance(data.get("articles"), dict):
+        fail("article/edits.json 格式无效")
+    return data["articles"]
 
 
 def sync_article_sources(manifest: dict, site: dict) -> int:
@@ -860,10 +874,13 @@ def main() -> int:
                 fail(f"article/article.json 的 site.{field} 必须是非空字符串")
         sync_article_sources(manifest, site)
         topic_by_id = {t["id"]: t for t in topics}
+        signatures = read_signatures()
         articles = []
         for manifest_article in manifest["articles"]:
             path = (ARTICLE_DIR / manifest_article["file"]).resolve()
-            articles.append(parse_article(path, manifest_article, topic_by_id, article_by_file))
+            parsed = parse_article(path, manifest_article, topic_by_id, article_by_file)
+            parsed["signatures"] = signatures.get(parsed["slug"], [])
+            articles.append(parsed)
         articles.sort(key=lambda article: article["order"])
         orders = [article["order"] for article in articles]
         if any(not isinstance(order, int) or order < 1 for order in orders):
