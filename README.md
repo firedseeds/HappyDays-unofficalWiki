@@ -1,6 +1,6 @@
 # HappyDays非官方文档
 
-一个类似语雀文档体验的 **纯静态团队知识库**。没有构建步骤、没有第三方依赖，双击 `index.html` 即可离线阅读，也可以直接部署到 GitHub Pages、Vercel、Netlify 或任意静态服务器。
+一个类似语雀文档体验的 **纯静态团队知识库**。没有前端框架和第三方依赖，文章通过 `build.py` 生成 `assets/data.js`；双击 `index.html` 即可离线阅读，也可以直接部署到 GitHub Pages、Vercel、Netlify 或任意静态服务器。
 
 页面以「左侧知识树 + 中间长文阅读 + 右侧页面目录」为核心，内置 8 篇可切换的示例文档、全文搜索、主题切换和响应式布局。
 
@@ -62,9 +62,10 @@ npx serve .
 ```text
 .
 ├─ index.html            # 页面骨架、图标 sprite、阅读器 UI
+├─ build.py              # 从 article/ 生成 assets/data.js
 ├─ assets/
 │  ├─ styles.css         # 设计系统、布局、组件、响应式与打印样式
-│  ├─ data.js            # 分类、文档元数据与全部正文
+│  ├─ data.js            # 由 build.py 生成的文章数据（请勿直接编辑）
 │  └─ app.js             # 路由、搜索、目录、主题与交互
 ├─ article/
 │  ├─ article.json       # 主题、文章索引与元数据的机器可读清单
@@ -230,81 +231,127 @@ npx serve .
 
 ---
 
-## 添加你自己的文档
+## 构建 data.js
 
-所有内容都在 `assets/data.js` 中。
+`article/` 是文章源目录，`assets/data.js` 是构建产物，请不要直接编辑生成文件。
 
-### 1. 添加主题（分类）
-
-```js
-var categories = [
-  // ...
-  {
-    id: "handbook",
-    name: "员工手册",
-    description: "入职、假期与日常制度。",
-    docs: ["onboarding"]
-  }
-];
+```bash
+python build.py
 ```
 
-### 2. 添加文章
+要求 Python 3.9+，无第三方依赖。脚本会：
 
-```js
-var docs = {
-  // ...
-  onboarding: {
-    title: "入职第一周",
-    emoji: "🌿",
-    category: "handbook",
-    excerpt: "账号、设备与第一周日程，一页说清楚。",
-    updated: "2026-11-01",
-    reading: 5,
-    tags: ["入职", "新成员"],
-    content: `
-      <p>这是一个普通段落。</p>
+- 读取 `article/article.json` 中的主题、站点信息和文章顺序
+- 扫描 `article/<topic>/<slug>.md`，解析 YAML front matter
+- 校验主题目录、slug、order、标题、摘要、标签等是否与清单一致
+- 将 Markdown 转换为站点使用的 HTML
+- 生成 `assets/data.js`，包含 `categories`、`docs`、`allIds` 和 `site`
 
-      <h2>第一天</h2>
-      <p>领取设备，加入群组，认识你的伙伴。</p>
-
-      <div class="callout callout--tip">
-        <span class="callout-icon">
-          <svg class="icon" aria-hidden="true"><use href="#i-bulb"></use></svg>
-        </span>
-        <div class="callout-content">
-          <p class="callout-title">小提示</p>
-          <p>有任何问题，随时在群里提问。</p>
-        </div>
-      </div>
-    `
-  }
-};
-```
-
-> `category` 必须对应 `categories` 中的某个 `id`，并确保该分类的 `docs` 数组包含新文档 ID。文档顺序即上一篇 / 下一篇的顺序。
->
-> 导出 Markdown 时，请将文章放入 `article/<category-id>/<slug>.md`，并同步更新 `article/article.json` 的 `topics`、文章 `topic` 与 `file` 字段。
+构建失败时会输出具体文件和字段，修复后重新运行即可；校验失败时不会改写 `assets/data.js`。
 
 ---
 
-## 可复用的内容组件
+## 新增或修改文章
 
-正文支持以下 HTML 组件，样式均已内置：
+### 1. 确认主题目录
 
-| 组件 | 用法 |
+每篇文章必须位于 `article/<topic-id>/` 下。主题 ID 与目录名必须一致，例如：
+
+```text
+article/start/quickstart.md
+article/product/faq.md
+```
+
+新增主题时，同时在 `article/article.json` 的 `topics` 中添加记录，并设置 `id`、`name`、`description`、`directory`、`order` 和 `articleCount`。
+
+### 2. 编写 Markdown 文件
+
+文件名为 `<slug>.md`，开头必须包含 front matter：
+
+```md
+---
+title: "入职第一周"
+description: "账号、设备与第一周日程，一页说清楚。"
+topic: "员工手册"
+topic_id: "handbook"
+updated: "2026-11-01"
+reading_time: 5
+emoji: "🌿"
+order: 9
+slug: "onboarding"
+source: "../../index.html#/doc/onboarding"
+tags:
+  - "入职"
+  - "新成员"
+---
+
+# 入职第一周
+
+*账号、设备与第一周日程，一页说清楚。*
+
+## 第一天
+
+领取设备，加入群组，认识你的伙伴。
+```
+
+说明：
+
+- 一级标题必须与 front matter 的 `title` 一致
+- 一级标题后的斜体摘要行可选；与 `description` 相同时会被构建脚本移除，避免与页面头部重复
+- `topic_id` 必须对应 `article.json` 中的主题
+- `order` 为全站阅读顺序，必须从 `1` 开始连续递增
+- Markdown 中的相对 `.md` 链接会自动转换为 `#/doc/<slug>` 站内路由
+
+### 3. 更新 article.json
+
+在 `articles` 中新增或修改文章记录，并同步更新 `articleCount`、`topics[].articleCount` 和 `lastUpdated`。文章记录至少包含：
+
+```json
+{
+  "slug": "onboarding",
+  "order": 9,
+  "topic": "handbook",
+  "title": "入职第一周",
+  "description": "账号、设备与第一周日程，一页说清楚。",
+  "emoji": "🌿",
+  "updated": "2026-11-01",
+  "readingTime": 5,
+  "tags": ["入职", "新成员"],
+  "file": "handbook/onboarding.md",
+  "source": "../index.html#/doc/onboarding"
+}
+```
+
+front matter 与 `article.json` 中的重复字段必须一致；不一致时构建会失败。
+
+### 4. 生成并检查
+
+```bash
+python build.py
+```
+
+构建成功后会更新 `assets/data.js`。随后打开 `index.html` 检查标题、目录、站内链接、代码块和表格的显示效果。
+
+---
+
+## Markdown 转换规则
+
+构建脚本会把以下 Markdown 转换为站点组件：
+
+| Markdown | 生成结果 |
 | --- | --- |
-| 提示框 | `.callout.callout--tip` / `--note` / `--warning` |
-| 链接卡片 | `.card-grid` + `.link-card` |
-| 步骤条 | `ol.steps` |
-| 检查清单 | `ul.checklist` |
-| 表格 | `.table-wrap > table` |
-| 代码块 | `.code-block` + `.code-head` + `pre > code` |
-| FAQ 折叠 | `details.faq-item` + `summary.faq-question` |
-| 时间线 | `ul.timeline` + `.timeline-item` |
-| 色板 | `.swatch-grid` + `.swatch` |
-| 按钮预览 | `.button-demo` + `.demo-btn` |
+| `# 标题` | 文章 H1；构建时移除，由页面头部展示 |
+| `##` / `###` | 正文标题，并进入右侧目录 |
+| `**粗体**` / `*斜体*` | `<strong>` / `<em>` |
+| `` `行内代码` `` | `<code>` |
+| `- 项目` | 无序列表 |
+| `1. 项目` | 步骤列表（`ol.steps`） |
+| 管道表格 | `.table-wrap` 表格 |
+| 围栏代码块（三反引号） | 带复制按钮的代码块 |
+| `> [!TIP]` / `[!NOTE]` / `[!WARNING]` | 提示框 |
+| `[文字](./other.md)` | `#/doc/other` 站内链接 |
 
-代码块中的 `<`、`>`、`&` 需要写成 `&lt;`、`&gt;`、`&amp;`，避免被浏览器解析为标签。
+正文按 Markdown 解析，原始 HTML 会被转义显示；自定义 HTML 组件请改用标准 Markdown 表达。
 
 ---
 
@@ -312,9 +359,12 @@ var docs = {
 
 品牌名分布在：
 
-- `index.html` 的标题、`brand-name`、侧边栏账号信息
-- `assets/data.js` 末尾的 `site` 配置
+- `index.html` 的标题、`brand-name` 和侧边栏信息
+- `article/article.json` 的 `site` 配置
+- Markdown 文章正文与 README
 - `assets/styles.css` 顶部的 CSS 变量
+
+`assets/data.js` 中的 `site` 由 `article.json` 生成，修改后需要重新运行 `python build.py`。
 
 主色只需改这几项：
 
@@ -333,11 +383,11 @@ var docs = {
 
 ## 部署
 
-这是一个无构建项目，将整个目录上传到任意静态托管即可。
+这是一个运行时无框架依赖的静态项目。修改 `article/` 后先运行 `python build.py` 更新 `assets/data.js`，再把整个目录上传到任意静态托管即可。
 
 **GitHub Pages**：把文件推到仓库 → Settings → Pages → 选择分支根目录。
 
-**Netlify / Vercel**：导入仓库，构建命令留空，发布目录填 `.`。
+**Netlify / Vercel**：导入仓库，构建命令留空，发布目录填 `.`（也可将构建命令设为 `python build.py`）。
 
 **Nginx / Apache**：直接把目录作为站点根目录。由于使用 hash 路由，不需要额外的 `try_files` 或 rewrite 规则。
 
