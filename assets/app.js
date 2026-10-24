@@ -22,9 +22,7 @@
 
   var STORAGE = {
     theme: "happydays-theme",
-    favorites: "happydays-favorites",
     recent: "happydays-recent",
-    feedback: "happydays-feedback",
     collapsed: "happydays-collapsed-categories",
     sidebar: "happydays-sidebar-collapsed",
     wide: "happydays-wide-reading"
@@ -48,8 +46,6 @@
     docReading: document.getElementById("docReading"),
     docTags: document.getElementById("docTags"),
     docBody: document.getElementById("docBody"),
-    docFooter: document.getElementById("docFooter"),
-    feedbackNote: document.getElementById("feedbackNote"),
     prevDoc: document.getElementById("prevDoc"),
     prevDocTitle: document.getElementById("prevDocTitle"),
     nextDoc: document.getElementById("nextDoc"),
@@ -63,7 +59,6 @@
     readingProgress: document.getElementById("readingProgress"),
     readingPercent: document.getElementById("readingPercent"),
     backToTop: document.getElementById("backToTop"),
-    favoriteBtn: document.getElementById("favoriteBtn"),
     shareBtn: document.getElementById("shareBtn"),
     themeBtn: document.getElementById("themeBtn"),
     moreBtn: document.getElementById("moreBtn"),
@@ -89,7 +84,6 @@
   };
 
   var collapsedCategories = new Set(readJSON(STORAGE.collapsed, []));
-  var feedbackStore = readJSON(STORAGE.feedback, {});
   var platformMod = /Mac|iPhone|iPad|iPod/i.test(navigator.platform || "") ? "⌘" : "Ctrl";
 
   /* -------------------------------------------------------
@@ -431,8 +425,6 @@
     els.docRoot.classList.add("is-entering");
 
     buildOutline();
-    updateFavoriteButton();
-    updateFeedbackUI();
     updatePageNavigation();
     setActiveTree();
     rememberRecent(id);
@@ -658,7 +650,7 @@
   }
 
   /* -------------------------------------------------------
-     Theme, favorite, feedback, wide reading
+     Theme and wide reading
      ------------------------------------------------------- */
 
   function activeTheme() {
@@ -676,75 +668,6 @@
     writeString(STORAGE.theme, next);
     syncThemeButton();
     showToast(next === "dark" ? "已切换到深色模式" : "已切换到浅色模式");
-  }
-
-  function favorites() {
-    var stored = readJSON(STORAGE.favorites, []);
-    return Array.isArray(stored) ? stored : [];
-  }
-
-  function updateFavoriteButton() {
-    var isFavorite = favorites().indexOf(state.currentId) !== -1;
-    els.favoriteBtn.classList.toggle("is-active", isFavorite);
-    els.favoriteBtn.setAttribute("aria-pressed", String(isFavorite));
-    var label = els.favoriteBtn.querySelector(".action-label");
-    if (label) {
-      label.textContent = isFavorite ? "已收藏" : "收藏";
-    }
-    var starUse = els.favoriteBtn.querySelector("use");
-    if (starUse) {
-      starUse.setAttribute("href", isFavorite ? "#i-star-filled" : "#i-star");
-    }
-    els.favoriteBtn.setAttribute("aria-label", isFavorite ? "取消收藏" : "收藏这篇文档");
-  }
-
-  function toggleFavorite() {
-    var list = favorites();
-    var index = list.indexOf(state.currentId);
-    var label = els.favoriteBtn.querySelector(".action-label");
-    if (index === -1) {
-      list.push(state.currentId);
-      showToast("已收藏这篇文档");
-      if (label) {
-        label.textContent = "已收藏";
-      }
-    } else {
-      list.splice(index, 1);
-      showToast("已取消收藏");
-      if (label) {
-        label.textContent = "收藏";
-      }
-    }
-    writeJSON(STORAGE.favorites, list);
-    updateFavoriteButton();
-  }
-
-  function updateFeedbackUI() {
-    var value = feedbackStore[state.currentId];
-    var buttons = els.docFooter.querySelectorAll("[data-feedback]");
-    for (var index = 0; index < buttons.length; index += 1) {
-      var isSelected = buttons[index].getAttribute("data-feedback") === value;
-      buttons[index].classList.toggle("is-selected", isSelected);
-      buttons[index].setAttribute("aria-pressed", String(isSelected));
-    }
-    if (value === "yes") {
-      els.feedbackNote.textContent = "谢谢你的肯定，我们会继续保持。";
-    } else if (value === "no") {
-      els.feedbackNote.textContent = "谢谢反馈，我们会重新检查这篇文档。";
-    } else {
-      els.feedbackNote.textContent = "你的反馈会帮助我们把知识写得更好。";
-    }
-    var card = els.docFooter.querySelector(".feedback-card");
-    if (card) {
-      card.classList.toggle("is-thanked", Boolean(value));
-    }
-  }
-
-  function submitFeedback(value) {
-    feedbackStore[state.currentId] = value;
-    writeJSON(STORAGE.feedback, feedbackStore);
-    updateFeedbackUI();
-    showToast(value === "yes" ? "感谢反馈，已记录" : "感谢反馈，我们会跟进改进");
   }
 
   function applyWideReading(enabled) {
@@ -1218,7 +1141,6 @@
     });
 
     els.shareBtn.addEventListener("click", copyPageLink);
-    els.favoriteBtn.addEventListener("click", toggleFavorite);
     els.themeBtn.addEventListener("click", toggleTheme);
     els.moreBtn.addEventListener("click", function (event) {
       event.stopPropagation();
@@ -1285,13 +1207,6 @@
           copyButton.innerHTML = icon("copy") + "复制";
         }, 1700);
       });
-    });
-
-    els.docFooter.addEventListener("click", function (event) {
-      var feedbackButton = event.target.closest("[data-feedback]");
-      if (feedbackButton) {
-        submitFeedback(feedbackButton.getAttribute("data-feedback"));
-      }
     });
 
     window.addEventListener("scroll", handleScroll, { passive: true });

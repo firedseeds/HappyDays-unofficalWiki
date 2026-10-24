@@ -135,10 +135,6 @@
             <svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg>
             <span>已保存</span>
           </span>
-          <button class="top-action favorite-btn" id="favoriteBtn" type="button" aria-pressed="false">
-            <svg class="icon" aria-hidden="true"><use href="#i-star"></use></svg>
-            <span class="action-label">收藏</span>
-          </button>
           <button class="top-action" id="shareBtn" type="button" aria-label="分享当前文档">
             <svg class="icon" aria-hidden="true"><use href="#i-share"></use></svg>
             <span class="action-label">分享</span>
@@ -200,24 +196,7 @@
 
             <div class="doc-body" id="docBody"></div>
 
-            <footer class="doc-footer" id="docFooter">
-              <div class="feedback-card">
-                <div class="feedback-copy">
-                  <strong>这篇文档对你有帮助吗？</strong>
-                  <span id="feedbackNote">你的反馈会帮助我们把知识写得更好。</span>
-                </div>
-                <div class="feedback-actions">
-                  <button class="feedback-button" type="button" data-feedback="yes">
-                    <svg class="icon" aria-hidden="true"><use href="#i-thumb-up"></use></svg>
-                    <span>有帮助</span>
-                  </button>
-                  <button class="feedback-button" type="button" data-feedback="no">
-                    <svg class="icon" aria-hidden="true"><use href="#i-thumb-down"></use></svg>
-                    <span>需改进</span>
-                  </button>
-                </div>
-              </div>
-
+            <footer class="doc-footer">
               <nav class="page-nav" aria-label="上一篇与下一篇">
                 <a class="page-nav-link page-nav-prev" id="prevDoc" href="#/doc/welcome">
                   <span class="page-nav-direction">
@@ -308,8 +287,6 @@
       <symbol id="i-history" viewBox="0 0 24 24"><path d="M4.4 10.2A8 8 0 1 1 6 16.9M4.4 10.2V5.7m0 4.5h4.4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 7.9V12l2.8 1.8" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
       <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M12 7.7V12l2.9 1.9" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
       <symbol id="i-read" viewBox="0 0 24 24"><path d="M4 5.8c2.9-1 5.6-.8 8 1.1 2.4-1.9 5.1-2.1 8-1.1v12.4c-2.9-1-5.6-.8-8 1.1-2.4-1.9-5.1-2.1-8-1.1V5.8Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M12 7v12" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
-      <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 3.7 2.55 5.17 5.7.83-4.12 4.02.97 5.68L12 16.72 6.9 19.4l.97-5.68L3.75 9.7l5.7-.83L12 3.7Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
-      <symbol id="i-star-filled" viewBox="0 0 24 24"><path d="m12 3.7 2.55 5.17 5.7.83-4.12 4.02.97 5.68L12 16.72 6.9 19.4l.97-5.68L3.75 9.7l5.7-.83L12 3.7Z" fill="currentColor" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></symbol>
       <symbol id="i-share" viewBox="0 0 24 24"><circle cx="6" cy="12" r="2.6" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="18" cy="5.5" r="2.6" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="18" cy="18.5" r="2.6" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="m8.4 10.8 7.2-4M8.4 13.2l7.2 4" fill="none" stroke="currentColor" stroke-width="1.7"/></symbol>
       <symbol id="i-more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5" fill="currentColor"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/><circle cx="19" cy="12" r="1.5" fill="currentColor"/></symbol>
       <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M12 2.8v2.1M12 19.1v2.1M4.5 4.5 6 6M18 18l1.5 1.5M2.8 12h2.1M19.1 12h2.1M4.5 19.5 6 18M18 6l1.5-1.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
@@ -323,8 +300,6 @@
       <symbol id="i-link" viewBox="0 0 24 24"><path d="m9.7 14.3 4.6-4.6M7.1 16.9l-1 1a3.7 3.7 0 0 1-5.2-5.2l3.6-3.6a3.7 3.7 0 0 1 5.2 0M16.9 7.1l1-1a3.7 3.7 0 0 1 5.2 5.2l-3.6 3.6a3.7 3.7 0 0 1-5.2 0" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
       <symbol id="i-printer" viewBox="0 0 24 24"><path d="M7 8V3.8h10V8M7 17H4.5V9.5A1.5 1.5 0 0 1 6 8h12a1.5 1.5 0 0 1 1.5 1.5V17H17" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><rect x="7" y="14" width="10" height="6.2" rx="1" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="17.3" cy="11.4" r=".9" fill="currentColor"/></symbol>
       <symbol id="i-wide" viewBox="0 0 24 24"><path d="M8.5 4H4v4.5M15.5 4H20v4.5M8.5 20H4v-4.5M15.5 20H20v-4.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
-      <symbol id="i-thumb-up" viewBox="0 0 24 24"><path d="M7.4 10.2 11 3.8c1.5.1 2.4 1.1 2.4 2.6v3.1h4.3c1.2 0 2.1 1.1 1.8 2.3l-1.4 6.1a2 2 0 0 1-1.9 1.5H7.4M7.4 10.2V19.4M7.4 10.2H4.2v9.2h3.2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
-      <symbol id="i-thumb-down" viewBox="0 0 24 24"><path d="M16.6 13.8 13 20.2c-1.5-.1-2.4-1.1-2.4-2.6v-3.1H6.3c-1.2 0-2.1-1.1-1.8-2.3l1.4-6.1a2 2 0 0 1 1.9-1.5h8.8M16.6 13.8V4.6M16.6 13.8h3.2V4.6h-3.2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
       <symbol id="i-user-plus" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.4" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M3.6 19.5c.5-3.2 2.5-5 5.4-5s4.9 1.8 5.4 5M18 8v6M15 11h6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
       <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M12 11v5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="7.8" r="1.05" fill="currentColor"/></symbol>
       <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M8.7 16.4a6.8 6.8 0 1 1 6.6 0v1.2H8.7v-1.2Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9.4 20.1h5.2M10.1 17.6h3.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>

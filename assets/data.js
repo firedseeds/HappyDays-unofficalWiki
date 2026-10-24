@@ -84,7 +84,7 @@ window.HAPPYDAYS_WIKI = (function () {
 <h2>需要帮助</h2>
 <p>如果这篇文档没有回答你的问题，可以先在<a href="#/doc/faq">常见问题</a>中找找；仍然卡住，就到 <code>#wiki-help</code> 频道提问，并附上你所在的页面与操作步骤。</p>
 <h3>发现内容过期？</h3>
-<p>在页面底部选择「需改进」，或直接在评论区 @ 文档维护者。我们会在一周内确认并更新。</p>
+<p>在团队频道留言，或直接联系文档维护者。我们会在一周内确认并更新。</p>
 <h3>想补充一篇？</h3>
 <p>任何成员都可以创建草稿。先在对应空间写清楚，再邀请一位相关同学做第一次评审。</p>
 <p><em>最后更新：2026 年 10 月 21 日</em></p>`
@@ -193,10 +193,10 @@ window.HAPPYDAYS_WIKI = (function () {
 </div>
 <h2>让文档保持可维护</h2>
 <p>知识库最大的成本不是写作，而是<strong>维护</strong>。下面这些习惯能显著延长一篇文档的保质期：</p>
-<ul><li>开头注明适用对象、前置条件和最后更新时间</li><li>把易变的信息（价格、人员、链接）集中放在一处</li><li>为每篇文档指定唯一维护者，而不是「产品组」</li><li>用评论和「需改进」反馈建立定期清理机制</li><li>每季度抽查访问量高但长期未更新的文档</li></ul>
+<ul><li>开头注明适用对象、前置条件和最后更新时间</li><li>把易变的信息（价格、人员、链接）集中放在一处</li><li>为每篇文档指定唯一维护者，而不是「产品组」</li><li>用定期评审和访问数据建立清理机制</li><li>每季度抽查访问量高但长期未更新的文档</li></ul>
 <h2>快捷键速查</h2>
 <div class="table-wrap"><table><thead><tr><th>动作</th><th>Windows / Linux</th><th>macOS</th></tr></thead><tbody><tr><td>全局搜索</td><td><code>Ctrl + K</code></td><td><code>⌘ + K</code></td></tr><tr><td>保存</td><td><code>Ctrl + S</code></td><td><code>⌘ + S</code></td></tr><tr><td>加粗 / 斜体</td><td><code>Ctrl + B / I</code></td><td><code>⌘ + B / I</code></td></tr><tr><td>插入链接</td><td><code>Ctrl + K（选中文本）</code></td><td><code>⌘ + K（选中文本）</code></td></tr><tr><td>撤销 / 重做</td><td><code>Ctrl + Z / Shift + Z</code></td><td><code>⌘ + Z / Shift + Z</code></td></tr><tr><td>发布</td><td><code>Ctrl + Enter</code></td><td><code>⌘ + Enter</code></td></tr></tbody></table></div>
-<p><em>遇到这里没有覆盖的问题？查看<a href="#/doc/faq">常见问题</a>，或在页面底部提交反馈。</em></p>`
+<p><em>遇到这里没有覆盖的问题？查看<a href="#/doc/faq">常见问题</a>，或在团队频道留言。</em></p>`
     },
     "faq": {
       title: "常见问题",
