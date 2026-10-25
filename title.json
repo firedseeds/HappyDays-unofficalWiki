@@ -4,7 +4,7 @@
   "titles": [
     {
       "text": "HappyDays 非官方文档",
-      "weight": 2,
+      "weight": 3,
       "runs": [
         {
           "text": "HappyDays 非官方文档",
@@ -18,10 +18,24 @@
     },
     {
       "text": "不要叛逃——zzx",
-      "weight": 10,
+      "weight": 5,
       "runs": [
         {
           "text": "不要叛逃——zzx",
+          "bold": false,
+          "italic": false,
+          "underline": false,
+          "strike": false,
+          "color": ""
+        }
+      ]
+    },
+    {
+      "text": "真的有人看文档吗awa",
+      "weight": 5,
+      "runs": [
+        {
+          "text": "真的有人看文档吗awa",
           "bold": false,
           "italic": false,
           "underline": false,
