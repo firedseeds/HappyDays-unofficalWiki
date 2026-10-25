@@ -53,6 +53,39 @@ python server.py
 
 编辑服务运行时，阅读页顶栏会出现「编辑」入口。每次启动 `server.py` 都会先自动运行 `build.py`；如果构建失败，服务不会启动并会输出具体错误。
 
+### 服务器脚本
+
+Linux 服务器可以使用根目录的 `server.sh` 管理进程：
+
+```bash
+chmod +x server.sh
+./server.sh -run      # 后台启动，成功输出 Successful
+./server.sh -stop     # 停止服务，成功输出 Successful
+./server.sh -logs     # 查看最近 200 行日志
+./server.sh -logs -f  # 持续跟踪日志
+```
+
+默认监听 `0.0.0.0:8000`，可以通过环境变量覆盖：
+
+```bash
+HOST=127.0.0.1 PORT=8080 ./server.sh -run
+```
+
+运行状态和日志保存在：
+
+```text
+.run/server.pid
+logs/server.log
+```
+
+当文章被创建、更新、移动或删除时，日志会输出类似：
+
+```text
+[2026-10-25T12:00:00+08:00] 文章更新：简介（slug=intro，作者=zeyu_1145，主题=简介，本地提交=是）
+```
+
+服务启动失败或停止失败时，脚本会输出 `fail: ...` 和对应错误。`server.py` 没有登录认证，公网部署时建议限制访问来源或使用反向代理认证。
+
 ### 支持的操作
 
 - 选择并编辑已有文章
@@ -184,6 +217,7 @@ python server.py --host 127.0.0.1 --port 8765
 ├─ editor.html           # 本地内容管理界面
 ├─ build.py              # 从 article/ 生成 assets/data.js
 ├─ server.py             # 本地编辑服务与 JSON API
+├─ server.sh             # Linux 启动、停止与日志脚本
 ├─ assets/
 │  ├─ styles.css         # 设计系统、布局、组件、响应式与打印样式
 │  ├─ editor.css         # 内容管理界面样式

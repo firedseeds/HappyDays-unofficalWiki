@@ -1,6 +1,8 @@
 __pycache__/
 *.py[cod]
 .check*/
+.run/
+logs/
 server-*.log
 *.log
 .DS_Store

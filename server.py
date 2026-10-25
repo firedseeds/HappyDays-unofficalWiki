@@ -419,6 +419,11 @@ def build_output_message(output: str) -> str:
     return output.splitlines()[-1] if output else "构建完成"
 
 
+def log_change(message: str) -> None:
+    timestamp = datetime.now().astimezone().isoformat(timespec="seconds")
+    print(f"[{timestamp}] {message}", flush=True)
+
+
 def git_error_text(result: subprocess.CompletedProcess, fallback: str) -> str:
     lines = []
     for line in f"{result.stderr or ''}\n{result.stdout or ''}".splitlines():
@@ -704,6 +709,11 @@ def update_article(slug: str, payload: dict) -> dict:
             commit_message,
             author,
         )
+        log_change(
+            f"文章{'移动' if moved else '更新'}：{updated['title']}"
+            f"（slug={slug}，作者={author}，主题={target_topic['name']}，"
+            f"本地提交={'是' if commit.get('committed') else '否'}）"
+        )
         return {
             "ok": True,
             "article": updated,
@@ -775,6 +785,10 @@ def delete_article(slug: str) -> dict:
         commit = auto_commit(
             [path, MANIFEST_PATH, DATA_PATH, EDITS_PATH, image_source],
             f"docs: 删除「{record['title']}」",
+        )
+        log_change(
+            f"文章删除：{record['title']}（slug={slug}，"
+            f"本地提交={'是' if commit.get('committed') else '否'}）"
         )
         return {
             "ok": True,
@@ -920,6 +934,10 @@ def create_article(payload: dict) -> dict:
             [path, MANIFEST_PATH, DATA_PATH, EDITS_PATH],
             f"docs: 新建「{record['title']}」（{author}）",
             author,
+        )
+        log_change(
+            f"文章创建：{record['title']}（slug={slug}，作者={author}，"
+            f"主题={topic['name']}，本地提交={'是' if commit.get('committed') else '否'}）"
         )
         return {
             "ok": True,
