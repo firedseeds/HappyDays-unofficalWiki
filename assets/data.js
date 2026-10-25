@@ -286,11 +286,11 @@ window.HAPPYDAYS_WIKI = (function () {
       title: "资源世界/下界",
       emoji: "🧭",
       category: "advanced",
-      excerpt: "此文档在语雀中暂无正文。",
+      excerpt: "暂无摘要",
       updated: "2026-10-25",
       reading: 1,
       tags: [],
-      signatures: [{"author": "233", "at": "2026-10-25T21:13:12+08:00", "action": "update", "title": "资源世界/下界", "topic": "进阶教程"}],
+      signatures: [{"author": "233", "at": "2026-10-25T21:13:12+08:00", "action": "update", "title": "资源世界/下界", "topic": "进阶教程"}, {"author": "233", "at": "2026-10-25T21:14:26+08:00", "action": "update", "title": "资源世界/下界", "topic": "进阶教程"}],
       content: `<h2>使用维度模组创建的维度，所以：资源世界不是原版主世界，地狱世界也不是真的地狱世界！</h2>
 <p><strong>资源世界与地狱世界可以刷怪，所以请注意您的安全。</strong></p>
 <p><strong>如果你想前往资源/地狱请前往南京（的厕所）。如果您的城市很偏远，不方便到达南京，可以向管理员申请命令方块传送。</strong></p>

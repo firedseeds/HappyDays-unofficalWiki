@@ -1,6 +1,6 @@
 ---
 title: "资源世界/下界"
-description: "此文档在语雀中暂无正文。"
+description: "暂无摘要"
 topic: "进阶教程"
 topic_id: "advanced"
 updated: "2026-10-25"
