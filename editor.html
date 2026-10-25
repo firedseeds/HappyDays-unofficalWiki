@@ -45,6 +45,10 @@
       </a>
       <div class="editor-top-actions">
         <span class="connection" id="connection"><i></i><span id="connectionText">连接中…</span></span>
+        <button class="editor-back" id="editTitlesBtn" type="button">
+          <svg class="icon" aria-hidden="true"><use href="#i-edit"></use></svg>
+          页面标题
+        </button>
         <a class="editor-back" href="index.html">
           <svg class="icon" aria-hidden="true"><use href="#i-arrow-left"></use></svg>
           返回阅读
@@ -237,6 +241,39 @@
         <button class="editor-btn editor-btn--primary" id="createTopicBtn" type="submit">
           <svg class="icon" aria-hidden="true"><use href="#i-folder-plus"></use></svg>
           创建主题
+        </button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="topic-dialog title-dialog" id="titleDialog" aria-labelledby="titleDialogTitle">
+    <form id="titleForm">
+      <div class="dialog-head">
+        <div>
+          <p class="form-eyebrow">页眉配置</p>
+          <h2 id="titleDialogTitle">页面标题</h2>
+        </div>
+        <button class="icon-button" id="closeTitleDialog" type="button" aria-label="关闭">
+          <svg class="icon" aria-hidden="true"><use href="#i-x"></use></svg>
+        </button>
+      </div>
+      <div class="dialog-body">
+        <p class="title-dialog-hint">标题按权重随机出现，出现概率 = 当前权重 / 总权重。鼠标悬停时暂停滚动。</p>
+        <div class="title-editor-list" id="titleEditorList"></div>
+        <div class="title-editor-foot">
+          <button class="editor-btn" id="addTitleItem" type="button">
+            <svg class="icon" aria-hidden="true"><use href="#i-plus"></use></svg>
+            添加标题
+          </button>
+          <span id="titleTotal">总权重 0</span>
+        </div>
+        <div class="form-alert" id="titleAlert" hidden role="alert"></div>
+      </div>
+      <div class="dialog-actions">
+        <button class="editor-btn" id="cancelTitle" type="button">取消</button>
+        <button class="editor-btn editor-btn--primary" id="saveTitlesBtn" type="submit">
+          <svg class="icon" aria-hidden="true"><use href="#i-save"></use></svg>
+          保存标题
         </button>
       </div>
     </form>

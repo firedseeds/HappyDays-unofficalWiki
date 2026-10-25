@@ -104,8 +104,10 @@
   padding: 0 9px;
   border: 1px solid var(--border);
   border-radius: 7px;
+  background: transparent;
   color: var(--text-secondary);
   font-size: 11px;
+  cursor: pointer;
   transition: background 150ms ease, color 150ms ease, border-color 150ms ease;
 }
 
@@ -876,6 +878,119 @@
   background: var(--surface);
   color: var(--text);
   box-shadow: var(--shadow-lg);
+}
+
+.title-dialog {
+  width: min(680px, calc(100vw - 32px));
+}
+
+.title-dialog-hint {
+  margin: 0;
+  color: var(--text-tertiary);
+  font-size: 10.5px;
+  line-height: 1.65;
+}
+
+.title-editor-list {
+  display: flex;
+  max-height: 350px;
+  flex-direction: column;
+  gap: 8px;
+  padding-right: 4px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.title-editor-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 92px 54px 30px;
+  gap: 8px;
+  align-items: center;
+}
+
+.title-editor-row input {
+  width: 100%;
+  min-width: 0;
+  height: 34px;
+  padding: 0 9px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--canvas);
+  color: var(--text);
+  font-size: 12px;
+  line-height: 1.5;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.title-editor-row input:focus {
+  border-color: rgba(10, 155, 105, 0.48);
+  outline: 0;
+  box-shadow: 0 0 0 3px rgba(10, 155, 105, 0.09);
+}
+
+.title-editor-row input[type="number"] {
+  text-align: right;
+}
+
+.title-editor-prob {
+  color: var(--text-faint);
+  font-size: 9.5px;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.title-remove {
+  display: inline-flex;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--text-faint);
+  cursor: pointer;
+}
+
+.title-remove:hover {
+  border-color: rgba(210, 85, 85, 0.25);
+  background: rgba(210, 85, 85, 0.08);
+  color: #d25555;
+}
+
+.title-remove .icon {
+  width: 14px;
+  height: 14px;
+}
+
+.title-editor-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.title-editor-foot .editor-btn {
+  flex: none;
+}
+
+.title-editor-foot span {
+  color: var(--text-faint);
+  font-size: 9.5px;
+  font-variant-numeric: tabular-nums;
+}
+
+.title-dialog .dialog-body {
+  max-height: min(65vh, 520px);
+  overflow-y: auto;
+}
+
+@media (max-width: 620px) {
+  .title-editor-row {
+    grid-template-columns: minmax(0, 1fr) 76px 45px 28px;
+    gap: 6px;
+  }
 }
 
 .topic-dialog::backdrop {

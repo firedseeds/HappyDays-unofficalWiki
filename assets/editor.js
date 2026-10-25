@@ -54,6 +54,16 @@
     createTopicBtn: document.getElementById("createTopicBtn"),
     closeTopicDialog: document.getElementById("closeTopicDialog"),
     cancelTopic: document.getElementById("cancelTopic"),
+    editTitlesBtn: document.getElementById("editTitlesBtn"),
+    titleDialog: document.getElementById("titleDialog"),
+    titleForm: document.getElementById("titleForm"),
+    titleEditorList: document.getElementById("titleEditorList"),
+    addTitleItem: document.getElementById("addTitleItem"),
+    titleTotal: document.getElementById("titleTotal"),
+    titleAlert: document.getElementById("titleAlert"),
+    closeTitleDialog: document.getElementById("closeTitleDialog"),
+    cancelTitle: document.getElementById("cancelTitle"),
+    saveTitlesBtn: document.getElementById("saveTitlesBtn"),
     toast: document.getElementById("editorToast")
   };
 
@@ -1044,6 +1054,168 @@
     });
   }
 
+  function setTitleAlert(message) {
+    els.titleAlert.textContent = message || "";
+    els.titleAlert.hidden = !message;
+  }
+
+  function updateTitleTotal() {
+    var rows = Array.prototype.slice.call(els.titleEditorList.querySelectorAll(".title-editor-row"));
+    var weights = rows.map(function (row) {
+      return Number(row.querySelector(".title-weight-input").value);
+    });
+    var total = weights.reduce(function (sum, weight) {
+      return sum + (Number.isFinite(weight) && weight > 0 ? weight : 0);
+    }, 0);
+    rows.forEach(function (row, index) {
+      var probability = row.querySelector(".title-editor-prob");
+      if (total > 0 && Number.isFinite(weights[index]) && weights[index] > 0) {
+        probability.textContent = (weights[index] / total * 100).toFixed(1) + "%";
+      } else {
+        probability.textContent = "—";
+      }
+    });
+    els.titleTotal.textContent = "总权重 " + (total > 0 ? total.toFixed(1) : "0");
+  }
+
+  function createTitleRow(item) {
+    var row = document.createElement("div");
+    row.className = "title-editor-row";
+
+    var text = document.createElement("input");
+    text.type = "text";
+    text.className = "title-text-input";
+    text.maxLength = 80;
+    text.placeholder = "标题内容";
+    text.value = item && item.text ? item.text : "";
+    text.setAttribute("aria-label", "标题内容");
+
+    var weight = document.createElement("input");
+    weight.type = "number";
+    weight.className = "title-weight-input";
+    weight.min = "0.1";
+    weight.max = "1000000";
+    weight.step = "0.1";
+    weight.value = item && item.weight ? item.weight : 1;
+    weight.setAttribute("aria-label", "标题权重");
+
+    var probability = document.createElement("span");
+    probability.className = "title-editor-prob";
+    probability.textContent = "—";
+
+    var remove = document.createElement("button");
+    remove.type = "button";
+    remove.className = "title-remove";
+    remove.title = "删除这条标题";
+    remove.setAttribute("aria-label", "删除标题");
+    remove.innerHTML = '<svg class="icon" aria-hidden="true"><use href="#i-trash"></use></svg>';
+
+    text.addEventListener("input", updateTitleTotal);
+    weight.addEventListener("input", updateTitleTotal);
+    remove.addEventListener("click", function () {
+      var rows = els.titleEditorList.querySelectorAll(".title-editor-row");
+      if (rows.length <= 1) {
+        setTitleAlert("至少保留一条标题");
+        return;
+      }
+      row.remove();
+      updateTitleTotal();
+    });
+
+    row.appendChild(text);
+    row.appendChild(weight);
+    row.appendChild(probability);
+    row.appendChild(remove);
+    els.titleEditorList.appendChild(row);
+    return row;
+  }
+
+  function renderTitleRows(titles) {
+    els.titleEditorList.innerHTML = "";
+    var items = Array.isArray(titles) && titles.length
+      ? titles
+      : [{ text: "HappyDays 非官方文档", weight: 1 }];
+    items.forEach(function (item) {
+      createTitleRow({
+        text: typeof item.text === "string" ? item.text : "",
+        weight: Number(item.weight) > 0 ? Number(item.weight) : 1
+      });
+    });
+    updateTitleTotal();
+  }
+
+  function openTitleDialog() {
+    setTitleAlert("");
+    els.saveTitlesBtn.disabled = true;
+    request("/api/titles").then(function (data) {
+      renderTitleRows(data && data.titles);
+      els.saveTitlesBtn.disabled = false;
+      els.titleDialog.showModal();
+      window.setTimeout(function () {
+        var first = els.titleEditorList.querySelector(".title-text-input");
+        if (first) {
+          first.focus();
+        }
+      }, 30);
+    }).catch(function (error) {
+      showToast(error.message, "error");
+      els.saveTitlesBtn.disabled = false;
+    });
+  }
+
+  function closeTitleDialog() {
+    els.titleDialog.close();
+  }
+
+  function collectTitleRows() {
+    var rows = Array.prototype.slice.call(els.titleEditorList.querySelectorAll(".title-editor-row"));
+    var titles = [];
+    rows.forEach(function (row) {
+      var text = row.querySelector(".title-text-input").value.trim();
+      var weight = Number(row.querySelector(".title-weight-input").value);
+      if (!text) {
+        throw new Error("标题内容不能为空");
+      }
+      if (!Number.isFinite(weight) || weight <= 0) {
+        throw new Error("标题权重必须大于 0");
+      }
+      titles.push({ text: text, weight: weight });
+    });
+    if (!titles.length) {
+      throw new Error("至少保留一条标题");
+    }
+    if (titles.length > 30) {
+      throw new Error("标题最多 30 条");
+    }
+    return titles;
+  }
+
+  function saveTitles(event) {
+    event.preventDefault();
+    var titles;
+    try {
+      titles = collectTitleRows();
+    } catch (error) {
+      setTitleAlert(error.message);
+      return;
+    }
+    var author = els.author.value.trim() || "HappyDays 团队";
+    els.saveTitlesBtn.disabled = true;
+    setTitleAlert("");
+    jsonRequest("PUT", "/api/titles", {
+      titles: titles,
+      author: author
+    }).then(function (result) {
+      closeTitleDialog();
+      showToast(resultMessage(result, "页眉标题已保存"), "success");
+    }).catch(function (error) {
+      setTitleAlert(error.message);
+      showToast(error.message, "error");
+    }).finally(function () {
+      els.saveTitlesBtn.disabled = false;
+    });
+  }
+
   function bindEvents() {
     els.topicList.addEventListener("click", function (event) {
       var deleteButton = event.target.closest(".topic-delete");
@@ -1068,6 +1240,21 @@
     els.newTopicBtn.addEventListener("click", function () {
       openTopicDialog();
     });
+    els.editTitlesBtn.addEventListener("click", openTitleDialog);
+    els.addTitleItem.addEventListener("click", function () {
+      var rows = els.titleEditorList.querySelectorAll(".title-editor-row");
+      if (rows.length >= 30) {
+        setTitleAlert("标题最多 30 条");
+        return;
+      }
+      setTitleAlert("");
+      var row = createTitleRow({ text: "", weight: 1 });
+      updateTitleTotal();
+      row.querySelector(".title-text-input").focus();
+    });
+    els.titleForm.addEventListener("submit", saveTitles);
+    els.closeTitleDialog.addEventListener("click", closeTitleDialog);
+    els.cancelTitle.addEventListener("click", closeTitleDialog);
     els.importArticleBtn.addEventListener("click", function () {
       els.importFileInput.click();
     });

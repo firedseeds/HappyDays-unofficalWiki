@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import os
 import re
 import shutil
@@ -36,6 +37,7 @@ ROOT = Path(__file__).resolve().parent
 ARTICLE_DIR = ROOT / "article"
 MANIFEST_PATH = ARTICLE_DIR / "article.json"
 EDITS_PATH = ARTICLE_DIR / "edits.json"
+TITLE_PATH = ROOT / "title.json"
 IMAGE_DIR = ROOT / "assets" / "image"
 DATA_PATH = ROOT / "assets" / "data.js"
 BUILD_SCRIPT = ROOT / "build.py"
@@ -115,6 +117,18 @@ def read_edits() -> dict:
         raise ApiError(500, f"无法读取 article/edits.json: {exc}")
     if not isinstance(data, dict) or not isinstance(data.get("articles"), dict):
         raise ApiError(500, "article/edits.json 格式无效")
+    return data
+
+
+def read_title_config() -> dict:
+    if not TITLE_PATH.is_file():
+        return {"titles": []}
+    try:
+        data = json.loads(TITLE_PATH.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise ApiError(500, f"无法读取 title.json: {exc}")
+    if not isinstance(data, dict) or not isinstance(data.get("titles"), list):
+        raise ApiError(500, "title.json 格式无效")
     return data
 
 
@@ -557,6 +571,62 @@ def auto_commit(paths: list[Path], message: str, author: str | None = None) -> d
         return {"committed": False, "skipped": "未找到 Git 命令"}
     except subprocess.TimeoutExpired:
         return {"committed": False, "error": "Git 操作超时"}
+
+
+def update_titles(payload: dict) -> dict:
+    with LOCK:
+        raw_titles = payload.get("titles")
+        if not isinstance(raw_titles, list) or not raw_titles:
+            raise ApiError(400, "标题列表不能为空")
+        if len(raw_titles) > 30:
+            raise ApiError(400, "标题最多 30 条")
+        titles = []
+        for item in raw_titles:
+            if not isinstance(item, dict):
+                raise ApiError(400, "标题条目格式无效")
+            text = require_text(item.get("text"), "标题", 80)
+            weight = item.get("weight")
+            if isinstance(weight, bool) or not isinstance(weight, (int, float)):
+                raise ApiError(400, "标题权重必须是数字")
+            weight = float(weight)
+            if not math.isfinite(weight) or weight <= 0 or weight > 1_000_000:
+                raise ApiError(400, "标题权重必须大于 0 且不超过 1000000")
+            if weight.is_integer():
+                weight = int(weight)
+            titles.append({"text": text, "weight": weight})
+
+        author_raw = payload.get("author")
+        author = (
+            require_text(author_raw, "author", 60)
+            if isinstance(author_raw, str) and author_raw.strip()
+            else "HappyDays 团队"
+        )
+        snapshot = TITLE_PATH.read_bytes() if TITLE_PATH.is_file() else None
+        try:
+            atomic_write(
+                TITLE_PATH,
+                json.dumps({"titles": titles}, ensure_ascii=False, indent=2) + "\n",
+            )
+        except Exception as exc:
+            if snapshot is not None:
+                atomic_write(TITLE_PATH, snapshot.decode("utf-8"))
+            raise ApiError(500, f"保存标题失败：{exc}")
+
+        commit = auto_commit(
+            [TITLE_PATH],
+            f"docs: 更新页眉标题（{author}）",
+            author,
+        )
+        log_change(
+            f"页眉标题更新（作者={author}，共 {len(titles)} 条，"
+            f"本地提交={'是' if commit.get('committed') else '否'}）"
+        )
+        return {
+            "ok": True,
+            "titles": titles,
+            "message": "页眉标题已保存",
+            "commit": commit,
+        }
 
 
 def relocate_markdown_paths(markdown: str, old_path: Path, new_path: Path) -> str:
@@ -1103,6 +1173,9 @@ class EditorHandler(SimpleHTTPRequestHandler):
                     manifest = read_manifest()
                     self.send_json(200, public_state(manifest))
                     return
+                if path == "/api/titles":
+                    self.send_json(200, read_title_config())
+                    return
                 match = re.fullmatch(r"/api/articles/([a-z0-9-]+)", path)
                 if match:
                     self.send_json(200, read_article(match.group(1)))
@@ -1117,9 +1190,12 @@ class EditorHandler(SimpleHTTPRequestHandler):
         path = unquote(urlparse(self.path).path)
         match = re.fullmatch(r"/api/articles/([a-z0-9-]+)", path)
         try:
+            payload = self.read_json()
+            if path == "/api/titles":
+                self.send_json(200, update_titles(payload))
+                return
             if not match:
                 raise ApiError(404, "接口不存在")
-            payload = self.read_json()
             result = update_article(match.group(1), payload)
             self.send_json(200, result)
         except ApiError as exc:
