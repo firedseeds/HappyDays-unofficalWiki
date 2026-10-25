@@ -125,6 +125,32 @@
     return items[items.length - 1].text;
   }
 
+  var titleRollState = {
+    items: [],
+    intervalMs: 10000,
+    timer: null,
+    paused: false
+  };
+
+  function stopTitleRotation() {
+    if (titleRollState.timer) {
+      window.clearInterval(titleRollState.timer);
+      titleRollState.timer = null;
+    }
+  }
+
+  function startTitleRotation() {
+    if (titleRollState.timer || titleRollState.paused || titleRollState.items.length < 2) {
+      return;
+    }
+    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return;
+    }
+    titleRollState.timer = window.setInterval(function () {
+      applyRollingTitle(pickWeightedTitle(titleRollState.items), true);
+    }, titleRollState.intervalMs);
+  }
+
   function applyRollingTitle(text, animate) {
     if (!els.titleRollText || !text) {
       return;
@@ -141,68 +167,258 @@
     els.titleRollText.title = text;
   }
 
+  function applyTitleRollConfig(data) {
+    var settings = Array.isArray(data) || !data ? {} : data;
+    var raw = Array.isArray(data) ? data : (data && data.titles);
+    if (!Array.isArray(raw)) {
+      return false;
+    }
+    var items = raw.map(function (item) {
+      var text = item && typeof item.text === "string" ? item.text.trim() : "";
+      var weight = Number(item && item.weight);
+      if (!text || !Number.isFinite(weight) || weight <= 0) {
+        return null;
+      }
+      return { text: text, weight: weight };
+    }).filter(Boolean);
+    if (!items.length) {
+      return false;
+    }
+
+    var fontSize = Number(settings.fontSize);
+    if (!Number.isFinite(fontSize)) {
+      fontSize = 16;
+    }
+    fontSize = Math.max(8, Math.min(40, fontSize));
+    els.titleRollText.style.fontSize = fontSize + "px";
+
+    var intervalSeconds = Number(settings.intervalSeconds);
+    if (!Number.isFinite(intervalSeconds)) {
+      intervalSeconds = 10;
+    }
+    intervalSeconds = Math.max(3, Math.min(3600, intervalSeconds));
+
+    titleRollState.items = items;
+    titleRollState.intervalMs = intervalSeconds * 1000;
+    stopTitleRotation();
+    applyRollingTitle(pickWeightedTitle(items), false);
+    startTitleRotation();
+    return true;
+  }
+
   function initTitleRoll() {
     if (!els.titleRollText) {
       return;
     }
+    els.titleRoll.addEventListener("mouseenter", function () {
+      titleRollState.paused = true;
+      stopTitleRotation();
+    });
+    els.titleRoll.addEventListener("mouseleave", function () {
+      titleRollState.paused = false;
+      startTitleRotation();
+    });
     fetch("title.json", { cache: "no-store" }).then(function (response) {
       if (!response.ok) {
         throw new Error("title.json unavailable");
       }
       return response.json();
     }).then(function (data) {
-      var settings = Array.isArray(data) || !data ? {} : data;
-      var raw = Array.isArray(data) ? data : (data && data.titles);
-      if (!Array.isArray(raw)) {
-        return;
-      }
-      var fontSize = Number(settings.fontSize);
-      if (!Number.isFinite(fontSize)) {
-        fontSize = 16;
-      }
-      fontSize = Math.max(8, Math.min(40, fontSize));
-      els.titleRollText.style.fontSize = fontSize + "px";
-
-      var intervalSeconds = Number(settings.intervalSeconds);
-      if (!Number.isFinite(intervalSeconds)) {
-        intervalSeconds = 10;
-      }
-      intervalSeconds = Math.max(3, Math.min(3600, intervalSeconds));
-      var intervalMs = intervalSeconds * 1000;
-
-      var items = raw.map(function (item) {
-        var text = item && typeof item.text === "string" ? item.text.trim() : "";
-        var weight = Number(item && item.weight);
-        if (!text || !Number.isFinite(weight) || weight <= 0) {
-          return null;
-        }
-        return { text: text, weight: weight };
-      }).filter(Boolean);
-      if (!items.length) {
-        return;
-      }
-      applyRollingTitle(pickWeightedTitle(items), false);
-      if (items.length < 2 || (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches)) {
-        return;
-      }
-      var timer = null;
-      var start = function () {
-        if (timer) {
-          return;
-        }
-        timer = window.setInterval(function () {
-          applyRollingTitle(pickWeightedTitle(items), true);
-        }, intervalMs);
-      };
-      var pause = function () {
-        window.clearInterval(timer);
-        timer = null;
-      };
-      els.titleRoll.addEventListener("mouseenter", pause);
-      els.titleRoll.addEventListener("mouseleave", start);
-      start();
+      applyTitleRollConfig(data);
     }).catch(function () {
       /* 保留静态回退标题 */
+    });
+  }
+
+  function setSiteTitleAlert(message) {
+    els.siteTitleAlert.textContent = message || "";
+    els.siteTitleAlert.hidden = !message;
+  }
+
+  function updateSiteTitleTotals() {
+    var rows = Array.prototype.slice.call(els.siteTitleRows.querySelectorAll(".site-title-row"));
+    var weights = rows.map(function (row) {
+      return Number(row.querySelector(".site-title-weight").value);
+    });
+    var total = weights.reduce(function (sum, weight) {
+      return sum + (Number.isFinite(weight) && weight > 0 ? weight : 0);
+    }, 0);
+    rows.forEach(function (row, index) {
+      var probability = row.querySelector(".site-title-prob");
+      if (total > 0 && Number.isFinite(weights[index]) && weights[index] > 0) {
+        probability.textContent = (weights[index] / total * 100).toFixed(1) + "%";
+      } else {
+        probability.textContent = "—";
+      }
+    });
+    els.siteTitleTotal.textContent = "总权重 " + (total > 0 ? total.toFixed(1) : "0");
+  }
+
+  function createSiteTitleRow(item) {
+    var row = document.createElement("div");
+    row.className = "site-title-row";
+
+    var text = document.createElement("input");
+    text.type = "text";
+    text.className = "site-title-text";
+    text.maxLength = 80;
+    text.placeholder = "标题内容";
+    text.value = item && item.text ? item.text : "";
+    text.setAttribute("aria-label", "标题内容");
+
+    var weight = document.createElement("input");
+    weight.type = "number";
+    weight.className = "site-title-weight";
+    weight.min = "0.1";
+    weight.max = "1000000";
+    weight.step = "0.1";
+    weight.value = item && item.weight ? item.weight : 1;
+    weight.setAttribute("aria-label", "标题权重");
+
+    var probability = document.createElement("span");
+    probability.className = "site-title-prob";
+    probability.textContent = "—";
+
+    var remove = document.createElement("button");
+    remove.type = "button";
+    remove.className = "site-title-remove";
+    remove.textContent = "×";
+    remove.title = "删除这条标题";
+    remove.setAttribute("aria-label", "删除标题");
+    remove.addEventListener("click", function () {
+      if (els.siteTitleRows.querySelectorAll(".site-title-row").length <= 1) {
+        setSiteTitleAlert("至少保留一条标题");
+        return;
+      }
+      row.remove();
+      updateSiteTitleTotals();
+    });
+
+    text.addEventListener("input", updateSiteTitleTotals);
+    weight.addEventListener("input", updateSiteTitleTotals);
+    row.appendChild(text);
+    row.appendChild(weight);
+    row.appendChild(probability);
+    row.appendChild(remove);
+    els.siteTitleRows.appendChild(row);
+    return row;
+  }
+
+  function renderSiteTitleRows(titles) {
+    els.siteTitleRows.innerHTML = "";
+    var items = Array.isArray(titles) && titles.length
+      ? titles
+      : [{ text: "HappyDays 非官方文档", weight: 1 }];
+    items.forEach(function (item) {
+      createSiteTitleRow({
+        text: typeof item.text === "string" ? item.text : "",
+        weight: Number(item.weight) > 0 ? Number(item.weight) : 1
+      });
+    });
+    updateSiteTitleTotals();
+  }
+
+  function titleApiRequest(method, payload) {
+    var options = { method: method, cache: "no-store" };
+    if (payload) {
+      options.headers = { "Content-Type": "application/json" };
+      options.body = JSON.stringify(payload);
+    }
+    return fetch("api/titles", options).then(function (response) {
+      return response.json().catch(function () {
+        return {};
+      }).then(function (data) {
+        if (!response.ok) {
+          throw new Error(data.error || "标题保存失败");
+        }
+        return data;
+      });
+    });
+  }
+
+  function openSiteTitleEditor() {
+    setSiteTitleAlert("");
+    els.siteTitleSave.disabled = true;
+    titleApiRequest("GET").then(function (data) {
+      renderSiteTitleRows(data && data.titles);
+      var fontSize = Number(data && data.fontSize);
+      var interval = Number(data && data.intervalSeconds);
+      els.siteTitleFont.value = Number.isFinite(fontSize) && fontSize >= 8 ? fontSize : 16;
+      els.siteTitleInterval.value = Number.isFinite(interval) && interval >= 3 ? interval : 10;
+      els.siteTitleSave.disabled = false;
+      els.titleEditDialog.showModal();
+      window.setTimeout(function () {
+        var first = els.siteTitleRows.querySelector(".site-title-text");
+        if (first) {
+          first.focus();
+        }
+      }, 30);
+    }).catch(function (error) {
+      showToast(error.message, "error");
+      els.siteTitleSave.disabled = false;
+    });
+  }
+
+  function closeSiteTitleEditor() {
+    els.titleEditDialog.close();
+  }
+
+  function collectSiteTitleRows() {
+    var rows = Array.prototype.slice.call(els.siteTitleRows.querySelectorAll(".site-title-row"));
+    var titles = [];
+    rows.forEach(function (row) {
+      var text = row.querySelector(".site-title-text").value.trim();
+      var weight = Number(row.querySelector(".site-title-weight").value);
+      if (!text) {
+        throw new Error("标题内容不能为空");
+      }
+      if (!Number.isFinite(weight) || weight <= 0) {
+        throw new Error("标题权重必须大于 0");
+      }
+      titles.push({ text: text, weight: weight });
+    });
+    if (!titles.length) {
+      throw new Error("至少保留一条标题");
+    }
+    if (titles.length > 30) {
+      throw new Error("标题最多 30 条");
+    }
+    var fontSize = Number(els.siteTitleFont.value);
+    var intervalSeconds = Number(els.siteTitleInterval.value);
+    if (!Number.isFinite(fontSize) || fontSize < 8 || fontSize > 40) {
+      throw new Error("字号必须在 8 到 40 之间");
+    }
+    if (!Number.isFinite(intervalSeconds) || intervalSeconds < 3 || intervalSeconds > 3600) {
+      throw new Error("轮换间隔必须在 3 到 3600 秒之间");
+    }
+    return {
+      titles: titles,
+      fontSize: fontSize,
+      intervalSeconds: intervalSeconds
+    };
+  }
+
+  function saveSiteTitles(event) {
+    event.preventDefault();
+    var payload;
+    try {
+      payload = collectSiteTitleRows();
+    } catch (error) {
+      setSiteTitleAlert(error.message);
+      return;
+    }
+    payload.author = site.team || "HappyDays 团队";
+    els.siteTitleSave.disabled = true;
+    setSiteTitleAlert("");
+    titleApiRequest("PUT", payload).then(function (result) {
+      applyTitleRollConfig(result);
+      closeSiteTitleEditor();
+      showToast("滚动标题已保存", "success");
+    }).catch(function (error) {
+      setSiteTitleAlert(error.message);
+      showToast(error.message, "error");
+    }).finally(function () {
+      els.siteTitleSave.disabled = false;
     });
   }
 
@@ -258,6 +474,18 @@
     backToTop: document.getElementById("backToTop"),
     titleRoll: document.getElementById("titleRoll"),
     titleRollText: document.getElementById("titleRollText"),
+    titleRollEdit: document.getElementById("titleRollEdit"),
+    titleEditDialog: document.getElementById("titleEditDialog"),
+    titleEditForm: document.getElementById("titleEditForm"),
+    siteTitleRows: document.getElementById("siteTitleRows"),
+    siteTitleFont: document.getElementById("siteTitleFont"),
+    siteTitleInterval: document.getElementById("siteTitleInterval"),
+    siteTitleTotal: document.getElementById("siteTitleTotal"),
+    siteTitleAlert: document.getElementById("siteTitleAlert"),
+    siteTitleAdd: document.getElementById("siteTitleAdd"),
+    siteTitleClose: document.getElementById("siteTitleClose"),
+    siteTitleCancel: document.getElementById("siteTitleCancel"),
+    siteTitleSave: document.getElementById("siteTitleSave"),
     editBtn: document.getElementById("editBtn"),
     shareBtn: document.getElementById("shareBtn"),
     ogUrl: document.getElementById("ogUrl"),
@@ -1510,6 +1738,20 @@
     });
 
     els.shareBtn.addEventListener("click", copyPageLink);
+    els.titleRollEdit.addEventListener("click", openSiteTitleEditor);
+    els.titleEditForm.addEventListener("submit", saveSiteTitles);
+    els.siteTitleAdd.addEventListener("click", function () {
+      if (els.siteTitleRows.querySelectorAll(".site-title-row").length >= 30) {
+        setSiteTitleAlert("标题最多 30 条");
+        return;
+      }
+      setSiteTitleAlert("");
+      var row = createSiteTitleRow({ text: "", weight: 1 });
+      updateSiteTitleTotals();
+      row.querySelector(".site-title-text").focus();
+    });
+    els.siteTitleClose.addEventListener("click", closeSiteTitleEditor);
+    els.siteTitleCancel.addEventListener("click", closeSiteTitleEditor);
     els.themeBtn.addEventListener("click", toggleTheme);
     els.moreBtn.addEventListener("click", function (event) {
       event.stopPropagation();
@@ -1619,6 +1861,7 @@
     }).then(function (data) {
       if (data && data.ok) {
         els.editBtn.hidden = false;
+        els.titleRollEdit.hidden = false;
       }
     }).catch(function () {
       /* 静态托管或 file:// 下没有编辑服务，保持入口隐藏 */

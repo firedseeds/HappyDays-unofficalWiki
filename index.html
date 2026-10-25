@@ -115,6 +115,9 @@
           <span class="title-roll-window">
             <span class="title-roll-text" id="titleRollText">HappyDays 非官方文档</span>
           </span>
+          <button class="title-roll-edit" id="titleRollEdit" type="button" aria-label="编辑滚动标题" title="编辑滚动标题" hidden>
+            <svg class="icon" aria-hidden="true"><use href="#i-edit"></use></svg>
+          </button>
         </div>
 
         <div class="topbar-actions">
@@ -278,6 +281,45 @@
   </button>
 
   <div class="sr-only" id="pageAnnouncement" aria-live="polite"></div>
+
+  <dialog class="site-title-dialog" id="titleEditDialog" aria-labelledby="titleEditHeading">
+    <form id="titleEditForm">
+      <div class="site-title-head">
+        <div>
+          <p class="site-title-eyebrow">页眉配置</p>
+          <h2 id="titleEditHeading">编辑滚动标题</h2>
+        </div>
+        <button class="icon-button" id="siteTitleClose" type="button" aria-label="关闭">
+          <svg class="icon" aria-hidden="true"><use href="#i-x"></use></svg>
+        </button>
+      </div>
+      <div class="site-title-body">
+        <p class="site-title-hint">标题按权重随机出现，概率 = 当前权重 / 总权重。</p>
+        <div class="site-title-settings">
+          <label class="site-title-setting">
+            <span>字号</span>
+            <input id="siteTitleFont" type="number" min="8" max="40" step="0.5" value="16">
+            <span class="site-title-unit">px</span>
+          </label>
+          <label class="site-title-setting">
+            <span>轮换间隔</span>
+            <input id="siteTitleInterval" type="number" min="3" max="3600" step="1" value="10">
+            <span class="site-title-unit">秒</span>
+          </label>
+        </div>
+        <div class="site-title-rows" id="siteTitleRows"></div>
+        <div class="site-title-foot">
+          <button class="site-title-add" id="siteTitleAdd" type="button">+ 添加标题</button>
+          <span id="siteTitleTotal"></span>
+        </div>
+        <div class="site-title-alert" id="siteTitleAlert" hidden role="alert"></div>
+      </div>
+      <div class="site-title-actions">
+        <button class="top-action" id="siteTitleCancel" type="button">取消</button>
+        <button class="site-title-save" id="siteTitleSave" type="submit">保存标题</button>
+      </div>
+    </form>
+  </dialog>
 
   <svg class="icon-sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
     <defs>
