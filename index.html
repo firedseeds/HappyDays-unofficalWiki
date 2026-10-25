@@ -12,6 +12,7 @@
   <meta property="og:description" content="HappyDays非官方文档">
   <meta property="og:url" id="ogUrl" content="">
   <link rel="canonical" id="canonicalLink" href="">
+  <link rel="stylesheet" href="assets/title-format.css">
   <title>HappyDays非官方文档</title>
   <link rel="icon" type="image/png" href="icon.png">
   <script>
@@ -307,6 +308,17 @@
             <span class="site-title-unit">秒</span>
           </label>
         </div>
+        <div class="title-format-toolbar" id="siteTitleToolbar" aria-label="标题格式">
+          <button class="title-format-button" type="button" data-format="bold" title="粗体"><b>B</b></button>
+          <button class="title-format-button" type="button" data-format="italic" title="斜体"><i>I</i></button>
+          <button class="title-format-button" type="button" data-format="underline" title="下划线"><u>U</u></button>
+          <button class="title-format-button" type="button" data-format="strike" title="删除线"><s>S</s></button>
+          <label class="title-format-color">
+            颜色
+            <input id="siteTitleColor" type="color" value="#0a9b69" title="文字颜色">
+          </label>
+          <span class="title-format-hint">选中文字后应用</span>
+        </div>
         <div class="site-title-rows" id="siteTitleRows"></div>
         <div class="site-title-foot">
           <button class="site-title-add" id="siteTitleAdd" type="button">+ 添加标题</button>
@@ -355,6 +367,7 @@
   </svg>
 
   <script src="assets/data.js"></script>
+  <script src="assets/title-format.js"></script>
   <script src="assets/app.js"></script>
 </body>
 </html>

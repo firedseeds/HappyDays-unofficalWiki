@@ -44,6 +44,7 @@ BUILD_SCRIPT = ROOT / "build.py"
 MAX_REQUEST_BYTES = 2 * 1024 * 1024
 MAX_BODY_CHARS = 800_000
 SLUG_RE = re.compile(r"^[a-z0-9][a-z0-9-]{0,63}$")
+TITLE_COLOR_RE = re.compile(r"^#[0-9a-fA-F]{6}$")
 LOCK = threading.Lock()
 
 
@@ -573,6 +574,65 @@ def auto_commit(paths: list[Path], message: str, author: str | None = None) -> d
         return {"committed": False, "error": "Git 操作超时"}
 
 
+def normalize_title_runs(item: dict) -> tuple[str, list[dict]]:
+    raw_runs = item.get("runs")
+    if raw_runs is None:
+        text = require_text(item.get("text"), "标题", 80)
+        return text, [
+            {
+                "text": text,
+                "bold": False,
+                "italic": False,
+                "underline": False,
+                "strike": False,
+                "color": "",
+            }
+        ]
+    if not isinstance(raw_runs, list) or not raw_runs:
+        raise ApiError(400, "标题 runs 不能为空")
+
+    runs = []
+    total = ""
+    for raw in raw_runs:
+        if not isinstance(raw, dict):
+            raise ApiError(400, "标题 run 格式无效")
+        text = raw.get("text")
+        if not isinstance(text, str) or not text:
+            raise ApiError(400, "标题 run 文本不能为空")
+        if "\n" in text or "\r" in text:
+            raise ApiError(400, "标题不能包含换行")
+        total += text
+        if len(total) > 80:
+            raise ApiError(400, "标题不能超过 80 个字符")
+        color = str(raw.get("color") or "").strip().lower()
+        if color and not TITLE_COLOR_RE.fullmatch(color):
+            raise ApiError(400, "标题颜色必须是 #RRGGBB")
+        runs.append(
+            {
+                "text": text,
+                "bold": bool(raw.get("bold")),
+                "italic": bool(raw.get("italic")),
+                "underline": bool(raw.get("underline")),
+                "strike": bool(raw.get("strike")),
+                "color": color,
+            }
+        )
+    if not total.strip():
+        raise ApiError(400, "标题不能为空")
+
+    merged = []
+    for run in runs:
+        previous = merged[-1] if merged else None
+        if previous and all(
+            previous[field] == run[field]
+            for field in ("bold", "italic", "underline", "strike", "color")
+        ):
+            previous["text"] += run["text"]
+        else:
+            merged.append(run)
+    return total, merged
+
+
 def update_titles(payload: dict) -> dict:
     with LOCK:
         raw_titles = payload.get("titles")
@@ -584,7 +644,7 @@ def update_titles(payload: dict) -> dict:
         for item in raw_titles:
             if not isinstance(item, dict):
                 raise ApiError(400, "标题条目格式无效")
-            text = require_text(item.get("text"), "标题", 80)
+            text, runs = normalize_title_runs(item)
             weight = item.get("weight")
             if isinstance(weight, bool) or not isinstance(weight, (int, float)):
                 raise ApiError(400, "标题权重必须是数字")
@@ -593,7 +653,7 @@ def update_titles(payload: dict) -> dict:
                 raise ApiError(400, "标题权重必须大于 0 且不超过 1000000")
             if weight.is_integer():
                 weight = int(weight)
-            titles.append({"text": text, "weight": weight})
+            titles.append({"text": text, "weight": weight, "runs": runs})
 
         font_size = payload.get("fontSize", 16)
         if isinstance(font_size, bool) or not isinstance(font_size, (int, float)):

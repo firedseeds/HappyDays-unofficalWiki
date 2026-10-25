@@ -122,16 +122,16 @@
       return sum + item.weight;
     }, 0);
     if (!total) {
-      return candidates[0].text;
+      return candidates[0];
     }
     var roll = Math.random() * total;
     for (var index = 0; index < candidates.length; index += 1) {
       roll -= candidates[index].weight;
       if (roll < 0) {
-        return candidates[index].text;
+        return candidates[index];
       }
     }
-    return candidates[candidates.length - 1].text;
+    return candidates[candidates.length - 1];
   }
 
   var titleRollState = {
@@ -141,6 +141,8 @@
     paused: false,
     currentText: ""
   };
+
+  var activeSiteTitleEditor = null;
 
   function stopTitleRotation() {
     if (titleRollState.timer) {
@@ -164,21 +166,25 @@
     }, titleRollState.intervalMs);
   }
 
-  function applyRollingTitle(text, animate) {
-    if (!els.titleRollText || !text) {
+  function applyRollingTitle(title, animate) {
+    if (!els.titleRollText || !title) {
+      return;
+    }
+    var normalized = window.HappyDaysTitleFormat.normalize(title);
+    if (!normalized.text) {
       return;
     }
     var reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     els.titleRollText.classList.remove("is-rolling");
     if (animate && !reduced) {
       void els.titleRollText.offsetWidth;
-      els.titleRollText.textContent = text;
+      window.HappyDaysTitleFormat.render(els.titleRollText, normalized);
       els.titleRollText.classList.add("is-rolling");
     } else {
-      els.titleRollText.textContent = text;
+      window.HappyDaysTitleFormat.render(els.titleRollText, normalized);
     }
-    els.titleRollText.title = text;
-    titleRollState.currentText = text;
+    els.titleRollText.title = normalized.text;
+    titleRollState.currentText = normalized.text;
   }
 
   function applyTitleRollConfig(data) {
@@ -188,12 +194,12 @@
       return false;
     }
     var items = raw.map(function (item) {
-      var text = item && typeof item.text === "string" ? item.text.trim() : "";
+      var normalized = window.HappyDaysTitleFormat.normalize(item);
       var weight = Number(item && item.weight);
-      if (!text || !Number.isFinite(weight) || weight <= 0) {
+      if (!normalized.text.trim() || !Number.isFinite(weight) || weight <= 0) {
         return null;
       }
-      return { text: text, weight: weight };
+      return { text: normalized.text, weight: weight, runs: normalized.runs };
     }).filter(Boolean);
     if (!items.length) {
       return false;
@@ -271,17 +277,78 @@
     els.siteTitleTotal.textContent = "总权重 " + (total > 0 ? total.toFixed(1) : "0");
   }
 
+  var savedSiteTitleRange = null;
+
+  function currentSiteTitleEditor() {
+    if (activeSiteTitleEditor && activeSiteTitleEditor.isConnected) {
+      return activeSiteTitleEditor;
+    }
+    var focused = document.activeElement;
+    if (focused && focused.classList && focused.classList.contains("site-title-text")) {
+      activeSiteTitleEditor = focused;
+      return focused;
+    }
+    return null;
+  }
+
+  function saveSiteTitleSelection() {
+    var editor = currentSiteTitleEditor();
+    var selection = window.getSelection();
+    if (!editor || !selection || !selection.rangeCount) {
+      return;
+    }
+    var range = selection.getRangeAt(0);
+    if (editor.contains(range.commonAncestorContainer)) {
+      savedSiteTitleRange = range.cloneRange();
+    }
+  }
+
+  function applySiteTitleFormat(command, value) {
+    activeSiteTitleEditor = currentSiteTitleEditor();
+    if (!activeSiteTitleEditor || !activeSiteTitleEditor.isConnected) {
+      setSiteTitleAlert("请先点击一条标题，再选择要修改的文字");
+      return;
+    }
+    activeSiteTitleEditor.focus();
+    if (savedSiteTitleRange && activeSiteTitleEditor.contains(savedSiteTitleRange.commonAncestorContainer)) {
+      var selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(savedSiteTitleRange);
+    }
+    document.execCommand("styleWithCSS", false, true);
+    document.execCommand(command, false, value || null);
+    saveSiteTitleSelection();
+  }
+
   function createSiteTitleRow(item) {
     var row = document.createElement("div");
     row.className = "site-title-row";
 
-    var text = document.createElement("input");
-    text.type = "text";
-    text.className = "site-title-text";
-    text.maxLength = 80;
-    text.placeholder = "标题内容";
-    text.value = item && item.text ? item.text : "";
+    var text = document.createElement("div");
+    text.className = "title-rich site-title-text";
+    text.contentEditable = "true";
+    text.spellcheck = false;
+    text.setAttribute("role", "textbox");
     text.setAttribute("aria-label", "标题内容");
+    text.setAttribute("data-placeholder", "标题内容");
+    window.HappyDaysTitleFormat.render(text, item || { text: "" });
+    text.addEventListener("focus", function () {
+      activeSiteTitleEditor = text;
+    });
+    text.addEventListener("mousedown", function () {
+      activeSiteTitleEditor = text;
+    });
+    text.addEventListener("keydown", function (event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+      }
+    });
+    text.addEventListener("paste", function (event) {
+      event.preventDefault();
+      var paste = (event.clipboardData || window.clipboardData).getData("text/plain");
+      document.execCommand("insertText", false, String(paste || "").replace(/[\r\n]+/g, " "));
+    });
+    text.addEventListener("input", updateSiteTitleTotals);
 
     var weight = document.createElement("input");
     weight.type = "number";
@@ -307,11 +374,13 @@
         setSiteTitleAlert("至少保留一条标题");
         return;
       }
+      if (activeSiteTitleEditor === text) {
+        activeSiteTitleEditor = null;
+      }
       row.remove();
       updateSiteTitleTotals();
     });
 
-    text.addEventListener("input", updateSiteTitleTotals);
     weight.addEventListener("input", updateSiteTitleTotals);
     row.appendChild(text);
     row.appendChild(weight);
@@ -329,6 +398,7 @@
     items.forEach(function (item) {
       createSiteTitleRow({
         text: typeof item.text === "string" ? item.text : "",
+        runs: item.runs,
         weight: Number(item.weight) > 0 ? Number(item.weight) : 1
       });
     });
@@ -367,6 +437,7 @@
       window.setTimeout(function () {
         var first = els.siteTitleRows.querySelector(".site-title-text");
         if (first) {
+          activeSiteTitleEditor = first;
           first.focus();
         }
       }, 30);
@@ -377,6 +448,8 @@
   }
 
   function closeSiteTitleEditor() {
+    activeSiteTitleEditor = null;
+    savedSiteTitleRange = null;
     els.titleEditDialog.close();
   }
 
@@ -384,15 +457,20 @@
     var rows = Array.prototype.slice.call(els.siteTitleRows.querySelectorAll(".site-title-row"));
     var titles = [];
     rows.forEach(function (row) {
-      var text = row.querySelector(".site-title-text").value.trim();
+      var editor = row.querySelector(".site-title-text");
+      var text = editor.textContent;
       var weight = Number(row.querySelector(".site-title-weight").value);
-      if (!text) {
+      if (!text.trim()) {
         throw new Error("标题内容不能为空");
       }
       if (!Number.isFinite(weight) || weight <= 0) {
         throw new Error("标题权重必须大于 0");
       }
-      titles.push({ text: text, weight: weight });
+      titles.push({
+        text: text,
+        weight: weight,
+        runs: window.HappyDaysTitleFormat.extract(editor)
+      });
     });
     if (!titles.length) {
       throw new Error("至少保留一条标题");
@@ -503,6 +581,8 @@
     titleEditDialog: document.getElementById("titleEditDialog"),
     titleEditForm: document.getElementById("titleEditForm"),
     siteTitleRows: document.getElementById("siteTitleRows"),
+    siteTitleToolbar: document.getElementById("siteTitleToolbar"),
+    siteTitleColor: document.getElementById("siteTitleColor"),
     siteTitleFont: document.getElementById("siteTitleFont"),
     siteTitleInterval: document.getElementById("siteTitleInterval"),
     siteTitleTotal: document.getElementById("siteTitleTotal"),
@@ -1765,6 +1845,25 @@
     els.shareBtn.addEventListener("click", copyPageLink);
     els.titleRollEdit.addEventListener("click", openSiteTitleEditor);
     els.titleEditForm.addEventListener("submit", saveSiteTitles);
+    document.addEventListener("selectionchange", saveSiteTitleSelection);
+    els.siteTitleToolbar.addEventListener("mousedown", function (event) {
+      saveSiteTitleSelection();
+      if (event.target.closest(".title-format-button")) {
+        event.preventDefault();
+      }
+    });
+    els.siteTitleToolbar.addEventListener("click", function (event) {
+      var button = event.target.closest(".title-format-button");
+      if (!button) {
+        return;
+      }
+      var command = button.dataset.format;
+      applySiteTitleFormat(command === "strike" ? "strikeThrough" : command);
+    });
+    els.siteTitleColor.addEventListener("mousedown", saveSiteTitleSelection);
+    els.siteTitleColor.addEventListener("input", function () {
+      applySiteTitleFormat("foreColor", els.siteTitleColor.value);
+    });
     els.siteTitleAdd.addEventListener("click", function () {
       if (els.siteTitleRows.querySelectorAll(".site-title-row").length >= 30) {
         setSiteTitleAlert("标题最多 30 条");

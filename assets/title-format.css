@@ -1,0 +1,87 @@
+.title-rich {
+  min-width: 0;
+  min-height: 34px;
+  padding: 7px 9px;
+  overflow-wrap: anywhere;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--canvas);
+  color: var(--text);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.45;
+  outline: 0;
+  white-space: pre-wrap;
+}
+
+.title-rich:focus {
+  border-color: rgba(10, 155, 105, 0.48);
+  box-shadow: 0 0 0 3px rgba(10, 155, 105, 0.09);
+}
+
+.title-rich:empty::before {
+  color: var(--text-faint);
+  content: attr(data-placeholder);
+  pointer-events: none;
+}
+
+.title-rich span {
+  white-space: pre;
+}
+
+.title-format-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 7px 8px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--canvas);
+}
+
+.title-format-button {
+  display: inline-flex;
+  width: 28px;
+  height: 28px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.title-format-button:hover {
+  border-color: var(--border);
+  background: var(--surface);
+  color: var(--text);
+}
+
+.title-format-color {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: 3px;
+  color: var(--text-faint);
+  font-size: 9.5px;
+}
+
+.title-format-color input {
+  width: 25px;
+  height: 25px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.title-format-hint {
+  margin-left: auto;
+  color: var(--text-faint);
+  font-size: 9px;
+  white-space: nowrap;
+}

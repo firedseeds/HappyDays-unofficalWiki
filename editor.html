@@ -6,6 +6,7 @@
   <meta name="color-scheme" content="light dark">
   <title>内容管理 · HappyDays非官方文档</title>
   <link rel="icon" type="image/png" href="icon.png">
+  <link rel="stylesheet" href="assets/title-format.css">
   <script>
     (function () {
       try {
@@ -271,6 +272,17 @@
             <span class="title-setting-unit">秒</span>
           </label>
         </div>
+        <div class="title-format-toolbar" id="editorTitleToolbar" aria-label="标题格式">
+          <button class="title-format-button" type="button" data-format="bold" title="粗体"><b>B</b></button>
+          <button class="title-format-button" type="button" data-format="italic" title="斜体"><i>I</i></button>
+          <button class="title-format-button" type="button" data-format="underline" title="下划线"><u>U</u></button>
+          <button class="title-format-button" type="button" data-format="strike" title="删除线"><s>S</s></button>
+          <label class="title-format-color">
+            颜色
+            <input id="editorTitleColor" type="color" value="#0a9b69" title="文字颜色">
+          </label>
+          <span class="title-format-hint">选中文字后应用</span>
+        </div>
         <div class="title-editor-list" id="titleEditorList"></div>
         <div class="title-editor-foot">
           <button class="editor-btn" id="addTitleItem" type="button">
@@ -310,6 +322,7 @@
     </defs>
   </svg>
 
+  <script src="assets/title-format.js"></script>
   <script src="assets/editor.js"></script>
 </body>
 </html>

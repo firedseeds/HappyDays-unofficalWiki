@@ -58,6 +58,8 @@
     titleDialog: document.getElementById("titleDialog"),
     titleForm: document.getElementById("titleForm"),
     titleEditorList: document.getElementById("titleEditorList"),
+    editorTitleToolbar: document.getElementById("editorTitleToolbar"),
+    editorTitleColor: document.getElementById("editorTitleColor"),
     titleFontSize: document.getElementById("titleFontSize"),
     titleInterval: document.getElementById("titleInterval"),
     addTitleItem: document.getElementById("addTitleItem"),
@@ -84,6 +86,8 @@
   };
 
   var AUTHOR_KEY = "happydays-editor-author";
+  var activeEditorTitle = null;
+  var savedEditorTitleRange = null;
 
   function rememberedAuthor() {
     try {
@@ -1080,17 +1084,76 @@
     els.titleTotal.textContent = "总权重 " + (total > 0 ? total.toFixed(1) : "0");
   }
 
+  function currentEditorTitle() {
+    if (activeEditorTitle && activeEditorTitle.isConnected) {
+      return activeEditorTitle;
+    }
+    var focused = document.activeElement;
+    if (focused && focused.classList && focused.classList.contains("title-text-input")) {
+      activeEditorTitle = focused;
+      return focused;
+    }
+    return null;
+  }
+
+  function saveEditorTitleSelection() {
+    var editor = currentEditorTitle();
+    var selection = window.getSelection();
+    if (!editor || !selection || !selection.rangeCount) {
+      return;
+    }
+    var range = selection.getRangeAt(0);
+    if (editor.contains(range.commonAncestorContainer)) {
+      savedEditorTitleRange = range.cloneRange();
+    }
+  }
+
+  function applyEditorTitleFormat(command, value) {
+    activeEditorTitle = currentEditorTitle();
+    if (!activeEditorTitle || !activeEditorTitle.isConnected) {
+      setTitleAlert("请先点击一条标题，再选择要修改的文字");
+      return;
+    }
+    activeEditorTitle.focus();
+    if (savedEditorTitleRange && activeEditorTitle.contains(savedEditorTitleRange.commonAncestorContainer)) {
+      var selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(savedEditorTitleRange);
+    }
+    document.execCommand("styleWithCSS", false, true);
+    document.execCommand(command, false, value || null);
+    saveEditorTitleSelection();
+  }
+
   function createTitleRow(item) {
     var row = document.createElement("div");
     row.className = "title-editor-row";
 
-    var text = document.createElement("input");
-    text.type = "text";
-    text.className = "title-text-input";
-    text.maxLength = 80;
-    text.placeholder = "标题内容";
-    text.value = item && item.text ? item.text : "";
+    var text = document.createElement("div");
+    text.className = "title-rich title-text-input";
+    text.contentEditable = "true";
+    text.spellcheck = false;
+    text.setAttribute("role", "textbox");
     text.setAttribute("aria-label", "标题内容");
+    text.setAttribute("data-placeholder", "标题内容");
+    window.HappyDaysTitleFormat.render(text, item || { text: "" });
+    text.addEventListener("focus", function () {
+      activeEditorTitle = text;
+    });
+    text.addEventListener("mousedown", function () {
+      activeEditorTitle = text;
+    });
+    text.addEventListener("keydown", function (event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+      }
+    });
+    text.addEventListener("paste", function (event) {
+      event.preventDefault();
+      var paste = (event.clipboardData || window.clipboardData).getData("text/plain");
+      document.execCommand("insertText", false, String(paste || "").replace(/[\r\n]+/g, " "));
+    });
+    text.addEventListener("input", updateTitleTotal);
 
     var weight = document.createElement("input");
     weight.type = "number";
@@ -1112,13 +1175,15 @@
     remove.setAttribute("aria-label", "删除标题");
     remove.innerHTML = '<svg class="icon" aria-hidden="true"><use href="#i-trash"></use></svg>';
 
-    text.addEventListener("input", updateTitleTotal);
     weight.addEventListener("input", updateTitleTotal);
     remove.addEventListener("click", function () {
       var rows = els.titleEditorList.querySelectorAll(".title-editor-row");
       if (rows.length <= 1) {
         setTitleAlert("至少保留一条标题");
         return;
+      }
+      if (activeEditorTitle === text) {
+        activeEditorTitle = null;
       }
       row.remove();
       updateTitleTotal();
@@ -1140,6 +1205,7 @@
     items.forEach(function (item) {
       createTitleRow({
         text: typeof item.text === "string" ? item.text : "",
+        runs: item.runs,
         weight: Number(item.weight) > 0 ? Number(item.weight) : 1
       });
     });
@@ -1160,6 +1226,7 @@
       window.setTimeout(function () {
         var first = els.titleEditorList.querySelector(".title-text-input");
         if (first) {
+          activeEditorTitle = first;
           first.focus();
         }
       }, 30);
@@ -1170,6 +1237,8 @@
   }
 
   function closeTitleDialog() {
+    activeEditorTitle = null;
+    savedEditorTitleRange = null;
     els.titleDialog.close();
   }
 
@@ -1177,15 +1246,20 @@
     var rows = Array.prototype.slice.call(els.titleEditorList.querySelectorAll(".title-editor-row"));
     var titles = [];
     rows.forEach(function (row) {
-      var text = row.querySelector(".title-text-input").value.trim();
+      var editor = row.querySelector(".title-text-input");
+      var text = editor.textContent;
       var weight = Number(row.querySelector(".title-weight-input").value);
-      if (!text) {
+      if (!text.trim()) {
         throw new Error("标题内容不能为空");
       }
       if (!Number.isFinite(weight) || weight <= 0) {
         throw new Error("标题权重必须大于 0");
       }
-      titles.push({ text: text, weight: weight });
+      titles.push({
+        text: text,
+        weight: weight,
+        runs: window.HappyDaysTitleFormat.extract(editor)
+      });
     });
     if (!titles.length) {
       throw new Error("至少保留一条标题");
@@ -1273,6 +1347,25 @@
     els.titleForm.addEventListener("submit", saveTitles);
     els.closeTitleDialog.addEventListener("click", closeTitleDialog);
     els.cancelTitle.addEventListener("click", closeTitleDialog);
+    document.addEventListener("selectionchange", saveEditorTitleSelection);
+    els.editorTitleToolbar.addEventListener("mousedown", function (event) {
+      saveEditorTitleSelection();
+      if (event.target.closest(".title-format-button")) {
+        event.preventDefault();
+      }
+    });
+    els.editorTitleToolbar.addEventListener("click", function (event) {
+      var button = event.target.closest(".title-format-button");
+      if (!button) {
+        return;
+      }
+      var command = button.dataset.format;
+      applyEditorTitleFormat(command === "strike" ? "strikeThrough" : command);
+    });
+    els.editorTitleColor.addEventListener("mousedown", saveEditorTitleSelection);
+    els.editorTitleColor.addEventListener("input", function () {
+      applyEditorTitleFormat("foreColor", els.editorTitleColor.value);
+    });
     els.importArticleBtn.addEventListener("click", function () {
       els.importFileInput.click();
     });
