@@ -9,7 +9,7 @@
     "domain": "127.0.0.1:8000"
   },
   "topicCount": 9,
-  "articleCount": 30,
+  "articleCount": 31,
   "lastUpdated": "2026-10-25",
   "topics": [
     {
@@ -89,7 +89,7 @@
       "directory": "history/godman",
       "parentId": "history",
       "order": 3,
-      "articleCount": 2
+      "articleCount": 3
     },
     {
       "id": "gallery",
@@ -199,7 +199,7 @@
       "order": 8,
       "topic": "advanced",
       "title": "资源世界/下界",
-      "description": "南京传送点",
+      "description": "暂无摘要",
       "emoji": "🧭",
       "updated": "2026-10-25",
       "readingTime": 1,
@@ -492,6 +492,19 @@
       "tags": [],
       "file": "history/people/1.md",
       "source": "/wiki/#/doc/1"
+    },
+    {
+      "slug": "666",
+      "order": 32,
+      "topic": "godman",
+      "title": "666",
+      "description": "此人掏走了钻石信标，被土豆审判后ban IP",
+      "emoji": "🐭",
+      "updated": "2026-10-25",
+      "readingTime": 5,
+      "tags": [],
+      "file": "history/godman/666.md",
+      "source": "/wiki/#/doc/666"
     }
   ]
 }

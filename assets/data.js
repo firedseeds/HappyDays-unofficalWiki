@@ -69,7 +69,7 @@ window.HAPPYDAYS_WIKI = (function () {
       description: "服务器里各种神人",
       parentId: "history",
       order: 3,
-      docs: ["qwertyuiop", "alex"]
+      docs: ["qwertyuiop", "alex", "666"]
     },
     {
       id: "gallery",
@@ -287,12 +287,17 @@ window.HAPPYDAYS_WIKI = (function () {
       title: "资源世界/下界",
       emoji: "🧭",
       category: "advanced",
-      excerpt: "南京传送点",
+      excerpt: "暂无摘要",
       updated: "2026-10-25",
       reading: 1,
       tags: [],
       signatures: [{"author": "233", "at": "2026-10-25T21:13:12+08:00", "action": "update", "title": "资源世界/下界", "topic": "进阶教程"}, {"author": "233", "at": "2026-10-25T21:14:26+08:00", "action": "update", "title": "资源世界/下界", "topic": "进阶教程"}, {"author": "苹果居士", "at": "2026-10-25T21:29:50+08:00", "action": "update", "title": "资源世界/下界", "topic": "进阶教程"}, {"author": "苹果居士", "at": "2026-10-25T21:29:54+08:00", "action": "update", "title": "资源世界/下界", "topic": "进阶教程"}],
-      content: `<p>南京传送点有资源传送和下界传送，服务器无末地</p>`
+      content: `<h2>使用维度模组创建的维度，所以：资源世界不是原版主世界，地狱世界也不是真的地狱世界！</h2>
+<p><strong>资源世界与地狱世界可以刷怪，所以请注意您的安全。</strong></p>
+<p><strong>如果你想前往资源/地狱请前往南京（的厕所）。如果您的城市很偏远，不方便到达南京，可以向管理员申请命令方块传送。</strong></p>
+<p><strong>事实上，和钟表菜单上所说的不一样，地狱世界不会死亡掉落。</strong></p>
+<p><strong>吓人这一块——233</strong></p>
+<p>你知道吗：在资源世界有通往原版地狱世界的传送门哦（</p>`
     },
     "senluo-kitchen": {
       title: "森罗物语：厨房",
@@ -738,11 +743,23 @@ window.HAPPYDAYS_WIKI = (function () {
       tags: [],
       signatures: [{"author": "苹果居士", "at": "2026-10-25T21:32:05+08:00", "action": "create", "title": "pingguojushi", "topic": "人物志"}, {"author": "苹果居士", "at": "2026-10-25T21:32:35+08:00", "action": "update", "title": "pingguojushi", "topic": "人物志"}],
       content: `<p>##介绍 上海金山镇长</p>`
+    },
+    "666": {
+      title: "666",
+      emoji: "🐭",
+      category: "godman",
+      excerpt: "此人掏走了钻石信标，被土豆审判后ban IP",
+      updated: "2026-10-25",
+      reading: 5,
+      tags: [],
+      signatures: [],
+      content: `<h3>此人掏走了钻石信标，被土豆审判后ban IP</h3>
+<p><em>由于群内消息已被自动删除，而编者的记忆力与鱼相当，所以只记得上面了</em></p>`
     }
   };
 
   var allIds = [
-    "intro", "before-joining", "first-arrival", "shop-plugin", "build-town", "about-nations", "first-money", "resource-world-nether", "senluo-kitchen", "senluo-tavern", "money-making-guide", "lottery", "immersive-vehicles", "town-resources", "cheating-response", "behavior-chat", "world-map", "matopiraphai", "233-2233", "zzx", "northeast-economic-alliance", "harbin-chronicle", "rhodes-island", "freedom-union", "dprk", "qwertyuiop", "alex", "gallery-1", "gallery-2", "1"
+    "intro", "before-joining", "first-arrival", "shop-plugin", "build-town", "about-nations", "first-money", "resource-world-nether", "senluo-kitchen", "senluo-tavern", "money-making-guide", "lottery", "immersive-vehicles", "town-resources", "cheating-response", "behavior-chat", "world-map", "matopiraphai", "233-2233", "zzx", "northeast-economic-alliance", "harbin-chronicle", "rhodes-island", "freedom-union", "dprk", "qwertyuiop", "alex", "gallery-1", "gallery-2", "1", "666"
   ];
 
   return {
