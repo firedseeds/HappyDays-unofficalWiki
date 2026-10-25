@@ -108,28 +108,38 @@
     });
   }
 
-  function pickWeightedTitle(items) {
-    var total = items.reduce(function (sum, item) {
+  function pickWeightedTitle(items, excludeText) {
+    var candidates = items;
+    if (excludeText) {
+      var filtered = items.filter(function (item) {
+        return item.text !== excludeText;
+      });
+      if (filtered.length) {
+        candidates = filtered;
+      }
+    }
+    var total = candidates.reduce(function (sum, item) {
       return sum + item.weight;
     }, 0);
     if (!total) {
-      return items[0].text;
+      return candidates[0].text;
     }
     var roll = Math.random() * total;
-    for (var index = 0; index < items.length; index += 1) {
-      roll -= items[index].weight;
+    for (var index = 0; index < candidates.length; index += 1) {
+      roll -= candidates[index].weight;
       if (roll < 0) {
-        return items[index].text;
+        return candidates[index].text;
       }
     }
-    return items[items.length - 1].text;
+    return candidates[candidates.length - 1].text;
   }
 
   var titleRollState = {
     items: [],
     intervalMs: 10000,
     timer: null,
-    paused: false
+    paused: false,
+    currentText: ""
   };
 
   function stopTitleRotation() {
@@ -147,7 +157,10 @@
       return;
     }
     titleRollState.timer = window.setInterval(function () {
-      applyRollingTitle(pickWeightedTitle(titleRollState.items), true);
+      applyRollingTitle(
+        pickWeightedTitle(titleRollState.items, titleRollState.currentText),
+        true
+      );
     }, titleRollState.intervalMs);
   }
 
@@ -165,6 +178,7 @@
       els.titleRollText.textContent = text;
     }
     els.titleRollText.title = text;
+    titleRollState.currentText = text;
   }
 
   function applyTitleRollConfig(data) {
@@ -201,7 +215,10 @@
     titleRollState.items = items;
     titleRollState.intervalMs = intervalSeconds * 1000;
     stopTitleRotation();
-    applyRollingTitle(pickWeightedTitle(items), false);
+    applyRollingTitle(
+      pickWeightedTitle(items, titleRollState.currentText),
+      false
+    );
     startTitleRotation();
     return true;
   }
