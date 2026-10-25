@@ -172,6 +172,13 @@
         "action": "create",
         "title": "pingguojushi",
         "topic": "人物志"
+      },
+      {
+        "author": "苹果居士",
+        "at": "2026-10-25T21:32:35+08:00",
+        "action": "update",
+        "title": "pingguojushi",
+        "topic": "人物志"
       }
     ]
   }

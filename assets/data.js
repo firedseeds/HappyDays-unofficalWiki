@@ -736,7 +736,7 @@ window.HAPPYDAYS_WIKI = (function () {
       updated: "2026-10-25",
       reading: 5,
       tags: [],
-      signatures: [{"author": "苹果居士", "at": "2026-10-25T21:32:05+08:00", "action": "create", "title": "pingguojushi", "topic": "人物志"}],
+      signatures: [{"author": "苹果居士", "at": "2026-10-25T21:32:05+08:00", "action": "create", "title": "pingguojushi", "topic": "人物志"}, {"author": "苹果居士", "at": "2026-10-25T21:32:35+08:00", "action": "update", "title": "pingguojushi", "topic": "人物志"}],
       content: `<p>##介绍 上海金山镇长</p>`
     }
   };
