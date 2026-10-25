@@ -66,6 +66,15 @@
         "title": "关于国家",
         "topic": "新手教程"
       }
+    ],
+    "northeast-economic-alliance": [
+      {
+        "author": "233",
+        "at": "2026-10-25T20:39:34+08:00",
+        "action": "update",
+        "title": "泛东北经济同盟",
+        "topic": "国家/城镇"
+      }
     ]
   }
 }
