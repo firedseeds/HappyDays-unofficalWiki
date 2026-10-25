@@ -29,6 +29,20 @@
           "color": ""
         }
       ]
+    },
+    {
+      "text": "bj",
+      "weight": 1,
+      "runs": [
+        {
+          "text": "bj",
+          "bold": false,
+          "italic": false,
+          "underline": false,
+          "strike": false,
+          "color": ""
+        }
+      ]
     }
   ]
 }
