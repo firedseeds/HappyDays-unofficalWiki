@@ -71,12 +71,31 @@ chmod +x server.sh
 HOST=127.0.0.1 PORT=8080 ./server.sh -run
 ```
 
+Windows 使用 `run.bat`，参数和输出一致：
+
+```bat
+run.bat -run
+run.bat -stop
+run.bat -logs
+run.bat -logs -f
+```
+
+Windows 环境变量示例：
+
+```bat
+set HOST=127.0.0.1
+set PORT=8080
+run.bat -run
+```
+
 运行状态和日志保存在：
 
 ```text
 .run/server.pid
 logs/server.log
 ```
+
+Windows 下对应路径为 `.run\server.pid` 和 `logs\server.log`。
 
 当文章被创建、更新、移动或删除时，日志会输出类似：
 
@@ -218,6 +237,7 @@ python server.py --host 127.0.0.1 --port 8765
 ├─ build.py              # 从 article/ 生成 assets/data.js
 ├─ server.py             # 本地编辑服务与 JSON API
 ├─ server.sh             # Linux 启动、停止与日志脚本
+├─ run.bat               # Windows 启动、停止与日志脚本
 ├─ assets/
 │  ├─ styles.css         # 设计系统、布局、组件、响应式与打印样式
 │  ├─ editor.css         # 内容管理界面样式
