@@ -388,12 +388,12 @@ window.HAPPYDAYS_WIKI = (function () {
       updated: "2026-10-25",
       reading: 1,
       tags: [],
-      signatures: [{"author": "233", "at": "2026-10-25T21:29:53+08:00", "action": "update", "title": "城镇资源", "topic": "进阶教程"}],
+      signatures: [{"author": "233", "at": "2026-10-25T21:29:53+08:00", "action": "update", "title": "城镇资源", "topic": "进阶教程"}, {"author": "233", "at": "2026-10-25T21:32:50+08:00", "action": "update", "title": "城镇资源", "topic": "进阶教程"}],
       content: `<p>可以使用<code>/t</code>或<code>/town</code>查看城镇资源（没有则<strong>未勘探</strong>）</p>
 <h3>资源机制</h3>
 <p>每当到<strong>中午的12点* </strong>，资源就会产出。</p>
 <h3>勘探资源</h3>
-<p>勘探资源分为4个等级：一块领地5块领地10块领地20块领地</p>
+<p><strong>勘探资源分为4个等级：一1块领地、5块领地、10块领地和20块领地，每个等级可增加一种资源。</strong></p>
 <ol class="steps"><li>首先站在<strong>你城镇的土地</strong>里，执行<code>/t resources survey</code>。</li><li>会弹出一个窗口，<code>[/confirm]</code>表示<strong>同意</strong>，<code>[/cancel]</code>表示<strong>取消</strong></li><li>点击<code>[/confirm]</code>或执行 <code>/confirm</code><strong>（需要25块）</strong></li><li>点击后，会有<strong>蓝色字体</strong>告诉你的城镇勘探到的资源（看不懂可以用翻译软件）</li></ol>
 <h3>领取资源</h3>
 <ol class="steps"><li>首先站在<strong>你城镇的土地</strong>里，执行<code>/t resources collect</code></li><li>资源会放置在你的<strong>背包</strong>中，位置不够时则放置一部分，重新领取请重新执行</li><li>需要注意：在上一个<strong>城镇日* </strong>中勘探的资源才能领取，所以建议北京时间上午12点前勘探资源。</li></ol>
