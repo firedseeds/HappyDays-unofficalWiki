@@ -148,6 +148,15 @@
         "title": "彩票",
         "topic": "进阶教程"
       }
+    ],
+    "town-resources": [
+      {
+        "author": "233",
+        "at": "2026-10-25T21:29:53+08:00",
+        "action": "update",
+        "title": "城镇资源",
+        "topic": "进阶教程"
+      }
     ]
   }
 }
