@@ -14,6 +14,7 @@
   <link rel="canonical" id="canonicalLink" href="">
   <link rel="stylesheet" href="assets/title-format.css">
   <link rel="stylesheet" href="assets/history.css">
+  <link rel="stylesheet" href="assets/comments.css">
   <title>HappyDays非官方文档</title>
   <link rel="icon" type="image/png" href="icon.png">
   <script>
@@ -206,6 +207,29 @@
                 <span id="docSignatureCount"></span>
               </div>
               <ol class="doc-signature-list" id="docSignatureList"></ol>
+            </section>
+
+            <section class="doc-comments" id="docComments" aria-label="评论">
+              <div class="doc-comments-head">
+                <h2>评论</h2>
+                <span id="docCommentCount">0 条</span>
+              </div>
+              <div class="doc-comment-list" id="docCommentList"></div>
+              <p class="doc-comment-empty" id="docCommentEmpty">还没有评论，来留下第一条吧。</p>
+              <form class="doc-comment-form" id="docCommentForm" hidden>
+                <label class="doc-comment-field">
+                  <span>署名</span>
+                  <input id="docCommentAuthor" type="text" maxlength="80" autocomplete="name" placeholder="你的名字" required>
+                </label>
+                <label class="doc-comment-field doc-comment-field--body">
+                  <span>评论</span>
+                  <textarea id="docCommentBody" maxlength="2000" rows="4" placeholder="写下你的评论…" required></textarea>
+                </label>
+                <div class="doc-comment-form-foot">
+                  <span class="doc-comment-status" id="docCommentStatus"></span>
+                  <button class="doc-comment-submit" id="docCommentSubmit" type="submit">发表评论</button>
+                </div>
+              </form>
             </section>
 
             <footer class="doc-footer">

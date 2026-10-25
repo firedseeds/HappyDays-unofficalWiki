@@ -220,6 +220,7 @@ python server.py --host 127.0.0.1 --port 8765
 | PUT | `/api/articles/<slug>/history/earliest` | 设置或清除最早可见版本 |
 | GET | `/api/articles/<slug>` | 读取文章元数据、Markdown 正文与署名记录 |
 | PUT | `/api/articles/<slug>` | 保存已有文章，必须传 `author`；传 `topicId` 可移动主题 |
+| POST | `/api/articles/<slug>/comments` | 发表评论，必须传 `author` 与 `body` |
 | POST | `/api/articles` | 新建文章，必须传 `author` |
 | GET | `/api/titles` | 读取页眉标题配置 |
 | PUT | `/api/titles` | 保存页眉标题与权重 |
@@ -232,7 +233,7 @@ python server.py --host 127.0.0.1 --port 8765
 
 ### 自动 Git 提交
 
-文章新建、更新、移动或删除成功后，`server.py` 会自动对本次变更的文件执行本地 `git commit`，包括文章 Markdown、`article/article.json`、`assets/data.js` 和 `article/edits.json`。
+文章新建、更新、移动或删除成功后，`server.py` 会自动对本次变更的文件执行本地 `git commit`，包括文章 Markdown、`article/article.json`、`assets/data.js`、`article/edits.json` 和 `comment.json`。
 
 - **只提交本地，不会执行 `git push`**
 - 只提交本次操作涉及的路径，不会提交工作区中其他未暂存改动
@@ -277,6 +278,32 @@ python server.py --host 127.0.0.1 --port 8765
 
 载入旧版本只替换编辑内容，不会立即保存；确认后仍需点击「保存并构建」。
 
+### 文章评论
+
+每篇文章底部都有评论区：
+
+- 评论必须填写署名和正文
+- 署名不超过 80 个字符，评论不超过 2000 个字符
+- 评论保存在根目录的 `comment.json`
+- 后端开启时显示发表表单；纯静态部署只读显示已有评论
+- 发表评论后会创建本地 Git commit，不会自动 push
+
+```json
+{
+  "version": 1,
+  "articles": {
+    "intro": [
+      {
+        "id": "评论 ID",
+        "author": "署名",
+        "at": "2026-10-25T21:00:00+08:00",
+        "body": "评论正文"
+      }
+    ]
+  }
+}
+```
+
 ---
 
 ## 已实现的功能
@@ -284,6 +311,7 @@ python server.py --host 127.0.0.1 --port 8765
 ### 阅读与导航
 
 - 文章头部显示最后编辑署名，文末显示完整署名记录
+- 文章底部支持带署名的评论，评论保存在 `comment.json`
 - 页眉按权重随机滚动显示站点标题，鼠标悬停时暂停
 - 知识库目录树，按主题分组，支持任意层级、可折叠并记住状态
 - 基于 URL hash 的文档路由，例如 `#/doc/<slug>`，可直接分享、刷新和前进后退
@@ -334,6 +362,7 @@ python server.py --host 127.0.0.1 --port 8765
 ├─ sync.sh               # Linux 启动/停止/每日 pull 与 push
 ├─ sync.ps1              # Windows 启动/停止/每日 pull 与 push
 ├─ title.json            # 页眉滚动标题、权重、默认字号与轮换间隔
+├─ comment.json          # 各文章的评论与署名
 ├─ assets/
 │  ├─ styles.css         # 设计系统、布局、组件、响应式与打印样式
 │  ├─ editor.css         # 内容管理界面样式

@@ -108,6 +108,132 @@
     });
   }
 
+  function renderDocComments(comments) {
+    var items = Array.isArray(comments) ? comments.slice().reverse() : [];
+    els.docCommentCount.textContent = items.length + " 条";
+    els.docCommentList.innerHTML = "";
+    els.docCommentEmpty.hidden = items.length > 0;
+    items.forEach(function (comment) {
+      var item = document.createElement("div");
+      item.className = "doc-comment-item";
+
+      var avatar = document.createElement("span");
+      avatar.className = "doc-comment-avatar";
+      avatar.setAttribute("aria-hidden", "true");
+      avatar.textContent = Array.from(String(comment.author || "匿"))[0] || "匿";
+
+      var main = document.createElement("div");
+      main.className = "doc-comment-main";
+
+      var meta = document.createElement("div");
+      meta.className = "doc-comment-meta";
+      var author = document.createElement("strong");
+      author.textContent = comment.author || "匿名";
+      var time = document.createElement("time");
+      time.dateTime = comment.at || "";
+      time.textContent = formatSignatureTime(comment.at);
+      meta.appendChild(author);
+      meta.appendChild(time);
+
+      var body = document.createElement("p");
+      body.className = "doc-comment-body";
+      body.textContent = comment.body || "";
+
+      main.appendChild(meta);
+      main.appendChild(body);
+      item.appendChild(avatar);
+      item.appendChild(main);
+      els.docCommentList.appendChild(item);
+    });
+  }
+
+  var commentLoadToken = 0;
+
+  function loadDocComments(slug) {
+    var token = ++commentLoadToken;
+    els.docCommentStatus.textContent = "";
+    els.docCommentStatus.classList.remove("is-error");
+    els.docCommentBody.value = "";
+    if (!slug) {
+      renderDocComments([]);
+      return;
+    }
+    fetch("comment.json", { cache: "no-store" }).then(function (response) {
+      if (!response.ok) {
+        throw new Error("评论加载失败");
+      }
+      return response.json();
+    }).then(function (data) {
+      if (token !== commentLoadToken || state.currentId !== slug) {
+        return;
+      }
+      var comments = data && data.articles && data.articles[slug];
+      renderDocComments(Array.isArray(comments) ? comments : []);
+    }).catch(function () {
+      if (token === commentLoadToken && state.currentId === slug) {
+        renderDocComments([]);
+      }
+    });
+  }
+
+  function commentAuthorStorageKey() {
+    return "happydays-comment-author";
+  }
+
+  function submitDocComment(event) {
+    event.preventDefault();
+    if (!state.currentId || els.docCommentSubmit.disabled) {
+      return;
+    }
+    var author = els.docCommentAuthor.value.trim();
+    var body = els.docCommentBody.value.trim();
+    if (!author) {
+      els.docCommentStatus.textContent = "请填写署名";
+      els.docCommentStatus.classList.add("is-error");
+      els.docCommentAuthor.focus();
+      return;
+    }
+    if (!body) {
+      els.docCommentStatus.textContent = "请填写评论";
+      els.docCommentStatus.classList.add("is-error");
+      els.docCommentBody.focus();
+      return;
+    }
+    els.docCommentSubmit.disabled = true;
+    els.docCommentStatus.classList.remove("is-error");
+    els.docCommentStatus.textContent = "发表中…";
+    fetch("api/articles/" + encodeURIComponent(state.currentId) + "/comments", {
+      method: "POST",
+      cache: "no-store",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ author: author, body: body })
+    }).then(function (response) {
+      return response.json().catch(function () {
+        return {};
+      }).then(function (data) {
+        if (!response.ok) {
+          throw new Error(data.error || "评论发表失败");
+        }
+        return data;
+      });
+    }).then(function (data) {
+      try {
+        localStorage.setItem(commentAuthorStorageKey(), author);
+      } catch (error) {
+        /* 忽略隐私模式下的 localStorage 错误 */
+      }
+      renderDocComments(data.comments || []);
+      els.docCommentBody.value = "";
+      els.docCommentStatus.textContent = "已发表";
+      showToast("评论已发表");
+    }).catch(function (error) {
+      els.docCommentStatus.textContent = error.message;
+      els.docCommentStatus.classList.add("is-error");
+    }).finally(function () {
+      els.docCommentSubmit.disabled = false;
+    });
+  }
+
   function pickWeightedTitle(items, excludeText) {
     var candidates = items;
     if (excludeText) {
@@ -766,6 +892,15 @@
     docSignatures: document.getElementById("docSignatures"),
     docSignatureCount: document.getElementById("docSignatureCount"),
     docSignatureList: document.getElementById("docSignatureList"),
+    docComments: document.getElementById("docComments"),
+    docCommentCount: document.getElementById("docCommentCount"),
+    docCommentList: document.getElementById("docCommentList"),
+    docCommentEmpty: document.getElementById("docCommentEmpty"),
+    docCommentForm: document.getElementById("docCommentForm"),
+    docCommentAuthor: document.getElementById("docCommentAuthor"),
+    docCommentBody: document.getElementById("docCommentBody"),
+    docCommentStatus: document.getElementById("docCommentStatus"),
+    docCommentSubmit: document.getElementById("docCommentSubmit"),
     colophonAuthor: document.getElementById("colophonAuthor"),
     docBody: document.getElementById("docBody"),
     prevDoc: document.getElementById("prevDoc"),
@@ -1262,6 +1397,7 @@
       return '<span class="doc-tag">' + escapeHTML(tag) + "</span>";
     }).join("");
     renderDocSignatures(doc.signatures || []);
+    loadDocComments(id);
     els.editBtn.href = "editor.html#" + encodeURIComponent(id);
 
     els.docBody.innerHTML = doc.content;
@@ -1317,6 +1453,7 @@
     els.docReading.textContent = "0 篇文章";
     els.docTags.innerHTML = "";
     renderDocSignatures([]);
+    renderDocComments([]);
     els.docAuthorMeta.hidden = true;
     els.docSignatures.hidden = true;
     els.editBtn.href = "editor.html";
@@ -2059,6 +2196,7 @@
     });
 
     els.shareBtn.addEventListener("click", copyPageLink);
+    els.docCommentForm.addEventListener("submit", submitDocComment);
     els.historyBtn.addEventListener("click", openHistory);
     els.historyClose.addEventListener("click", closeHistory);
     els.historyDialog.addEventListener("click", function (event) {
@@ -2214,6 +2352,14 @@
         els.editBtn.hidden = false;
         els.titleRollEdit.hidden = false;
         els.historyBtn.hidden = false;
+        els.docCommentForm.hidden = false;
+        if (!els.docCommentAuthor.value) {
+          try {
+            els.docCommentAuthor.value = localStorage.getItem(commentAuthorStorageKey()) || "";
+          } catch (error) {
+            /* 忽略隐私模式下的 localStorage 错误 */
+          }
+        }
       }
     }).catch(function () {
       /* 静态托管或 file:// 下没有编辑服务，保持入口隐藏 */

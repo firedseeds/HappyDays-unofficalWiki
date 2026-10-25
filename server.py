@@ -38,6 +38,7 @@ ARTICLE_DIR = ROOT / "article"
 MANIFEST_PATH = ARTICLE_DIR / "article.json"
 EDITS_PATH = ARTICLE_DIR / "edits.json"
 HISTORY_PATH = ARTICLE_DIR / "history.json"
+COMMENT_PATH = ROOT / "comment.json"
 TITLE_PATH = ROOT / "title.json"
 IMAGE_DIR = ROOT / "assets" / "image"
 DATA_PATH = ROOT / "assets" / "data.js"
@@ -140,6 +141,64 @@ def write_edits(edits: dict) -> None:
         EDITS_PATH,
         json.dumps(edits, ensure_ascii=False, indent=2) + "\n",
     )
+
+
+def read_comments() -> dict:
+    if not COMMENT_PATH.is_file():
+        return {"version": 1, "articles": {}}
+    try:
+        data = json.loads(COMMENT_PATH.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise ApiError(500, f"无法读取 comment.json: {exc}")
+    if not isinstance(data, dict) or not isinstance(data.get("articles"), dict):
+        raise ApiError(500, "comment.json 格式无效")
+    return data
+
+
+def write_comments(data: dict) -> None:
+    atomic_write(
+        COMMENT_PATH,
+        json.dumps(data, ensure_ascii=False, indent=2) + "\n",
+    )
+
+
+def article_comments(slug: str) -> list[dict]:
+    comments = read_comments()["articles"].get(slug, [])
+    if not isinstance(comments, list):
+        return []
+    return [item for item in comments if isinstance(item, dict)]
+
+
+def add_article_comment(slug: str, payload: dict) -> dict:
+    record = article_map(read_manifest()).get(slug)
+    if record is None:
+        raise ApiError(404, "文章不存在")
+    author = require_text(payload.get("author"), "署名", 80)
+    body = require_text(payload.get("body"), "评论", 2000, multiline=True)
+    comment = {
+        "id": str(uuid.uuid4()),
+        "author": author,
+        "at": datetime.now().astimezone().isoformat(timespec="seconds"),
+        "body": body,
+    }
+    with LOCK:
+        data = read_comments()
+        comments = data["articles"].setdefault(slug, [])
+        if not isinstance(comments, list):
+            raise ApiError(500, "comment.json 中该文章的评论格式无效")
+        comments.append(comment)
+        write_comments(data)
+        commit = auto_commit(
+            [COMMENT_PATH],
+            f"docs: 添加评论「{record.get('title', slug)}」（{author}）",
+            author,
+        )
+    return {
+        "ok": True,
+        "comment": comment,
+        "comments": article_comments(slug),
+        "commit": commit,
+    }
 
 
 def read_history_config() -> dict:
@@ -1517,6 +1576,11 @@ class EditorHandler(SimpleHTTPRequestHandler):
     def do_POST(self) -> None:
         path = unquote(urlparse(self.path).path)
         try:
+            comment_match = re.fullmatch(r"/api/articles/([a-z0-9-]+)/comments", path)
+            if comment_match:
+                payload = self.read_json()
+                self.send_json(200, add_article_comment(comment_match.group(1), payload))
+                return
             if path == "/api/articles":
                 payload = self.read_json()
                 self.send_json(200, create_article(payload))
