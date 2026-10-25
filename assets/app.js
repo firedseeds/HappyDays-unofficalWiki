@@ -108,6 +108,89 @@
     });
   }
 
+  function pickWeightedTitle(items) {
+    var total = items.reduce(function (sum, item) {
+      return sum + item.weight;
+    }, 0);
+    if (!total) {
+      return items[0].text;
+    }
+    var roll = Math.random() * total;
+    for (var index = 0; index < items.length; index += 1) {
+      roll -= items[index].weight;
+      if (roll < 0) {
+        return items[index].text;
+      }
+    }
+    return items[items.length - 1].text;
+  }
+
+  function applyRollingTitle(text, animate) {
+    if (!els.titleRollText || !text) {
+      return;
+    }
+    var reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    els.titleRollText.classList.remove("is-rolling");
+    if (animate && !reduced) {
+      void els.titleRollText.offsetWidth;
+      els.titleRollText.textContent = text;
+      els.titleRollText.classList.add("is-rolling");
+    } else {
+      els.titleRollText.textContent = text;
+    }
+    els.titleRollText.title = text;
+  }
+
+  function initTitleRoll() {
+    if (!els.titleRollText) {
+      return;
+    }
+    fetch("title.json", { cache: "no-store" }).then(function (response) {
+      if (!response.ok) {
+        throw new Error("title.json unavailable");
+      }
+      return response.json();
+    }).then(function (data) {
+      var raw = Array.isArray(data) ? data : (data && data.titles);
+      if (!Array.isArray(raw)) {
+        return;
+      }
+      var items = raw.map(function (item) {
+        var text = item && typeof item.text === "string" ? item.text.trim() : "";
+        var weight = Number(item && item.weight);
+        if (!text || !Number.isFinite(weight) || weight <= 0) {
+          return null;
+        }
+        return { text: text, weight: weight };
+      }).filter(Boolean);
+      if (!items.length) {
+        return;
+      }
+      applyRollingTitle(pickWeightedTitle(items), false);
+      if (items.length < 2 || (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches)) {
+        return;
+      }
+      var timer = null;
+      var start = function () {
+        if (timer) {
+          return;
+        }
+        timer = window.setInterval(function () {
+          applyRollingTitle(pickWeightedTitle(items), true);
+        }, 6500);
+      };
+      var pause = function () {
+        window.clearInterval(timer);
+        timer = null;
+      };
+      els.titleRoll.addEventListener("mouseenter", pause);
+      els.titleRoll.addEventListener("mouseleave", start);
+      start();
+    }).catch(function () {
+      /* 保留静态回退标题 */
+    });
+  }
+
   var CATEGORY_BY_ID = {};
   categories.forEach(function (category) {
     CATEGORY_BY_ID[category.id] = category;
@@ -158,6 +241,8 @@
     readingProgress: document.getElementById("readingProgress"),
     readingPercent: document.getElementById("readingPercent"),
     backToTop: document.getElementById("backToTop"),
+    titleRoll: document.getElementById("titleRoll"),
+    titleRollText: document.getElementById("titleRollText"),
     editBtn: document.getElementById("editBtn"),
     shareBtn: document.getElementById("shareBtn"),
     ogUrl: document.getElementById("ogUrl"),
@@ -1512,6 +1597,7 @@
     renderSidebar();
     buildSearchIndex();
     bindEvents();
+    initTitleRoll();
 
     fetch("api/health", { cache: "no-store" }).then(function (response) {
       return response.ok ? response.json() : null;
