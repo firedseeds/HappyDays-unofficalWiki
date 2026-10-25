@@ -13,6 +13,7 @@
   <meta property="og:url" id="ogUrl" content="">
   <link rel="canonical" id="canonicalLink" href="">
   <link rel="stylesheet" href="assets/title-format.css">
+  <link rel="stylesheet" href="assets/history.css">
   <title>HappyDays非官方文档</title>
   <link rel="icon" type="image/png" href="icon.png">
   <script>
@@ -130,6 +131,10 @@
             <svg class="icon" aria-hidden="true"><use href="#i-edit"></use></svg>
             <span class="action-label">编辑</span>
           </a>
+          <button class="top-action" id="historyBtn" type="button" aria-label="查看版本历史" hidden>
+            <svg class="icon" aria-hidden="true"><use href="#i-clock"></use></svg>
+            <span class="action-label">历史</span>
+          </button>
           <button class="top-action" id="shareBtn" type="button" aria-label="分享当前文档">
             <svg class="icon" aria-hidden="true"><use href="#i-share"></use></svg>
             <span class="action-label">分享</span>
@@ -336,6 +341,28 @@
         <button class="site-title-save" id="siteTitleSave" type="submit">保存标题</button>
       </div>
     </form>
+  </dialog>
+
+  <dialog class="history-dialog" id="historyDialog" aria-labelledby="historyHeading">
+    <div class="history-shell">
+      <header class="history-head">
+        <div>
+          <p class="history-eyebrow">Version history</p>
+          <h2 id="historyHeading">文章版本</h2>
+        </div>
+        <button class="history-close" id="historyClose" type="button" aria-label="关闭版本历史">×</button>
+      </header>
+      <div class="history-body">
+        <aside class="history-side">
+          <p class="history-cutoff" id="historyCutoff"></p>
+          <div class="history-list" id="historyList"></div>
+        </aside>
+        <section class="history-detail">
+          <div class="history-meta" id="historyMeta"></div>
+          <article class="doc-body history-content" id="historyContent"></article>
+        </section>
+      </div>
+    </div>
   </dialog>
 
   <svg class="icon-sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">

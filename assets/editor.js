@@ -25,6 +25,17 @@
     formHeading: document.getElementById("formHeading"),
     formAlert: document.getElementById("formAlert"),
     previewBtn: document.getElementById("previewBtn"),
+    historyBtn: document.getElementById("historyBtn"),
+    historyDialog: document.getElementById("historyDialog"),
+    historyClose: document.getElementById("historyClose"),
+    historyList: document.getElementById("historyList"),
+    historyMeta: document.getElementById("historyMeta"),
+    historyContent: document.getElementById("historyContent"),
+    historyCutoff: document.getElementById("historyCutoff"),
+    historyLoad: document.getElementById("historyLoad"),
+    historySetCutoff: document.getElementById("historySetCutoff"),
+    historyClearCutoff: document.getElementById("historyClearCutoff"),
+    historyStatus: document.getElementById("historyStatus"),
     saveBtn: document.getElementById("saveBtn"),
     saveLabel: document.getElementById("saveLabel"),
     deleteArticleBtn: document.getElementById("deleteArticleBtn"),
@@ -84,6 +95,12 @@
     previewController: null,
     previewTimer: null,
     toastTimer: null
+  };
+
+  var historyState = {
+    versions: [],
+    detail: null,
+    selectedHash: null
   };
 
   var AUTHOR_KEY = "happydays-editor-author";
@@ -163,6 +180,18 @@
       item.appendChild(head);
       item.appendChild(meta);
       els.signatureList.appendChild(item);
+    });
+  }
+
+  function escapeHTML(value) {
+    return String(value == null ? "" : value).replace(/[&<>"']/g, function (character) {
+      return {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      }[character];
     });
   }
 
@@ -662,6 +691,9 @@
 
 
   function fillForm(article) {
+    if (els.historyDialog.open) {
+      closeHistory();
+    }
     state.loading = true;
     state.mode = "edit";
     state.currentSlug = article.slug;
@@ -703,6 +735,9 @@
   function startNewArticle(topicId, skipConfirm) {
     if (!skipConfirm && !confirmDiscard()) {
       return;
+    }
+    if (els.historyDialog.open) {
+      closeHistory();
     }
     if (!state.topics.length) {
       showToast("请先添加一个主题", "error");
@@ -756,6 +791,217 @@
     }).catch(function (error) {
       showToast(error.message, "error");
       return false;
+    });
+  }
+
+  function formatHistoryDate(value) {
+    var parsed = new Date(value);
+    if (Number.isNaN(parsed.getTime())) {
+      return value || "";
+    }
+    return parsed.toLocaleString("zh-CN", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+  }
+
+  function editorHistoryAuthor() {
+    return (els.author.value || "").trim() || rememberedAuthor() || "HappyDays 团队";
+  }
+
+  function renderEditorHistory(data) {
+    var versions = Array.isArray(data && data.versions) ? data.versions : [];
+    historyState.versions = versions;
+    els.historyCutoff.textContent = data && data.earliest
+      ? "最早可见版本已限制；更早版本在阅读页隐藏。"
+      : "阅读页会显示全部历史版本。";
+    els.historyList.innerHTML = "";
+    if (!versions.length) {
+      els.historyList.innerHTML = '<p class="history-empty">还没有可查看的版本。</p>';
+      els.historyContent.innerHTML = "";
+      els.historyMeta.textContent = "";
+      els.historyLoad.disabled = true;
+      els.historySetCutoff.disabled = true;
+      return;
+    }
+    versions.forEach(function (version) {
+      var button = document.createElement("button");
+      button.type = "button";
+      button.className = "history-version" + (version.visible === false ? " is-hidden" : "");
+      button.dataset.hash = version.hash;
+      button.innerHTML =
+        '<span class="history-version-date">' + escapeHTML(formatHistoryDate(version.date)) + "</span>" +
+        '<span class="history-version-subject">' + escapeHTML(version.subject || "更新文章") + "</span>" +
+        '<span class="history-version-author">' +
+        escapeHTML(version.author || "未知") +
+        (version.current ? " · 当前" : "") +
+        (version.visible === false ? " · 已隐藏" : "") +
+        "</span>";
+      button.addEventListener("click", function () {
+        loadEditorHistoryVersion(version.hash);
+      });
+      els.historyList.appendChild(button);
+    });
+    var initial = versions.filter(function (version) {
+      return version.hash === historyState.selectedHash;
+    })[0] || versions[0];
+    loadEditorHistoryVersion(initial.hash);
+  }
+
+  function loadEditorHistoryVersion(hash) {
+    if (!state.currentSlug) {
+      return;
+    }
+    historyState.selectedHash = hash;
+    Array.prototype.forEach.call(
+      els.historyList.querySelectorAll(".history-version"),
+      function (button) {
+        button.classList.toggle("is-active", button.dataset.hash === hash);
+      }
+    );
+    els.historyMeta.textContent = "加载版本…";
+    fetch(
+      "/api/articles/" + encodeURIComponent(state.currentSlug) + "/history/" + encodeURIComponent(hash),
+      { cache: "no-store", headers: { Accept: "application/json" } }
+    ).then(function (response) {
+      return response.json().catch(function () {
+        return {};
+      }).then(function (data) {
+        if (!response.ok) {
+          throw new Error(data.error || "版本加载失败");
+        }
+        return data;
+      });
+    }).then(function (detail) {
+      historyState.detail = detail;
+      els.historyMeta.innerHTML =
+        "<strong>" + escapeHTML(detail.title || hash) + "</strong>" +
+        "<span>" + escapeHTML(formatHistoryDate(detail.date)) + " · " +
+        escapeHTML(detail.author || "未知") + "</span>" +
+        "<code>" + escapeHTML(detail.shortHash || hash) + "</code>";
+      els.historyLoad.disabled = false;
+      els.historySetCutoff.disabled = false;
+      var topicId = state.currentArticle ? state.currentArticle.topic : "";
+      return fetch("/api/preview", {
+        method: "POST",
+        cache: "no-store",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          slug: state.currentSlug,
+          topicId: topicId,
+          body: detail.body || ""
+        })
+      }).then(function (response) {
+        return response.json().catch(function () {
+          return {};
+        }).then(function (preview) {
+          if (response.ok && typeof preview.html === "string") {
+            els.historyContent.innerHTML = preview.html;
+          } else {
+            var pre = document.createElement("pre");
+            pre.textContent = detail.body || "";
+            els.historyContent.innerHTML = "";
+            els.historyContent.appendChild(pre);
+          }
+        });
+      });
+    }).catch(function (error) {
+      historyState.detail = null;
+      els.historyLoad.disabled = true;
+      els.historySetCutoff.disabled = true;
+      els.historyMeta.textContent = error.message;
+      els.historyContent.innerHTML = "";
+    });
+  }
+
+  function openHistory() {
+    if (state.mode !== "edit" || !state.currentSlug) {
+      showToast("请先打开一篇文章", "error");
+      return;
+    }
+    historyState.versions = [];
+    historyState.detail = null;
+    historyState.selectedHash = null;
+    els.historyDialog.showModal();
+    els.historyList.innerHTML = '<p class="history-empty">加载版本列表…</p>';
+    els.historyMeta.textContent = "";
+    els.historyContent.innerHTML = "";
+    els.historyLoad.disabled = true;
+    els.historySetCutoff.disabled = true;
+    els.historyStatus.textContent = "";
+    fetch("/api/articles/" + encodeURIComponent(state.currentSlug) + "/history", {
+      cache: "no-store",
+      headers: { Accept: "application/json" }
+    }).then(function (response) {
+      return response.json().catch(function () {
+        return {};
+      }).then(function (data) {
+        if (!response.ok) {
+          throw new Error(data.error || "版本列表加载失败");
+        }
+        return data;
+      });
+    }).then(renderEditorHistory).catch(function (error) {
+      els.historyList.innerHTML = '<p class="history-empty">' + escapeHTML(error.message) + "</p>";
+    });
+  }
+
+  function closeHistory() {
+    els.historyDialog.close();
+  }
+
+  function loadHistoryIntoEditor() {
+    var detail = historyState.detail;
+    if (!detail || !state.currentSlug) {
+      return;
+    }
+    if (!window.confirm("载入这个版本会替换当前编辑内容，但不会立即保存。继续吗？")) {
+      return;
+    }
+    els.title.value = detail.title || "";
+    els.description.value = detail.description || "";
+    els.emoji.value = detail.emoji || "📄";
+    els.updated.value = detail.updated || localToday();
+    els.reading.value = detail.readingTime || 5;
+    els.tags.value = (detail.tags || []).join(", ");
+    els.body.value = detail.body || "";
+    state.dirty = true;
+    updateHeadingFromTitle();
+    refreshPreview();
+    setFormAlert("已载入版本 " + (detail.shortHash || "") + "，尚未保存");
+    closeHistory();
+    showToast("历史版本已载入编辑器，请确认后保存", "success");
+  }
+
+  function updateHistoryCutoff(hash) {
+    if (!state.currentSlug) {
+      return;
+    }
+    els.historySetCutoff.disabled = true;
+    els.historyClearCutoff.disabled = true;
+    jsonRequest(
+      "PUT",
+      "/api/articles/" + encodeURIComponent(state.currentSlug) + "/history/earliest",
+      { hash: hash, author: editorHistoryAuthor() }
+    ).then(function (result) {
+      els.historyStatus.textContent = result.commit && result.commit.committed
+        ? "已记录并本地提交 " + (result.commit.hash || "")
+        : "最早可见版本已更新";
+      return fetch("/api/articles/" + encodeURIComponent(state.currentSlug) + "/history", {
+        cache: "no-store",
+        headers: { Accept: "application/json" }
+      }).then(function (response) {
+        return response.json();
+      }).then(renderEditorHistory);
+    }).catch(function (error) {
+      els.historyStatus.textContent = error.message;
+      showToast(error.message, "error");
+    }).finally(function () {
+      els.historySetCutoff.disabled = false;
+      els.historyClearCutoff.disabled = false;
     });
   }
 
@@ -1468,6 +1714,22 @@
       if (!state.loading) {
         state.dirty = true;
       }
+    });
+    els.historyBtn.addEventListener("click", openHistory);
+    els.historyClose.addEventListener("click", closeHistory);
+    els.historyDialog.addEventListener("click", function (event) {
+      if (event.target === els.historyDialog) {
+        closeHistory();
+      }
+    });
+    els.historyLoad.addEventListener("click", loadHistoryIntoEditor);
+    els.historySetCutoff.addEventListener("click", function () {
+      if (historyState.selectedHash) {
+        updateHistoryCutoff(historyState.selectedHash);
+      }
+    });
+    els.historyClearCutoff.addEventListener("click", function () {
+      updateHistoryCutoff(null);
     });
     els.previewBtn.addEventListener("click", refreshPreview);
 

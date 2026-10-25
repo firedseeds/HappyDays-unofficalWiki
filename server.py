@@ -37,6 +37,7 @@ ROOT = Path(__file__).resolve().parent
 ARTICLE_DIR = ROOT / "article"
 MANIFEST_PATH = ARTICLE_DIR / "article.json"
 EDITS_PATH = ARTICLE_DIR / "edits.json"
+HISTORY_PATH = ARTICLE_DIR / "history.json"
 TITLE_PATH = ROOT / "title.json"
 IMAGE_DIR = ROOT / "assets" / "image"
 DATA_PATH = ROOT / "assets" / "data.js"
@@ -45,6 +46,7 @@ MAX_REQUEST_BYTES = 2 * 1024 * 1024
 MAX_BODY_CHARS = 800_000
 SLUG_RE = re.compile(r"^[a-z0-9][a-z0-9-]{0,63}$")
 TITLE_COLOR_RE = re.compile(r"^#[0-9a-fA-F]{6}$")
+HISTORY_HASH_RE = re.compile(r"^[0-9a-fA-F]{7,40}$")
 LOCK = threading.Lock()
 
 
@@ -138,6 +140,184 @@ def write_edits(edits: dict) -> None:
         EDITS_PATH,
         json.dumps(edits, ensure_ascii=False, indent=2) + "\n",
     )
+
+
+def read_history_config() -> dict:
+    if not HISTORY_PATH.is_file():
+        return {"version": 1, "articles": {}}
+    try:
+        data = json.loads(HISTORY_PATH.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise ApiError(500, f"无法读取 article/history.json: {exc}")
+    if not isinstance(data, dict) or not isinstance(data.get("articles"), dict):
+        raise ApiError(500, "article/history.json 格式无效")
+    return data
+
+
+def write_history_config(config: dict) -> None:
+    atomic_write(
+        HISTORY_PATH,
+        json.dumps(config, ensure_ascii=False, indent=2) + "\n",
+    )
+
+
+def run_git(arguments: list[str], timeout: int = 20) -> str:
+    try:
+        result = subprocess.run(
+            ["git", "-c", "core.quotepath=false", *arguments],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            timeout=timeout,
+        )
+    except FileNotFoundError:
+        raise ApiError(500, "未找到 Git 命令")
+    except subprocess.TimeoutExpired:
+        raise ApiError(500, "Git 操作超时")
+    if result.returncode != 0:
+        raise ApiError(500, git_error_text(result, "Git 操作失败"))
+    return result.stdout or ""
+
+
+def require_history_record(slug: str) -> dict:
+    record = article_map(read_manifest()).get(slug)
+    if record is None:
+        raise ApiError(404, "文章不存在")
+    return record
+
+
+def article_history_versions(record: dict) -> tuple[list[dict], str | None]:
+    path = article_path(record)
+    relative = path.relative_to(ROOT).as_posix()
+    output = run_git(
+        [
+            "log",
+            "--follow",
+            "--format=%H%x1f%an%x1f%ad%x1f%s",
+            "--date=iso-strict",
+            "--name-only",
+            "--",
+            relative,
+        ]
+    )
+    versions = []
+    current = None
+    for raw_line in output.splitlines():
+        line = raw_line.rstrip("\r")
+        if re.match(r"^[0-9a-fA-F]{40}\x1f", line):
+            parts = line.split("\x1f", 3)
+            current = {
+                "hash": parts[0],
+                "author": parts[1] if len(parts) > 1 else "",
+                "date": parts[2] if len(parts) > 2 else "",
+                "subject": parts[3] if len(parts) > 3 else "",
+            }
+        elif current is not None and line.strip():
+            current["path"] = line.strip()
+            versions.append(current)
+            current = None
+
+    for index, version in enumerate(versions):
+        version["shortHash"] = version["hash"][:7]
+        version["current"] = index == 0
+
+    config = read_history_config()
+    entry = config["articles"].get(record["slug"])
+    configured = entry.get("earliest") if isinstance(entry, dict) else None
+    hashes = {version["hash"] for version in versions}
+    cutoff = configured if isinstance(configured, str) and configured in hashes else None
+    cutoff_index = next(
+        (index for index, version in enumerate(versions) if version["hash"] == cutoff),
+        None,
+    )
+    for index, version in enumerate(versions):
+        version["visible"] = cutoff_index is None or index <= cutoff_index
+    return versions, cutoff
+
+
+def article_history_detail(slug: str, commit_hash: str) -> dict:
+    if not HISTORY_HASH_RE.fullmatch(commit_hash):
+        raise ApiError(400, "版本号格式无效")
+    record = require_history_record(slug)
+    versions, _ = article_history_versions(record)
+    version = next(
+        (item for item in versions if item["hash"].lower().startswith(commit_hash.lower())),
+        None,
+    )
+    if version is None:
+        raise ApiError(404, "找不到该版本")
+    path = version["path"]
+    raw = run_git(["show", f"{version['hash']}:{path}"], timeout=30)
+    front = {}
+    body = raw
+    try:
+        front, body = build.split_front_matter(raw, f"{path}@{version['shortHash']}")
+        body = build.strip_title_and_excerpt(
+            body,
+            str(front.get("title") or record.get("title") or ""),
+            str(front.get("description") or record.get("description") or ""),
+            f"{path}@{version['shortHash']}",
+        )
+    except build.BuildError:
+        body = raw
+    title = front.get("title") if isinstance(front.get("title"), str) else record.get("title", "")
+    description = (
+        front.get("description")
+        if isinstance(front.get("description"), str)
+        else record.get("description", "")
+    )
+    tags = front.get("tags") if isinstance(front.get("tags"), list) else record.get("tags", [])
+    return {
+        "hash": version["hash"],
+        "shortHash": version["shortHash"],
+        "author": version["author"],
+        "date": version["date"],
+        "subject": version["subject"],
+        "title": title,
+        "description": description,
+        "emoji": front.get("emoji") if isinstance(front.get("emoji"), str) else record.get("emoji", ""),
+        "updated": str(front.get("updated") or record.get("updated") or ""),
+        "readingTime": front.get("reading_time")
+        if isinstance(front.get("reading_time"), int)
+        else record.get("readingTime", 1),
+        "tags": tags,
+        "body": body.strip(),
+    }
+
+
+def set_history_earliest(slug: str, commit_hash: str | None, author: str | None = None) -> dict:
+    record = require_history_record(slug)
+    versions, _ = article_history_versions(record)
+    selected = None
+    if commit_hash:
+        if not isinstance(commit_hash, str) or not HISTORY_HASH_RE.fullmatch(commit_hash):
+            raise ApiError(400, "版本号格式无效")
+        selected = next(
+            (item for item in versions if item["hash"].lower().startswith(commit_hash.lower())),
+            None,
+        )
+        if selected is None:
+            raise ApiError(400, "该版本不属于这篇文章")
+    with LOCK:
+        config = read_history_config()
+        articles = config.setdefault("articles", {})
+        if selected is None:
+            articles.pop(slug, None)
+        else:
+            articles[slug] = {"earliest": selected["hash"]}
+        write_history_config(config)
+        commit = auto_commit(
+            [HISTORY_PATH],
+            "docs: 设置最早可见版本" if selected else "docs: 清除最早可见版本",
+            author,
+        )
+    return {
+        "ok": True,
+        "earliest": selected["hash"] if selected else None,
+        "commit": commit,
+    }
 
 
 def signature_record(
@@ -1278,6 +1458,25 @@ class EditorHandler(SimpleHTTPRequestHandler):
                 if path == "/api/titles":
                     self.send_json(200, read_title_config())
                     return
+                history_match = re.fullmatch(r"/api/articles/([a-z0-9-]+)/history", path)
+                if history_match:
+                    record = require_history_record(history_match.group(1))
+                    versions, earliest = article_history_versions(record)
+                    self.send_json(200, {"versions": versions, "earliest": earliest})
+                    return
+                history_detail_match = re.fullmatch(
+                    r"/api/articles/([a-z0-9-]+)/history/([0-9a-fA-F]{7,40})",
+                    path,
+                )
+                if history_detail_match:
+                    self.send_json(
+                        200,
+                        article_history_detail(
+                            history_detail_match.group(1),
+                            history_detail_match.group(2),
+                        ),
+                    )
+                    return
                 match = re.fullmatch(r"/api/articles/([a-z0-9-]+)", path)
                 if match:
                     self.send_json(200, read_article(match.group(1)))
@@ -1295,6 +1494,17 @@ class EditorHandler(SimpleHTTPRequestHandler):
             payload = self.read_json()
             if path == "/api/titles":
                 self.send_json(200, update_titles(payload))
+                return
+            history_match = re.fullmatch(r"/api/articles/([a-z0-9-]+)/history/earliest", path)
+            if history_match:
+                self.send_json(
+                    200,
+                    set_history_earliest(
+                        history_match.group(1),
+                        payload.get("hash"),
+                        payload.get("author"),
+                    ),
+                )
                 return
             if not match:
                 raise ApiError(404, "接口不存在")

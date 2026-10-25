@@ -501,6 +501,153 @@
     els.titleEditDialog.close();
   }
 
+  function formatHistoryDate(value) {
+    var parsed = new Date(value);
+    if (Number.isNaN(parsed.getTime())) {
+      return value || "";
+    }
+    return parsed.toLocaleString("zh-CN", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+  }
+
+  function renderHistoryVersions(data) {
+    var versions = Array.isArray(data && data.versions) ? data.versions : [];
+    var visible = versions.filter(function (version) {
+      return version.visible !== false;
+    });
+    if (!visible.length) {
+      visible = versions;
+    }
+    els.historyCutoff.textContent = data && data.earliest
+      ? "只显示最早可见版本及之后的内容"
+      : "显示全部历史版本";
+    els.historyList.innerHTML = "";
+    if (!visible.length) {
+      els.historyList.innerHTML = '<p class="history-empty">还没有可查看的版本。</p>';
+      els.historyContent.innerHTML = "";
+      els.historyMeta.textContent = "";
+      return;
+    }
+    visible.forEach(function (version) {
+      var button = document.createElement("button");
+      button.type = "button";
+      button.className = "history-version";
+      button.dataset.hash = version.hash;
+      button.innerHTML =
+        '<span class="history-version-date">' + escapeHTML(formatHistoryDate(version.date)) + "</span>" +
+        '<span class="history-version-subject">' + escapeHTML(version.subject || "更新文章") + "</span>" +
+        '<span class="history-version-author">' +
+        escapeHTML(version.author || "未知") +
+        (version.current ? " · 当前" : "") +
+        "</span>";
+      button.addEventListener("click", function () {
+        loadHistoryVersion(version.hash);
+      });
+      els.historyList.appendChild(button);
+    });
+    loadHistoryVersion(visible[0].hash);
+  }
+
+  function loadHistoryVersion(hash) {
+    var slug = state.currentId;
+    if (!slug) {
+      return;
+    }
+    Array.prototype.forEach.call(
+      els.historyList.querySelectorAll(".history-version"),
+      function (button) {
+        button.classList.toggle("is-active", button.dataset.hash === hash);
+      }
+    );
+    els.historyMeta.textContent = "加载版本…";
+    var doc = docs[slug];
+    fetch(
+      "api/articles/" + encodeURIComponent(slug) + "/history/" + encodeURIComponent(hash),
+      { cache: "no-store" }
+    ).then(function (response) {
+      return response.json().catch(function () {
+        return {};
+      }).then(function (data) {
+        if (!response.ok) {
+          throw new Error(data.error || "版本加载失败");
+        }
+        return data;
+      });
+    }).then(function (detail) {
+      els.historyMeta.innerHTML =
+        "<strong>" + escapeHTML(detail.title || hash) + "</strong>" +
+        "<span>" + escapeHTML(formatHistoryDate(detail.date)) + " · " +
+        escapeHTML(detail.author || "未知") + "</span>" +
+        "<code>" + escapeHTML(detail.shortHash || hash) + "</code>";
+      return fetch("api/preview", {
+        method: "POST",
+        cache: "no-store",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          slug: slug,
+          topicId: doc && doc.topic,
+          body: detail.body || ""
+        })
+      }).then(function (response) {
+        return response.json().catch(function () {
+          return {};
+        }).then(function (preview) {
+          if (response.ok && typeof preview.html === "string") {
+            els.historyContent.innerHTML = preview.html;
+          } else {
+            var pre = document.createElement("pre");
+            pre.textContent = detail.body || "";
+            els.historyContent.innerHTML = "";
+            els.historyContent.appendChild(pre);
+          }
+        });
+      }).catch(function () {
+        var pre = document.createElement("pre");
+        pre.textContent = detail.body || "";
+        els.historyContent.innerHTML = "";
+        els.historyContent.appendChild(pre);
+      });
+    }).catch(function (error) {
+      els.historyMeta.textContent = error.message;
+      els.historyContent.innerHTML = "";
+    });
+  }
+
+  function openHistory() {
+    if (!state.currentId) {
+      return;
+    }
+    els.historyDialog.showModal();
+    els.historyList.innerHTML = '<p class="history-empty">加载版本列表…</p>';
+    els.historyMeta.textContent = "";
+    els.historyContent.innerHTML = "";
+    fetch(
+      "api/articles/" + encodeURIComponent(state.currentId) + "/history",
+      { cache: "no-store" }
+    ).then(function (response) {
+      return response.json().catch(function () {
+        return {};
+      }).then(function (data) {
+        if (!response.ok) {
+          throw new Error(data.error || "版本列表加载失败");
+        }
+        return data;
+      });
+    }).then(renderHistoryVersions).catch(function (error) {
+      els.historyList.innerHTML = '<p class="history-empty">' + escapeHTML(error.message) + "</p>";
+      els.historyMeta.textContent = "";
+    });
+  }
+
+  function closeHistory() {
+    els.historyDialog.close();
+  }
+
   function collectSiteTitleRows() {
     var rows = Array.prototype.slice.call(els.siteTitleRows.querySelectorAll(".site-title-row"));
     var titles = [];
@@ -641,6 +788,13 @@
     siteTitleCancel: document.getElementById("siteTitleCancel"),
     siteTitleSave: document.getElementById("siteTitleSave"),
     editBtn: document.getElementById("editBtn"),
+    historyBtn: document.getElementById("historyBtn"),
+    historyDialog: document.getElementById("historyDialog"),
+    historyClose: document.getElementById("historyClose"),
+    historyList: document.getElementById("historyList"),
+    historyMeta: document.getElementById("historyMeta"),
+    historyContent: document.getElementById("historyContent"),
+    historyCutoff: document.getElementById("historyCutoff"),
     shareBtn: document.getElementById("shareBtn"),
     ogUrl: document.getElementById("ogUrl"),
     canonicalLink: document.getElementById("canonicalLink"),
@@ -1071,6 +1225,9 @@
     var doc = docs[id];
     if (!doc) {
       return;
+    }
+    if (els.historyDialog.open) {
+      closeHistory();
     }
 
     document.body.classList.remove("is-empty-library");
@@ -1892,6 +2049,13 @@
     });
 
     els.shareBtn.addEventListener("click", copyPageLink);
+    els.historyBtn.addEventListener("click", openHistory);
+    els.historyClose.addEventListener("click", closeHistory);
+    els.historyDialog.addEventListener("click", function (event) {
+      if (event.target === els.historyDialog) {
+        closeHistory();
+      }
+    });
     els.titleRollEdit.addEventListener("click", openSiteTitleEditor);
     els.titleEditForm.addEventListener("submit", saveSiteTitles);
     document.addEventListener("selectionchange", saveSiteTitleSelection);
@@ -2052,6 +2216,7 @@
       if (data && data.ok) {
         els.editBtn.hidden = false;
         els.titleRollEdit.hidden = false;
+        els.historyBtn.hidden = false;
       }
     }).catch(function () {
       /* 静态托管或 file:// 下没有编辑服务，保持入口隐藏 */

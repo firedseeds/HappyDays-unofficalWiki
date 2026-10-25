@@ -215,6 +215,9 @@ python server.py --host 127.0.0.1 --port 8765
 | --- | --- | --- |
 | GET | `/api/health` | 检查编辑服务是否可用 |
 | GET | `/api/state` | 获取主题和文章索引 |
+| GET | `/api/articles/<slug>/history` | 读取文章 Git 版本列表与最早可见版本 |
+| GET | `/api/articles/<slug>/history/<hash>` | 读取指定版本内容 |
+| PUT | `/api/articles/<slug>/history/earliest` | 设置或清除最早可见版本 |
 | GET | `/api/articles/<slug>` | 读取文章元数据、Markdown 正文与署名记录 |
 | PUT | `/api/articles/<slug>` | 保存已有文章，必须传 `author`；传 `topicId` 可移动主题 |
 | POST | `/api/articles` | 新建文章，必须传 `author` |
@@ -261,6 +264,19 @@ python server.py --host 127.0.0.1 --port 8765
 
 每次保存文章都会追加一条记录，`action` 为 `create`、`update` 或 `move`；移动文章时额外包含 `fromTopic`。编辑器和阅读页都会显示署名历史：阅读页头部显示最后编辑者，正文末尾显示完整记录。
 
+### 文章版本历史
+
+后端开启时，每篇文章都可以从本地 Git 提交中查看历史版本：
+
+- 阅读页顶部「历史」按钮打开版本列表并预览旧版本
+- 编辑器「版本历史」可预览任意版本，并载入到编辑表单
+- 编辑器中可以把某个版本设为「最早可见版本」，阅读页将隐藏更早版本
+- 「显示全部版本」可清除限制
+- 版本限制保存在 `article/history.json`，设置时会自动创建本地 Git commit
+- 纯静态部署没有历史按钮；版本历史依赖 `server.py`
+
+载入旧版本只替换编辑内容，不会立即保存；确认后仍需点击「保存并构建」。
+
 ---
 
 ## 已实现的功能
@@ -299,6 +315,7 @@ python server.py --host 127.0.0.1 --port 8765
 - 新建文章与添加主题
 - 导入 Markdown 文件并生成新建文章草稿；文件名必须为英文 slug
 - 每次保存填写署名，并查看署名历史
+- 查看文章历史版本、载入旧版本，并设置阅读页最早可见版本
 - 保存后自动构建 `data.js` 并创建本地 Git commit，失败自动回滚
 
 ---
@@ -327,6 +344,7 @@ python server.py --host 127.0.0.1 --port 8765
 ├─ article/
 │  ├─ article.json       # 9 个主题、29 篇文章的清单
 │  ├─ edits.json         # 各文章的署名记录
+│  ├─ history.json       # 各文章的最早可见版本设置（可选）
 │  ├─ intro/             # 简介（1 篇）
 │  ├─ beginner/          # 新手教程（6 篇）
 │  ├─ advanced/          # 进阶教程（7 篇）
