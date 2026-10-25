@@ -34,7 +34,7 @@
         return;
       }
       var size = Number(run.size);
-      if (!Number.isFinite(size) || size <= 0) {
+      if (!Number.isFinite(size) || size <= 0 || size < 8 || size > 80) {
         size = 0;
       }
       runs.push({

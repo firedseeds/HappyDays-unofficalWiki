@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import html as html_lib
 import json
+import math
 import re
 import sys
 from pathlib import Path
@@ -24,6 +25,7 @@ ROOT = Path(__file__).resolve().parent
 ARTICLE_DIR = ROOT / "article"
 MANIFEST_PATH = ARTICLE_DIR / "article.json"
 EDITS_PATH = ARTICLE_DIR / "edits.json"
+TITLE_PATH = ROOT / "title.json"
 OUTPUT_PATH = ROOT / "assets" / "data.js"
 
 REQUIRED_FRONT_MATTER = (
@@ -853,6 +855,65 @@ def sync_article_sources(manifest: dict) -> int:
     return changed
 
 
+def validate_title_config() -> None:
+    if not TITLE_PATH.is_file():
+        fail("找不到 title.json")
+    try:
+        data = json.loads(TITLE_PATH.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        fail(f"title.json 不是合法 JSON: {exc}")
+    if not isinstance(data, dict):
+        fail("title.json 必须是 JSON 对象")
+
+    font_size = data.get("fontSize", 18.5)
+    if (
+        isinstance(font_size, bool)
+        or not isinstance(font_size, (int, float))
+        or not math.isfinite(float(font_size))
+        or not 8 <= float(font_size) <= 40
+    ):
+        fail("title.json 的 fontSize 必须在 8–40px 之间")
+
+    interval = data.get("intervalSeconds")
+    if (
+        isinstance(interval, bool)
+        or not isinstance(interval, (int, float))
+        or not math.isfinite(float(interval))
+        or not 3 <= float(interval) <= 3600
+    ):
+        fail("title.json 的 intervalSeconds 必须在 3–3600 秒之间")
+
+    titles = data.get("titles")
+    if not isinstance(titles, list) or not titles:
+        fail("title.json 的 titles 不能为空")
+    if len(titles) > 30:
+        fail("title.json 最多允许 30 条标题")
+
+    for index, title in enumerate(titles, start=1):
+        if not isinstance(title, dict):
+            fail(f"title.json 第 {index} 条标题格式无效")
+        runs = title.get("runs")
+        if runs is None:
+            continue
+        if not isinstance(runs, list) or not runs:
+            fail(f"title.json 第 {index} 条标题的 runs 不能为空")
+        for run in runs:
+            if not isinstance(run, dict):
+                fail(f"title.json 第 {index} 条标题的 run 格式无效")
+            size = run.get("size", 0)
+            if size in (None, ""):
+                continue
+            if (
+                isinstance(size, bool)
+                or not isinstance(size, (int, float))
+                or not math.isfinite(float(size))
+                or (float(size) != 0 and not 8 <= float(size) <= 80)
+            ):
+                fail(
+                    f"title.json 第 {index} 条标题的单字字号必须在 8–80px 之间"
+                )
+
+
 def main() -> int:
     try:
         manifest, topics, article_by_file = discover_articles()
@@ -862,6 +923,7 @@ def main() -> int:
         for field in ("name", "team", "tagline", "domain"):
             if not isinstance(site.get(field), str) or not site[field]:
                 fail(f"article/article.json 的 site.{field} 必须是非空字符串")
+        validate_title_config()
         sync_article_sources(manifest)
         topic_by_id = {t["id"]: t for t in topics}
         signatures = read_signatures()
