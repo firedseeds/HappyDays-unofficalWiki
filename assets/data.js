@@ -53,7 +53,7 @@ window.HAPPYDAYS_WIKI = (function () {
       description: "服务器玩家与人物记录。",
       parentId: "history",
       order: 1,
-      docs: ["matopiraphai", "233-2233", "zzx"]
+      docs: ["matopiraphai", "233-2233", "zzx", "1"]
     },
     {
       id: "nations",
@@ -727,11 +727,22 @@ window.HAPPYDAYS_WIKI = (function () {
       tags: [],
       signatures: [],
       content: `<p><img src="assets/image/gallery-2/1791127683915-48391af4-0c07-4bb6-b1a3-b051fbaef2d9.png" alt="图片" loading="lazy" decoding="async"></p>`
+    },
+    "1": {
+      title: "pingguojushi",
+      emoji: "📄",
+      category: "people",
+      excerpt: "棍木",
+      updated: "2026-10-25",
+      reading: 5,
+      tags: [],
+      signatures: [{"author": "苹果居士", "at": "2026-10-25T21:32:05+08:00", "action": "create", "title": "pingguojushi", "topic": "人物志"}],
+      content: `<p>##介绍 上海金山镇长</p>`
     }
   };
 
   var allIds = [
-    "intro", "before-joining", "first-arrival", "shop-plugin", "build-town", "about-nations", "first-money", "resource-world-nether", "senluo-kitchen", "senluo-tavern", "money-making-guide", "lottery", "immersive-vehicles", "town-resources", "cheating-response", "behavior-chat", "world-map", "matopiraphai", "233-2233", "zzx", "northeast-economic-alliance", "harbin-chronicle", "rhodes-island", "freedom-union", "dprk", "qwertyuiop", "alex", "gallery-1", "gallery-2"
+    "intro", "before-joining", "first-arrival", "shop-plugin", "build-town", "about-nations", "first-money", "resource-world-nether", "senluo-kitchen", "senluo-tavern", "money-making-guide", "lottery", "immersive-vehicles", "town-resources", "cheating-response", "behavior-chat", "world-map", "matopiraphai", "233-2233", "zzx", "northeast-economic-alliance", "harbin-chronicle", "rhodes-island", "freedom-union", "dprk", "qwertyuiop", "alex", "gallery-1", "gallery-2", "1"
   ];
 
   return {

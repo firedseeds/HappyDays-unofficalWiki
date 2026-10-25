@@ -9,7 +9,7 @@
     "domain": "127.0.0.1:8000"
   },
   "topicCount": 9,
-  "articleCount": 29,
+  "articleCount": 30,
   "lastUpdated": "2026-10-25",
   "topics": [
     {
@@ -70,7 +70,7 @@
       "parentId": "history",
       "order": 1,
       "emoji": "👤",
-      "articleCount": 3
+      "articleCount": 4
     },
     {
       "id": "nations",
@@ -479,6 +479,19 @@
       "tags": [],
       "file": "gallery/gallery-2.md",
       "source": "/#/doc/gallery-2"
+    },
+    {
+      "slug": "1",
+      "order": 31,
+      "topic": "people",
+      "title": "pingguojushi",
+      "description": "棍木",
+      "emoji": "📄",
+      "updated": "2026-10-25",
+      "readingTime": 5,
+      "tags": [],
+      "file": "history/people/1.md",
+      "source": "/#/doc/1"
     }
   ]
 }
