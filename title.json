@@ -43,6 +43,20 @@
           "color": ""
         }
       ]
+    },
+    {
+      "text": "我是彩蛋",
+      "weight": 1,
+      "runs": [
+        {
+          "text": "我是彩蛋",
+          "bold": false,
+          "italic": false,
+          "underline": false,
+          "strike": false,
+          "color": ""
+        }
+      ]
     }
   ]
 }
