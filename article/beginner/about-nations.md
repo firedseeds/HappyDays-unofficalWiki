@@ -8,7 +8,7 @@ reading_time: 1
 emoji: "🌱"
 order: 6
 slug: "about-nations"
-source: "https://127.0.0.1:8000/#/doc/about-nations"
+source: "/#/doc/about-nations"
 tags:
 ---
 

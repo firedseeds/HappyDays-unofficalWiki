@@ -8,7 +8,7 @@ reading_time: 1
 emoji: "📖"
 order: 25
 slug: "dprk"
-source: "https://127.0.0.1:8000/#/doc/dprk"
+source: "/#/doc/dprk"
 tags:
 ---
 

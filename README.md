@@ -293,7 +293,7 @@ python server.py --host 127.0.0.1 --port 8765
       "readingTime": 6,
       "tags": ["必读", "新成员", "团队文化"],
       "file": "start/welcome.md",
-      "source": "https://example.con/#/doc/welcome"
+      "source": "/#/doc/welcome"
     }
     // 其余文章结构相同，按 order 升序排列
   ]
@@ -341,15 +341,15 @@ python server.py --host 127.0.0.1 --port 8765
 | `readingTime` | integer | 预计阅读时间，单位为分钟 |
 | `tags` | string[] | 文章标签，可为空数组 |
 | `file` | string | Markdown 文件路径，相对于 `article/` 目录 |
-| `source` | string | 由 `site.domain` 生成的绝对页面地址 |
+| `source` | string | 站点根相对地址，格式为 `/#/doc/<slug>` |
 
-每篇 Markdown 的 front matter 同时包含 `topic`（显示名称）和 `topic_id`（主题 ID），与 JSON 中文章的 `topic` 字段对应。Markdown 与 JSON 的 `source` 现在都使用 `https://<site.domain>/#/doc/<slug>` 形式的绝对地址。
+每篇 Markdown 的 front matter 同时包含 `topic`（显示名称）和 `topic_id`（主题 ID），与 JSON 中文章的 `topic` 字段对应。Markdown 与 JSON 的 `source` 都使用 `/#/doc/<slug>` 形式的站点根相对地址，访问时由浏览器或调用方补全域名。
 
 ### 外链域名
 
-`site.domain` 是站点唯一的外部域名配置，当前值见 `article/article.json`。它用于生成文章 `source`、页面 canonical / Open Graph URL，以及“分享/复制链接”和邀请链接；如果只填写域名，程序会自动补上 `https://`。
+`site.domain` 是站点唯一的外部域名配置，当前值见 `article/article.json`。它用于页面 canonical / Open Graph URL，以及“分享/复制链接”和邀请链接；如果只填写域名，程序会自动补上 `https://`。
 
-修改 `site.domain` 后重新运行 `python build.py`（或重启 `server.py`），构建脚本会把所有文章的 JSON 与 front matter `source` 同步到新域名。
+文章 `source` 不包含域名，统一保存为 `/#/doc/<slug>`；部署到任意域名都不需要修改文章。修改 `site.domain` 后重新运行 `python build.py`（或重启 `server.py`），canonical、分享链接和邀请链接会使用新域名。
 
 文章正文中的第三方外链（例如 Minecraft Wiki、GitHub、爱发电等）属于内容本身，不会被改写为该域名。
 
@@ -377,7 +377,7 @@ python build.py
 要求 Python 3.10+，无第三方依赖。脚本会：
 
 - 读取 `article/article.json` 中的主题、站点信息和文章顺序
-- 根据 `site.domain` 同步文章 JSON 与 front matter 的 `source`
+- 将文章 JSON 与 front matter 的 `source` 统一为 `/#/doc/<slug>` 相对地址
 - 扫描 `article/<topic>/<slug>.md`，解析 YAML front matter
 - 校验主题目录、slug、order、标题、摘要、标签等是否与清单一致
 - 将 Markdown 转换为站点使用的 HTML
@@ -414,7 +414,7 @@ reading_time: 5
 emoji: "🌿"
 order: 9
 slug: "onboarding"
-source: "https://example.con/#/doc/onboarding"
+source: "/#/doc/onboarding"
 tags:
   - "入职"
   - "新成员"
@@ -453,7 +453,7 @@ tags:
   "readingTime": 5,
   "tags": ["入职", "新成员"],
   "file": "handbook/onboarding.md",
-  "source": "https://example.con/#/doc/onboarding"
+  "source": "/#/doc/onboarding"
 }
 ```
 

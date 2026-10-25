@@ -8,7 +8,7 @@ reading_time: 3
 emoji: "🌱"
 order: 2
 slug: "before-joining"
-source: "https://127.0.0.1:8000/#/doc/before-joining"
+source: "/#/doc/before-joining"
 tags:
 ---
 

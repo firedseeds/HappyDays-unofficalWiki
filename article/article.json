@@ -114,7 +114,7 @@
       "readingTime": 1,
       "tags": [],
       "file": "intro/intro.md",
-      "source": "https://127.0.0.1:8000/#/doc/intro"
+      "source": "/#/doc/intro"
     },
     {
       "slug": "before-joining",
@@ -127,7 +127,7 @@
       "readingTime": 3,
       "tags": [],
       "file": "beginner/before-joining.md",
-      "source": "https://127.0.0.1:8000/#/doc/before-joining"
+      "source": "/#/doc/before-joining"
     },
     {
       "slug": "first-arrival",
@@ -140,7 +140,7 @@
       "readingTime": 2,
       "tags": [],
       "file": "beginner/first-arrival.md",
-      "source": "https://127.0.0.1:8000/#/doc/first-arrival"
+      "source": "/#/doc/first-arrival"
     },
     {
       "slug": "shop-plugin",
@@ -153,7 +153,7 @@
       "readingTime": 3,
       "tags": [],
       "file": "beginner/shop-plugin.md",
-      "source": "https://127.0.0.1:8000/#/doc/shop-plugin"
+      "source": "/#/doc/shop-plugin"
     },
     {
       "slug": "build-town",
@@ -166,7 +166,7 @@
       "readingTime": 1,
       "tags": [],
       "file": "beginner/build-town.md",
-      "source": "https://127.0.0.1:8000/#/doc/build-town"
+      "source": "/#/doc/build-town"
     },
     {
       "slug": "about-nations",
@@ -179,7 +179,7 @@
       "readingTime": 1,
       "tags": [],
       "file": "beginner/about-nations.md",
-      "source": "https://127.0.0.1:8000/#/doc/about-nations"
+      "source": "/#/doc/about-nations"
     },
     {
       "slug": "first-money",
@@ -192,7 +192,7 @@
       "readingTime": 1,
       "tags": [],
       "file": "beginner/first-money.md",
-      "source": "https://127.0.0.1:8000/#/doc/first-money"
+      "source": "/#/doc/first-money"
     },
     {
       "slug": "resource-world-nether",
@@ -205,7 +205,7 @@
       "readingTime": 1,
       "tags": [],
       "file": "advanced/resource-world-nether.md",
-      "source": "https://127.0.0.1:8000/#/doc/resource-world-nether"
+      "source": "/#/doc/resource-world-nether"
     },
     {
       "slug": "senluo-kitchen",
@@ -218,7 +218,7 @@
       "readingTime": 1,
       "tags": [],
       "file": "advanced/senluo-kitchen.md",
-      "source": "https://127.0.0.1:8000/#/doc/senluo-kitchen"
+      "source": "/#/doc/senluo-kitchen"
     },
     {
       "slug": "senluo-tavern",
@@ -231,7 +231,7 @@
       "readingTime": 1,
       "tags": [],
       "file": "advanced/senluo-tavern.md",
-      "source": "https://127.0.0.1:8000/#/doc/senluo-tavern"
+      "source": "/#/doc/senluo-tavern"
     },
     {
       "slug": "money-making-guide",
@@ -244,7 +244,7 @@
       "readingTime": 1,
       "tags": [],
       "file": "advanced/money-making-guide.md",
-      "source": "https://127.0.0.1:8000/#/doc/money-making-guide"
+      "source": "/#/doc/money-making-guide"
     },
     {
       "slug": "lottery",
@@ -257,7 +257,7 @@
       "readingTime": 1,
       "tags": [],
       "file": "advanced/lottery.md",
-      "source": "https://127.0.0.1:8000/#/doc/lottery"
+      "source": "/#/doc/lottery"
     },
     {
       "slug": "immersive-vehicles",
@@ -270,7 +270,7 @@
       "readingTime": 1,
       "tags": [],
       "file": "advanced/immersive-vehicles.md",
-      "source": "https://127.0.0.1:8000/#/doc/immersive-vehicles"
+      "source": "/#/doc/immersive-vehicles"
     },
     {
       "slug": "town-resources",
@@ -283,7 +283,7 @@
       "readingTime": 1,
       "tags": [],
       "file": "advanced/town-resources.md",
-      "source": "https://127.0.0.1:8000/#/doc/town-resources"
+      "source": "/#/doc/town-resources"
     },
     {
       "slug": "cheating-response",
@@ -296,7 +296,7 @@
       "readingTime": 2,
       "tags": [],
       "file": "rules/cheating-response.md",
-      "source": "https://127.0.0.1:8000/#/doc/cheating-response"
+      "source": "/#/doc/cheating-response"
     },
     {
       "slug": "behavior-chat",
@@ -309,7 +309,7 @@
       "readingTime": 3,
       "tags": [],
       "file": "rules/behavior-chat.md",
-      "source": "https://127.0.0.1:8000/#/doc/behavior-chat"
+      "source": "/#/doc/behavior-chat"
     },
     {
       "slug": "world-map",
@@ -322,7 +322,7 @@
       "readingTime": 1,
       "tags": [],
       "file": "rules/world-map.md",
-      "source": "https://127.0.0.1:8000/#/doc/world-map"
+      "source": "/#/doc/world-map"
     },
     {
       "slug": "matopiraphai",
@@ -335,7 +335,7 @@
       "readingTime": 1,
       "tags": [],
       "file": "history/people/matopiraphai.md",
-      "source": "https://127.0.0.1:8000/#/doc/matopiraphai"
+      "source": "/#/doc/matopiraphai"
     },
     {
       "slug": "233-2233",
@@ -348,7 +348,7 @@
       "readingTime": 1,
       "tags": [],
       "file": "history/people/233-2233.md",
-      "source": "https://127.0.0.1:8000/#/doc/233-2233"
+      "source": "/#/doc/233-2233"
     },
     {
       "slug": "zzx",
@@ -361,7 +361,7 @@
       "readingTime": 1,
       "tags": [],
       "file": "history/people/zzx.md",
-      "source": "https://127.0.0.1:8000/#/doc/zzx"
+      "source": "/#/doc/zzx"
     },
     {
       "slug": "northeast-economic-alliance",
@@ -374,7 +374,7 @@
       "readingTime": 1,
       "tags": [],
       "file": "history/nations/northeast-economic-alliance.md",
-      "source": "https://127.0.0.1:8000/#/doc/northeast-economic-alliance"
+      "source": "/#/doc/northeast-economic-alliance"
     },
     {
       "slug": "harbin-chronicle",
@@ -387,7 +387,7 @@
       "readingTime": 1,
       "tags": [],
       "file": "history/nations/harbin-chronicle.md",
-      "source": "https://127.0.0.1:8000/#/doc/harbin-chronicle"
+      "source": "/#/doc/harbin-chronicle"
     },
     {
       "slug": "rhodes-island",
@@ -400,7 +400,7 @@
       "readingTime": 1,
       "tags": [],
       "file": "history/nations/rhodes-island.md",
-      "source": "https://127.0.0.1:8000/#/doc/rhodes-island"
+      "source": "/#/doc/rhodes-island"
     },
     {
       "slug": "freedom-union",
@@ -413,7 +413,7 @@
       "readingTime": 1,
       "tags": [],
       "file": "history/nations/freedom-union.md",
-      "source": "https://127.0.0.1:8000/#/doc/freedom-union"
+      "source": "/#/doc/freedom-union"
     },
     {
       "slug": "dprk",
@@ -426,7 +426,7 @@
       "readingTime": 1,
       "tags": [],
       "file": "history/nations/dprk.md",
-      "source": "https://127.0.0.1:8000/#/doc/dprk"
+      "source": "/#/doc/dprk"
     },
     {
       "slug": "qwertyuiop",
@@ -439,7 +439,7 @@
       "readingTime": 2,
       "tags": [],
       "file": "history/godman/qwertyuiop.md",
-      "source": "https://127.0.0.1:8000/#/doc/qwertyuiop"
+      "source": "/#/doc/qwertyuiop"
     },
     {
       "slug": "alex",
@@ -452,7 +452,7 @@
       "readingTime": 1,
       "tags": [],
       "file": "history/godman/alex.md",
-      "source": "https://127.0.0.1:8000/#/doc/alex"
+      "source": "/#/doc/alex"
     },
     {
       "slug": "gallery-1",
@@ -465,7 +465,7 @@
       "readingTime": 1,
       "tags": [],
       "file": "gallery/gallery-1.md",
-      "source": "https://127.0.0.1:8000/#/doc/gallery-1"
+      "source": "/#/doc/gallery-1"
     },
     {
       "slug": "gallery-2",
@@ -478,7 +478,7 @@
       "readingTime": 1,
       "tags": [],
       "file": "gallery/gallery-2.md",
-      "source": "https://127.0.0.1:8000/#/doc/gallery-2"
+      "source": "/#/doc/gallery-2"
     }
   ]
 }

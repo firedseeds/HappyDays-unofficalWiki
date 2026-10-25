@@ -8,7 +8,7 @@ reading_time: 3
 emoji: "🌱"
 order: 4
 slug: "shop-plugin"
-source: "https://127.0.0.1:8000/#/doc/shop-plugin"
+source: "/#/doc/shop-plugin"
 tags:
 ---
 

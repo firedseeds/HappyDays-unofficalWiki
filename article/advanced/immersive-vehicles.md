@@ -8,7 +8,7 @@ reading_time: 1
 emoji: "🧭"
 order: 13
 slug: "immersive-vehicles"
-source: "https://127.0.0.1:8000/#/doc/immersive-vehicles"
+source: "/#/doc/immersive-vehicles"
 tags:
 ---
 

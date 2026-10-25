@@ -8,7 +8,7 @@ reading_time: 1
 emoji: "🧭"
 order: 11
 slug: "money-making-guide"
-source: "https://127.0.0.1:8000/#/doc/money-making-guide"
+source: "/#/doc/money-making-guide"
 tags:
 ---
 

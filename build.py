@@ -807,15 +807,6 @@ def build_manifest(articles: list[dict], topics: list[dict], site: dict) -> str:
     return "\n".join(lines)
 
 
-def site_origin(site: dict) -> str:
-    domain = str(site.get("domain", "")).strip().rstrip("/")
-    if not domain:
-        domain = "example.con"
-    if not domain.startswith(("http://", "https://")):
-        domain = "https://" + domain
-    return domain
-
-
 def read_signatures() -> dict:
     if not EDITS_PATH.is_file():
         return {}
@@ -828,15 +819,14 @@ def read_signatures() -> dict:
     return data["articles"]
 
 
-def sync_article_sources(manifest: dict, site: dict) -> int:
-    """Keep every article source in sync with the single site.domain value."""
-    origin = site_origin(site)
+def sync_article_sources(manifest: dict) -> int:
+    """Keep every article source in the domain-relative form."""
     changed = 0
     for article in manifest["articles"]:
         slug = article.get("slug")
         if not isinstance(slug, str):
             continue
-        desired = f"{origin}/#/doc/{slug}"
+        desired = f"/#/doc/{slug}"
         if article.get("source") != desired:
             article["source"] = desired
             changed += 1
@@ -859,7 +849,7 @@ def sync_article_sources(manifest: dict, site: dict) -> int:
             encoding="utf-8",
             newline="\n",
         )
-        print(f"Synced {changed} article source URLs to {origin}")
+        print(f"Synced {changed} article source URLs to /#/doc/<slug>")
     return changed
 
 
@@ -872,7 +862,7 @@ def main() -> int:
         for field in ("name", "team", "tagline", "domain"):
             if not isinstance(site.get(field), str) or not site[field]:
                 fail(f"article/article.json 的 site.{field} 必须是非空字符串")
-        sync_article_sources(manifest, site)
+        sync_article_sources(manifest)
         topic_by_id = {t["id"]: t for t in topics}
         signatures = read_signatures()
         articles = []
