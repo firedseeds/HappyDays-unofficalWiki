@@ -1,4 +1,6 @@
 {
+  "fontSize": 16,
+  "intervalSeconds": 10,
   "titles": [
     {
       "text": "HappyDays 非官方文档",

@@ -891,6 +891,47 @@
   line-height: 1.65;
 }
 
+.title-settings {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--canvas);
+}
+
+.title-setting {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-tertiary);
+  font-size: 10.5px;
+}
+
+.title-setting input {
+  width: 72px;
+  height: 31px;
+  padding: 0 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 12px;
+  text-align: right;
+}
+
+.title-setting input:focus {
+  border-color: rgba(10, 155, 105, 0.48);
+  outline: 0;
+  box-shadow: 0 0 0 3px rgba(10, 155, 105, 0.09);
+}
+
+.title-setting-unit {
+  color: var(--text-faint);
+  font-size: 9.5px;
+}
+
 .title-editor-list {
   display: flex;
   max-height: 350px;

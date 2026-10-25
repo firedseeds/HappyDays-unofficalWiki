@@ -259,6 +259,18 @@
       </div>
       <div class="dialog-body">
         <p class="title-dialog-hint">标题按权重随机出现，出现概率 = 当前权重 / 总权重。鼠标悬停时暂停滚动。</p>
+        <div class="title-settings">
+          <label class="title-setting">
+            <span>字号</span>
+            <input id="titleFontSize" type="number" min="8" max="40" step="0.5" value="16">
+            <span class="title-setting-unit">px</span>
+          </label>
+          <label class="title-setting">
+            <span>轮换间隔</span>
+            <input id="titleInterval" type="number" min="3" max="3600" step="1" value="10">
+            <span class="title-setting-unit">秒</span>
+          </label>
+        </div>
         <div class="title-editor-list" id="titleEditorList"></div>
         <div class="title-editor-foot">
           <button class="editor-btn" id="addTitleItem" type="button">

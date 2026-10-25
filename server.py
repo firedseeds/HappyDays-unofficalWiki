@@ -595,6 +595,24 @@ def update_titles(payload: dict) -> dict:
                 weight = int(weight)
             titles.append({"text": text, "weight": weight})
 
+        font_size = payload.get("fontSize", 16)
+        if isinstance(font_size, bool) or not isinstance(font_size, (int, float)):
+            raise ApiError(400, "字号必须是数字")
+        font_size = float(font_size)
+        if not math.isfinite(font_size) or font_size < 8 or font_size > 40:
+            raise ApiError(400, "字号必须在 8 到 40 之间")
+        if font_size.is_integer():
+            font_size = int(font_size)
+
+        interval_seconds = payload.get("intervalSeconds", 10)
+        if isinstance(interval_seconds, bool) or not isinstance(interval_seconds, (int, float)):
+            raise ApiError(400, "轮换时间必须是数字")
+        interval_seconds = float(interval_seconds)
+        if not math.isfinite(interval_seconds) or interval_seconds < 3 or interval_seconds > 3600:
+            raise ApiError(400, "轮换时间必须在 3 到 3600 秒之间")
+        if interval_seconds.is_integer():
+            interval_seconds = int(interval_seconds)
+
         author_raw = payload.get("author")
         author = (
             require_text(author_raw, "author", 60)
@@ -605,7 +623,15 @@ def update_titles(payload: dict) -> dict:
         try:
             atomic_write(
                 TITLE_PATH,
-                json.dumps({"titles": titles}, ensure_ascii=False, indent=2) + "\n",
+                json.dumps(
+                    {
+                        "fontSize": font_size,
+                        "intervalSeconds": interval_seconds,
+                        "titles": titles,
+                    },
+                    ensure_ascii=False,
+                    indent=2,
+                ) + "\n",
             )
         except Exception as exc:
             if snapshot is not None:
@@ -619,10 +645,13 @@ def update_titles(payload: dict) -> dict:
         )
         log_change(
             f"页眉标题更新（作者={author}，共 {len(titles)} 条，"
+            f"字号={font_size}px，轮换={interval_seconds}s，"
             f"本地提交={'是' if commit.get('committed') else '否'}）"
         )
         return {
             "ok": True,
+            "fontSize": font_size,
+            "intervalSeconds": interval_seconds,
             "titles": titles,
             "message": "页眉标题已保存",
             "commit": commit,

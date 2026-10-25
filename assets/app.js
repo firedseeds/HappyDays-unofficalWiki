@@ -151,10 +151,25 @@
       }
       return response.json();
     }).then(function (data) {
+      var settings = Array.isArray(data) || !data ? {} : data;
       var raw = Array.isArray(data) ? data : (data && data.titles);
       if (!Array.isArray(raw)) {
         return;
       }
+      var fontSize = Number(settings.fontSize);
+      if (!Number.isFinite(fontSize)) {
+        fontSize = 16;
+      }
+      fontSize = Math.max(8, Math.min(40, fontSize));
+      els.titleRollText.style.fontSize = fontSize + "px";
+
+      var intervalSeconds = Number(settings.intervalSeconds);
+      if (!Number.isFinite(intervalSeconds)) {
+        intervalSeconds = 10;
+      }
+      intervalSeconds = Math.max(3, Math.min(3600, intervalSeconds));
+      var intervalMs = intervalSeconds * 1000;
+
       var items = raw.map(function (item) {
         var text = item && typeof item.text === "string" ? item.text.trim() : "";
         var weight = Number(item && item.weight);
@@ -177,7 +192,7 @@
         }
         timer = window.setInterval(function () {
           applyRollingTitle(pickWeightedTitle(items), true);
-        }, 6500);
+        }, intervalMs);
       };
       var pause = function () {
         window.clearInterval(timer);

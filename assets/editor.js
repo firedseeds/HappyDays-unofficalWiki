@@ -58,6 +58,8 @@
     titleDialog: document.getElementById("titleDialog"),
     titleForm: document.getElementById("titleForm"),
     titleEditorList: document.getElementById("titleEditorList"),
+    titleFontSize: document.getElementById("titleFontSize"),
+    titleInterval: document.getElementById("titleInterval"),
     addTitleItem: document.getElementById("addTitleItem"),
     titleTotal: document.getElementById("titleTotal"),
     titleAlert: document.getElementById("titleAlert"),
@@ -1149,6 +1151,10 @@
     els.saveTitlesBtn.disabled = true;
     request("/api/titles").then(function (data) {
       renderTitleRows(data && data.titles);
+      var fontSize = Number(data && data.fontSize);
+      var interval = Number(data && data.intervalSeconds);
+      els.titleFontSize.value = Number.isFinite(fontSize) && fontSize >= 8 ? fontSize : 16;
+      els.titleInterval.value = Number.isFinite(interval) && interval >= 3 ? interval : 10;
       els.saveTitlesBtn.disabled = false;
       els.titleDialog.showModal();
       window.setTimeout(function () {
@@ -1199,11 +1205,23 @@
       setTitleAlert(error.message);
       return;
     }
+    var fontSize = Number(els.titleFontSize.value);
+    var intervalSeconds = Number(els.titleInterval.value);
+    if (!Number.isFinite(fontSize) || fontSize < 8 || fontSize > 40) {
+      setTitleAlert("字号必须在 8 到 40 之间");
+      return;
+    }
+    if (!Number.isFinite(intervalSeconds) || intervalSeconds < 3 || intervalSeconds > 3600) {
+      setTitleAlert("轮换间隔必须在 3 到 3600 秒之间");
+      return;
+    }
     var author = els.author.value.trim() || "HappyDays 团队";
     els.saveTitlesBtn.disabled = true;
     setTitleAlert("");
     jsonRequest("PUT", "/api/titles", {
       titles: titles,
+      fontSize: fontSize,
+      intervalSeconds: intervalSeconds,
       author: author
     }).then(function (result) {
       closeTitleDialog();

@@ -761,17 +761,20 @@ kbd {
   height: 100%;
   flex: 1;
   align-items: center;
+  justify-content: center;
   overflow: hidden;
 }
 
 .title-roll-text {
   display: block;
+  max-width: 100%;
   overflow: hidden;
   color: var(--text-secondary);
-  font-size: 13.5px;
+  font-size: 16px;
   font-weight: 600;
   letter-spacing: 0.01em;
   line-height: 1.25;
+  text-align: center;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
