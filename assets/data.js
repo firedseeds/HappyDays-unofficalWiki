@@ -370,8 +370,9 @@ window.HAPPYDAYS_WIKI = (function () {
       updated: "2026-10-25",
       reading: 1,
       tags: [],
-      signatures: [],
-      content: `<p>此文档在语雀中暂无正文。</p>`
+      signatures: [{"author": "233", "at": "2026-10-25T21:22:00+08:00", "action": "update", "title": "彩票", "topic": "进阶教程"}],
+      content: `<p><strong>输入：/lt</strong></p>
+<p><strong>查看详情</strong></p>`
     },
     "immersive-vehicles": {
       title: "沉浸车辆",
