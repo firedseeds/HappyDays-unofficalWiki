@@ -8,7 +8,7 @@ reading_time: 1
 emoji: "🧭"
 order: 9
 slug: "senluo-kitchen"
-source: "/#/doc/senluo-kitchen"
+source: "/wiki/#/doc/senluo-kitchen"
 tags:
 ---
 

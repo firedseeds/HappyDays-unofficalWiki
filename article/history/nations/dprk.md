@@ -8,7 +8,7 @@ reading_time: 1
 emoji: "📖"
 order: 25
 slug: "dprk"
-source: "/#/doc/dprk"
+source: "/wiki/#/doc/dprk"
 tags:
 ---
 

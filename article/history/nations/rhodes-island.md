@@ -8,7 +8,7 @@ reading_time: 1
 emoji: "📖"
 order: 23
 slug: "rhodes-island"
-source: "/#/doc/rhodes-island"
+source: "/wiki/#/doc/rhodes-island"
 tags:
 ---
 

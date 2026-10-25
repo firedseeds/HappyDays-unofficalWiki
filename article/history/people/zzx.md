@@ -8,7 +8,7 @@ reading_time: 1
 emoji: "📖"
 order: 20
 slug: "zzx"
-source: "/#/doc/zzx"
+source: "/wiki/#/doc/zzx"
 tags:
 ---
 

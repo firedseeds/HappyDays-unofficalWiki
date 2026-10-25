@@ -8,7 +8,7 @@ reading_time: 1
 emoji: "🧭"
 order: 13
 slug: "immersive-vehicles"
-source: "/#/doc/immersive-vehicles"
+source: "/wiki/#/doc/immersive-vehicles"
 tags:
 ---
 

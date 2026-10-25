@@ -8,7 +8,7 @@ reading_time: 1
 emoji: "📖"
 order: 21
 slug: "northeast-economic-alliance"
-source: "/#/doc/northeast-economic-alliance"
+source: "/wiki/#/doc/northeast-economic-alliance"
 tags:
 ---
 

@@ -8,7 +8,7 @@ reading_time: 1
 emoji: "🌱"
 order: 5
 slug: "build-town"
-source: "/#/doc/build-town"
+source: "/wiki/#/doc/build-town"
 tags:
 ---
 

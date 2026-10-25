@@ -8,7 +8,7 @@ reading_time: 3
 emoji: "🌱"
 order: 4
 slug: "shop-plugin"
-source: "/#/doc/shop-plugin"
+source: "/wiki/#/doc/shop-plugin"
 tags:
 ---
 

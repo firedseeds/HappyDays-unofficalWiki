@@ -8,7 +8,7 @@ reading_time: 1
 emoji: "🌱"
 order: 6
 slug: "about-nations"
-source: "/#/doc/about-nations"
+source: "/wiki/#/doc/about-nations"
 tags:
 ---
 

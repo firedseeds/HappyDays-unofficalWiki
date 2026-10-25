@@ -8,7 +8,7 @@ reading_time: 1
 emoji: "📖"
 order: 18
 slug: "matopiraphai"
-source: "/#/doc/matopiraphai"
+source: "/wiki/#/doc/matopiraphai"
 tags:
 ---
 

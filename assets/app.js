@@ -16,13 +16,24 @@
   var allIds = wiki.allIds;
   var site = wiki.site || {};
 
+  var SITE_BASE_PATH = "/wiki";
+
   function siteRoot() {
     var domain = String(site.domain || "").trim().replace(/\/+$/, "");
     if (!domain) {
-      return window.location.href.split("#")[0].replace(/\/+$/, "");
+      var path = window.location.pathname.replace(/\/+$/, "");
+      var base = path.replace(/\/(?:index|editor)\.html$/i, "");
+      if (!/\/wiki$/.test(base)) {
+        base = SITE_BASE_PATH;
+      }
+      return window.location.origin + base;
     }
     if (!/^https?:\/\//i.test(domain)) {
-      domain = "https://" + domain;
+      var protocol = window.location.protocol === "https:" ? "https:" : "http:";
+      domain = protocol + "//" + domain;
+    }
+    if (!/\/wiki$/i.test(domain)) {
+      domain += SITE_BASE_PATH;
     }
     return domain;
   }

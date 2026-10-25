@@ -8,7 +8,7 @@ reading_time: 1
 emoji: "🌱"
 order: 7
 slug: "first-money"
-source: "/#/doc/first-money"
+source: "/wiki/#/doc/first-money"
 tags:
 ---
 

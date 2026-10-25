@@ -10,23 +10,19 @@
 
 ## 快速预览
 
-直接打开：
-
-```text
-index.html
-```
-
-如果浏览器对本地文件限制较严格，可以启动一个静态服务器：
+推荐直接启动服务，阅读和编辑都使用同一个 `/wiki/` 入口：
 
 ```bash
-# Python 3
-python -m http.server 8080
-
-# 或 Node.js（任选其一）
-npx serve .
+python server.py
 ```
 
-然后访问 `http://localhost:8080`。
+然后访问：
+
+```text
+http://127.0.0.1:8000/wiki/
+```
+
+如果只需要静态预览，必须把整个项目部署到 `/wiki/` 路径下，而不是直接打开根目录或 `index.html`。例如在项目父目录创建一个 `wiki` 子目录指向本项目，再从父目录启动 `python -m http.server 8080`，访问 `http://localhost:8080/wiki/`。
 
 如需在网页中编辑文章和添加主题，请运行编辑服务：
 
@@ -34,7 +30,7 @@ npx serve .
 python server.py
 ```
 
-然后访问 `http://127.0.0.1:8000/editor.html`。
+然后访问 `http://127.0.0.1:8000/wiki/editor.html`。
 
 ---
 
@@ -48,8 +44,8 @@ python server.py
 
 默认地址：
 
-- 阅读站点：`http://127.0.0.1:8000/`
-- 内容管理：`http://127.0.0.1:8000/editor.html`
+- 阅读站点：`http://127.0.0.1:8000/wiki/`
+- 内容管理：`http://127.0.0.1:8000/wiki/editor.html`
 
 编辑服务运行时，阅读页顶栏会出现「编辑」入口。每次启动 `server.py` 都会先自动运行 `build.py`；如果构建失败，服务不会启动并会输出具体错误。
 
@@ -478,7 +474,7 @@ python server.py --host 127.0.0.1 --port 8765
       "readingTime": 6,
       "tags": ["必读", "新成员", "团队文化"],
       "file": "start/welcome.md",
-      "source": "/#/doc/welcome"
+      "source": "/wiki/#/doc/welcome"
     }
     // 其余文章结构相同，按 order 升序排列
   ]
@@ -526,15 +522,15 @@ python server.py --host 127.0.0.1 --port 8765
 | `readingTime` | integer | 预计阅读时间，单位为分钟 |
 | `tags` | string[] | 文章标签，可为空数组 |
 | `file` | string | Markdown 文件路径，相对于 `article/` 目录 |
-| `source` | string | 站点根相对地址，格式为 `/#/doc/<slug>` |
+| `source` | string | 站点根相对地址，格式为 `/wiki/#/doc/<slug>` |
 
-每篇 Markdown 的 front matter 同时包含 `topic`（显示名称）和 `topic_id`（主题 ID），与 JSON 中文章的 `topic` 字段对应。Markdown 与 JSON 的 `source` 都使用 `/#/doc/<slug>` 形式的站点根相对地址，访问时由浏览器或调用方补全域名。
+每篇 Markdown 的 front matter 同时包含 `topic`（显示名称）和 `topic_id`（主题 ID），与 JSON 中文章的 `topic` 字段对应。Markdown 与 JSON 的 `source` 都使用 `/wiki/#/doc/<slug>` 形式的站点根相对地址，访问时由浏览器或调用方补全域名。
 
 ### 外链域名
 
 `site.domain` 是站点唯一的外部域名配置，当前值见 `article/article.json`。它用于页面 canonical / Open Graph URL，以及“分享/复制链接”和邀请链接；如果只填写域名，程序会自动补上 `https://`。
 
-文章 `source` 不包含域名，统一保存为 `/#/doc/<slug>`；部署到任意域名都不需要修改文章。修改 `site.domain` 后重新运行 `python build.py`（或重启 `server.py`），canonical、分享链接和邀请链接会使用新域名。
+文章 `source` 不包含域名，统一保存为 `/wiki/#/doc/<slug>`；部署到任意域名都不需要修改文章。修改 `site.domain` 后重新运行 `python build.py`（或重启 `server.py`），canonical、分享链接和邀请链接会使用新域名和 `/wiki` 入口。
 
 文章正文中的第三方外链（例如 Minecraft Wiki、GitHub、爱发电等）属于内容本身，不会被改写为该域名。
 
@@ -562,7 +558,7 @@ python build.py
 要求 Python 3.10+，无第三方依赖。脚本会：
 
 - 读取 `article/article.json` 中的主题、站点信息和文章顺序
-- 将文章 JSON 与 front matter 的 `source` 统一为 `/#/doc/<slug>` 相对地址
+- 将文章 JSON 与 front matter 的 `source` 统一为 `/wiki/#/doc/<slug>` 相对地址
 - 扫描 `article/<topic>/<slug>.md`，解析 YAML front matter
 - 校验主题目录、slug、order、标题、摘要、标签等是否与清单一致
 - 将 Markdown 转换为站点使用的 HTML
@@ -599,7 +595,7 @@ reading_time: 5
 emoji: "🌿"
 order: 9
 slug: "onboarding"
-source: "/#/doc/onboarding"
+source: "/wiki/#/doc/onboarding"
 tags:
   - "入职"
   - "新成员"
@@ -638,7 +634,7 @@ tags:
   "readingTime": 5,
   "tags": ["入职", "新成员"],
   "file": "handbook/onboarding.md",
-  "source": "/#/doc/onboarding"
+  "source": "/wiki/#/doc/onboarding"
 }
 ```
 
@@ -703,13 +699,25 @@ python build.py
 
 ## 部署
 
-这是一个运行时无框架依赖的静态项目。修改 `article/` 后先运行 `python build.py` 更新 `assets/data.js`，再把整个目录上传到任意静态托管即可。
+站点的正式入口是 `/wiki/`。`server.py` 会自动把 `/`、`/wiki`、`/index.html` 重定向到 `/wiki/`，并在内部把 `/wiki/...` 映射到项目文件。
 
-**GitHub Pages**：把文件推到仓库 → Settings → Pages → 选择分支根目录。
+这是一个运行时无框架依赖的静态项目。修改 `article/` 后先运行 `python build.py` 更新 `assets/data.js`，再把整个目录部署到 `/wiki/` 路径下。
 
-**Netlify / Vercel**：导入仓库，构建命令留空，发布目录填 `.`（也可将构建命令设为 `python build.py`）。
+**GitHub Pages**：如果仓库名为 `wiki`，项目地址就是 `https://<user>.github.io/wiki/`，与入口路径一致；否则需要自定义域名或反向代理把 `/wiki/` 指到站点。
 
-**Nginx / Apache**：直接把目录作为站点根目录。由于使用 hash 路由，不需要额外的 `try_files` 或 rewrite 规则。
+**Netlify / Vercel**：构建命令可设为 `python build.py`，发布目录为 `.`，并通过平台的 rewrite/redirect 功能把 `/wiki/*` 映射到站点文件。
+
+**Nginx / Apache**：把站点目录映射到 `/wiki/`，例如 Nginx：
+
+```nginx
+location = /wiki { return 302 /wiki/; }
+location /wiki/ {
+    alias /path/to/HappyDays-wiki/;
+    index index.html;
+}
+```
+
+由于使用 hash 路由，文章内部不需要额外的 `try_files` 规则；但 `/wiki/` 前缀必须保留。
 
 静态部署时不会包含可用的编辑 API，阅读页的「编辑」入口会自动隐藏；如需编辑，请在本地运行 `python server.py`。不要在公网静态服务器上直接部署 `server.py`。
 

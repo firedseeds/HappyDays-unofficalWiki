@@ -828,7 +828,7 @@ def sync_article_sources(manifest: dict) -> int:
         slug = article.get("slug")
         if not isinstance(slug, str):
             continue
-        desired = f"/#/doc/{slug}"
+        desired = f"/wiki/#/doc/{slug}"
         if article.get("source") != desired:
             article["source"] = desired
             changed += 1
@@ -851,7 +851,7 @@ def sync_article_sources(manifest: dict) -> int:
             encoding="utf-8",
             newline="\n",
         )
-        print(f"Synced {changed} article source URLs to /#/doc/<slug>")
+        print(f"Synced {changed} article source URLs to /wiki/#/doc/<slug>")
     return changed
 
 

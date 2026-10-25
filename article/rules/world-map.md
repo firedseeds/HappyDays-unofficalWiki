@@ -8,7 +8,7 @@ reading_time: 1
 emoji: "📜"
 order: 17
 slug: "world-map"
-source: "/#/doc/world-map"
+source: "/wiki/#/doc/world-map"
 tags:
 ---
 

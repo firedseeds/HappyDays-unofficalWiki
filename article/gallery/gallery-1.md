@@ -8,7 +8,7 @@ reading_time: 1
 emoji: "🖼️"
 order: 29
 slug: "gallery-1"
-source: "/#/doc/gallery-1"
+source: "/wiki/#/doc/gallery-1"
 tags:
 ---
 

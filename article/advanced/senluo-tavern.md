@@ -8,7 +8,7 @@ reading_time: 1
 emoji: "🧭"
 order: 10
 slug: "senluo-tavern"
-source: "/#/doc/senluo-tavern"
+source: "/wiki/#/doc/senluo-tavern"
 tags:
 ---
 

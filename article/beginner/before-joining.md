@@ -8,7 +8,7 @@ reading_time: 3
 emoji: "🌱"
 order: 2
 slug: "before-joining"
-source: "/#/doc/before-joining"
+source: "/wiki/#/doc/before-joining"
 tags:
 ---
 

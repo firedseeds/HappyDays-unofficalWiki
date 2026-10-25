@@ -8,7 +8,7 @@ reading_time: 1
 emoji: "🧭"
 order: 11
 slug: "money-making-guide"
-source: "/#/doc/money-making-guide"
+source: "/wiki/#/doc/money-making-guide"
 tags:
 ---
 

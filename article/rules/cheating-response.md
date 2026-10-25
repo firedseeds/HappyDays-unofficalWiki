@@ -8,7 +8,7 @@ reading_time: 2
 emoji: "📜"
 order: 15
 slug: "cheating-response"
-source: "/#/doc/cheating-response"
+source: "/wiki/#/doc/cheating-response"
 tags:
 ---
 

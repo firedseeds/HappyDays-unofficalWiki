@@ -5,7 +5,7 @@ Run:
     python server.py
 
 Then open:
-    http://127.0.0.1:8000/editor.html
+    http://127.0.0.1:8000/wiki/editor.html
 
 The server binds to localhost only. It exposes a small JSON API for editing
 Markdown articles, creating topics, and previewing Markdown. Every successful
@@ -44,6 +44,7 @@ TITLE_PATH = ROOT / "title.json"
 IMAGE_DIR = ROOT / "assets" / "image"
 DATA_PATH = ROOT / "assets" / "data.js"
 BUILD_SCRIPT = ROOT / "build.py"
+BASE_PATH = "/wiki"
 MAX_REQUEST_BYTES = 2 * 1024 * 1024
 MAX_BODY_CHARS = 800_000
 SLUG_RE = re.compile(r"^[a-z0-9][a-z0-9-]{0,63}$")
@@ -568,7 +569,7 @@ def validate_article_fields(payload: dict, defaults: dict | None = None) -> dict
 
 
 def compose_markdown(record: dict, topic: dict, body: str) -> str:
-    source = f"/#/doc/{record['slug']}"
+    source = f"/wiki/#/doc/{record['slug']}"
     frontmatter = [
         "---",
         f"title: {json.dumps(record['title'], ensure_ascii=False)}",
@@ -1310,7 +1311,7 @@ def create_article(payload: dict) -> dict:
             "readingTime": fields["reading_time"],
             "tags": fields["tags"],
             "file": f"{topic['directory']}/{slug}.md",
-            "source": f"/#/doc/{slug}",
+            "source": f"/wiki/#/doc/{slug}",
         }
         manifest["articles"].append(record)
         refresh_manifest(manifest)
@@ -1464,11 +1465,31 @@ def preview_markdown(payload: dict) -> dict:
     return {"html": html}
 
 
+def strip_base_path(path: str) -> str:
+    if path == BASE_PATH:
+        return "/"
+    if path.startswith(BASE_PATH + "/"):
+        return path[len(BASE_PATH):]
+    return path
+
+
 class EditorHandler(SimpleHTTPRequestHandler):
     server_version = "HappyDaysEditor/1.0"
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=str(ROOT), **kwargs)
+
+    def redirect_to_base(self) -> None:
+        self.send_response(302)
+        self.send_header("Location", BASE_PATH + "/")
+        self.end_headers()
+
+    def translate_path(self, path: str) -> str:
+        parsed = urlparse(path)
+        stripped = strip_base_path(unquote(parsed.path))
+        if parsed.query:
+            stripped += "?" + parsed.query
+        return super().translate_path(stripped)
 
     def log_message(self, format_string, *args):
         sys.stderr.write(
@@ -1509,7 +1530,11 @@ class EditorHandler(SimpleHTTPRequestHandler):
         return payload
 
     def do_GET(self) -> None:
-        path = unquote(urlparse(self.path).path)
+        request_path = unquote(urlparse(self.path).path)
+        if request_path in ("/", "/index.html") or request_path == BASE_PATH:
+            self.redirect_to_base()
+            return
+        path = strip_base_path(request_path)
         try:
             with LOCK:
                 if path == "/api/health":
@@ -1552,7 +1577,7 @@ class EditorHandler(SimpleHTTPRequestHandler):
             self.send_json(500, {"error": f"服务器错误：{exc}"})
 
     def do_PUT(self) -> None:
-        path = unquote(urlparse(self.path).path)
+        path = strip_base_path(unquote(urlparse(self.path).path))
         match = re.fullmatch(r"/api/articles/([a-z0-9-]+)", path)
         try:
             payload = self.read_json()
@@ -1580,7 +1605,7 @@ class EditorHandler(SimpleHTTPRequestHandler):
             self.send_json(500, {"error": f"服务器错误：{exc}"})
 
     def do_POST(self) -> None:
-        path = unquote(urlparse(self.path).path)
+        path = strip_base_path(unquote(urlparse(self.path).path))
         try:
             comment_match = re.fullmatch(r"/api/articles/([a-z0-9-]+)/comments", path)
             if comment_match:
@@ -1606,7 +1631,7 @@ class EditorHandler(SimpleHTTPRequestHandler):
             self.send_json(500, {"error": f"服务器错误：{exc}"})
 
     def do_DELETE(self) -> None:
-        path = unquote(urlparse(self.path).path)
+        path = strip_base_path(unquote(urlparse(self.path).path))
         try:
             article_match = re.fullmatch(r"/api/articles/([a-z0-9-]+)", path)
             if article_match:
@@ -1648,8 +1673,8 @@ def main() -> int:
     except OSError as exc:
         print(f"无法启动服务：{exc}", file=sys.stderr, flush=True)
         return 1
-    print(f"HappyDays Wiki 编辑器已启动：http://{args.host}:{args.port}/editor.html", flush=True)
-    print(f"阅读站点：http://{args.host}:{args.port}/", flush=True)
+    print(f"HappyDays Wiki 编辑器已启动：http://{args.host}:{args.port}/wiki/editor.html", flush=True)
+    print(f"阅读站点：http://{args.host}:{args.port}/wiki/", flush=True)
     print("按 Ctrl+C 停止。", flush=True)
     try:
         httpd.serve_forever()
