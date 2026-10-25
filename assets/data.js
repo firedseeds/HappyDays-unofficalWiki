@@ -590,8 +590,8 @@ window.HAPPYDAYS_WIKI = (function () {
       updated: "2026-10-25",
       reading: 1,
       tags: [],
-      signatures: [{"author": "233", "at": "2026-10-25T20:39:34+08:00", "action": "update", "title": "泛东北经济同盟", "topic": "国家/城镇"}],
-      content: `<p><strong>zzx成立的国家 以哈尔滨为首府</strong></p>
+      signatures: [{"author": "233", "at": "2026-10-25T20:39:34+08:00", "action": "update", "title": "泛东北经济同盟", "topic": "国家/城镇"}, {"author": "233", "at": "2026-10-25T20:43:35+08:00", "action": "update", "title": "泛东北经济同盟", "topic": "国家/城镇"}],
+      content: `<h2>zzx成立的国家 以哈尔滨为首府</h2>
 <p>据zzx所述：“其实泛东北可以表示地图上的所有国家。</p>
 <p>比如朝鲜在威海东北，</p>
 <p>所以朝鲜也是泛东北的一员（</p>
@@ -601,7 +601,9 @@ window.HAPPYDAYS_WIKI = (function () {
 <p>北京在太原东北，</p>
 <p>所以也可以加入。”</p>
 <p><strong>震撼首发——233</strong></p>
-<p><strong>你知道吗？这其实是zzx的第2次蟠桃</strong></p>`
+<p>注：标点符号为编者所加</p>
+<h2>你知道吗？这其实是zzx的第2次蟠桃</h2>
+<p><strong>由自由联邦共同体（FU）独立而来，详见zzx人物志</strong></p>`
     },
     "harbin-chronicle": {
       title: "哈尔滨地方志",
