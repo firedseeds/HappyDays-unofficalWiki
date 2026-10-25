@@ -291,7 +291,7 @@ window.HAPPYDAYS_WIKI = (function () {
       updated: "2026-10-25",
       reading: 1,
       tags: [],
-      signatures: [{"author": "233", "at": "2026-10-25T21:13:12+08:00", "action": "update", "title": "资源世界/下界", "topic": "进阶教程"}, {"author": "233", "at": "2026-10-25T21:14:26+08:00", "action": "update", "title": "资源世界/下界", "topic": "进阶教程"}, {"author": "苹果居士", "at": "2026-10-25T21:29:50+08:00", "action": "update", "title": "资源世界/下界", "topic": "进阶教程"}],
+      signatures: [{"author": "233", "at": "2026-10-25T21:13:12+08:00", "action": "update", "title": "资源世界/下界", "topic": "进阶教程"}, {"author": "233", "at": "2026-10-25T21:14:26+08:00", "action": "update", "title": "资源世界/下界", "topic": "进阶教程"}, {"author": "苹果居士", "at": "2026-10-25T21:29:50+08:00", "action": "update", "title": "资源世界/下界", "topic": "进阶教程"}, {"author": "苹果居士", "at": "2026-10-25T21:29:54+08:00", "action": "update", "title": "资源世界/下界", "topic": "进阶教程"}],
       content: `<p>南京传送点有资源传送和下界传送，服务器无末地</p>`
     },
     "senluo-kitchen": {
