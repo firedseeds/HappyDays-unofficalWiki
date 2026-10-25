@@ -124,6 +124,15 @@ stop_server() {
   printf 'Successful\n'
 }
 
+restart_server() {
+  if is_running; then
+    stop_server >/dev/null
+  else
+    rm -f "$PID_FILE"
+  fi
+  run_server
+}
+
 show_logs() {
   if [ ! -f "$LOG_FILE" ]; then
     fail "log file not found: $LOG_FILE"
@@ -142,10 +151,13 @@ case "${1:-}" in
   -stop)
     stop_server
     ;;
+  -restart)
+    restart_server
+    ;;
   -logs)
     show_logs "$@"
     ;;
   *)
-    fail "usage: $0 -run | -stop | -logs [-f]"
+    fail "usage: $0 -run | -stop | -restart | -logs [-f]"
     ;;
 esac

@@ -58,11 +58,18 @@ python server.py
 Linux 服务器可以使用根目录的 `server.sh` 管理进程：
 
 ```bash
-chmod +x server.sh
+chmod +x server.sh run.sh
 ./server.sh -run      # 后台启动，成功输出 Successful
 ./server.sh -stop     # 停止服务，成功输出 Successful
+./server.sh -restart  # 重启服务，成功输出 Successful
 ./server.sh -logs     # 查看最近 200 行日志
 ./server.sh -logs -f  # 持续跟踪日志
+```
+
+`server.sh` 同时提供 `run.sh` 兼容入口，参数完全一致：
+
+```bash
+./run.sh -restart
 ```
 
 默认监听 `0.0.0.0:8000`，可以通过环境变量覆盖：
@@ -76,6 +83,7 @@ Windows 使用 `run.bat`，参数和输出一致：
 ```bat
 run.bat -run
 run.bat -stop
+run.bat -restart
 run.bat -logs
 run.bat -logs -f
 ```
@@ -263,8 +271,9 @@ python server.py --host 127.0.0.1 --port 8765
 ├─ editor.html           # 本地内容管理界面
 ├─ build.py              # 从 article/ 生成 assets/data.js
 ├─ server.py             # 本地编辑服务与 JSON API
-├─ server.sh             # Linux 启动、停止与日志脚本
-├─ run.bat               # Windows 启动、停止与日志脚本
+├─ server.sh             # Linux 启动、停止、重启与日志脚本
+├─ run.sh                # server.sh 的兼容入口
+├─ run.bat               # Windows 启动、停止、重启与日志脚本
 ├─ title.json            # 页眉滚动标题与权重
 ├─ assets/
 │  ├─ styles.css         # 设计系统、布局、组件、响应式与打印样式

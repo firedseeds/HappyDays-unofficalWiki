@@ -18,8 +18,28 @@ if not exist "%LOG_DIR%" mkdir "%LOG_DIR%"
 
 if /I "%~1"=="-run" goto run
 if /I "%~1"=="-stop" goto stop
+if /I "%~1"=="-restart" goto restart
 if /I "%~1"=="-logs" goto logs
 goto usage
+
+:restart
+if exist "%PID_FILE%" (
+  set /p OLD_PID=<"%PID_FILE%"
+  if defined OLD_PID (
+    tasklist /FI "PID eq !OLD_PID!" /NH 2>nul | find "!OLD_PID!" >nul
+    if not errorlevel 1 (
+      taskkill /PID !OLD_PID! /T /F >nul 2>&1
+      ping -n 2 127.0.0.1 >nul
+      tasklist /FI "PID eq !OLD_PID!" /NH 2>nul | find "!OLD_PID!" >nul
+      if not errorlevel 1 (
+        echo fail: could not stop server ^(PID !OLD_PID!^)
+        exit /b 1
+      )
+    )
+  )
+  del /q "%PID_FILE%" >nul 2>&1
+)
+goto run
 
 :run
 if exist "%PID_FILE%" (
@@ -162,5 +182,5 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command "Get-Content -Path '%LOG_
 exit /b 0
 
 :usage
-echo fail: usage: %~nx0 -run ^| -stop ^| -logs [-f] 1>&2
+echo fail: usage: %~nx0 -run ^| -stop ^| -restart ^| -logs [-f] 1>&2
 exit /b 1
