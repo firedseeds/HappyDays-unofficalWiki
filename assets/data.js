@@ -625,8 +625,10 @@ window.HAPPYDAYS_WIKI = (function () {
       updated: "2026-10-25",
       reading: 1,
       tags: [],
-      signatures: [],
-      content: `<p>此文档在语雀中暂无正文。</p>`
+      signatures: [{"author": "233", "at": "2026-10-25T20:56:49+08:00", "action": "update", "title": "罗德岛", "topic": "国家/城镇"}],
+      content: `<h2>截至撰稿日期（2026.10.25）罗德岛为第二大国家</h2>
+<p><strong>其对服务器的影响是巨大的——233</strong></p>
+<p>让我们有请罗德岛成员来编辑（</p>`
     },
     "freedom-union": {
       title: "自由联邦共同体 Freedom Union",
