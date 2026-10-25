@@ -490,7 +490,7 @@
       siteTitleBaseFontSize = fontSize;
       renderSiteTitleRows(data && data.titles);
       els.siteTitleInterval.value = Number.isFinite(interval) && interval >= 3 ? interval : 10;
-      els.siteTitleSize.value = "";
+      els.siteTitleSize.value = String(siteTitleBaseFontSize);
       els.siteTitleSave.disabled = false;
       els.titleEditDialog.showModal();
       window.setTimeout(function () {

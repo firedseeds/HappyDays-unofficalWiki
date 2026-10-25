@@ -1525,7 +1525,7 @@
       editorTitleBaseFontSize = fontSize;
       renderTitleRows(data && data.titles);
       els.titleInterval.value = Number.isFinite(interval) && interval >= 3 ? interval : 10;
-      els.editorTitleSize.value = "";
+      els.editorTitleSize.value = String(editorTitleBaseFontSize);
       els.saveTitlesBtn.disabled = false;
       els.titleDialog.showModal();
       window.setTimeout(function () {
