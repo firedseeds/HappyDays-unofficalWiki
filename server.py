@@ -38,7 +38,8 @@ ARTICLE_DIR = ROOT / "article"
 MANIFEST_PATH = ARTICLE_DIR / "article.json"
 EDITS_PATH = ARTICLE_DIR / "edits.json"
 HISTORY_PATH = ARTICLE_DIR / "history.json"
-COMMENT_PATH = ROOT / "comment.json"
+COMMENT_DIR = ROOT / "comment"
+COMMENT_PATH = COMMENT_DIR / "comment.json"
 TITLE_PATH = ROOT / "title.json"
 IMAGE_DIR = ROOT / "assets" / "image"
 DATA_PATH = ROOT / "assets" / "data.js"
@@ -145,13 +146,13 @@ def write_edits(edits: dict) -> None:
 
 def read_comments() -> dict:
     if not COMMENT_PATH.is_file():
-        return {"version": 1, "articles": {}}
+        return {"version": 2, "articles": {}}
     try:
         data = json.loads(COMMENT_PATH.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
-        raise ApiError(500, f"无法读取 comment.json: {exc}")
+        raise ApiError(500, f"无法读取 comment/comment.json: {exc}")
     if not isinstance(data, dict) or not isinstance(data.get("articles"), dict):
-        raise ApiError(500, "comment.json 格式无效")
+        raise ApiError(500, "comment/comment.json 格式无效")
     return data
 
 
@@ -175,21 +176,26 @@ def add_article_comment(slug: str, payload: dict) -> dict:
         raise ApiError(404, "文章不存在")
     author = require_text(payload.get("author"), "署名", 80)
     body = require_text(payload.get("body"), "评论", 2000, multiline=True)
+    comment_id = str(uuid.uuid4())
+    relative_file = f"{slug}/{comment_id}.md"
+    markdown_path = COMMENT_DIR / relative_file
     comment = {
-        "id": str(uuid.uuid4()),
+        "id": comment_id,
         "author": author,
         "at": datetime.now().astimezone().isoformat(timespec="seconds"),
+        "file": relative_file,
         "body": body,
     }
     with LOCK:
+        atomic_write(markdown_path, body + "\n")
         data = read_comments()
         comments = data["articles"].setdefault(slug, [])
         if not isinstance(comments, list):
-            raise ApiError(500, "comment.json 中该文章的评论格式无效")
+            raise ApiError(500, "comment/comment.json 中该文章的评论格式无效")
         comments.append(comment)
         write_comments(data)
         commit = auto_commit(
-            [COMMENT_PATH],
+            [COMMENT_PATH, markdown_path],
             f"docs: 添加评论「{record.get('title', slug)}」（{author}）",
             author,
         )

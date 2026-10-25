@@ -108,6 +108,128 @@
     });
   }
 
+  function renderCommentMarkdown(source) {
+    var text = String(source || "").replace(/\r\n?/g, "\n");
+    var codeBlocks = [];
+    text = text.replace(/```([^\n`]*)\n([\s\S]*?)```/g, function (match, language, code) {
+      var index = codeBlocks.length;
+      codeBlocks.push("<pre><code>" + escapeHTML(code.replace(/\n$/, "")) + "</code></pre>");
+      return "\u0000CODE" + index + "\u0000";
+    });
+    text = escapeHTML(text);
+
+    function safeUrl(value) {
+      var url = String(value || "").replace(/&amp;/g, "&").trim();
+      if (!/^(https?:\/\/|mailto:|\/|#)/i.test(url)) {
+        return "";
+      }
+      return escapeHTML(url);
+    }
+
+    function inlineMarkdown(value) {
+      var inlineCodes = [];
+      value = value.replace(/`([^`]+)`/g, function (match, code) {
+        var index = inlineCodes.length;
+        inlineCodes.push("<code>" + code + "</code>");
+        return "\u0000INLINE" + index + "\u0000";
+      });
+      value = value.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, function (match, label, url) {
+        var href = safeUrl(url);
+        if (!href) {
+          return label;
+        }
+        var external = /^https?:/i.test(href) ? ' target="_blank" rel="noopener noreferrer"' : "";
+        return '<a href="' + href + '"' + external + ">" + label + "</a>";
+      });
+      value = value.replace(/\*\*([^*\n]+)\*\*/g, "<strong>$1</strong>");
+      value = value.replace(/__([^_\n]+)__/g, "<strong>$1</strong>");
+      value = value.replace(/(^|[^*])\*([^*\n]+)\*/g, "$1<em>$2</em>");
+      value = value.replace(/(^|[^_])_([^_\n]+)_/g, "$1<em>$2</em>");
+      value = value.replace(/~~([^~\n]+)~~/g, "<del>$1</del>");
+      inlineCodes.forEach(function (html, index) {
+        value = value.replace("\u0000INLINE" + index + "\u0000", html);
+      });
+      return value;
+    }
+
+    var lines = text.split("\n");
+    var html = [];
+    var index = 0;
+    while (index < lines.length) {
+      var line = lines[index];
+      if (!line.trim()) {
+        index += 1;
+        continue;
+      }
+      var codeMatch = /^\u0000CODE(\d+)\u0000$/.exec(line.trim());
+      if (codeMatch) {
+        html.push(codeBlocks[Number(codeMatch[1])] || "");
+        index += 1;
+        continue;
+      }
+      var heading = /^(#{1,6})\s+(.*)$/.exec(line);
+      if (heading) {
+        var level = heading[1].length;
+        html.push("<h" + level + ">" + inlineMarkdown(heading[2]) + "</h" + level + ">");
+        index += 1;
+        continue;
+      }
+      if (/^---+$/.test(line.trim())) {
+        html.push("<hr>");
+        index += 1;
+        continue;
+      }
+      if (/^>\s?/.test(line)) {
+        var quoted = [];
+        while (index < lines.length && /^>\s?/.test(lines[index])) {
+          quoted.push(inlineMarkdown(lines[index].replace(/^>\s?/, "")));
+          index += 1;
+        }
+        html.push("<blockquote>" + quoted.join("<br>") + "</blockquote>");
+        continue;
+      }
+      var unordered = /^[-+*]\s+(.*)$/.exec(line);
+      var ordered = /^\d+\.\s+(.*)$/.exec(line);
+      if (unordered || ordered) {
+        var listType = unordered ? "ul" : "ol";
+        var items = [];
+        while (index < lines.length) {
+          var item = unordered
+            ? /^[-+*]\s+(.*)$/.exec(lines[index])
+            : /^\d+\.\s+(.*)$/.exec(lines[index]);
+          if (!item) {
+            break;
+          }
+          items.push("<li>" + inlineMarkdown(item[1]) + "</li>");
+          index += 1;
+        }
+        html.push("<" + listType + ">" + items.join("") + "</" + listType + ">");
+        continue;
+      }
+      var paragraph = [];
+      while (index < lines.length && lines[index].trim()) {
+        if (
+          /^(#{1,6})\s+/.test(lines[index]) ||
+          /^>\s?/.test(lines[index]) ||
+          /^[-+*]\s+/.test(lines[index]) ||
+          /^\d+\.\s+/.test(lines[index]) ||
+          /^---+$/.test(lines[index].trim()) ||
+          /^\u0000CODE\d+\u0000$/.test(lines[index].trim())
+        ) {
+          break;
+        }
+        paragraph.push(inlineMarkdown(lines[index]));
+        index += 1;
+      }
+      if (paragraph.length) {
+        html.push("<p>" + paragraph.join("<br>") + "</p>");
+      } else {
+        index += 1;
+      }
+    }
+    return html.join("");
+  }
+
   function renderDocComments(comments) {
     var items = Array.isArray(comments) ? comments.slice().reverse() : [];
     els.docCommentCount.textContent = items.length + " 条";
@@ -135,9 +257,9 @@
       meta.appendChild(author);
       meta.appendChild(time);
 
-      var body = document.createElement("p");
+      var body = document.createElement("div");
       body.className = "doc-comment-body";
-      body.textContent = comment.body || "";
+      body.innerHTML = renderCommentMarkdown(comment.body || "");
 
       main.appendChild(meta);
       main.appendChild(body);
@@ -158,7 +280,7 @@
       renderDocComments([]);
       return;
     }
-    fetch("comment.json", { cache: "no-store" }).then(function (response) {
+    fetch("comment/comment.json", { cache: "no-store" }).then(function (response) {
       if (!response.ok) {
         throw new Error("评论加载失败");
       }
