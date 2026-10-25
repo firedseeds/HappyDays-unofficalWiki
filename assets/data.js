@@ -767,7 +767,7 @@ window.HAPPYDAYS_WIKI = (function () {
       name: "HappyDays非官方文档",
       team: "HappyDays 团队",
       tagline: "团队知识库",
-      domain: "127.0.0.1:8000",
+      domain: "114.55.99.2:8000",
       language: "zh-CN"
     },
     categories: categories,
