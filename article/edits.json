@@ -82,6 +82,15 @@
         "title": "泛东北经济同盟",
         "topic": "国家/城镇"
       }
+    ],
+    "harbin-chronicle": [
+      {
+        "author": "233",
+        "at": "2026-10-25T20:47:38+08:00",
+        "action": "update",
+        "title": "哈尔滨地方志",
+        "topic": "国家/城镇"
+      }
     ]
   }
 }
