@@ -107,7 +107,7 @@
         var color = colorToHex(style.color);
         var size = parseFloat(style.fontSize) || 0;
         Array.from(node.nodeValue || "").forEach(function (character) {
-          if (character === "\n" || character === "\r") {
+          if (character === "\n" || character === "\r" || character === "\u200b") {
             return;
           }
           runs.push({

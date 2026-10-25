@@ -143,7 +143,7 @@
   };
 
   var activeSiteTitleEditor = null;
-  var siteTitleBaseFontSize = 16;
+  var siteTitleBaseFontSize = 18.5;
 
   function stopTitleRotation() {
     if (titleRollState.timer) {
@@ -208,7 +208,7 @@
 
     var fontSize = Number(settings.fontSize);
     if (!Number.isFinite(fontSize)) {
-      fontSize = 16;
+      fontSize = 18.5;
     }
     fontSize = Math.max(8, Math.min(40, fontSize));
     els.titleRollText.style.fontSize = fontSize + "px";
@@ -343,11 +343,23 @@
     activeSiteTitleEditor.focus();
     restoreSiteTitleRange();
     var selection = window.getSelection();
-    if (!selection || !selection.rangeCount || selection.getRangeAt(0).collapsed) {
+    if (!selection || !selection.rangeCount) {
       setSiteTitleAlert("请先选中要修改字号的文字");
       return;
     }
     var range = selection.getRangeAt(0);
+    if (range.collapsed) {
+      var pending = document.createElement("span");
+      pending.style.fontSize = size + "px";
+      pending.textContent = "\u200b";
+      range.insertNode(pending);
+      range.setStart(pending.firstChild, 1);
+      range.collapse(true);
+      selection.removeAllRanges();
+      selection.addRange(range);
+      savedSiteTitleRange = range.cloneRange();
+      return;
+    }
     var span = document.createElement("span");
     span.style.fontSize = size + "px";
     span.appendChild(range.extractContents());
@@ -472,12 +484,11 @@
       var fontSize = Number(data && data.fontSize);
       var interval = Number(data && data.intervalSeconds);
       if (!Number.isFinite(fontSize)) {
-        fontSize = 16;
+        fontSize = 18.5;
       }
       fontSize = Math.max(8, Math.min(40, fontSize));
       siteTitleBaseFontSize = fontSize;
       renderSiteTitleRows(data && data.titles);
-      els.siteTitleFont.value = fontSize;
       els.siteTitleInterval.value = Number.isFinite(interval) && interval >= 3 ? interval : 10;
       els.siteTitleSize.value = "";
       els.siteTitleSave.disabled = false;
@@ -653,7 +664,7 @@
     var titles = [];
     rows.forEach(function (row) {
       var editor = row.querySelector(".site-title-text");
-      var text = editor.textContent;
+      var text = editor.textContent.replace(/\u200b/g, "");
       var weight = Number(row.querySelector(".site-title-weight").value);
       if (!text.trim()) {
         throw new Error("标题内容不能为空");
@@ -673,7 +684,7 @@
     if (titles.length > 30) {
       throw new Error("标题最多 30 条");
     }
-    var fontSize = Number(els.siteTitleFont.value);
+    var fontSize = siteTitleBaseFontSize;
     var intervalSeconds = Number(els.siteTitleInterval.value);
     if (!Number.isFinite(fontSize) || fontSize < 8 || fontSize > 40) {
       throw new Error("字号必须在 8 到 40 之间");
@@ -779,7 +790,6 @@
     siteTitleToolbar: document.getElementById("siteTitleToolbar"),
     siteTitleColor: document.getElementById("siteTitleColor"),
     siteTitleSize: document.getElementById("siteTitleSize"),
-    siteTitleFont: document.getElementById("siteTitleFont"),
     siteTitleInterval: document.getElementById("siteTitleInterval"),
     siteTitleTotal: document.getElementById("siteTitleTotal"),
     siteTitleAlert: document.getElementById("siteTitleAlert"),
@@ -2080,19 +2090,6 @@
     els.siteTitleSize.addEventListener("mousedown", saveSiteTitleSelection);
     els.siteTitleSize.addEventListener("change", function () {
       applySiteTitleFontSize(els.siteTitleSize.value);
-    });
-    els.siteTitleFont.addEventListener("input", function () {
-      var size = Number(els.siteTitleFont.value);
-      if (!Number.isFinite(size) || size < 8 || size > 40) {
-        return;
-      }
-      siteTitleBaseFontSize = size;
-      Array.prototype.forEach.call(
-        els.siteTitleRows.querySelectorAll(".site-title-text"),
-        function (editor) {
-          editor.style.fontSize = size + "px";
-        }
-      );
     });
     els.siteTitleAdd.addEventListener("click", function () {
       if (els.siteTitleRows.querySelectorAll(".site-title-row").length >= 30) {

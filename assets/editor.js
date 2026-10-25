@@ -72,7 +72,6 @@
     editorTitleToolbar: document.getElementById("editorTitleToolbar"),
     editorTitleColor: document.getElementById("editorTitleColor"),
     editorTitleSize: document.getElementById("editorTitleSize"),
-    titleFontSize: document.getElementById("titleFontSize"),
     titleInterval: document.getElementById("titleInterval"),
     addTitleItem: document.getElementById("addTitleItem"),
     titleTotal: document.getElementById("titleTotal"),
@@ -106,7 +105,7 @@
   var AUTHOR_KEY = "happydays-editor-author";
   var activeEditorTitle = null;
   var savedEditorTitleRange = null;
-  var editorTitleBaseFontSize = 16;
+  var editorTitleBaseFontSize = 18.5;
 
   function rememberedAuthor() {
     try {
@@ -1395,11 +1394,23 @@
     activeEditorTitle.focus();
     restoreEditorTitleRange();
     var selection = window.getSelection();
-    if (!selection || !selection.rangeCount || selection.getRangeAt(0).collapsed) {
+    if (!selection || !selection.rangeCount) {
       setTitleAlert("请先选中要修改字号的文字");
       return;
     }
     var range = selection.getRangeAt(0);
+    if (range.collapsed) {
+      var pending = document.createElement("span");
+      pending.style.fontSize = size + "px";
+      pending.textContent = "\u200b";
+      range.insertNode(pending);
+      range.setStart(pending.firstChild, 1);
+      range.collapse(true);
+      selection.removeAllRanges();
+      selection.addRange(range);
+      savedEditorTitleRange = range.cloneRange();
+      return;
+    }
     var span = document.createElement("span");
     span.style.fontSize = size + "px";
     span.appendChild(range.extractContents());
@@ -1508,12 +1519,11 @@
       var fontSize = Number(data && data.fontSize);
       var interval = Number(data && data.intervalSeconds);
       if (!Number.isFinite(fontSize)) {
-        fontSize = 16;
+        fontSize = 18.5;
       }
       fontSize = Math.max(8, Math.min(40, fontSize));
       editorTitleBaseFontSize = fontSize;
       renderTitleRows(data && data.titles);
-      els.titleFontSize.value = fontSize;
       els.titleInterval.value = Number.isFinite(interval) && interval >= 3 ? interval : 10;
       els.editorTitleSize.value = "";
       els.saveTitlesBtn.disabled = false;
@@ -1542,7 +1552,7 @@
     var titles = [];
     rows.forEach(function (row) {
       var editor = row.querySelector(".title-text-input");
-      var text = editor.textContent;
+      var text = editor.textContent.replace(/\u200b/g, "");
       var weight = Number(row.querySelector(".title-weight-input").value);
       if (!text.trim()) {
         throw new Error("标题内容不能为空");
@@ -1574,7 +1584,7 @@
       setTitleAlert(error.message);
       return;
     }
-    var fontSize = Number(els.titleFontSize.value);
+    var fontSize = editorTitleBaseFontSize;
     var intervalSeconds = Number(els.titleInterval.value);
     if (!Number.isFinite(fontSize) || fontSize < 8 || fontSize > 40) {
       setTitleAlert("字号必须在 8 到 40 之间");
@@ -1664,19 +1674,6 @@
     els.editorTitleSize.addEventListener("mousedown", saveEditorTitleSelection);
     els.editorTitleSize.addEventListener("change", function () {
       applyEditorTitleFontSize(els.editorTitleSize.value);
-    });
-    els.titleFontSize.addEventListener("input", function () {
-      var size = Number(els.titleFontSize.value);
-      if (!Number.isFinite(size) || size < 8 || size > 40) {
-        return;
-      }
-      editorTitleBaseFontSize = size;
-      Array.prototype.forEach.call(
-        els.titleEditorList.querySelectorAll(".title-text-input"),
-        function (editor) {
-          editor.style.fontSize = size + "px";
-        }
-      );
     });
     els.importArticleBtn.addEventListener("click", function () {
       els.importFileInput.click();
