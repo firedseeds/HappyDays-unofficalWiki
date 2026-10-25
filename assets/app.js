@@ -413,7 +413,15 @@
     titleApiRequest("PUT", payload).then(function (result) {
       applyTitleRollConfig(result);
       closeSiteTitleEditor();
-      showToast("滚动标题已保存", "success");
+      var message = "滚动标题已保存";
+      if (result.commit && result.commit.committed) {
+        message += result.commit.hash
+          ? " · 已本地提交 " + result.commit.hash
+          : " · 已本地提交";
+      } else if (result.commit && result.commit.error) {
+        message += " · 本地提交失败：" + String(result.commit.error).split("\n")[0];
+      }
+      showToast(message, "success");
     }).catch(function (error) {
       setSiteTitleAlert(error.message);
       showToast(error.message, "error");
