@@ -586,6 +586,7 @@ def normalize_title_runs(item: dict) -> tuple[str, list[dict]]:
                 "underline": False,
                 "strike": False,
                 "color": "",
+                "size": 0,
             }
         ]
     if not isinstance(raw_runs, list) or not raw_runs:
@@ -607,6 +608,17 @@ def normalize_title_runs(item: dict) -> tuple[str, list[dict]]:
         color = str(raw.get("color") or "").strip().lower()
         if color and not TITLE_COLOR_RE.fullmatch(color):
             raise ApiError(400, "标题颜色必须是 #RRGGBB")
+        size = raw.get("size", 0)
+        if size in (None, ""):
+            size = 0
+        elif isinstance(size, bool) or not isinstance(size, (int, float)):
+            raise ApiError(400, "标题字号必须是数字")
+        else:
+            size = float(size)
+            if not math.isfinite(size) or size < 8 or size > 80:
+                raise ApiError(400, "标题单字字号必须在 8–80px 之间")
+            if size.is_integer():
+                size = int(size)
         runs.append(
             {
                 "text": text,
@@ -615,6 +627,7 @@ def normalize_title_runs(item: dict) -> tuple[str, list[dict]]:
                 "underline": bool(raw.get("underline")),
                 "strike": bool(raw.get("strike")),
                 "color": color,
+                "size": size,
             }
         )
     if not total.strip():
@@ -625,7 +638,7 @@ def normalize_title_runs(item: dict) -> tuple[str, list[dict]]:
         previous = merged[-1] if merged else None
         if previous and all(
             previous[field] == run[field]
-            for field in ("bold", "italic", "underline", "strike", "color")
+            for field in ("bold", "italic", "underline", "strike", "color", "size")
         ):
             previous["text"] += run["text"]
         else:

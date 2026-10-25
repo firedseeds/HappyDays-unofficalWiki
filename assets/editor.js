@@ -60,6 +60,7 @@
     titleEditorList: document.getElementById("titleEditorList"),
     editorTitleToolbar: document.getElementById("editorTitleToolbar"),
     editorTitleColor: document.getElementById("editorTitleColor"),
+    editorTitleSize: document.getElementById("editorTitleSize"),
     titleFontSize: document.getElementById("titleFontSize"),
     titleInterval: document.getElementById("titleInterval"),
     addTitleItem: document.getElementById("addTitleItem"),
@@ -88,6 +89,7 @@
   var AUTHOR_KEY = "happydays-editor-author";
   var activeEditorTitle = null;
   var savedEditorTitleRange = null;
+  var editorTitleBaseFontSize = 16;
 
   function rememberedAuthor() {
     try {
@@ -1108,6 +1110,18 @@
     }
   }
 
+  function restoreEditorTitleRange() {
+    if (!activeEditorTitle || !savedEditorTitleRange) {
+      return;
+    }
+    if (!activeEditorTitle.contains(savedEditorTitleRange.commonAncestorContainer)) {
+      return;
+    }
+    var selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(savedEditorTitleRange);
+  }
+
   function applyEditorTitleFormat(command, value) {
     activeEditorTitle = currentEditorTitle();
     if (!activeEditorTitle || !activeEditorTitle.isConnected) {
@@ -1115,14 +1129,42 @@
       return;
     }
     activeEditorTitle.focus();
-    if (savedEditorTitleRange && activeEditorTitle.contains(savedEditorTitleRange.commonAncestorContainer)) {
-      var selection = window.getSelection();
-      selection.removeAllRanges();
-      selection.addRange(savedEditorTitleRange);
-    }
+    restoreEditorTitleRange();
     document.execCommand("styleWithCSS", false, true);
     document.execCommand(command, false, value || null);
     saveEditorTitleSelection();
+  }
+
+  function applyEditorTitleFontSize(value) {
+    activeEditorTitle = currentEditorTitle();
+    var size = Number(value);
+    if (!activeEditorTitle || !activeEditorTitle.isConnected) {
+      setTitleAlert("请先点击一条标题，再选择要修改的文字");
+      return;
+    }
+    if (!Number.isFinite(size) || size < 8 || size > 80) {
+      setTitleAlert("单字字号必须在 8–80px 之间");
+      return;
+    }
+    activeEditorTitle.focus();
+    restoreEditorTitleRange();
+    var selection = window.getSelection();
+    if (!selection || !selection.rangeCount || selection.getRangeAt(0).collapsed) {
+      setTitleAlert("请先选中要修改字号的文字");
+      return;
+    }
+    var range = selection.getRangeAt(0);
+    var span = document.createElement("span");
+    span.style.fontSize = size + "px";
+    span.appendChild(range.extractContents());
+    Array.prototype.forEach.call(span.querySelectorAll("[style]"), function (node) {
+      node.style.fontSize = "";
+    });
+    range.insertNode(span);
+    range.selectNodeContents(span);
+    selection.removeAllRanges();
+    selection.addRange(range);
+    savedEditorTitleRange = range.cloneRange();
   }
 
   function createTitleRow(item) {
@@ -1133,6 +1175,7 @@
     text.className = "title-rich title-text-input";
     text.contentEditable = "true";
     text.spellcheck = false;
+    text.style.fontSize = editorTitleBaseFontSize + "px";
     text.setAttribute("role", "textbox");
     text.setAttribute("aria-label", "标题内容");
     text.setAttribute("data-placeholder", "标题内容");
@@ -1216,11 +1259,17 @@
     setTitleAlert("");
     els.saveTitlesBtn.disabled = true;
     request("/api/titles").then(function (data) {
-      renderTitleRows(data && data.titles);
       var fontSize = Number(data && data.fontSize);
       var interval = Number(data && data.intervalSeconds);
-      els.titleFontSize.value = Number.isFinite(fontSize) && fontSize >= 8 ? fontSize : 16;
+      if (!Number.isFinite(fontSize)) {
+        fontSize = 16;
+      }
+      fontSize = Math.max(8, Math.min(40, fontSize));
+      editorTitleBaseFontSize = fontSize;
+      renderTitleRows(data && data.titles);
+      els.titleFontSize.value = fontSize;
       els.titleInterval.value = Number.isFinite(interval) && interval >= 3 ? interval : 10;
+      els.editorTitleSize.value = "";
       els.saveTitlesBtn.disabled = false;
       els.titleDialog.showModal();
       window.setTimeout(function () {
@@ -1365,6 +1414,23 @@
     els.editorTitleColor.addEventListener("mousedown", saveEditorTitleSelection);
     els.editorTitleColor.addEventListener("input", function () {
       applyEditorTitleFormat("foreColor", els.editorTitleColor.value);
+    });
+    els.editorTitleSize.addEventListener("mousedown", saveEditorTitleSelection);
+    els.editorTitleSize.addEventListener("change", function () {
+      applyEditorTitleFontSize(els.editorTitleSize.value);
+    });
+    els.titleFontSize.addEventListener("input", function () {
+      var size = Number(els.titleFontSize.value);
+      if (!Number.isFinite(size) || size < 8 || size > 40) {
+        return;
+      }
+      editorTitleBaseFontSize = size;
+      Array.prototype.forEach.call(
+        els.titleEditorList.querySelectorAll(".title-text-input"),
+        function (editor) {
+          editor.style.fontSize = size + "px";
+        }
+      );
     });
     els.importArticleBtn.addEventListener("click", function () {
       els.importFileInput.click();

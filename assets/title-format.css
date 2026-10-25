@@ -60,7 +60,8 @@
   color: var(--text);
 }
 
-.title-format-color {
+.title-format-color,
+.title-format-size {
   display: inline-flex;
   align-items: center;
   gap: 5px;
@@ -77,6 +78,22 @@
   border-radius: 5px;
   background: transparent;
   cursor: pointer;
+}
+
+.title-format-size input {
+  width: 46px;
+  height: 25px;
+  padding: 0 5px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background: var(--canvas);
+  color: var(--text);
+  font-size: 10px;
+  outline: 0;
+}
+
+.title-format-size input:focus {
+  border-color: rgba(10, 155, 105, 0.48);
 }
 
 .title-format-hint {
