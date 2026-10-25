@@ -100,8 +100,20 @@ run.bat -run
 
 ```text
 .run/server.pid
+.run/sync.pid
 logs/server.log
+logs/sync.log
 ```
+
+启动和停止时会自动同步 Git：
+
+- 启动前执行 `git pull --rebase --autostash`
+- 停止时执行 `git pull --rebase --autostash` 后再 `git push`
+- 服务运行期间，每天 **00:00（Asia/Shanghai）自动 pull**，**12:00 自动 push**
+- 定时任务只在服务运行期间生效
+- Git 同步日志写入 `logs/sync.log`，`-logs` 会同时显示服务日志和同步日志
+- 当前目录不是 Git 仓库时自动跳过
+- 同步失败不会阻止服务启动或停止，错误会记录到日志
 
 Windows 下对应路径为 `.run\server.pid` 和 `logs\server.log`。
 
@@ -281,6 +293,8 @@ python server.py --host 127.0.0.1 --port 8765
 ├─ server.sh             # Linux 启动、停止、重启与日志脚本
 ├─ run.sh                # server.sh 的兼容入口
 ├─ run.bat               # Windows 启动、停止、重启与日志脚本
+├─ sync.sh               # Linux 启动/停止/每日 pull 与 push
+├─ sync.ps1              # Windows 启动/停止/每日 pull 与 push
 ├─ title.json            # 页眉滚动标题、权重、字号与轮换间隔
 ├─ assets/
 │  ├─ styles.css         # 设计系统、布局、组件、响应式与打印样式

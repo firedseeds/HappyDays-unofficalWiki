@@ -10,13 +10,68 @@ PYTHON_BIN="${PYTHON:-python3}"
 RUN_DIR="$ROOT/.run"
 LOG_DIR="$ROOT/logs"
 PID_FILE="$RUN_DIR/server.pid"
+SYNC_PID_FILE="$RUN_DIR/sync.pid"
+SYNC_SCRIPT="$ROOT/sync.sh"
 LOG_FILE="$LOG_DIR/server.log"
+SYNC_LOG_FILE="$LOG_DIR/sync.log"
 
 mkdir -p "$RUN_DIR" "$LOG_DIR"
 
 fail() {
   printf 'fail: %s\n' "$*" >&2
   exit 1
+}
+
+start_sync_scheduler() {
+  [ -d "$ROOT/.git" ] || return 0
+  if [ -f "$SYNC_PID_FILE" ]; then
+    local old_pid
+    old_pid="$(cat "$SYNC_PID_FILE" 2>/dev/null || true)"
+    if [ -n "$old_pid" ] && kill -0 "$old_pid" 2>/dev/null; then
+      return 0
+    fi
+    rm -f "$SYNC_PID_FILE"
+  fi
+  nohup bash "$SYNC_SCRIPT" -loop >>"$SYNC_LOG_FILE" 2>&1 &
+  printf '%s\n' "$!" >"$SYNC_PID_FILE"
+}
+
+stop_sync_scheduler() {
+  if [ ! -f "$SYNC_PID_FILE" ]; then
+    return 0
+  fi
+  local sync_pid
+  sync_pid="$(cat "$SYNC_PID_FILE" 2>/dev/null || true)"
+  if [ -n "$sync_pid" ] && kill -0 "$sync_pid" 2>/dev/null; then
+    kill "$sync_pid" 2>/dev/null || true
+    local attempt
+    for attempt in $(seq 1 20); do
+      if ! kill -0 "$sync_pid" 2>/dev/null; then
+        break
+      fi
+      sleep 0.2
+    done
+    kill -9 "$sync_pid" 2>/dev/null || true
+  fi
+  rm -f "$SYNC_PID_FILE"
+}
+
+sync_pull_startup() {
+  if [ ! -d "$ROOT/.git" ]; then
+    return 0
+  fi
+  if ! bash "$SYNC_SCRIPT" -pull startup >/dev/null 2>&1; then
+    printf 'warning: startup git pull failed; see logs/sync.log\n' >>"$LOG_FILE"
+  fi
+}
+
+sync_push_stop() {
+  if [ ! -d "$ROOT/.git" ]; then
+    return 0
+  fi
+  if ! bash "$SYNC_SCRIPT" -push stop >/dev/null 2>&1; then
+    printf 'warning: shutdown git push failed; see logs/sync.log\n' >>"$LOG_FILE"
+  fi
 }
 
 is_running() {
@@ -51,6 +106,8 @@ run_server() {
     fail "python executable not found: $PYTHON_BIN"
   fi
 
+  sync_pull_startup
+
   printf '\n[%s] server.sh -run host=%s port=%s\n' \
     "$(date '+%Y-%m-%d %H:%M:%S')" "$HOST" "$PORT" >>"$LOG_FILE"
   if [ "$HOST" = "0.0.0.0" ]; then
@@ -70,6 +127,7 @@ run_server() {
       exit 1
     fi
     if health_check; then
+      start_sync_scheduler
       printf 'Successful\n'
       return 0
     fi
@@ -84,6 +142,7 @@ run_server() {
 }
 
 stop_server() {
+  stop_sync_scheduler
   if [ ! -f "$PID_FILE" ]; then
     fail "server is not running (no PID file)"
   fi
@@ -109,6 +168,7 @@ stop_server() {
   for attempt in $(seq 1 20); do
     if ! kill -0 "$pid" 2>/dev/null; then
       rm -f "$PID_FILE"
+      sync_push_stop
       printf 'Successful\n'
       return 0
     fi
@@ -121,6 +181,7 @@ stop_server() {
   if kill -0 "$pid" 2>/dev/null; then
     fail "server process $pid is still running"
   fi
+  sync_push_stop
   printf 'Successful\n'
 }
 
@@ -137,7 +198,13 @@ show_logs() {
   if [ ! -f "$LOG_FILE" ]; then
     fail "log file not found: $LOG_FILE"
   fi
-  if [ "${2:-}" = "-f" ]; then
+  if [ -f "$SYNC_LOG_FILE" ]; then
+    if [ "${2:-}" = "-f" ]; then
+      tail -n "${LOG_LINES:-200}" -f "$LOG_FILE" "$SYNC_LOG_FILE"
+    else
+      tail -n "${LOG_LINES:-200}" "$LOG_FILE" "$SYNC_LOG_FILE"
+    fi
+  elif [ "${2:-}" = "-f" ]; then
     tail -n "${LOG_LINES:-200}" -f "$LOG_FILE"
   else
     tail -n "${LOG_LINES:-200}" "$LOG_FILE"
