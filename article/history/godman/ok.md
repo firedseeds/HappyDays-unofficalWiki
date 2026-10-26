@@ -1,8 +1,8 @@
 ---
 title: "OK"
 description: "OK：多次破坏服务器"
-topic: "简介"
-topic_id: "intro"
+topic: "神人堂"
+topic_id: "godman"
 updated: "2026-10-26"
 reading_time: 5
 emoji: "📄"

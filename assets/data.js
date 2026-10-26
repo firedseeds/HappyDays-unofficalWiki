@@ -13,7 +13,7 @@ window.HAPPYDAYS_WIKI = (function () {
       description: "HappyDays 服务器与知识库概览。",
       parentId: null,
       order: 1,
-      docs: ["intro", "ok"]
+      docs: ["intro"]
     },
     {
       id: "beginner",
@@ -69,7 +69,7 @@ window.HAPPYDAYS_WIKI = (function () {
       description: "服务器里各种神人",
       parentId: "history",
       order: 3,
-      docs: ["qwertyuiop", "alex", "666"]
+      docs: ["qwertyuiop", "alex", "666", "ok"]
     },
     {
       id: "gallery",
@@ -757,12 +757,12 @@ window.HAPPYDAYS_WIKI = (function () {
     "ok": {
       title: "OK",
       emoji: "📄",
-      category: "intro",
+      category: "godman",
       excerpt: "OK：多次破坏服务器",
       updated: "2026-10-26",
       reading: 5,
       tags: [],
-      signatures: [{"author": "233", "at": "2026-10-26T22:28:21+08:00", "action": "create", "title": "OK", "topic": "简介"}, {"author": "233", "at": "2026-10-26T22:28:28+08:00", "action": "update", "title": "OK", "topic": "intro"}, {"author": "233", "at": "2026-10-26T22:28:30+08:00", "action": "update", "title": "OK", "topic": "intro"}],
+      signatures: [{"author": "233", "at": "2026-10-26T22:28:21+08:00", "action": "create", "title": "OK", "topic": "简介"}, {"author": "233", "at": "2026-10-26T22:28:28+08:00", "action": "update", "title": "OK", "topic": "intro"}, {"author": "233", "at": "2026-10-26T22:28:30+08:00", "action": "update", "title": "OK", "topic": "intro"}, {"author": "233", "at": "2026-10-26T22:28:43+08:00", "action": "move", "title": "OK", "topic": "神人堂", "fromTopic": "简介"}],
       content: `<h2>OK：多次破坏服务器，与南宁的dfdf私下交易(10rmb)，盗取他人账号。曾占据南通和秦皇岛，疯狂挖取主世界钻石。</h2>`
     }
   };
