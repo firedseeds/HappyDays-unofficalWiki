@@ -224,6 +224,7 @@ python server.py --host 127.0.0.1 --port 8765
 | PUT | `/api/articles/<slug>` | 保存已有文章，必须传 `author`；传 `topicId` 可移动主题 |
 | POST | `/api/articles/<slug>/comments` | 发表评论，必须传 `author` 与 `body` |
 | POST | `/api/articles/<slug>/move` | 在当前主题内上移或下移文章，传 `direction` 与 `author` |
+| POST | `/api/bgm` | 上传 MP3/WAV 背景音乐，查询参数 `title`、`weight`、`filename` |
 | POST | `/api/articles` | 新建文章，必须传 `author` |
 | GET | `/api/titles` | 读取页眉标题配置 |
 | PUT | `/api/titles` | 保存页眉标题与权重 |
@@ -281,6 +282,53 @@ python server.py --host 127.0.0.1 --port 8765
 
 载入旧版本只替换编辑内容，不会立即保存；确认后仍需点击「保存并构建」。
 
+### 背景音乐
+
+页面右下角提供固定位置的 BGM 播放器，不会随文章滚动或切换移动：
+
+- 显示当前歌名
+- 播放 / 暂停
+- 下一首
+- 后端开启时显示上传按钮
+
+音乐文件放在：
+
+```text
+BGM/
+```
+
+配置保存在：
+
+```text
+BGM.json
+```
+
+格式：
+
+```json
+{
+  "version": 1,
+  "tracks": [
+    {
+      "file": "example.mp3",
+      "title": "Example Song",
+      "weight": 1
+    }
+  ]
+}
+```
+
+规则：
+
+- 只支持 `.mp3` 和 `.wav`，单文件最大 50MB
+- 上传时必须填写歌名和权重
+- 切歌规则与滚动标题一致：按权重随机，并排除当前歌曲
+- 只在用户点击下一首或当前歌曲播放结束时切歌
+- 只有一首音乐时循环播放
+- 页面不可见时暂停，回到页面后仅在之前正在播放时恢复
+- 上传成功后自动创建本地 Git commit（不会 push）
+- 纯静态部署可以读取 `BGM.json` 并播放已有音乐，但不能上传
+
 ### 文章评论
 
 每篇文章底部都有评论区：
@@ -318,6 +366,7 @@ python server.py --host 127.0.0.1 --port 8765
 
 - 文章头部显示最后编辑署名，文末显示完整署名记录
 - 文章底部支持带署名的 Markdown 评论，评论保存在 `comment/`
+- 右下角固定 BGM 播放器，支持加权随机切歌、单曲循环和标签页隐藏暂停
 - 页眉按权重随机滚动显示站点标题，鼠标悬停时暂停
 - 知识库目录树，按主题分组，支持任意层级、可折叠并记住状态
 - 基于 URL hash 的文档路由，例如 `#/doc/<slug>`，可直接分享、刷新和前进后退
@@ -369,6 +418,8 @@ python server.py --host 127.0.0.1 --port 8765
 ├─ sync.sh               # Linux 启动/停止同步与每日 push
 ├─ sync.ps1              # Windows 启动/停止同步与每日 push
 ├─ title.json            # 页眉滚动标题、权重、默认字号与轮换间隔
+├─ BGM.json              # 背景音乐文件名、歌名与权重
+├─ BGM/                  # 背景音乐文件目录
 ├─ comment/              # 评论元数据与每条评论的 Markdown 文件
 │  ├─ comment.json       # 各文章的评论索引
 │  └─ <slug>/<id>.md     # 单条评论正文

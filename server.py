@@ -28,7 +28,7 @@ import uuid
 from datetime import date, datetime
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from urllib.parse import unquote, urlparse
+from urllib.parse import parse_qs, unquote, urlparse
 
 import build
 
@@ -40,12 +40,15 @@ EDITS_PATH = ARTICLE_DIR / "edits.json"
 HISTORY_PATH = ARTICLE_DIR / "history.json"
 COMMENT_DIR = ROOT / "comment"
 COMMENT_PATH = COMMENT_DIR / "comment.json"
+BGM_DIR = ROOT / "BGM"
+BGM_PATH = ROOT / "BGM.json"
 TITLE_PATH = ROOT / "title.json"
 IMAGE_DIR = ROOT / "assets" / "image"
 DATA_PATH = ROOT / "assets" / "data.js"
 BUILD_SCRIPT = ROOT / "build.py"
 BASE_PATH = "/wiki"
 MAX_REQUEST_BYTES = 2 * 1024 * 1024
+MAX_BGM_BYTES = 50 * 1024 * 1024
 MAX_BODY_CHARS = 800_000
 SLUG_RE = re.compile(r"^[a-z0-9][a-z0-9-]{0,63}$")
 TITLE_COLOR_RE = re.compile(r"^#[0-9a-fA-F]{6}$")
@@ -80,6 +83,23 @@ def atomic_write(path: Path, text: str) -> None:
     try:
         with temporary.open("w", encoding="utf-8", newline="\n") as handle:
             handle.write(text)
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.replace(temporary, path)
+    finally:
+        if temporary.exists():
+            try:
+                temporary.unlink()
+            except OSError:
+                pass
+
+
+def atomic_write_bytes(path: Path, data: bytes) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_name(f".{path.name}.tmp-{os.getpid()}-{threading.get_ident()}")
+    try:
+        with temporary.open("wb") as handle:
+            handle.write(data)
             handle.flush()
             os.fsync(handle.fileno())
         os.replace(temporary, path)
@@ -206,6 +226,73 @@ def add_article_comment(slug: str, payload: dict) -> dict:
         "comments": article_comments(slug),
         "commit": commit,
     }
+
+
+def read_bgm_config() -> dict:
+    if not BGM_PATH.is_file():
+        return {"version": 1, "tracks": []}
+    try:
+        data = json.loads(BGM_PATH.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise ApiError(500, f"无法读取 BGM.json: {exc}")
+    if not isinstance(data, dict) or not isinstance(data.get("tracks"), list):
+        raise ApiError(500, "BGM.json 格式无效")
+    return data
+
+
+def write_bgm_config(data: dict) -> None:
+    atomic_write(
+        BGM_PATH,
+        json.dumps(data, ensure_ascii=False, indent=2) + "\n",
+    )
+
+
+def add_bgm_track(payload: dict, audio: bytes) -> dict:
+    title = require_text(payload.get("title"), "歌名", 120)
+    raw_weight = payload.get("weight", 1)
+    if isinstance(raw_weight, bool) or not isinstance(raw_weight, (int, float)):
+        raise ApiError(400, "权重必须是数字")
+    weight = float(raw_weight)
+    if not math.isfinite(weight) or weight <= 0 or weight > 1_000_000:
+        raise ApiError(400, "权重必须大于 0 且不超过 1000000")
+    if weight.is_integer():
+        weight = int(weight)
+
+    filename = str(payload.get("filename") or "").strip()
+    if not filename or "/" in filename or "\\" in filename or filename in (".", ".."):
+        raise ApiError(400, "文件名无效")
+    if len(filename) > 160:
+        raise ApiError(400, "文件名不能超过 160 个字符")
+    if any(ord(character) < 32 for character in filename):
+        raise ApiError(400, "文件名包含非法字符")
+    suffix = Path(filename).suffix.lower()
+    if suffix not in (".mp3", ".wav"):
+        raise ApiError(400, "只支持 .mp3 和 .wav 文件")
+    if not audio:
+        raise ApiError(400, "音频文件不能为空")
+
+    BGM_DIR.mkdir(parents=True, exist_ok=True)
+    target = BGM_DIR / filename
+    if target.exists():
+        raise ApiError(409, "BGM 目录中已存在同名文件")
+    track = {"file": filename, "title": title, "weight": weight}
+    try:
+        atomic_write_bytes(target, audio)
+        data = read_bgm_config()
+        data["tracks"].append(track)
+        write_bgm_config(data)
+    except Exception:
+        if target.exists():
+            target.unlink()
+        raise
+    commit = auto_commit(
+        [target, BGM_PATH],
+        f"docs: 添加 BGM「{title}」",
+    )
+    log_change(
+        f"BGM 上传：{title}（文件={filename}，本地提交={'是' if commit.get('committed') else '否'}）"
+    )
+    return {"ok": True, "track": track, "tracks": data["tracks"], "commit": commit}
 
 
 def read_history_config() -> dict:
@@ -1698,6 +1785,31 @@ class EditorHandler(SimpleHTTPRequestHandler):
     def do_POST(self) -> None:
         path = strip_base_path(unquote(urlparse(self.path).path))
         try:
+            if path == "/api/bgm":
+                try:
+                    length = int(self.headers.get("Content-Length", "0"))
+                except ValueError:
+                    raise ApiError(400, "Content-Length 无效")
+                if length <= 0:
+                    raise ApiError(400, "音频文件不能为空")
+                if length > MAX_BGM_BYTES:
+                    raise ApiError(413, "音频文件不能超过 50MB")
+                audio = self.rfile.read(length)
+                if len(audio) != length:
+                    raise ApiError(400, "音频文件上传不完整")
+                query = parse_qs(urlparse(self.path).query)
+                weight_value = query.get("weight", ["1"])[0]
+                try:
+                    weight = float(weight_value)
+                except (TypeError, ValueError):
+                    weight = weight_value
+                payload = {
+                    "title": query.get("title", [""])[0],
+                    "filename": query.get("filename", [""])[0],
+                    "weight": weight,
+                }
+                self.send_json(200, add_bgm_track(payload, audio))
+                return
             comment_match = re.fullmatch(r"/api/articles/([a-z0-9-]+)/comments", path)
             if comment_match:
                 payload = self.read_json()

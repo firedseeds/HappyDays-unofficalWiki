@@ -1149,7 +1149,22 @@
     searchResults: document.getElementById("searchResults"),
     toastRegion: document.getElementById("toastRegion"),
     pageAnnouncement: document.getElementById("pageAnnouncement"),
-    mainContent: document.getElementById("mainContent")
+    mainContent: document.getElementById("mainContent"),
+    bgmPlayer: document.getElementById("bgmPlayer"),
+    bgmTitle: document.getElementById("bgmTitle"),
+    bgmToggle: document.getElementById("bgmToggle"),
+    bgmNext: document.getElementById("bgmNext"),
+    bgmUpload: document.getElementById("bgmUpload"),
+    bgmAudio: document.getElementById("bgmAudio"),
+    bgmDialog: document.getElementById("bgmDialog"),
+    bgmForm: document.getElementById("bgmForm"),
+    bgmFile: document.getElementById("bgmFile"),
+    bgmFormTitle: document.getElementById("bgmFormTitle"),
+    bgmFormWeight: document.getElementById("bgmFormWeight"),
+    bgmFormStatus: document.getElementById("bgmFormStatus"),
+    bgmSubmit: document.getElementById("bgmSubmit"),
+    bgmCancel: document.getElementById("bgmCancel"),
+    bgmCancelX: document.getElementById("bgmCancelX")
   };
 
   var state = {
@@ -1162,6 +1177,235 @@
     scrollTicking: false,
     lastSidebarTrigger: null
   };
+
+  var bgmState = {
+    tracks: [],
+    current: null,
+    backend: false,
+    resumeOnVisible: false
+  };
+
+  function normalizeBgmTracks(data) {
+    var tracks = Array.isArray(data && data.tracks) ? data.tracks : [];
+    return tracks.map(function (track) {
+      if (!track || typeof track.file !== "string" || !track.file) {
+        return null;
+      }
+      var weight = Number(track.weight);
+      if (!Number.isFinite(weight) || weight <= 0) {
+        return null;
+      }
+      return {
+        file: track.file,
+        title: typeof track.title === "string" && track.title ? track.title : track.file,
+        weight: weight
+      };
+    }).filter(Boolean);
+  }
+
+  function pickWeightedBgm(tracks, currentFile) {
+    if (!tracks.length) {
+      return null;
+    }
+    var candidates = tracks;
+    if (tracks.length > 1 && currentFile) {
+      var filtered = tracks.filter(function (track) {
+        return track.file !== currentFile;
+      });
+      if (filtered.length) {
+        candidates = filtered;
+      }
+    }
+    var total = candidates.reduce(function (sum, track) {
+      return sum + track.weight;
+    }, 0);
+    if (!total) {
+      return candidates[0];
+    }
+    var roll = Math.random() * total;
+    for (var index = 0; index < candidates.length; index += 1) {
+      roll -= candidates[index].weight;
+      if (roll < 0) {
+        return candidates[index];
+      }
+    }
+    return candidates[candidates.length - 1];
+  }
+
+  function bgmUrl(file) {
+    return "BGM/" + encodeURIComponent(file);
+  }
+
+  function syncBgmButton() {
+    var playing = !!bgmState.current && !els.bgmAudio.paused;
+    els.bgmToggle.textContent = playing ? "Ⅱ" : "▶";
+    els.bgmToggle.classList.toggle("is-playing", playing);
+    els.bgmToggle.setAttribute("aria-label", playing ? "暂停背景音乐" : "播放背景音乐");
+    els.bgmToggle.title = playing ? "暂停" : "播放";
+  }
+
+  function playBgm() {
+    if (!bgmState.current) {
+      return;
+    }
+    var promise = els.bgmAudio.play();
+    if (promise && typeof promise.catch === "function") {
+      promise.catch(function () {
+        syncBgmButton();
+      });
+    }
+  }
+
+  function setBgmTrack(track, autoplay) {
+    if (!track) {
+      return;
+    }
+    bgmState.current = track;
+    bgmState.resumeOnVisible = false;
+    els.bgmPlayer.hidden = false;
+    els.bgmTitle.textContent = track.title;
+    els.bgmTitle.title = track.title;
+    els.bgmAudio.loop = bgmState.tracks.length === 1;
+    els.bgmAudio.src = bgmUrl(track.file);
+    els.bgmAudio.load();
+    syncBgmButton();
+    if (autoplay) {
+      playBgm();
+    }
+  }
+
+  function applyBgmTracks(tracks) {
+    bgmState.tracks = tracks;
+    if (!tracks.length) {
+      bgmState.current = null;
+      els.bgmAudio.pause();
+      els.bgmAudio.removeAttribute("src");
+      els.bgmAudio.load();
+      els.bgmTitle.textContent = "暂无音乐";
+      els.bgmTitle.title = "";
+      els.bgmPlayer.hidden = !bgmState.backend;
+      syncBgmButton();
+      return;
+    }
+    els.bgmPlayer.hidden = false;
+    var existing = bgmState.current
+      ? tracks.filter(function (track) { return track.file === bgmState.current.file; })[0]
+      : null;
+    if (existing) {
+      bgmState.current = existing;
+      els.bgmAudio.loop = tracks.length === 1;
+      els.bgmTitle.textContent = existing.title;
+      els.bgmTitle.title = existing.title;
+      syncBgmButton();
+      return;
+    }
+    setBgmTrack(pickWeightedBgm(tracks, null), false);
+  }
+
+  function loadBgmTracks() {
+    fetch("BGM.json", { cache: "no-store" }).then(function (response) {
+      if (!response.ok) {
+        throw new Error("BGM 加载失败");
+      }
+      return response.json();
+    }).then(function (data) {
+      applyBgmTracks(normalizeBgmTracks(data));
+    }).catch(function () {
+      applyBgmTracks([]);
+    });
+  }
+
+  function openBgmDialog() {
+    if (!bgmState.backend) {
+      showToast("上传 BGM 需要启动本地服务", "error");
+      return;
+    }
+    els.bgmForm.reset();
+    els.bgmFormWeight.value = "1";
+    els.bgmFormStatus.textContent = "";
+    els.bgmFormStatus.classList.remove("is-error");
+    els.bgmSubmit.disabled = false;
+    els.bgmDialog.showModal();
+  }
+
+  function closeBgmDialog() {
+    els.bgmDialog.close();
+  }
+
+  function uploadBgm(event) {
+    event.preventDefault();
+    var file = els.bgmFile.files && els.bgmFile.files[0];
+    var title = els.bgmFormTitle.value.trim();
+    var weight = Number(els.bgmFormWeight.value);
+    if (!file) {
+      els.bgmFormStatus.textContent = "请选择音频文件";
+      els.bgmFormStatus.classList.add("is-error");
+      return;
+    }
+    if (!/\.(mp3|wav)$/i.test(file.name)) {
+      els.bgmFormStatus.textContent = "只支持 .mp3 和 .wav 文件";
+      els.bgmFormStatus.classList.add("is-error");
+      return;
+    }
+    if (file.size > 50 * 1024 * 1024) {
+      els.bgmFormStatus.textContent = "音频文件不能超过 50MB";
+      els.bgmFormStatus.classList.add("is-error");
+      return;
+    }
+    if (!title) {
+      els.bgmFormStatus.textContent = "请填写歌名";
+      els.bgmFormStatus.classList.add("is-error");
+      return;
+    }
+    if (!Number.isFinite(weight) || weight <= 0) {
+      els.bgmFormStatus.textContent = "权重必须大于 0";
+      els.bgmFormStatus.classList.add("is-error");
+      return;
+    }
+    els.bgmSubmit.disabled = true;
+    els.bgmFormStatus.classList.remove("is-error");
+    els.bgmFormStatus.textContent = "上传中…";
+    file.arrayBuffer().then(function (buffer) {
+      return fetch(
+        "api/bgm?title=" + encodeURIComponent(title) +
+        "&weight=" + encodeURIComponent(String(weight)) +
+        "&filename=" + encodeURIComponent(file.name),
+        {
+          method: "POST",
+          cache: "no-store",
+          headers: { "Content-Type": file.type || "application/octet-stream" },
+          body: buffer
+        }
+      );
+    }).then(function (response) {
+      return response.json().catch(function () {
+        return {};
+      }).then(function (data) {
+        if (!response.ok) {
+          throw new Error(data.error || "BGM 上传失败");
+        }
+        return data;
+      });
+    }).then(function (data) {
+      applyBgmTracks(normalizeBgmTracks(data));
+      setBgmTrack(data.track, true);
+      closeBgmDialog();
+      showToast("BGM 已上传");
+    }).catch(function (error) {
+      els.bgmFormStatus.textContent = error.message;
+      els.bgmFormStatus.classList.add("is-error");
+    }).finally(function () {
+      els.bgmSubmit.disabled = false;
+    });
+  }
+
+  function nextBgm() {
+    if (!bgmState.tracks.length) {
+      return;
+    }
+    var next = pickWeightedBgm(bgmState.tracks, bgmState.current && bgmState.current.file);
+    setBgmTrack(next, true);
+  }
 
   var collapsedCategories = new Set(readJSON(STORAGE.collapsed, []));
   var platformMod = /Mac|iPhone|iPad|iPod/i.test(navigator.platform || "") ? "⌘" : "Ctrl";
@@ -2412,6 +2656,46 @@
     });
 
     els.shareBtn.addEventListener("click", copyPageLink);
+    els.bgmToggle.addEventListener("click", function () {
+      if (els.bgmAudio.paused) {
+        playBgm();
+      } else {
+        els.bgmAudio.pause();
+      }
+    });
+    els.bgmNext.addEventListener("click", nextBgm);
+    els.bgmUpload.addEventListener("click", openBgmDialog);
+    els.bgmForm.addEventListener("submit", uploadBgm);
+    els.bgmCancel.addEventListener("click", closeBgmDialog);
+    els.bgmCancelX.addEventListener("click", closeBgmDialog);
+    els.bgmDialog.addEventListener("click", function (event) {
+      if (event.target === els.bgmDialog) {
+        closeBgmDialog();
+      }
+    });
+    els.bgmAudio.addEventListener("play", syncBgmButton);
+    els.bgmAudio.addEventListener("pause", syncBgmButton);
+    els.bgmAudio.addEventListener("ended", function () {
+      if (bgmState.tracks.length <= 1) {
+        els.bgmAudio.currentTime = 0;
+        playBgm();
+        return;
+      }
+      nextBgm();
+    });
+    document.addEventListener("visibilitychange", function () {
+      if (document.hidden) {
+        if (!els.bgmAudio.paused) {
+          bgmState.resumeOnVisible = true;
+          els.bgmAudio.pause();
+        }
+        return;
+      }
+      if (bgmState.resumeOnVisible) {
+        bgmState.resumeOnVisible = false;
+        playBgm();
+      }
+    });
     els.docCommentForm.addEventListener("submit", submitDocComment);
     els.historyBtn.addEventListener("click", openHistory);
     els.historyClose.addEventListener("click", closeHistory);
@@ -2560,11 +2844,17 @@
     buildSearchIndex();
     bindEvents();
     initTitleRoll();
+    loadBgmTracks();
 
     fetch("api/health", { cache: "no-store" }).then(function (response) {
       return response.ok ? response.json() : null;
     }).then(function (data) {
       if (data && data.ok) {
+        bgmState.backend = true;
+        els.bgmUpload.hidden = false;
+        if (!bgmState.tracks.length) {
+          els.bgmPlayer.hidden = false;
+        }
         els.editBtn.hidden = false;
         els.titleRollEdit.hidden = false;
         els.historyBtn.hidden = false;

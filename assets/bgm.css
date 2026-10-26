@@ -1,0 +1,250 @@
+.bgm-player {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 55;
+  display: flex;
+  max-width: min(360px, calc(100vw - 24px));
+  align-items: center;
+  gap: 10px;
+  padding: 8px 9px 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
+  box-shadow: 0 10px 34px rgba(8, 22, 14, 0.18);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+}
+
+.bgm-player[hidden] {
+  display: none;
+}
+
+.bgm-now {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.bgm-label {
+  color: var(--accent);
+  font-size: 7.5px;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+}
+
+.bgm-title {
+  overflow: hidden;
+  color: var(--text-secondary);
+  font-size: 10.5px;
+  font-weight: 650;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.bgm-actions {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 3px;
+}
+
+.bgm-button {
+  display: inline-flex;
+  width: 27px;
+  height: 27px;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--text-faint);
+  font-size: 12px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.bgm-button:hover {
+  border-color: var(--border);
+  background: var(--canvas);
+  color: var(--text);
+}
+
+.bgm-button.is-playing {
+  color: var(--accent);
+}
+
+.bgm-dialog {
+  width: min(460px, calc(100vw - 32px));
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: 0 24px 70px rgba(7, 20, 13, 0.28);
+}
+
+.bgm-dialog::backdrop {
+  background: rgba(15, 28, 21, 0.42);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+
+.bgm-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.bgm-dialog-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 18px 20px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.bgm-eyebrow {
+  margin: 0 0 4px;
+  color: var(--accent);
+  font-size: 8px;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.bgm-dialog-head h2 {
+  margin: 0;
+  font-size: 18px;
+  letter-spacing: -0.02em;
+}
+
+.bgm-close {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-faint);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.bgm-close:hover {
+  border-color: var(--border);
+  background: var(--canvas);
+  color: var(--text);
+}
+
+.bgm-dialog-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 15px 20px;
+}
+
+.bgm-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.bgm-field > span {
+  color: var(--text-tertiary);
+  font-size: 9.5px;
+  font-weight: 650;
+}
+
+.bgm-field input[type="text"],
+.bgm-field input[type="number"] {
+  width: 100%;
+  height: 34px;
+  padding: 0 9px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--canvas);
+  color: var(--text);
+  font: inherit;
+  font-size: 11.5px;
+  outline: 0;
+}
+
+.bgm-field input[type="file"] {
+  color: var(--text-secondary);
+  font-size: 10.5px;
+}
+
+.bgm-field input:focus {
+  border-color: rgba(10, 155, 105, 0.48);
+  box-shadow: 0 0 0 3px rgba(10, 155, 105, 0.09);
+}
+
+.bgm-field small {
+  color: var(--text-faint);
+  font-size: 9px;
+}
+
+.bgm-form-status {
+  min-height: 16px;
+  margin: 0;
+  color: var(--text-faint);
+  font-size: 9.5px;
+}
+
+.bgm-form-status.is-error {
+  color: #d25555;
+}
+
+.bgm-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 12px 20px 17px;
+  border-top: 1px solid var(--border);
+}
+
+.bgm-secondary,
+.bgm-primary {
+  height: 31px;
+  padding: 0 13px;
+  border-radius: 7px;
+  font-size: 10.5px;
+  cursor: pointer;
+}
+
+.bgm-secondary {
+  border: 1px solid var(--border);
+  background: var(--canvas);
+  color: var(--text-secondary);
+}
+
+.bgm-primary {
+  border: 1px solid var(--accent-strong);
+  background: var(--accent-strong);
+  color: #fff;
+}
+
+.bgm-primary:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}
+
+@media (max-width: 620px) {
+  .bgm-player {
+    right: 10px;
+    bottom: 10px;
+    left: 10px;
+    max-width: none;
+  }
+}
+
+@media print {
+  .bgm-player {
+    display: none !important;
+  }
+}
