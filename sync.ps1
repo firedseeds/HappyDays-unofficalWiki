@@ -81,27 +81,20 @@ if ($Mode -eq "Push") {
     exit (Invoke-PushSync "manual")
 }
 
-Write-SyncLog "sync scheduler started"
+Write-SyncLog "sync scheduler started (daily push only)"
 while ($true) {
     $now = Get-Date
     $today12 = $now.Date.AddHours(12)
-    $tomorrow0 = $now.Date.AddDays(1)
     if ($now -lt $today12) {
         $next = $today12
-        $action = "push"
     } else {
-        $next = $tomorrow0
-        $action = "pull"
+        $next = $today12.AddDays(1)
     }
     $delay = [int][Math]::Ceiling(($next - $now).TotalSeconds)
     if ($delay -lt 1) {
         $delay = 1
     }
     Start-Sleep -Seconds $delay
-    if ($action -eq "pull") {
-        Invoke-PullSync "daily-pull" | Out-Null
-    } else {
-        Invoke-PushSync "daily-push" | Out-Null
-    }
+    Invoke-PushSync "daily-push" | Out-Null
     Start-Sleep -Seconds 60
 }

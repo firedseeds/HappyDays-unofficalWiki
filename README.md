@@ -105,7 +105,9 @@ logs/sync.log
 
 - 启动前执行 `git pull --rebase --autostash`
 - 停止时执行 `git pull --rebase --autostash` 后再 `git push`
-- 服务运行期间，每天 **00:00（Asia/Shanghai）自动 pull**，**12:00 自动 push**
+- 服务运行期间，每天 **12:00（Asia/Shanghai）自动 push**
+- **00:00 定时 pull 已移除**
+- 启动时仍会 pull；停止时仍会 pull 后 push；12:00 push 前会先 rebase
 - 定时任务只在服务运行期间生效
 - Git 同步日志写入 `logs/sync.log`，`-logs` 会同时显示服务日志和同步日志
 - 当前目录不是 Git 仓库时自动跳过
@@ -358,8 +360,8 @@ python server.py --host 127.0.0.1 --port 8765
 ├─ server.sh             # Linux 启动、停止、重启与日志脚本
 ├─ run.sh                # server.sh 的兼容入口
 ├─ run.bat               # Windows 启动、停止、重启与日志脚本
-├─ sync.sh               # Linux 启动/停止/每日 pull 与 push
-├─ sync.ps1              # Windows 启动/停止/每日 pull 与 push
+├─ sync.sh               # Linux 启动/停止同步与每日 push
+├─ sync.ps1              # Windows 启动/停止同步与每日 push
 ├─ title.json            # 页眉滚动标题、权重、默认字号与轮换间隔
 ├─ comment/              # 评论元数据与每条评论的 Markdown 文件
 │  ├─ comment.json       # 各文章的评论索引

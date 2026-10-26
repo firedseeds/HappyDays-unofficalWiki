@@ -47,36 +47,28 @@ sync_push() {
 }
 
 next_sync_event() {
-  local now today0 today12
+  local now today12
   now="$(date +%s)"
-  today0="$(TZ="$SYNC_TIMEZONE" date -d 'today 00:00' +%s)"
   today12="$(TZ="$SYNC_TIMEZONE" date -d 'today 12:00' +%s)"
-  if [ "$now" -lt "$today0" ]; then
-    printf '%s %s\n' "$today0" "pull"
-  elif [ "$now" -lt "$today12" ]; then
+  if [ "$now" -lt "$today12" ]; then
     printf '%s %s\n' "$today12" "push"
   else
-    printf '%s %s\n' "$(TZ="$SYNC_TIMEZONE" date -d 'tomorrow 00:00' +%s)" "pull"
+    printf '%s %s\n' "$(TZ="$SYNC_TIMEZONE" date -d 'tomorrow 12:00' +%s)" "push"
   fi
 }
 
 sync_loop() {
-  log "sync scheduler started (timezone=$SYNC_TIMEZONE)"
+  log "sync scheduler started (timezone=$SYNC_TIMEZONE, daily push only)"
   while true; do
-    local event next action delay
+    local event next delay
     event="$(next_sync_event)"
     next="${event% *}"
-    action="${event#* }"
     delay=$((next - $(date +%s)))
     if [ "$delay" -lt 1 ]; then
       delay=1
     fi
     sleep "$delay"
-    if [ "$action" = "pull" ]; then
-      sync_pull "daily-pull" || true
-    else
-      sync_push "daily-push" || true
-    fi
+    sync_push "daily-push" || true
     sleep 60
   done
 }
