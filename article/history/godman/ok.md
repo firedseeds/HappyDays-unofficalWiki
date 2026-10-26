@@ -6,7 +6,7 @@ topic_id: "godman"
 updated: "2026-10-26"
 reading_time: 5
 emoji: "📄"
-order: 28
+order: 27
 slug: "ok"
 source: "/wiki/#/doc/ok"
 tags:

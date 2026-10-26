@@ -69,7 +69,7 @@ window.HAPPYDAYS_WIKI = (function () {
       description: "服务器里各种神人",
       parentId: "history",
       order: 3,
-      docs: ["qwertyuiop", "ok", "alex", "666"]
+      docs: ["ok", "qwertyuiop", "alex", "666"]
     },
     {
       id: "gallery",
@@ -670,6 +670,17 @@ window.HAPPYDAYS_WIKI = (function () {
 <p>26年10月8日更新：</p>
 <ol class="steps"><li>将军指正柳京饭店为55层\\o/\\o/\\o/</li></ol>`
     },
+    "ok": {
+      title: "OK",
+      emoji: "📄",
+      category: "godman",
+      excerpt: "OK：多次破坏服务器",
+      updated: "2026-10-26",
+      reading: 5,
+      tags: [],
+      signatures: [{"author": "233", "at": "2026-10-26T22:28:21+08:00", "action": "create", "title": "OK", "topic": "简介"}, {"author": "233", "at": "2026-10-26T22:28:28+08:00", "action": "update", "title": "OK", "topic": "intro"}, {"author": "233", "at": "2026-10-26T22:28:30+08:00", "action": "update", "title": "OK", "topic": "intro"}, {"author": "233", "at": "2026-10-26T22:28:43+08:00", "action": "move", "title": "OK", "topic": "神人堂", "fromTopic": "简介"}, {"author": "233", "at": "2026-10-26T22:28:50+08:00", "action": "update", "title": "OK", "topic": "godman"}, {"author": "233", "at": "2026-10-26T22:28:51+08:00", "action": "update", "title": "OK", "topic": "godman"}, {"author": "233", "at": "2026-10-26T22:28:53+08:00", "action": "update", "title": "OK", "topic": "godman"}],
+      content: `<h2>OK：多次破坏服务器，与南宁的dfdf私下交易(10rmb)，盗取他人账号。曾占据南通和秦皇岛，疯狂挖取主世界钻石。</h2>`
+    },
     "qwertyuiop": {
       title: "qwertyuiop",
       emoji: "📖",
@@ -692,17 +703,6 @@ window.HAPPYDAYS_WIKI = (function () {
 <p>多个账号流窜于 <strong>洛桑，长白山</strong>之间，对多地发展造成影响，且超出了服务器规定的账号数量 ,在26年10月3日，在公屏中发布自己密码，大号被ban（10月4号恢复）国庆前，偷取了联合行省4万余元，被踢出后独立，<strong>欲在桦太立国（库页岛日占时曾用名）称自己为桦太主席，</strong>与联合行省建立敌对关系，在群内骂人，公然挑衅JINFANBO</p>
 <p>在q群发表亲日言论，被骂后仍称自己喜爱日本文化，</p>
 <p>26年10月6日晚，未经服主允许在群内宣传其他服务器，fox在晚22点16分发起投票，以10:2截止，，后在7号凌晨1点15分4a宣布踢出qwert，其在同日早约八点建立国家，早8点54分其4个qq号和三个游戏号 分别被提出被提出群聊、服务器，创下了存在时间最短国家的记录（</p>`
-    },
-    "ok": {
-      title: "OK",
-      emoji: "📄",
-      category: "godman",
-      excerpt: "OK：多次破坏服务器",
-      updated: "2026-10-26",
-      reading: 5,
-      tags: [],
-      signatures: [{"author": "233", "at": "2026-10-26T22:28:21+08:00", "action": "create", "title": "OK", "topic": "简介"}, {"author": "233", "at": "2026-10-26T22:28:28+08:00", "action": "update", "title": "OK", "topic": "intro"}, {"author": "233", "at": "2026-10-26T22:28:30+08:00", "action": "update", "title": "OK", "topic": "intro"}, {"author": "233", "at": "2026-10-26T22:28:43+08:00", "action": "move", "title": "OK", "topic": "神人堂", "fromTopic": "简介"}, {"author": "233", "at": "2026-10-26T22:28:50+08:00", "action": "update", "title": "OK", "topic": "godman"}, {"author": "233", "at": "2026-10-26T22:28:51+08:00", "action": "update", "title": "OK", "topic": "godman"}],
-      content: `<h2>OK：多次破坏服务器，与南宁的dfdf私下交易(10rmb)，盗取他人账号。曾占据南通和秦皇岛，疯狂挖取主世界钻石。</h2>`
     },
     "gallery-1": {
       title: "请输入文本（1）",
@@ -768,7 +768,7 @@ window.HAPPYDAYS_WIKI = (function () {
   };
 
   var allIds = [
-    "intro", "before-joining", "first-arrival", "shop-plugin", "build-town", "about-nations", "first-money", "resource-world-nether", "senluo-kitchen", "senluo-tavern", "money-making-guide", "lottery", "immersive-vehicles", "town-resources", "cheating-response", "behavior-chat", "world-map", "matopiraphai", "233-2233", "zzx", "northeast-economic-alliance", "harbin-chronicle", "rhodes-island", "freedom-union", "dprk", "qwertyuiop", "ok", "gallery-1", "gallery-2", "1", "alex", "666"
+    "intro", "before-joining", "first-arrival", "shop-plugin", "build-town", "about-nations", "first-money", "resource-world-nether", "senluo-kitchen", "senluo-tavern", "money-making-guide", "lottery", "immersive-vehicles", "town-resources", "cheating-response", "behavior-chat", "world-map", "matopiraphai", "233-2233", "zzx", "northeast-economic-alliance", "harbin-chronicle", "rhodes-island", "freedom-union", "dprk", "ok", "qwertyuiop", "gallery-1", "gallery-2", "1", "alex", "666"
   ];
 
   return {

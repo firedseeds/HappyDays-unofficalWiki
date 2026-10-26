@@ -6,7 +6,7 @@ topic_id: "godman"
 updated: "2026-10-25"
 reading_time: 2
 emoji: "📖"
-order: 27
+order: 28
 slug: "qwertyuiop"
 source: "/wiki/#/doc/qwertyuiop"
 tags:
