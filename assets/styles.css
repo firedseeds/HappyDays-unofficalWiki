@@ -3318,6 +3318,23 @@ body.sidebar-collapsed .reading-progress {
   left: 0;
 }
 
+/* Single-document mode: hide the left knowledge navigation */
+body.single-view .sidebar {
+  display: none;
+}
+
+body.single-view .app-main {
+  margin-left: 0;
+}
+
+body.single-view .menu-button {
+  display: none !important;
+}
+
+body.single-view .sidebar-backdrop {
+  display: none !important;
+}
+
 /* =========================================================
    Responsive
    ========================================================= */

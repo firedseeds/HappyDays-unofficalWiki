@@ -1563,6 +1563,25 @@
     return match ? match[1].toLowerCase() : null;
   }
 
+  function isSingleView() {
+    return /#single$/.test(window.location.hash);
+  }
+
+  function applySingleView() {
+    var enabled = isSingleView();
+    document.body.classList.toggle("single-view", enabled);
+    if (!enabled) {
+      if (els.sidebar) {
+        els.sidebar.removeAttribute("inert");
+      }
+      return;
+    }
+    document.body.classList.remove("sidebar-open");
+    if (els.sidebar) {
+      els.sidebar.setAttribute("inert", "");
+    }
+  }
+
   function renderDocument(id, initial) {
     var doc = docs[id];
     if (!doc) {
@@ -1684,6 +1703,7 @@
   }
 
   function route(initial) {
+    applySingleView();
     if (!allIds.length) {
       var cleanUrl = window.location.pathname + window.location.search;
       try {
@@ -1719,7 +1739,6 @@
     }
     renderDocument(id, initial);
   }
-
   function updatePageNavigation() {
     var index = allIds.indexOf(state.currentId);
     var prevId = index > 0 ? allIds[index - 1] : null;
