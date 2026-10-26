@@ -495,7 +495,7 @@
     },
     {
       "slug": "666",
-      "order": 32,
+      "order": 33,
       "topic": "godman",
       "title": "666",
       "description": "此人掏走了钻石信标，被土豆审判后ban IP",
@@ -508,7 +508,7 @@
     },
     {
       "slug": "ok",
-      "order": 33,
+      "order": 32,
       "topic": "godman",
       "title": "OK",
       "description": "OK：多次破坏服务器",
