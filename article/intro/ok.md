@@ -6,7 +6,7 @@ topic_id: "intro"
 updated: "2026-10-26"
 reading_time: 5
 emoji: "📄"
-order: 1
+order: 33
 slug: "ok"
 source: "/wiki/#/doc/ok"
 tags:
