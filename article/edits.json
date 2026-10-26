@@ -195,6 +195,15 @@
         "title": "pingguojushi",
         "topic": "人物志"
       }
+    ],
+    "before-joining": [
+      {
+        "author": "smillfox",
+        "at": "2026-10-26T13:27:55+08:00",
+        "action": "update",
+        "title": "进入游戏前",
+        "topic": "新手教程"
+      }
     ]
   }
 }
