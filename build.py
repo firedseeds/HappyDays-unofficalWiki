@@ -149,6 +149,38 @@ class MarkdownRenderer:
         lines = markdown.split("\n")
         return "\n".join(self.render_blocks(lines)).strip()
 
+    @staticmethod
+    def wrap_delimited(text: str, delimiter: str, tag: str) -> str:
+        parts = []
+        position = 0
+        while position < len(text):
+            start = text.find(delimiter, position)
+            if start < 0:
+                parts.append(text[position:])
+                break
+            end = text.find(delimiter, start + len(delimiter))
+            if delimiter == "**":
+                while (
+                    end >= 0
+                    and end + 2 < len(text)
+                    and text[end + 2] == "*"
+                    and text.find("**", end + 1) == end + 1
+                ):
+                    end += 1
+            if end < 0:
+                parts.append(text[position:])
+                break
+            if end == start + len(delimiter):
+                parts.append(text[position:end + len(delimiter)])
+                position = end + len(delimiter)
+                continue
+            parts.append(text[position:start])
+            parts.append(f"<{tag}>")
+            parts.append(text[start + len(delimiter):end])
+            parts.append(f"</{tag}>")
+            position = end + len(delimiter)
+        return "".join(parts)
+
     def inline(self, text: str) -> str:
         code_spans: list[str] = []
         image_spans: list[str] = []
@@ -175,13 +207,15 @@ class MarkdownRenderer:
 
         text = re.sub(r"`([^`\n]+)`", stash_code, text)
         text = escape_text(text)
-        text = re.sub(
-            r"!\[([^\]]*)\]\(([^)\s]+)(?:\s+[\"']([^\"']*)[\"'])?\)",
-            stash_image,
-            text,
-        )
-        text = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", text, flags=re.S)
-        text = re.sub(r"(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)", r"<em>\1</em>", text, flags=re.S)
+        allow_links = text.count("[") <= 4000
+        if allow_links:
+            text = re.sub(
+                r"!\[([^\]]*)\]\(([^)\s]+)(?:\s+[\"']([^\"']*)[\"'])?\)",
+                stash_image,
+                text,
+            )
+        text = self.wrap_delimited(text, "**", "strong")
+        text = self.wrap_delimited(text, "*", "em")
 
         def replace_link(match: re.Match) -> str:
             label = match.group(1)
@@ -189,7 +223,8 @@ class MarkdownRenderer:
             href = self.resolve_href(href)
             return f'<a href="{html_lib.escape(href, quote=True)}">{label}</a>'
 
-        text = re.sub(r"\[([^\]]+)\]\(([^)]+)\)", replace_link, text)
+        if allow_links:
+            text = re.sub(r"\[([^\]]+)\]\(([^)]+)\)", replace_link, text)
         for index, fragment in enumerate(code_spans):
             text = text.replace(f"\x00{index}\x00", fragment)
         for index, fragment in enumerate(image_spans):
