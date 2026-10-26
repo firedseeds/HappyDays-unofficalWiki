@@ -6,7 +6,7 @@ topic_id: "godman"
 updated: "2026-10-25"
 reading_time: 1
 emoji: "📖"
-order: 28
+order: 32
 slug: "alex"
 source: "/wiki/#/doc/alex"
 tags:

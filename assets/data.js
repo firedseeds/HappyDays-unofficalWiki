@@ -69,7 +69,7 @@ window.HAPPYDAYS_WIKI = (function () {
       description: "服务器里各种神人",
       parentId: "history",
       order: 3,
-      docs: ["qwertyuiop", "alex", "ok", "666"]
+      docs: ["qwertyuiop", "ok", "alex", "666"]
     },
     {
       id: "gallery",
@@ -693,21 +693,16 @@ window.HAPPYDAYS_WIKI = (function () {
 <p>在q群发表亲日言论，被骂后仍称自己喜爱日本文化，</p>
 <p>26年10月6日晚，未经服主允许在群内宣传其他服务器，fox在晚22点16分发起投票，以10:2截止，，后在7号凌晨1点15分4a宣布踢出qwert，其在同日早约八点建立国家，早8点54分其4个qq号和三个游戏号 分别被提出被提出群聊、服务器，创下了存在时间最短国家的记录（</p>`
     },
-    "alex": {
-      title: "Alex",
-      emoji: "📖",
+    "ok": {
+      title: "OK",
+      emoji: "📄",
       category: "godman",
-      excerpt: "被zzx带进来的神人，进来不到两天就把火车给实体化了，...",
-      updated: "2026-10-25",
-      reading: 1,
+      excerpt: "OK：多次破坏服务器",
+      updated: "2026-10-26",
+      reading: 5,
       tags: [],
-      signatures: [],
-      content: `<p>被zzx带进来的神人，进来不到两天就把火车给实体化了，那个中午是人类史上最黑暗的一个中午。</p>
-<p>他凭借一己之力就让服务器的哈鲁线，停运了2~3小时，后面约45天被拆的火车不会停留在长春。</p>
-<p>在拆火车的前一天，他在秦皇岛拆车站的金属梁、活板门、砖楼梯等材料，后向土豆解释为缺少建筑材料</p>
-<p><strong>望大家引以为戒，不要拆哈尔滨火车，保护铁路人人有责</strong></p>
-<p><strong>fish评价：大拆除时代</strong></p>
-<p><strong>获得称号：服务器拆火车第一人。</strong></p>`
+      signatures: [{"author": "233", "at": "2026-10-26T22:28:21+08:00", "action": "create", "title": "OK", "topic": "简介"}, {"author": "233", "at": "2026-10-26T22:28:28+08:00", "action": "update", "title": "OK", "topic": "intro"}, {"author": "233", "at": "2026-10-26T22:28:30+08:00", "action": "update", "title": "OK", "topic": "intro"}, {"author": "233", "at": "2026-10-26T22:28:43+08:00", "action": "move", "title": "OK", "topic": "神人堂", "fromTopic": "简介"}, {"author": "233", "at": "2026-10-26T22:28:50+08:00", "action": "update", "title": "OK", "topic": "godman"}, {"author": "233", "at": "2026-10-26T22:28:51+08:00", "action": "update", "title": "OK", "topic": "godman"}],
+      content: `<h2>OK：多次破坏服务器，与南宁的dfdf私下交易(10rmb)，盗取他人账号。曾占据南通和秦皇岛，疯狂挖取主世界钻石。</h2>`
     },
     "gallery-1": {
       title: "请输入文本（1）",
@@ -742,16 +737,21 @@ window.HAPPYDAYS_WIKI = (function () {
       signatures: [{"author": "苹果居士", "at": "2026-10-25T21:32:05+08:00", "action": "create", "title": "pingguojushi", "topic": "人物志"}, {"author": "苹果居士", "at": "2026-10-25T21:32:35+08:00", "action": "update", "title": "pingguojushi", "topic": "人物志"}],
       content: `<p>##介绍 上海金山镇长</p>`
     },
-    "ok": {
-      title: "OK",
-      emoji: "📄",
+    "alex": {
+      title: "Alex",
+      emoji: "📖",
       category: "godman",
-      excerpt: "OK：多次破坏服务器",
-      updated: "2026-10-26",
-      reading: 5,
+      excerpt: "被zzx带进来的神人，进来不到两天就把火车给实体化了，...",
+      updated: "2026-10-25",
+      reading: 1,
       tags: [],
-      signatures: [{"author": "233", "at": "2026-10-26T22:28:21+08:00", "action": "create", "title": "OK", "topic": "简介"}, {"author": "233", "at": "2026-10-26T22:28:28+08:00", "action": "update", "title": "OK", "topic": "intro"}, {"author": "233", "at": "2026-10-26T22:28:30+08:00", "action": "update", "title": "OK", "topic": "intro"}, {"author": "233", "at": "2026-10-26T22:28:43+08:00", "action": "move", "title": "OK", "topic": "神人堂", "fromTopic": "简介"}, {"author": "233", "at": "2026-10-26T22:28:50+08:00", "action": "update", "title": "OK", "topic": "godman"}],
-      content: `<h2>OK：多次破坏服务器，与南宁的dfdf私下交易(10rmb)，盗取他人账号。曾占据南通和秦皇岛，疯狂挖取主世界钻石。</h2>`
+      signatures: [],
+      content: `<p>被zzx带进来的神人，进来不到两天就把火车给实体化了，那个中午是人类史上最黑暗的一个中午。</p>
+<p>他凭借一己之力就让服务器的哈鲁线，停运了2~3小时，后面约45天被拆的火车不会停留在长春。</p>
+<p>在拆火车的前一天，他在秦皇岛拆车站的金属梁、活板门、砖楼梯等材料，后向土豆解释为缺少建筑材料</p>
+<p><strong>望大家引以为戒，不要拆哈尔滨火车，保护铁路人人有责</strong></p>
+<p><strong>fish评价：大拆除时代</strong></p>
+<p><strong>获得称号：服务器拆火车第一人。</strong></p>`
     },
     "666": {
       title: "666",
@@ -768,7 +768,7 @@ window.HAPPYDAYS_WIKI = (function () {
   };
 
   var allIds = [
-    "intro", "before-joining", "first-arrival", "shop-plugin", "build-town", "about-nations", "first-money", "resource-world-nether", "senluo-kitchen", "senluo-tavern", "money-making-guide", "lottery", "immersive-vehicles", "town-resources", "cheating-response", "behavior-chat", "world-map", "matopiraphai", "233-2233", "zzx", "northeast-economic-alliance", "harbin-chronicle", "rhodes-island", "freedom-union", "dprk", "qwertyuiop", "alex", "gallery-1", "gallery-2", "1", "ok", "666"
+    "intro", "before-joining", "first-arrival", "shop-plugin", "build-town", "about-nations", "first-money", "resource-world-nether", "senluo-kitchen", "senluo-tavern", "money-making-guide", "lottery", "immersive-vehicles", "town-resources", "cheating-response", "behavior-chat", "world-map", "matopiraphai", "233-2233", "zzx", "northeast-economic-alliance", "harbin-chronicle", "rhodes-island", "freedom-union", "dprk", "qwertyuiop", "ok", "gallery-1", "gallery-2", "1", "alex", "666"
   ];
 
   return {
