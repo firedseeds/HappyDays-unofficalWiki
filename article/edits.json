@@ -1,7 +1,15 @@
 {
   "version": 1,
   "articles": {
-    "intro": [],
+    "intro": [
+      {
+        "author": "smillfox",
+        "at": "2026-10-26T11:50:49+08:00",
+        "action": "update",
+        "title": "简介",
+        "topic": "简介"
+      }
+    ],
     "about-nations": [
       {
         "author": "zzx",

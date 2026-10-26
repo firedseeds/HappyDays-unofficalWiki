@@ -1,6 +1,6 @@
 ---
 title: "简介"
-description: "HappyDays轨道交通服务器happydays是建..."
+description: "happydays是在1:326的欧亚地图上以..."
 topic: "简介"
 topic_id: "intro"
 updated: "2026-10-25"
@@ -16,7 +16,7 @@ tags:
 
 ## HappyDays轨道交通服务器
 
-**happydays是建立在1:326的欧亚地图上的以建立发展城市、轨道交通及铁路建设为基础的Minecraft服务器**
+**happydays是在1:326的欧亚地图上以建立发展城市、轨道交通及铁路建设为基础的Minecraft服务器**
 
 **游戏版本：Java 1.20.1**
 
