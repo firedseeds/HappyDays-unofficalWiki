@@ -744,17 +744,36 @@ def restore_files(snapshot: dict[Path, bytes | None]) -> None:
             atomic_write(path, content.decode("utf-8"))
 
 
+def build_timeout_seconds() -> float:
+    try:
+        value = float(os.environ.get("BUILD_TIMEOUT", "90"))
+    except (TypeError, ValueError):
+        value = 90
+    return max(5, min(value, 3600))
+
+
 def run_build() -> str:
+    timeout = build_timeout_seconds()
     try:
         result = subprocess.run(
             [sys.executable, str(BUILD_SCRIPT)],
             cwd=ROOT,
             capture_output=True,
             text=True,
-            timeout=90,
+            timeout=timeout,
         )
-    except subprocess.TimeoutExpired:
-        raise ApiError(500, "build.py 超时")
+    except subprocess.TimeoutExpired as exc:
+        partial = ""
+        for value in (exc.stderr, exc.stdout):
+            if value:
+                text = value.decode("utf-8", "replace") if isinstance(value, bytes) else str(value)
+                partial = text.strip()
+                if partial:
+                    break
+        detail = f"（{timeout:g} 秒）"
+        if partial:
+            detail += "\n" + partial[-2000:]
+        raise ApiError(500, "build.py 超时" + detail)
     if result.returncode != 0:
         detail = (result.stderr or result.stdout or "未知错误").strip()
         if len(detail) > 2000:
@@ -1869,12 +1888,15 @@ def main() -> int:
     if args.host not in ("127.0.0.1", "localhost"):
         print("警告：编辑器没有认证，建议只绑定 127.0.0.1。", file=sys.stderr)
 
-    try:
-        build_message = build_output_message(run_build())
-        print(f"启动前自动构建：{build_message}", flush=True)
-    except ApiError as exc:
-        print(f"启动前构建失败：{exc.message}", file=sys.stderr, flush=True)
-        return 1
+    if os.environ.get("SKIP_STARTUP_BUILD", "").lower() in ("1", "true", "yes"):
+        print("已跳过启动前构建（SKIP_STARTUP_BUILD=1）", flush=True)
+    else:
+        try:
+            build_message = build_output_message(run_build())
+            print(f"启动前自动构建：{build_message}", flush=True)
+        except ApiError as exc:
+            print(f"启动前构建失败：{exc.message}", file=sys.stderr, flush=True)
+            return 1
 
     try:
         httpd = EditorServer((args.host, args.port), EditorHandler)

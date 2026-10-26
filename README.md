@@ -62,6 +62,20 @@ python server.py --host 0.0.0.0 --port 8000
 tail -n 100 logs/sync.log
 ```
 
+如果启动前 `build.py` 超时，可以临时提高构建超时时间：
+
+```bash
+BUILD_TIMEOUT=300 ./server.sh -run
+```
+
+仅用于排查时可以跳过启动前构建，直接使用现有 `assets/data.js`：
+
+```bash
+SKIP_STARTUP_BUILD=1 ./server.sh -run
+```
+
+跳过构建不会更新静态文章数据；编辑保存仍会正常触发构建。正常情况下建议先手动运行 `python3 build.py` 确认构建是否能完成。
+
 
 ### 服务器脚本
 
