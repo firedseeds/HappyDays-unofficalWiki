@@ -198,21 +198,35 @@
 
   function request(path, options) {
     options = options || {};
+    var method = options.method || "GET";
     var headers = { Accept: "application/json" };
     if (options.body) {
       headers["Content-Type"] = "application/json";
     }
-    return fetch(path, {
-      method: options.method || "GET",
-      headers: headers,
-      body: options.body,
-      signal: options.signal
-    }).catch(function (error) {
-      if (error && error.name === "AbortError") {
-        throw error;
-      }
-      throw new Error("无法连接编辑服务，请先运行 python server.py");
-    }).then(function (response) {
+    var retries = method === "GET" ? 2 : 0;
+
+    function send(remaining) {
+      return fetch(path, {
+        method: method,
+        headers: headers,
+        body: options.body,
+        signal: options.signal
+      }).catch(function (error) {
+        if (error && error.name === "AbortError") {
+          throw error;
+        }
+        if (remaining > 0) {
+          return new Promise(function (resolve) {
+            window.setTimeout(resolve, 500);
+          }).then(function () {
+            return send(remaining - 1);
+          });
+        }
+        throw new Error("无法连接编辑服务，请稍后重试或运行 python server.py");
+      });
+    }
+
+    return send(retries).then(function (response) {
       return response.text().then(function (text) {
         var payload = null;
         if (text) {
