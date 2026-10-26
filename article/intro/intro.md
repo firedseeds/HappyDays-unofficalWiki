@@ -6,7 +6,7 @@ topic_id: "intro"
 updated: "2026-10-25"
 reading_time: 1
 emoji: "🚇"
-order: 1
+order: 33
 slug: "intro"
 source: "/wiki/#/doc/intro"
 tags:

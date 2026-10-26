@@ -13,7 +13,7 @@ window.HAPPYDAYS_WIKI = (function () {
       description: "HappyDays 服务器与知识库概览。",
       parentId: null,
       order: 1,
-      docs: ["intro", "ok"]
+      docs: ["ok", "intro"]
     },
     {
       id: "beginner",
@@ -82,24 +82,16 @@ window.HAPPYDAYS_WIKI = (function () {
   ];
 
   var docs = {
-    "intro": {
-      title: "简介",
-      emoji: "🚇",
+    "ok": {
+      title: "OK",
+      emoji: "📄",
       category: "intro",
-      excerpt: "happydays是在1:326的欧亚地图上以...",
-      updated: "2026-10-25",
-      reading: 1,
+      excerpt: "OK：多次破坏服务器",
+      updated: "2026-10-26",
+      reading: 5,
       tags: [],
-      signatures: [{"author": "smillfox", "at": "2026-10-26T11:50:49+08:00", "action": "update", "title": "简介", "topic": "简介"}],
-      content: `<h2>HappyDays轨道交通服务器</h2>
-<p><strong>happydays是在1:326的欧亚地图上以建立发展城市、轨道交通及铁路建设为基础的Minecraft服务器</strong></p>
-<p><strong>游戏版本：Java 1.20.1</strong></p>
-<p><strong>服务器地址：n3-22.yxsjmc.cn:20999</strong></p>
-<p><strong>在线地图网址：</strong><a href="http://n3-22.yxsjmc.cn:20675/"><strong>n3-22.yxsjmc.cn:20675</strong></a></p>
-<p><strong>qq群：498750087</strong></p>
-<p>服务器管理一览</p>
-<p><strong>腐竹：HAPPYAAAAA</strong></p>
-<p><strong>管理员：Crazytudou、Burnkey、smillfox、fish</strong></p>`
+      signatures: [{"author": "233", "at": "2026-10-26T22:28:21+08:00", "action": "create", "title": "OK", "topic": "简介"}, {"author": "233", "at": "2026-10-26T22:28:28+08:00", "action": "update", "title": "OK", "topic": "intro"}],
+      content: `<h2>OK：多次破坏服务器，与南宁的dfdf私下交易(10rmb)，盗取他人账号。曾占据南通和秦皇岛，疯狂挖取主世界钻石。</h2>`
     },
     "before-joining": {
       title: "进入游戏前",
@@ -754,21 +746,29 @@ window.HAPPYDAYS_WIKI = (function () {
       content: `<h3>此人掏走了钻石信标，被土豆审判后ban IP</h3>
 <p><em>由于群内消息已被自动删除，而编者的记忆力与鱼相当，所以只记得上面了</em></p>`
     },
-    "ok": {
-      title: "OK",
-      emoji: "📄",
+    "intro": {
+      title: "简介",
+      emoji: "🚇",
       category: "intro",
-      excerpt: "OK：多次破坏服务器",
-      updated: "2026-10-26",
-      reading: 5,
+      excerpt: "happydays是在1:326的欧亚地图上以...",
+      updated: "2026-10-25",
+      reading: 1,
       tags: [],
-      signatures: [{"author": "233", "at": "2026-10-26T22:28:21+08:00", "action": "create", "title": "OK", "topic": "简介"}],
-      content: `<h2>OK：多次破坏服务器，与南宁的dfdf私下交易(10rmb)，盗取他人账号。曾占据南通和秦皇岛，疯狂挖取主世界钻石。</h2>`
+      signatures: [{"author": "smillfox", "at": "2026-10-26T11:50:49+08:00", "action": "update", "title": "简介", "topic": "简介"}],
+      content: `<h2>HappyDays轨道交通服务器</h2>
+<p><strong>happydays是在1:326的欧亚地图上以建立发展城市、轨道交通及铁路建设为基础的Minecraft服务器</strong></p>
+<p><strong>游戏版本：Java 1.20.1</strong></p>
+<p><strong>服务器地址：n3-22.yxsjmc.cn:20999</strong></p>
+<p><strong>在线地图网址：</strong><a href="http://n3-22.yxsjmc.cn:20675/"><strong>n3-22.yxsjmc.cn:20675</strong></a></p>
+<p><strong>qq群：498750087</strong></p>
+<p>服务器管理一览</p>
+<p><strong>腐竹：HAPPYAAAAA</strong></p>
+<p><strong>管理员：Crazytudou、Burnkey、smillfox、fish</strong></p>`
     }
   };
 
   var allIds = [
-    "intro", "before-joining", "first-arrival", "shop-plugin", "build-town", "about-nations", "first-money", "resource-world-nether", "senluo-kitchen", "senluo-tavern", "money-making-guide", "lottery", "immersive-vehicles", "town-resources", "cheating-response", "behavior-chat", "world-map", "matopiraphai", "233-2233", "zzx", "northeast-economic-alliance", "harbin-chronicle", "rhodes-island", "freedom-union", "dprk", "qwertyuiop", "alex", "gallery-1", "gallery-2", "1", "666", "ok"
+    "ok", "before-joining", "first-arrival", "shop-plugin", "build-town", "about-nations", "first-money", "resource-world-nether", "senluo-kitchen", "senluo-tavern", "money-making-guide", "lottery", "immersive-vehicles", "town-resources", "cheating-response", "behavior-chat", "world-map", "matopiraphai", "233-2233", "zzx", "northeast-economic-alliance", "harbin-chronicle", "rhodes-island", "freedom-union", "dprk", "qwertyuiop", "alex", "gallery-1", "gallery-2", "1", "666", "intro"
   ];
 
   return {

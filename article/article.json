@@ -105,7 +105,7 @@
   "articles": [
     {
       "slug": "intro",
-      "order": 1,
+      "order": 33,
       "topic": "intro",
       "title": "简介",
       "description": "happydays是在1:326的欧亚地图上以...",
@@ -508,7 +508,7 @@
     },
     {
       "slug": "ok",
-      "order": 33,
+      "order": 1,
       "topic": "intro",
       "title": "OK",
       "description": "OK：多次破坏服务器",
