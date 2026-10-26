@@ -102,3 +102,34 @@
   font-size: 9px;
   white-space: nowrap;
 }
+
+.title-move {
+  display: flex;
+  height: 34px;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+}
+
+.title-move-button {
+  width: 22px;
+  height: 15px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--canvas);
+  color: var(--text-faint);
+  font-size: 10px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.title-move-button:hover:not(:disabled) {
+  border-color: var(--border-strong);
+  color: var(--text);
+}
+
+.title-move-button:disabled {
+  cursor: default;
+  opacity: 0.28;
+}

@@ -1139,6 +1139,97 @@ def update_article(slug: str, payload: dict) -> dict:
         }
 
 
+def move_article_order(slug: str, payload: dict) -> dict:
+    direction = payload.get("direction")
+    if direction not in ("up", "down"):
+        raise ApiError(400, "direction 必须是 up 或 down")
+    author = require_text(payload.get("author"), "署名", 80)
+    with LOCK:
+        manifest = read_manifest()
+        records = article_map(manifest)
+        record = records.get(slug)
+        if record is None:
+            raise ApiError(404, "文章不存在")
+        siblings = sorted(
+            (item for item in manifest["articles"] if item.get("topic") == record.get("topic")),
+            key=lambda item: (int(item.get("order", 0)), str(item.get("slug", ""))),
+        )
+        index = next(
+            (i for i, item in enumerate(siblings) if item.get("slug") == slug),
+            None,
+        )
+        if index is None:
+            raise ApiError(404, "文章不在主题列表中")
+        target_index = index - 1 if direction == "up" else index + 1
+        if target_index < 0 or target_index >= len(siblings):
+            return {"ok": True, "moved": False, "article": record}
+        other = siblings[target_index]
+        path = article_path(record)
+        other_path = article_path(other)
+        snapshots = {
+            path: path.read_bytes() if path.is_file() else None,
+            other_path: other_path.read_bytes() if other_path.is_file() else None,
+        }
+        manifest_snapshot = MANIFEST_PATH.read_bytes()
+        data_snapshot = DATA_PATH.read_bytes() if DATA_PATH.is_file() else None
+        edits_snapshot_bytes = edits_snapshot()
+
+        record_order = int(record.get("order", 0))
+        other_order = int(other.get("order", 0))
+        record["order"], other["order"] = other_order, record_order
+
+        def rewrite_order(markdown_path, order):
+            raw = markdown_path.read_text(encoding="utf-8")
+            updated, count = re.subn(
+                r"(?m)^order:\s*\d+\s*$",
+                f"order: {order}",
+                raw,
+                count=1,
+            )
+            if count != 1:
+                raise ApiError(500, f"无法更新 {markdown_path.name} 的 order")
+            atomic_write(markdown_path, updated)
+
+        edits = read_edits()
+        edits.setdefault("articles", {}).setdefault(slug, []).append(
+            signature_record(author, "update", record.get("title", slug), record.get("topic", ""))
+        )
+        try:
+            rewrite_order(path, record["order"])
+            rewrite_order(other_path, other["order"])
+            write_manifest(manifest)
+            write_edits(edits)
+            output = run_build()
+        except Exception as exc:
+            restore_files(snapshots)
+            atomic_write(MANIFEST_PATH, manifest_snapshot.decode("utf-8"))
+            if data_snapshot is not None:
+                atomic_write(DATA_PATH, data_snapshot.decode("utf-8"))
+            elif DATA_PATH.exists():
+                DATA_PATH.unlink()
+            restore_edits(edits_snapshot_bytes)
+            if isinstance(exc, ApiError):
+                raise
+            raise ApiError(500, f"调整顺序失败：{exc}")
+
+        commit = auto_commit(
+            [path, other_path, MANIFEST_PATH, DATA_PATH, EDITS_PATH],
+            f"docs: 调整「{record.get('title', slug)}」顺序（{author}）",
+            author,
+        )
+        log_change(
+            f"文章排序：{record.get('title', slug)}（slug={slug}，"
+            f"方向={direction}，本地提交={'是' if commit.get('committed') else '否'}）"
+        )
+        return {
+            "ok": True,
+            "moved": True,
+            "article": record,
+            "message": build_output_message(output),
+            "commit": commit,
+        }
+
+
 def delete_article(slug: str) -> dict:
     with LOCK:
         manifest = read_manifest()
@@ -1611,6 +1702,11 @@ class EditorHandler(SimpleHTTPRequestHandler):
             if comment_match:
                 payload = self.read_json()
                 self.send_json(200, add_article_comment(comment_match.group(1), payload))
+                return
+            move_match = re.fullmatch(r"/api/articles/([a-z0-9-]+)/move", path)
+            if move_match:
+                payload = self.read_json()
+                self.send_json(200, move_article_order(move_match.group(1), payload))
                 return
             if path == "/api/articles":
                 payload = self.read_json()

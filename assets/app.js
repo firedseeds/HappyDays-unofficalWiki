@@ -689,6 +689,29 @@
     probability.className = "site-title-prob";
     probability.textContent = "—";
 
+    var move = document.createElement("div");
+    move.className = "title-move";
+    var up = document.createElement("button");
+    up.type = "button";
+    up.className = "title-move-button";
+    up.textContent = "↑";
+    up.title = "上移标题";
+    up.setAttribute("aria-label", "上移标题");
+    up.addEventListener("click", function () {
+      moveSiteTitleRow(row, -1);
+    });
+    var down = document.createElement("button");
+    down.type = "button";
+    down.className = "title-move-button";
+    down.textContent = "↓";
+    down.title = "下移标题";
+    down.setAttribute("aria-label", "下移标题");
+    down.addEventListener("click", function () {
+      moveSiteTitleRow(row, 1);
+    });
+    move.appendChild(up);
+    move.appendChild(down);
+
     var remove = document.createElement("button");
     remove.type = "button";
     remove.className = "site-title-remove";
@@ -705,15 +728,43 @@
       }
       row.remove();
       updateSiteTitleTotals();
+      updateSiteTitleMoveButtons();
     });
 
     weight.addEventListener("input", updateSiteTitleTotals);
     row.appendChild(text);
     row.appendChild(weight);
     row.appendChild(probability);
+    row.appendChild(move);
     row.appendChild(remove);
     els.siteTitleRows.appendChild(row);
+    updateSiteTitleMoveButtons();
     return row;
+  }
+
+  function updateSiteTitleMoveButtons() {
+    var rows = Array.prototype.slice.call(els.siteTitleRows.querySelectorAll(".site-title-row"));
+    rows.forEach(function (row, index) {
+      var buttons = row.querySelectorAll(".title-move-button");
+      if (buttons.length === 2) {
+        buttons[0].disabled = index === 0;
+        buttons[1].disabled = index === rows.length - 1;
+      }
+    });
+  }
+
+  function moveSiteTitleRow(row, direction) {
+    var sibling = direction < 0 ? row.previousElementSibling : row.nextElementSibling;
+    if (!sibling) {
+      return;
+    }
+    if (direction < 0) {
+      els.siteTitleRows.insertBefore(row, sibling);
+    } else {
+      els.siteTitleRows.insertBefore(sibling, row);
+    }
+    updateSiteTitleMoveButtons();
+    updateSiteTitleTotals();
   }
 
   function renderSiteTitleRows(titles) {

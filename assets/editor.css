@@ -944,7 +944,7 @@
 
 .title-editor-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 92px 54px 30px;
+  grid-template-columns: minmax(0, 1fr) 92px 54px 24px 30px;
   gap: 8px;
   align-items: center;
 }
@@ -1029,7 +1029,7 @@
 
 @media (max-width: 620px) {
   .title-editor-row {
-    grid-template-columns: minmax(0, 1fr) 76px 45px 28px;
+    grid-template-columns: minmax(0, 1fr) 76px 45px 24px 28px;
     gap: 6px;
   }
 }

@@ -105,16 +105,15 @@ window.HAPPYDAYS_WIKI = (function () {
       title: "进入游戏前",
       emoji: "🌱",
       category: "beginner",
-      excerpt: "1 - 准备1.1 配置推荐使用强劲的电脑、笔记本或手...",
+      excerpt: "配置推荐使用强劲的电脑、笔记本或手...",
       updated: "2026-10-25",
       reading: 3,
       tags: [],
-      signatures: [],
+      signatures: [{"author": "smillfox", "at": "2026-10-26T13:27:55+08:00", "action": "update", "title": "进入游戏前", "topic": "新手教程"}],
       content: `<h2>1 - 准备</h2>
 <p><strong>1.1 配置</strong></p>
 <p><strong>推荐使用强劲的电脑、笔记本或手机游玩</strong></p>
-<p>根据Minecraft的性能需求，不建议使用过于古老的机器进行游玩，否则会造成加载时间过长，游玩掉帧等令人不适</p>
-<p>的问题。</p>
+<p>根据Minecraft的性能需求，不建议使用过于古老的机器进行游玩，否则会造成加载时间过长，游玩掉帧等令人不适的问题。</p>
 <p><strong>1.2 系统</strong></p>
 <p><strong>⭕推荐使用系统：Windows7以上</strong></p>
 <p>❌不支持的系统：未越狱的iOS、HarmonyOS Next 等</p>
@@ -139,8 +138,7 @@ window.HAPPYDAYS_WIKI = (function () {
 <p><strong>注：电脑须下载电脑的整合包，手机须下载手机的整合包</strong></p>
 <p><strong>2.3 连接服务器</strong></p>
 <p>在启动器点击启动游戏后，将会弹出游戏窗口请遵循以下步骤：</p>
-<p>①在游戏界面中点击<strong>多人游戏</strong></p>
-<p><strong>②</strong>点击<strong>添加服务器</strong>，输入服务器IP地址n3-22.yxsjmc.cn:20999</p>
+<p>①在游戏界面中点击<strong>多人游戏</strong>，然后点击第一个服务器</p>
 <p><strong>至此，你学会了怎么进入服务器👏🏻</strong></p>`
     },
     "first-arrival": {

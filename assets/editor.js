@@ -39,6 +39,8 @@
     saveBtn: document.getElementById("saveBtn"),
     saveLabel: document.getElementById("saveLabel"),
     deleteArticleBtn: document.getElementById("deleteArticleBtn"),
+    moveArticleUp: document.getElementById("moveArticleUp"),
+    moveArticleDown: document.getElementById("moveArticleDown"),
     title: document.getElementById("fieldTitle"),
     topic: document.getElementById("fieldTopic"),
     topicHint: document.getElementById("topicHint"),
@@ -449,6 +451,8 @@
     els.saveBtn.disabled = busy;
     els.previewBtn.disabled = busy;
     els.deleteArticleBtn.disabled = busy;
+    els.moveArticleUp.disabled = busy;
+    els.moveArticleDown.disabled = busy;
     els.importArticleBtn.disabled = busy || state.topics.length === 0;
     els.saveLabel.textContent = busy
       ? "保存中…"
@@ -468,6 +472,8 @@
     els.form.hidden = true;
     els.offlineState.hidden = true;
     els.deleteArticleBtn.hidden = true;
+    els.moveArticleUp.hidden = true;
+    els.moveArticleDown.hidden = true;
     setActiveArticle();
     history.replaceState(null, "", "#new");
   }
@@ -723,6 +729,8 @@
     setFormAlert("");
     showEditor();
     els.deleteArticleBtn.hidden = false;
+    els.moveArticleUp.hidden = false;
+    els.moveArticleDown.hidden = false;
     setBusy(false);
     setActiveArticle();
     history.replaceState(null, "", "#" + encodeURIComponent(article.slug));
@@ -771,6 +779,8 @@
     setFormAlert("");
     showEditor();
     els.deleteArticleBtn.hidden = true;
+    els.moveArticleUp.hidden = true;
+    els.moveArticleDown.hidden = true;
     setBusy(false);
     setActiveArticle();
     history.replaceState(null, "", "#new");
@@ -790,6 +800,36 @@
     }).catch(function (error) {
       showToast(error.message, "error");
       return false;
+    });
+  }
+
+  function moveArticle(direction) {
+    if (!state.currentSlug || state.mode !== "edit" || state.saving) {
+      return;
+    }
+    if (state.dirty && !window.confirm("当前修改尚未保存，调整顺序会重新加载文章，继续吗？")) {
+      return;
+    }
+    var slug = state.currentSlug;
+    var author = (els.author.value || "").trim() || rememberedAuthor() || "HappyDays 团队";
+    setBusy(true);
+    jsonRequest("POST", "/api/articles/" + encodeURIComponent(slug) + "/move", {
+      direction: direction,
+      author: author
+    }).then(function (result) {
+      if (!result.moved) {
+        showToast(direction === "up" ? "已经是当前主题的第一篇" : "已经是当前主题的最后一篇");
+        return null;
+      }
+      return fetchState().then(function () {
+        return openArticle(slug, true);
+      }).then(function () {
+        showToast("文章顺序已调整", "success");
+      });
+    }).catch(function (error) {
+      showToast(error.message, "error");
+    }).finally(function () {
+      setBusy(false);
     });
   }
 
@@ -1468,6 +1508,29 @@
     probability.className = "title-editor-prob";
     probability.textContent = "—";
 
+    var move = document.createElement("div");
+    move.className = "title-move";
+    var up = document.createElement("button");
+    up.type = "button";
+    up.className = "title-move-button";
+    up.textContent = "↑";
+    up.title = "上移标题";
+    up.setAttribute("aria-label", "上移标题");
+    up.addEventListener("click", function () {
+      moveTitleRow(row, -1);
+    });
+    var down = document.createElement("button");
+    down.type = "button";
+    down.className = "title-move-button";
+    down.textContent = "↓";
+    down.title = "下移标题";
+    down.setAttribute("aria-label", "下移标题");
+    down.addEventListener("click", function () {
+      moveTitleRow(row, 1);
+    });
+    move.appendChild(up);
+    move.appendChild(down);
+
     var remove = document.createElement("button");
     remove.type = "button";
     remove.className = "title-remove";
@@ -1487,14 +1550,42 @@
       }
       row.remove();
       updateTitleTotal();
+      updateTitleMoveButtons();
     });
 
     row.appendChild(text);
     row.appendChild(weight);
     row.appendChild(probability);
+    row.appendChild(move);
     row.appendChild(remove);
     els.titleEditorList.appendChild(row);
+    updateTitleMoveButtons();
     return row;
+  }
+
+  function updateTitleMoveButtons() {
+    var rows = Array.prototype.slice.call(els.titleEditorList.querySelectorAll(".title-editor-row"));
+    rows.forEach(function (row, index) {
+      var buttons = row.querySelectorAll(".title-move-button");
+      if (buttons.length === 2) {
+        buttons[0].disabled = index === 0;
+        buttons[1].disabled = index === rows.length - 1;
+      }
+    });
+  }
+
+  function moveTitleRow(row, direction) {
+    var sibling = direction < 0 ? row.previousElementSibling : row.nextElementSibling;
+    if (!sibling) {
+      return;
+    }
+    if (direction < 0) {
+      els.titleEditorList.insertBefore(row, sibling);
+    } else {
+      els.titleEditorList.insertBefore(sibling, row);
+    }
+    updateTitleMoveButtons();
+    updateTitleTotal();
   }
 
   function renderTitleRows(titles) {
@@ -1686,6 +1777,12 @@
       }
     });
     els.deleteArticleBtn.addEventListener("click", deleteCurrentArticle);
+    els.moveArticleUp.addEventListener("click", function () {
+      moveArticle("up");
+    });
+    els.moveArticleDown.addEventListener("click", function () {
+      moveArticle("down");
+    });
     els.retryConnection.addEventListener("click", function () {
       boot();
     });
