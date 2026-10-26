@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>HappyDays轨道交通服务器</title>
+		<meta name="description" content="HappyDays轨道交通服务器：发展城市、轨道交通与铁路建设。">
+		<link rel="canonical" href="http://114.55.99.2:8000/home">
+		<style>
+			:root {
+				--color-bg: #f7f5f0;
+				--color-text: #2c2c2c;
+				--color-muted: #777;
+				--color-accent: #8b1e1e;
+				--color-border: #e0dcd5;
+				--container-width: 1380px;
+				--font-serif: "Noto Serif SC", "Source Han Serif SC", "Songti SC", serif;
+				--font-sans: "PingFang SC", "Microsoft YaHei", sans-serif;
+			}
+
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
+
+			body {
+				font-family: var(--font-sans);
+				background-color: var(--color-bg);
+				color: var(--color-text);
+				line-height: 1.7;
+				-webkit-font-smoothing: antialiased;
+			}
+
+			.container {
+				max-width: var(--container-width);
+				margin: 0 auto;
+				padding: 0 40px;
+			}
+
+			/* ----- 顶部导航 ----- */
+			.site-header {
+				position: sticky;
+				top: 0;
+				z-index: 100;
+				background-color: rgba(247, 245, 240, 0.92);
+				backdrop-filter: blur(12px);
+				border-bottom: 1px solid var(--color-border);
+			}
+
+			.header-inner {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				height: 76px;
+			}
+
+			.logo {
+				font-family: var(--font-serif);
+				font-size: 1.35rem;
+				font-weight: 700;
+				letter-spacing: 2px;
+				color: var(--color-text);
+				text-decoration: none;
+			}
+
+			.logo span {
+				color: var(--color-accent);
+			}
+
+			.nav-links {
+				display: flex;
+				gap: 32px;
+				list-style: none;
+			}
+
+			.nav-links a {
+				text-decoration: none;
+				color: var(--color-muted);
+				font-size: 0.92rem;
+				letter-spacing: 0.5px;
+				transition: color 0.2s;
+			}
+
+			.nav-links a:hover,
+			.nav-links a.active {
+				color: var(--color-text);
+			}
+
+			.nav-links a.active {
+				font-weight: 600;
+				border-bottom: 2px solid var(--color-accent);
+				padding-bottom: 4px;
+			}
+
+			/* ----- 通栏主视觉（可点击链接） ----- */
+			.hero {
+				display: flex;
+				align-items: flex-end;
+				width: 100%;
+				height: 65vh;
+				min-height: 420px;
+				max-height: 640px;
+				margin-bottom: 60px;
+				background: linear-gradient(135deg, #3a3a3a 0%, #1a1a1a 100%);
+				text-decoration: none;
+				cursor: pointer;
+			}
+
+			.hero-caption {
+				width: 100%;
+				padding: 40px 0;
+				background: linear-gradient(transparent, rgba(0, 0, 0, 0.75));
+				color: #fff;
+			}
+
+			.hero-caption h1 {
+				font-family: var(--font-serif);
+				font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+				font-weight: 500;
+				letter-spacing: 2px;
+				margin-bottom: 8px;
+			}
+
+			.hero-caption p {
+				font-size: 0.95rem;
+				opacity: 0.85;
+				letter-spacing: 1px;
+			}
+
+			/* ----- 内容区块 ----- */
+			.section {
+				margin-bottom: 72px;
+			}
+
+			.section-header {
+				display: flex;
+				align-items: baseline;
+				justify-content: space-between;
+				margin-bottom: 32px;
+				border-bottom: 1px solid var(--color-border);
+				padding-bottom: 16px;
+			}
+
+			.section-title {
+				font-family: var(--font-serif);
+				font-size: 1.6rem;
+				font-weight: 500;
+				letter-spacing: 1.5px;
+			}
+
+			.section-title::before {
+				content: '';
+				display: inline-block;
+				width: 4px;
+				height: 1.2em;
+				background: var(--color-accent);
+				margin-right: 12px;
+				vertical-align: -0.15em;
+			}
+
+			.section-more {
+				font-size: 0.85rem;
+				color: var(--color-muted);
+				text-decoration: none;
+			}
+
+			/* 卡片网格列表：新手教程与进阶教程共用 */
+			.card-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+				gap: 32px 28px;
+			}
+
+			/* 卡片本身是链接，保留块级布局并去掉下划线 */
+			.card {
+				display: block;
+				background: #fff;
+				border: 1px solid var(--color-border);
+				color: var(--color-text);
+				text-decoration: none;
+				transition: transform 0.25s ease, box-shadow 0.25s ease;
+				cursor: pointer;
+			}
+
+			.card:hover {
+				transform: translateY(-4px);
+				box-shadow: 0 12px 30px rgba(0, 0, 0, 0.07);
+			}
+
+			.card-media {
+				width: 100%;
+				aspect-ratio: 4 / 3;
+				background-color: #e8e4dd;
+				position: relative;
+				overflow: hidden;
+			}
+
+			.card-media::after {
+				content: '图片占位';
+				position: absolute;
+				inset: 0;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				color: #b0a89a;
+				font-size: 0.85rem;
+				letter-spacing: 1px;
+			}
+
+			.card-body {
+				padding: 20px 22px 24px;
+			}
+
+			.card-body h3 {
+				font-family: var(--font-serif);
+				font-size: 1.1rem;
+				font-weight: 500;
+				margin-bottom: 6px;
+				letter-spacing: 0.5px;
+			}
+
+			.card-body .meta {
+				font-size: 0.8rem;
+				color: var(--color-muted);
+			}
+
+			/* 在线地图入口按钮 */
+			.map-entry a {
+				display: inline-block;
+				padding: 12px 32px;
+				border: 1px solid var(--color-text);
+				color: var(--color-text);
+				text-decoration: none;
+				font-size: 0.9rem;
+				letter-spacing: 1px;
+				transition: background 0.2s, color 0.2s, border-color 0.2s;
+			}
+
+			.map-entry a:hover {
+				background: var(--color-accent);
+				border-color: var(--color-accent);
+				color: #fff;
+			}
+
+			/* ----- 页脚 ----- */
+			.site-footer {
+				border-top: 1px solid var(--color-border);
+				padding: 48px 0 32px;
+				margin-top: 40px;
+				font-size: 0.82rem;
+				color: var(--color-muted);
+			}
+
+			.footer-grid {
+				display: flex;
+				justify-content: space-between;
+				flex-wrap: wrap;
+				gap: 24px;
+			}
+
+			/* ----- 响应式：适配手机与平板 ----- */
+			@media (max-width: 900px) {
+				.container {
+					padding: 0 24px;
+				}
+
+				.header-inner {
+					height: 64px;
+				}
+
+				.nav-links {
+					gap: 18px;
+				}
+
+				.nav-links a {
+					font-size: 0.82rem;
+				}
+
+				.hero {
+					height: 48vh;
+					min-height: 320px;
+				}
+
+				.section {
+					margin-bottom: 48px;
+				}
+
+				.card-grid {
+					grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+					gap: 24px 16px;
+				}
+			}
+
+			@media (max-width: 600px) {
+				.nav-links {
+					display: none;
+				}
+
+				.hero-caption h1 {
+					font-size: 1.5rem;
+				}
+
+				.card-grid {
+					grid-template-columns: 1fr;
+				}
+			}
+		</style>
+	</head>
+	<body>
+
+		<!-- 导航 -->
+		<header class="site-header">
+			<div class="container header-inner">
+				<a href="/home" class="logo">HAPPY<span>DAYS</span>服务器</a>
+				<nav>
+					<ul class="nav-links">
+						<li><a href="/home" class="active">首页</a></li>
+						<li><a href="/wiki/#/doc/intro">简介</a></li>
+						<li><a href="/wiki/#/doc/before-joining">新手教程</a></li>
+						<li><a href="/wiki/#/doc/resource-world-nether">进阶教程</a></li>
+						<li><a href="/wiki/#/doc/cheating-response">服务器规则</a></li>
+						<li><a href="/wiki/#/doc/matopiraphai">HAPPYDAYS历史</a></li>
+						<li><a href="/wiki/#/doc/gallery-1">妙妙图集</a></li>
+						<li><a href="/wiki/#/doc/world-map">大地巡游</a></li>
+						<li><a href="/wiki/#/doc/immersive-vehicles">车/机祸启示录</a></li>
+					</ul>
+				</nav>
+			</div>
+		</header>
+
+		<!-- 通栏主视觉（点击跳转简介页） -->
+		<a class="hero" href="/wiki/#/doc/intro" aria-label="前往简介页">
+			<div class="hero-caption">
+				<div class="container">
+					<h1>HappyDays轨道交通服务器</h1>
+					<p>发展城市 · 轨道交通 · 铁路建设</p>
+				</div>
+			</div>
+		</a>
+
+		<main class="container">
+
+			<!-- 新手教程 -->
+			<section class="section">
+				<div class="section-header">
+					<h2 class="section-title">新手教程</h2>
+					<a href="/wiki/#/doc/before-joining" class="section-more">浏览更多 →</a>
+				</div>
+				<div class="card-grid">
+					<a class="card" href="/wiki/#/doc/before-joining">
+						<div class="card-media"></div>
+						<div class="card-body">
+							<h3>进入游戏前</h3>
+							<p class="meta">配置：推荐使用强劲的电脑、笔</p>
+						</div>
+					</a>
+					<a class="card" href="/wiki/#/doc/before-joining">
+						<div class="card-media"></div>
+						<div class="card-body">
+							<h3>初来乍到</h3>
+							<p class="meta">最基本的：逃出出生点！！！（bushi）</p>
+						</div>
+					</a>
+					<a class="card" href="/wiki/#/doc/before-joining">
+						<div class="card-media"></div>
+						<div class="card-body">
+							<h3>商店插件</h3>
+							<p class="meta">本服务器使用QuickShop插件，如</p>
+						</div>
+					</a>
+				</div>
+			</section>
+
+			<!-- 进阶教程 -->
+			<section class="section">
+				<div class="section-header">
+					<h2 class="section-title">进阶教程</h2>
+					<a href="/wiki/#/doc/resource-world-nether" class="section-more">浏览更多 →</a>
+				</div>
+				<div class="card-grid">
+					<a class="card" href="/wiki/#/doc/resource-world-nether">
+						<div class="card-media"></div>
+						<div class="card-body">
+							<h3>资源世界/下界</h3>
+							<p class="meta">使用维度模组创建的维度，所以：</p>
+						</div>
+					</a>
+					<a class="card" href="/wiki/#/doc/resource-world-nether">
+						<div class="card-media"></div>
+						<div class="card-body">
+							<h3>森罗物语：厨房</h3>
+							<p class="meta">做饭是一门高深的艺术</p>
+						</div>
+					</a>
+					<a class="card" href="/wiki/#/doc/resource-world-nether">
+						<div class="card-media"></div>
+						<div class="card-body">
+							<h3>森罗物语：酒馆</h3>
+							<p class="meta">酿酒需要大把光阴</p>
+						</div>
+					</a>
+				</div>
+			</section>
+
+			<!-- 在线地图 -->
+			<section class="section">
+				<div class="section-header">
+					<h2 class="section-title">在线地图</h2>
+				</div>
+				<div class="map-entry">
+					<a href="http://n3-22.yxsjmc.cn:20675" target="_blank" rel="noopener">点击进入在线地图 →</a>
+				</div>
+			</section>
+
+		</main>
+
+		<footer class="site-footer">
+			<div class="container footer-grid">
+				<div>HAPPYDAYS非官方文档 · 版权所有</div>
+				<div>最后更新日期：2026-10-26</div>
+			</div>
+		</footer>
+	</body>
+</html>

@@ -10,7 +10,7 @@
 
 ## 快速预览
 
-推荐直接启动服务，阅读和编辑都使用同一个 `/wiki/` 入口：
+推荐直接启动服务。访问网站根地址会进入首页 `/home`，知识库仍然使用 `/wiki/`：
 
 ```bash
 python server.py
@@ -19,10 +19,12 @@ python server.py
 然后访问：
 
 ```text
-http://127.0.0.1:8000/wiki/
+http://127.0.0.1:8000/          -> 自动跳转 /home
+http://127.0.0.1:8000/home      -> 首页
+http://127.0.0.1:8000/wiki/     -> 非官方文档
 ```
 
-如果只需要静态预览，必须把整个项目部署到 `/wiki/` 路径下，而不是直接打开根目录或 `index.html`。例如在项目父目录创建一个 `wiki` 子目录指向本项目，再从父目录启动 `python -m http.server 8080`，访问 `http://localhost:8080/wiki/`。
+如果只需要静态预览，必须把首页映射到 `/home`，并把整个项目部署到 `/wiki/` 路径下，而不是直接打开根目录或 `index.html`。例如在项目父目录创建一个 `wiki` 子目录指向本项目，再从父目录启动 `python -m http.server 8080`；首页需要单独通过反向代理或 rewrite 把 `/home` 指向 `home.html`。
 
 如需在网页中编辑文章和添加主题，请运行编辑服务：
 
@@ -44,6 +46,7 @@ python server.py
 
 默认地址：
 
+- 首页：`http://127.0.0.1:8000/home`
 - 阅读站点：`http://127.0.0.1:8000/wiki/`
 - 内容管理：`http://127.0.0.1:8000/wiki/editor.html`
 
@@ -436,6 +439,7 @@ BGM.json
 
 ```text
 .
+├─ home.html             # 网站首页，映射到 /home
 ├─ index.html            # 页面骨架、图标 sprite、阅读器 UI
 ├─ editor.html           # 本地内容管理界面
 ├─ build.py              # 从 article/ 生成 assets/data.js
@@ -786,25 +790,42 @@ python build.py
 
 ## 部署
 
-站点的正式入口是 `/wiki/`。`server.py` 会自动把 `/`、`/wiki`、`/index.html` 重定向到 `/wiki/`，并在内部把 `/wiki/...` 映射到项目文件。
+网站入口分为两层：`/home` 是首页，`/wiki/` 是非官方文档。`server.py` 会自动把 `/`、`/index.html`、`/home.html`、`/home/` 重定向到 `/home`，把 `/wiki` 重定向到 `/wiki/`，并在内部把 `/wiki/...` 映射到项目文件。
 
-这是一个运行时无框架依赖的静态项目。修改 `article/` 后先运行 `python build.py` 更新 `assets/data.js`，再把整个目录部署到 `/wiki/` 路径下。
+这是一个运行时无框架依赖的静态项目。修改 `article/` 后先运行 `python build.py` 更新 `assets/data.js`，再把整个目录部署到 `/wiki/` 路径下，同时把 `/home` 映射到根目录的 `home.html`。
 
-**GitHub Pages**：如果仓库名为 `wiki`，项目地址就是 `https://<user>.github.io/wiki/`，与入口路径一致；否则需要自定义域名或反向代理把 `/wiki/` 指到站点。
+**GitHub Pages**：如果仓库名为 `wiki`，项目地址就是 `https://<user>.github.io/wiki/`，与知识库入口路径一致；首页 `/home` 需要平台 rewrite 或反向代理支持。
 
-**Netlify / Vercel**：构建命令可设为 `python build.py`，发布目录为 `.`，并通过平台的 rewrite/redirect 功能把 `/wiki/*` 映射到站点文件。
+**Netlify / Vercel**：构建命令可设为 `python build.py`，发布目录为 `.`，并通过平台的 rewrite/redirect 功能把 `/wiki/*` 映射到站点文件、把 `/home` 映射到 `home.html`。
 
-**Nginx / Apache**：把站点目录映射到 `/wiki/`，例如 Nginx：
+**Nginx / Apache**：首页和知识库需要同时映射，例如 Nginx：
 
 ```nginx
-location = /wiki { return 302 /wiki/; }
+root /path/to/HappyDays-wiki;
+
+location = / {
+    return 302 /home;
+}
+
+location = /home {
+    try_files /home.html =404;
+}
+
+location = /home.html {
+    return 302 /home;
+}
+
+location = /wiki {
+    return 302 /wiki/;
+}
+
 location /wiki/ {
     alias /path/to/HappyDays-wiki/;
     index index.html;
 }
 ```
 
-由于使用 hash 路由，文章内部不需要额外的 `try_files` 规则；但 `/wiki/` 前缀必须保留。
+由于知识库使用 hash 路由，文章内部不需要额外的 `try_files` 规则；但 `/wiki/` 前缀必须保留。
 
 静态部署时不会包含可用的编辑 API，阅读页的「编辑」入口会自动隐藏；如需编辑，请在本地运行 `python server.py`。不要在公网静态服务器上直接部署 `server.py`。
 

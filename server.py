@@ -1681,9 +1681,16 @@ class EditorHandler(SimpleHTTPRequestHandler):
         self.send_header("Location", BASE_PATH + "/")
         self.end_headers()
 
+    def redirect_to_home(self) -> None:
+        self.send_response(302)
+        self.send_header("Location", "/home")
+        self.end_headers()
+
     def translate_path(self, path: str) -> str:
         parsed = urlparse(path)
         stripped = strip_base_path(unquote(parsed.path))
+        if stripped in ("/home", "/home/", "/home.html"):
+            stripped = "/home.html"
         if parsed.query:
             stripped += "?" + parsed.query
         return super().translate_path(stripped)
@@ -1728,7 +1735,10 @@ class EditorHandler(SimpleHTTPRequestHandler):
 
     def do_GET(self) -> None:
         request_path = unquote(urlparse(self.path).path)
-        if request_path in ("/", "/index.html") or request_path == BASE_PATH:
+        if request_path in ("/", "/index.html", "/home.html", "/home/"):
+            self.redirect_to_home()
+            return
+        if request_path == BASE_PATH:
             self.redirect_to_base()
             return
         path = strip_base_path(request_path)
@@ -1903,6 +1913,7 @@ def main() -> int:
     except OSError as exc:
         print(f"无法启动服务：{exc}", file=sys.stderr, flush=True)
         return 1
+    print(f"HappyDays Wiki 首页：http://{args.host}:{args.port}/home", flush=True)
     print(f"HappyDays Wiki 编辑器已启动：http://{args.host}:{args.port}/wiki/editor.html", flush=True)
     print(f"阅读站点：http://{args.host}:{args.port}/wiki/", flush=True)
     print("按 Ctrl+C 停止。", flush=True)
