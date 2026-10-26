@@ -9,8 +9,8 @@
     "domain": "114.55.99.2:8000"
   },
   "topicCount": 9,
-  "articleCount": 31,
-  "lastUpdated": "2026-10-25",
+  "articleCount": 32,
+  "lastUpdated": "2026-10-26",
   "topics": [
     {
       "id": "intro",
@@ -19,7 +19,7 @@
       "order": 1,
       "description": "HappyDays 服务器与知识库概览。",
       "emoji": "🚇",
-      "articleCount": 1,
+      "articleCount": 2,
       "parentId": null
     },
     {
@@ -505,6 +505,19 @@
       "tags": [],
       "file": "history/godman/666.md",
       "source": "/wiki/#/doc/666"
+    },
+    {
+      "slug": "ok",
+      "order": 33,
+      "topic": "intro",
+      "title": "OK",
+      "description": "OK：多次破坏服务器",
+      "emoji": "📄",
+      "updated": "2026-10-26",
+      "readingTime": 5,
+      "tags": [],
+      "file": "intro/ok.md",
+      "source": "/wiki/#/doc/ok"
     }
   ]
 }

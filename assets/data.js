@@ -13,7 +13,7 @@ window.HAPPYDAYS_WIKI = (function () {
       description: "HappyDays 服务器与知识库概览。",
       parentId: null,
       order: 1,
-      docs: ["intro"]
+      docs: ["intro", "ok"]
     },
     {
       id: "beginner",
@@ -753,11 +753,22 @@ window.HAPPYDAYS_WIKI = (function () {
       signatures: [],
       content: `<h3>此人掏走了钻石信标，被土豆审判后ban IP</h3>
 <p><em>由于群内消息已被自动删除，而编者的记忆力与鱼相当，所以只记得上面了</em></p>`
+    },
+    "ok": {
+      title: "OK",
+      emoji: "📄",
+      category: "intro",
+      excerpt: "OK：多次破坏服务器",
+      updated: "2026-10-26",
+      reading: 5,
+      tags: [],
+      signatures: [{"author": "233", "at": "2026-10-26T22:28:21+08:00", "action": "create", "title": "OK", "topic": "简介"}],
+      content: `<h2>OK：多次破坏服务器，与南宁的dfdf私下交易(10rmb)，盗取他人账号。曾占据南通和秦皇岛，疯狂挖取主世界钻石。</h2>`
     }
   };
 
   var allIds = [
-    "intro", "before-joining", "first-arrival", "shop-plugin", "build-town", "about-nations", "first-money", "resource-world-nether", "senluo-kitchen", "senluo-tavern", "money-making-guide", "lottery", "immersive-vehicles", "town-resources", "cheating-response", "behavior-chat", "world-map", "matopiraphai", "233-2233", "zzx", "northeast-economic-alliance", "harbin-chronicle", "rhodes-island", "freedom-union", "dprk", "qwertyuiop", "alex", "gallery-1", "gallery-2", "1", "666"
+    "intro", "before-joining", "first-arrival", "shop-plugin", "build-town", "about-nations", "first-money", "resource-world-nether", "senluo-kitchen", "senluo-tavern", "money-making-guide", "lottery", "immersive-vehicles", "town-resources", "cheating-response", "behavior-chat", "world-map", "matopiraphai", "233-2233", "zzx", "northeast-economic-alliance", "harbin-chronicle", "rhodes-island", "freedom-union", "dprk", "qwertyuiop", "alex", "gallery-1", "gallery-2", "1", "666", "ok"
   ];
 
   return {
