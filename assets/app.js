@@ -411,8 +411,21 @@
     }
   }
 
+  function rotatableTitleCount(items) {
+    var seen = {};
+    items.forEach(function (item) {
+      seen[item.text] = true;
+    });
+    return Object.keys(seen).length;
+  }
+
   function startTitleRotation() {
-    if (titleRollState.timer || titleRollState.paused || titleRollState.items.length < 2) {
+    if (
+      titleRollState.timer ||
+      titleRollState.paused ||
+      titleRollState.items.length < 2 ||
+      rotatableTitleCount(titleRollState.items) < 2
+    ) {
       return;
     }
     if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
