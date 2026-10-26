@@ -49,6 +49,20 @@ python server.py
 
 编辑服务运行时，阅读页顶栏会出现「编辑」入口。每次启动 `server.py` 都会先自动运行 `build.py`；如果构建失败，服务不会启动并会输出具体错误。
 
+`python server.py` 是前台进程，启动后不会返回命令提示符，这是正常现象；按 `Ctrl+C` 停止。默认只监听 `127.0.0.1`，如果要从其他机器访问：
+
+```bash
+python server.py --host 0.0.0.0 --port 8000
+```
+
+`server.sh -run` 会后台启动，并在启动前尝试 pull。启动 pull 最长等待 15 秒，超时或失败会记录警告但不会阻止服务启动。详细原因可查看：
+
+```bash
+./server.sh -logs
+tail -n 100 logs/sync.log
+```
+
+
 ### 服务器脚本
 
 Linux 服务器可以使用根目录的 `server.sh` 管理进程：

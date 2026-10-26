@@ -60,8 +60,14 @@ sync_pull_startup() {
   if [ ! -d "$ROOT/.git" ]; then
     return 0
   fi
-  if ! bash "$SYNC_SCRIPT" -pull startup >/dev/null 2>&1; then
-    printf 'warning: startup git pull failed; see logs/sync.log\n' >>"$LOG_FILE"
+  local status=0
+  if command -v timeout >/dev/null 2>&1; then
+    timeout 15 bash "$SYNC_SCRIPT" -pull startup >/dev/null 2>&1 || status=$?
+  else
+    bash "$SYNC_SCRIPT" -pull startup >/dev/null 2>&1 || status=$?
+  fi
+  if [ "$status" -ne 0 ]; then
+    printf 'warning: startup git pull failed or timed out; see logs/sync.log\n' >>"$LOG_FILE"
   fi
 }
 
@@ -69,8 +75,14 @@ sync_push_stop() {
   if [ ! -d "$ROOT/.git" ]; then
     return 0
   fi
-  if ! bash "$SYNC_SCRIPT" -push stop >/dev/null 2>&1; then
-    printf 'warning: shutdown git push failed; see logs/sync.log\n' >>"$LOG_FILE"
+  local status=0
+  if command -v timeout >/dev/null 2>&1; then
+    timeout 40 bash "$SYNC_SCRIPT" -push stop >/dev/null 2>&1 || status=$?
+  else
+    bash "$SYNC_SCRIPT" -push stop >/dev/null 2>&1 || status=$?
+  fi
+  if [ "$status" -ne 0 ]; then
+    printf 'warning: shutdown git push failed or timed out; see logs/sync.log\n' >>"$LOG_FILE"
   fi
 }
 

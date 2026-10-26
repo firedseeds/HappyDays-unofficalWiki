@@ -27,9 +27,10 @@ if ($Mode -eq "Loop") {
 if (-not $env:GIT_SSH_COMMAND -and $env:OS -eq "Windows_NT") {
     $ssh = Join-Path $env:WINDIR "System32\OpenSSH\ssh.exe"
     if (Test-Path $ssh) {
-        $env:GIT_SSH_COMMAND = "`"$ssh`" -o StrictHostKeyChecking=accept-new"
+        $env:GIT_SSH_COMMAND = "`"$ssh`" -o BatchMode=yes -o ConnectTimeout=8 -o StrictHostKeyChecking=accept-new"
     }
 }
+$env:GIT_TERMINAL_PROMPT = "0"
 
 function Write-SyncLog([string]$Message) {
     $stamp = Get-Date -Format "yyyy-MM-ddTHH:mm:ssK"

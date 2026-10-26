@@ -4,7 +4,7 @@ set -u
 ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 LOG_DIR="$ROOT/logs"
 LOG_FILE="${SYNC_LOG_FILE:-$LOG_DIR/sync.log}"
-SYNC_SSH_COMMAND="${SYNC_SSH_COMMAND:-ssh}"
+SYNC_SSH_COMMAND="${SYNC_SSH_COMMAND:-ssh -o BatchMode=yes -o ConnectTimeout=8}"
 SYNC_TIMEZONE="${SYNC_TIMEZONE:-Asia/Shanghai}"
 
 mkdir -p "$LOG_DIR"
@@ -21,7 +21,13 @@ git_sync() {
     return 0
   fi
   log "git $label start"
-  GIT_SSH_COMMAND="$SYNC_SSH_COMMAND" git -C "$ROOT" "$@" >>"$LOG_FILE" 2>&1
+  if command -v timeout >/dev/null 2>&1; then
+    timeout 35 env GIT_TERMINAL_PROMPT=0 GIT_SSH_COMMAND="$SYNC_SSH_COMMAND" \
+      git -C "$ROOT" "$@" >>"$LOG_FILE" 2>&1
+  else
+    env GIT_TERMINAL_PROMPT=0 GIT_SSH_COMMAND="$SYNC_SSH_COMMAND" \
+      git -C "$ROOT" "$@" >>"$LOG_FILE" 2>&1
+  fi
   local code=$?
   if [ "$code" -eq 0 ]; then
     log "git $label success"
