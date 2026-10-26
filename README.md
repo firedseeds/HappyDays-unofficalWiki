@@ -256,6 +256,9 @@ python server.py --host 127.0.0.1 --port 8765
 | POST | `/api/articles/<slug>/comments` | 发表评论，必须传 `author` 与 `body` |
 | POST | `/api/articles/<slug>/move` | 在当前主题内上移或下移文章，传 `direction` 与 `author` |
 | POST | `/api/bgm` | 上传 MP3/WAV 背景音乐，查询参数 `title`、`weight`、`filename` |
+| GET | `/api/home` | 读取首页图片配置 |
+| PUT | `/api/home` | 保存首页图片权重和轮换间隔 |
+| POST | `/api/home/images` | 上传首页 PNG/JPG 图片，查询参数 `filename`、`weight` |
 | POST | `/api/articles` | 新建文章，必须传 `author` |
 | GET | `/api/titles` | 读取页眉标题配置 |
 | PUT | `/api/titles` | 保存页眉标题与权重 |
@@ -312,6 +315,37 @@ python server.py --host 127.0.0.1 --port 8765
 - 纯静态部署没有历史按钮；版本历史依赖 `server.py`
 
 载入旧版本只替换编辑内容，不会立即保存；确认后仍需点击「保存并构建」。
+
+### 首页图片
+
+首页 `/home` 的主视觉上覆盖一张可轮换图片：
+
+- 图片文件保存在 `home/`
+- 配置保存在 `home.json`
+- 无图片时显示 `NO IMAGE`
+- 图片右下方有「编辑图片」按钮，后端开启时可见
+- 支持上传 `.png`、`.jpg`、`.jpeg`，单文件最大 20MB
+- 图片按权重随机轮换，并排除当前图片
+- 只有一张图片时不启动轮换
+- 主视觉仍链接到简介页
+- 图片下方提供「更喜欢wiki式的操作方式？跳转至传统页面」链接到 `/wiki/`
+
+`home.json` 格式：
+
+```json
+{
+  "version": 1,
+  "intervalSeconds": 5,
+  "images": [
+    {
+      "file": "example.png",
+      "weight": 1
+    }
+  ]
+}
+```
+
+点击「编辑图片」可以修改轮换间隔、各图片权重，并上传新图片。保存和上传会创建本地 Git commit，不会 push。
 
 ### 背景音乐
 
@@ -440,6 +474,8 @@ BGM.json
 ```text
 .
 ├─ home.html             # 网站首页，映射到 /home
+├─ home.json             # 首页图片文件名、权重与轮换间隔
+├─ home/                 # 首页轮换图片
 ├─ index.html            # 页面骨架、图标 sprite、阅读器 UI
 ├─ editor.html           # 本地内容管理界面
 ├─ build.py              # 从 article/ 生成 assets/data.js
@@ -461,6 +497,8 @@ BGM.json
 │  ├─ data.js            # 由 build.py 生成的文章数据（请勿直接编辑）
 │  ├─ app.js             # 路由、搜索、目录、主题与交互
 │  ├─ editor.js          # 内容管理界面逻辑
+│  ├─ home.css           # 首页图片、编辑弹窗与入口链接样式
+│  ├─ home.js            # 首页图片轮换、上传与配置编辑
 │  └─ image/             # 迁移文章的本地图片
 ├─ article/
 │  ├─ article.json       # 9 个主题、29 篇文章的清单
@@ -813,6 +851,10 @@ location = /home {
 
 location = /home.html {
     return 302 /home;
+}
+
+location /home/ {
+    alias /path/to/HappyDays-wiki/home/;
 }
 
 location = /wiki {

@@ -42,6 +42,8 @@ COMMENT_DIR = ROOT / "comment"
 COMMENT_PATH = COMMENT_DIR / "comment.json"
 BGM_DIR = ROOT / "BGM"
 BGM_PATH = ROOT / "BGM.json"
+HOME_DIR = ROOT / "home"
+HOME_PATH = ROOT / "home.json"
 TITLE_PATH = ROOT / "title.json"
 IMAGE_DIR = ROOT / "assets" / "image"
 DATA_PATH = ROOT / "assets" / "data.js"
@@ -49,6 +51,7 @@ BUILD_SCRIPT = ROOT / "build.py"
 BASE_PATH = "/wiki"
 MAX_REQUEST_BYTES = 2 * 1024 * 1024
 MAX_BGM_BYTES = 50 * 1024 * 1024
+MAX_HOME_IMAGE_BYTES = 20 * 1024 * 1024
 MAX_BODY_CHARS = 800_000
 SLUG_RE = re.compile(r"^[a-z0-9][a-z0-9-]{0,63}$")
 TITLE_COLOR_RE = re.compile(r"^#[0-9a-fA-F]{6}$")
@@ -293,6 +296,120 @@ def add_bgm_track(payload: dict, audio: bytes) -> dict:
         f"BGM 上传：{title}（文件={filename}，本地提交={'是' if commit.get('committed') else '否'}）"
     )
     return {"ok": True, "track": track, "tracks": data["tracks"], "commit": commit}
+
+
+def read_home_config() -> dict:
+    if not HOME_PATH.is_file():
+        return {"version": 1, "intervalSeconds": 5, "images": []}
+    try:
+        data = json.loads(HOME_PATH.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise ApiError(500, f"无法读取 home.json: {exc}")
+    return validate_home_config(data)
+
+
+def validate_home_config(data: dict) -> dict:
+    if not isinstance(data, dict):
+        raise ApiError(400, "home.json 必须是 JSON 对象")
+    raw_interval = data.get("intervalSeconds", 5)
+    if isinstance(raw_interval, bool) or not isinstance(raw_interval, (int, float)):
+        raise ApiError(400, "轮换间隔必须是数字")
+    interval = float(raw_interval)
+    if not math.isfinite(interval) or interval < 3 or interval > 3600:
+        raise ApiError(400, "轮换间隔必须在 3–3600 秒之间")
+    if interval.is_integer():
+        interval = int(interval)
+
+    raw_images = data.get("images", [])
+    if not isinstance(raw_images, list):
+        raise ApiError(400, "images 必须是数组")
+    images = []
+    seen = set()
+    for item in raw_images:
+        if not isinstance(item, dict):
+            raise ApiError(400, "图片配置必须是对象")
+        filename = str(item.get("file") or "").strip()
+        if not filename or "/" in filename or "\\" in filename or filename in (".", ".."):
+            raise ApiError(400, "图片文件名无效")
+        if Path(filename).suffix.lower() not in (".png", ".jpg", ".jpeg"):
+            raise ApiError(400, "首页图片只支持 .png、.jpg、.jpeg")
+        if filename in seen:
+            raise ApiError(400, "首页图片文件名不能重复")
+        seen.add(filename)
+        target = HOME_DIR / filename
+        if not target.is_file():
+            raise ApiError(400, f"首页图片不存在: {filename}")
+        raw_weight = item.get("weight")
+        if isinstance(raw_weight, bool) or not isinstance(raw_weight, (int, float)):
+            raise ApiError(400, "图片权重必须是数字")
+        weight = float(raw_weight)
+        if not math.isfinite(weight) or weight <= 0 or weight > 1_000_000:
+            raise ApiError(400, "图片权重必须大于 0 且不超过 1000000")
+        if weight.is_integer():
+            weight = int(weight)
+        images.append({"file": filename, "weight": weight})
+    return {"version": 1, "intervalSeconds": interval, "images": images}
+
+
+def write_home_config(data: dict) -> None:
+    atomic_write(
+        HOME_PATH,
+        json.dumps(data, ensure_ascii=False, indent=2) + "\n",
+    )
+
+
+def update_home_config(payload: dict) -> dict:
+    with LOCK:
+        data = validate_home_config(payload)
+        write_home_config(data)
+        auto_commit([HOME_PATH], "docs: 更新首页图片配置")
+        return {"ok": True, "config": data}
+
+
+def add_home_image(payload: dict, image: bytes) -> dict:
+    with LOCK:
+        filename = str(payload.get("filename") or "").strip()
+        if not filename or "/" in filename or "\\" in filename or filename in (".", ".."):
+            raise ApiError(400, "图片文件名无效")
+        if len(filename) > 160:
+            raise ApiError(400, "图片文件名不能超过 160 个字符")
+        if any(ord(character) < 32 for character in filename):
+            raise ApiError(400, "图片文件名包含非法字符")
+        if Path(filename).suffix.lower() not in (".png", ".jpg", ".jpeg"):
+            raise ApiError(400, "只支持 .png、.jpg、.jpeg 图片")
+        if not image:
+            raise ApiError(400, "图片文件不能为空")
+        raw_weight = payload.get("weight", 1)
+        if isinstance(raw_weight, bool) or not isinstance(raw_weight, (int, float)):
+            raise ApiError(400, "图片权重必须是数字")
+        weight = float(raw_weight)
+        if not math.isfinite(weight) or weight <= 0 or weight > 1_000_000:
+            raise ApiError(400, "图片权重必须大于 0 且不超过 1000000")
+        if weight.is_integer():
+            weight = int(weight)
+
+        HOME_DIR.mkdir(parents=True, exist_ok=True)
+        target = HOME_DIR / filename
+        if target.exists():
+            raise ApiError(409, "home 目录中已存在同名图片")
+        image_item = {"file": filename, "weight": weight}
+        try:
+            atomic_write_bytes(target, image)
+            data = read_home_config()
+            data["images"].append(image_item)
+            write_home_config(data)
+        except Exception:
+            if target.exists():
+                target.unlink()
+            raise
+        commit = auto_commit(
+            [target, HOME_PATH],
+            f"docs: 添加首页图片「{filename}」",
+        )
+        log_change(
+            f"首页图片上传：{filename}（本地提交={'是' if commit.get('committed') else '否'}）"
+        )
+        return {"ok": True, "image": image_item, "config": data, "commit": commit}
 
 
 def read_history_config() -> dict:
@@ -1754,6 +1871,9 @@ class EditorHandler(SimpleHTTPRequestHandler):
                 if path == "/api/titles":
                     self.send_json(200, read_title_config())
                     return
+                if path == "/api/home":
+                    self.send_json(200, read_home_config())
+                    return
                 history_match = re.fullmatch(r"/api/articles/([a-z0-9-]+)/history", path)
                 if history_match:
                     record = require_history_record(history_match.group(1))
@@ -1791,6 +1911,9 @@ class EditorHandler(SimpleHTTPRequestHandler):
             if path == "/api/titles":
                 self.send_json(200, update_titles(payload))
                 return
+            if path == "/api/home":
+                self.send_json(200, update_home_config(payload))
+                return
             history_match = re.fullmatch(r"/api/articles/([a-z0-9-]+)/history/earliest", path)
             if history_match:
                 self.send_json(
@@ -1814,6 +1937,30 @@ class EditorHandler(SimpleHTTPRequestHandler):
     def do_POST(self) -> None:
         path = strip_base_path(unquote(urlparse(self.path).path))
         try:
+            if path == "/api/home/images":
+                try:
+                    length = int(self.headers.get("Content-Length", "0"))
+                except ValueError:
+                    raise ApiError(400, "Content-Length 无效")
+                if length <= 0:
+                    raise ApiError(400, "图片文件不能为空")
+                if length > MAX_HOME_IMAGE_BYTES:
+                    raise ApiError(413, "图片文件不能超过 20MB")
+                image = self.rfile.read(length)
+                if len(image) != length:
+                    raise ApiError(400, "图片文件上传不完整")
+                query = parse_qs(urlparse(self.path).query)
+                weight_value = query.get("weight", ["1"])[0]
+                try:
+                    weight = float(weight_value)
+                except (TypeError, ValueError):
+                    weight = weight_value
+                payload = {
+                    "filename": query.get("filename", [""])[0],
+                    "weight": weight,
+                }
+                self.send_json(200, add_home_image(payload, image))
+                return
             if path == "/api/bgm":
                 try:
                     length = int(self.headers.get("Content-Length", "0"))

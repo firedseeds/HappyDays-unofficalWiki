@@ -306,6 +306,7 @@
 				}
 			}
 		</style>
+		<link rel="stylesheet" href="assets/home.css">
 	</head>
 	<body>
 
@@ -330,14 +331,24 @@
 		</header>
 
 		<!-- 通栏主视觉（点击跳转简介页） -->
-		<a class="hero" href="/wiki/#/doc/intro" aria-label="前往简介页">
-			<div class="hero-caption">
-				<div class="container">
-					<h1>HappyDays轨道交通服务器</h1>
-					<p>发展城市 · 轨道交通 · 铁路建设</p>
-				</div>
+		<section class="hero-section">
+			<div class="hero-frame">
+				<a class="hero" href="/wiki/#/doc/intro" aria-label="前往简介页">
+					<div class="hero-media" aria-hidden="true">
+						<img id="homeHeroImage" alt="" hidden>
+						<span class="hero-placeholder" id="homeHeroPlaceholder">NO IMAGE</span>
+					</div>
+					<div class="hero-caption">
+						<div class="container">
+							<h1>HappyDays轨道交通服务器</h1>
+							<p>发展城市 · 轨道交通 · 铁路建设</p>
+						</div>
+					</div>
+				</a>
+				<button class="hero-edit" id="homeImageEdit" type="button" aria-label="编辑首页图片" hidden>编辑图片</button>
 			</div>
-		</a>
+			<a class="wiki-switch" href="/wiki/">更喜欢wiki式的操作方式？跳转至传统页面</a>
+		</section>
 
 		<main class="container">
 
@@ -421,5 +432,46 @@
 				<div>最后更新日期：2026-10-26</div>
 			</div>
 		</footer>
+
+		<dialog class="home-image-dialog" id="homeImageDialog" aria-labelledby="homeImageDialogTitle">
+			<form class="home-image-form" id="homeImageForm">
+				<header class="home-image-head">
+					<div>
+						<p class="home-image-eyebrow">Home visual</p>
+						<h2 id="homeImageDialogTitle">编辑首页图片</h2>
+					</div>
+					<button class="home-image-close" id="homeImageCancelX" type="button" aria-label="关闭">×</button>
+				</header>
+				<div class="home-image-body">
+					<label class="home-image-field">
+						<span>轮换间隔（秒）</span>
+						<input id="homeImageInterval" type="number" min="3" max="3600" step="1" value="5" required>
+					</label>
+					<div class="home-image-list" id="homeImageList"></div>
+					<fieldset class="home-image-upload">
+						<legend>上传新图片</legend>
+						<label class="home-image-field">
+							<span>图片文件</span>
+							<input id="homeImageFile" type="file" accept=".png,.jpg,.jpeg,image/png,image/jpeg">
+							<small>仅支持 .png、.jpg、.jpeg，最大 20MB</small>
+						</label>
+						<div class="home-image-upload-row">
+							<label class="home-image-field">
+								<span>权重</span>
+								<input id="homeImageUploadWeight" type="number" min="0.1" max="1000000" step="0.1" value="1" required>
+							</label>
+							<button class="home-image-secondary" id="homeImageUpload" type="button">上传图片</button>
+						</div>
+					</fieldset>
+					<p class="home-image-status" id="homeImageStatus"></p>
+				</div>
+				<footer class="home-image-actions">
+					<button class="home-image-secondary" id="homeImageCancel" type="button">取消</button>
+					<button class="home-image-primary" id="homeImageSubmit" type="submit">保存</button>
+				</footer>
+			</form>
+		</dialog>
+
+		<script src="assets/home.js" defer></script>
 	</body>
 </html>
