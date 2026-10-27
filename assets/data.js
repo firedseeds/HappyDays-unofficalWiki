@@ -311,7 +311,7 @@ window.HAPPYDAYS_WIKI = (function () {
       updated: "2026-10-25",
       reading: 1,
       tags: [],
-      signatures: [{"author": "smillfox", "at": "2026-10-27T21:51:48+08:00", "action": "update", "title": "森罗物语：厨房", "topic": "进阶教程"}],
+      signatures: [{"author": "smillfox", "at": "2026-10-27T21:51:48+08:00", "action": "update", "title": "森罗物语：厨房", "topic": "进阶教程"}, {"author": "smillfox", "at": "2026-10-27T22:16:13+08:00", "action": "update", "title": "森罗物语：厨房", "topic": "进阶教程"}],
       content: `<h2>引言</h2>
 <p>做饭是一门高深的艺术</p>
 <h2>一、食材的获取及储存</h2>
@@ -326,7 +326,7 @@ window.HAPPYDAYS_WIKI = (function () {
 <p>1.1.4使用工具加工(获取种子)</p>
 <p>将稻穗放入<strong>石磨</strong>即可得到稻米</p>
 <p>1.1.5种植与收获</p>
-<p>除了水稻外其他三种作物皆可在成熟后右键收获，水稻只能连根拔起</p>
+<p>除了水稻外其他三种作物皆可在成熟后右键收获，水稻只能连根拔起 （使用镰刀除外）</p>
 <p><strong>1.2肉类的获取/处理</strong></p>
 <p><strong>1.3杂项获取方法</strong></p>
 <h2>二、烹饪食物</h2>
