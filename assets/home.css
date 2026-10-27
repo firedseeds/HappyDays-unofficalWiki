@@ -33,22 +33,41 @@
 }
 
 .home-theme-toggle {
+  display: inline-flex;
+  width: 32px;
   height: 32px;
   margin-left: 18px;
-  padding: 0 10px;
+  padding: 0;
+  align-items: center;
+  justify-content: center;
   border: 1px solid var(--color-border);
   border-radius: 6px;
   background: transparent;
   color: var(--color-muted);
   font: inherit;
-  font-size: 0.78rem;
-  letter-spacing: 0.05em;
   cursor: pointer;
 }
 
 .home-theme-toggle:hover {
   border-color: var(--color-text);
   color: var(--color-text);
+}
+
+.home-theme-icon {
+  width: 17px;
+  height: 17px;
+}
+
+.home-theme-toggle .icon-sun {
+  display: none;
+}
+
+[data-theme="dark"] .home-theme-toggle .icon-sun {
+  display: block;
+}
+
+[data-theme="dark"] .home-theme-toggle .icon-moon {
+  display: none;
 }
 
 .card {

@@ -15,10 +15,6 @@
   function applyTheme(theme) {
     document.documentElement.setAttribute("data-theme", theme);
     document.querySelectorAll(".js-theme-toggle").forEach(function (button) {
-      var text = button.querySelector(".theme-toggle-text");
-      if (text) {
-        text.textContent = theme === "dark" ? "日间" : "夜间";
-      }
       button.setAttribute("aria-label", theme === "dark" ? "切换到日间模式" : "切换到夜间模式");
       button.setAttribute("aria-pressed", theme === "dark" ? "true" : "false");
     });
