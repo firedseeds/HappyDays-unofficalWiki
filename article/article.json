@@ -10,7 +10,7 @@
   },
   "topicCount": 9,
   "articleCount": 32,
-  "lastUpdated": "2026-10-27",
+  "lastUpdated": "2026-10-28",
   "topics": [
     {
       "id": "intro",
@@ -251,11 +251,14 @@
       "order": 12,
       "topic": "advanced",
       "title": "彩票",
-      "description": "此文档在语雀中暂无正文。",
+      "description": "赚钱的歪门邪道",
       "emoji": "🧭",
-      "updated": "2026-10-25",
+      "updated": "2026-10-28",
       "readingTime": 1,
-      "tags": [],
+      "tags": [
+        "教程",
+        "赚钱"
+      ],
       "file": "advanced/lottery.md",
       "source": "/wiki/#/doc/lottery"
     },

@@ -387,14 +387,21 @@ window.HAPPYDAYS_WIKI = (function () {
       title: "彩票",
       emoji: "🧭",
       category: "advanced",
-      excerpt: "此文档在语雀中暂无正文。",
+      excerpt: "赚钱的歪门邪道",
       icon: "/icon.png",
-      updated: "2026-10-25",
+      updated: "2026-10-28",
       reading: 1,
-      tags: [],
-      signatures: [{"author": "233", "at": "2026-10-25T21:22:00+08:00", "action": "update", "title": "彩票", "topic": "进阶教程"}],
-      content: `<p><strong>输入：/lt</strong></p>
-<p><strong>查看详情</strong></p>`
+      tags: ["教程", "赚钱"],
+      signatures: [{"author": "233", "at": "2026-10-25T21:22:00+08:00", "action": "update", "title": "彩票", "topic": "进阶教程"}, {"author": "fish", "at": "2026-10-28T00:36:13+08:00", "action": "update", "title": "彩票", "topic": "进阶教程"}],
+      content: `<blockquote>
+<p>彩票系统</p>
+</blockquote>
+<p><strong>老实赚钱，很枯燥吧——fish</strong></p>
+<ul><li>使用方式为指令输入</li></ul>
+<p>指令格式：/lt &lt;下注量&gt; &lt;5个随机数字&gt;</p>
+<ol class="steps"><li>&lt;下注量&gt;填1-100随意</li><li>5个随机数字可填1-18，之间用空格隔开</li><li>5个随机数字也可以用random代替，会随机选择</li><li>一注15游戏币</li></ol>
+<p><strong>示例：</strong> /lt 100 6 4 9 13 15</p>
+<p>/lt 50 random</p>`
     },
     "immersive-vehicles": {
       title: "沉浸车辆",
