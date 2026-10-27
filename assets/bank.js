@@ -165,6 +165,9 @@
   document.title = topic.name + " · Bank · HappyDays轨道交通服务器";
   titleEl.textContent = topic.name;
   descriptionEl.textContent = topic.description || "";
+  document.querySelectorAll(".nav-links a").forEach(function (link) {
+    link.classList.toggle("active", link.getAttribute("href") === "/bank/" + topic.id);
+  });
   renderBreadcrumb(topic);
 
   var directDocs = docsFor(topic);
