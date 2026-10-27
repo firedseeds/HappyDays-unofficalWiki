@@ -1916,7 +1916,7 @@ class EditorHandler(SimpleHTTPRequestHandler):
             return
         if request_path == "/favicon.ico":
             self.send_response(302)
-            self.send_header("Location", "/icon.png")
+            self.send_header("Location", "/icon.png?v=2")
             self.end_headers()
             return
         if request_path == BASE_PATH:

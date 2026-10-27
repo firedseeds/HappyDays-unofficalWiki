@@ -888,7 +888,7 @@ location = / {
 }
 
 location = /favicon.ico {
-    return 302 /icon.png;
+    return 302 /icon.png?v=2;
 }
 
 location = /home {
