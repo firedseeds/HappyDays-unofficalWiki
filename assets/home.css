@@ -218,8 +218,15 @@
 }
 
 .hero-section .hero {
+  height: var(--hero-base-height, 65vh);
   margin-bottom: 0;
   transition: height 500ms var(--ease), max-height 500ms var(--ease);
+}
+
+@media (max-width: 900px) {
+  .hero-section .hero {
+    height: var(--hero-base-height, 48vh);
+  }
 }
 
 .site-header {
@@ -268,15 +275,16 @@ body.hero-focus .site-header {
 
 .hero-media img {
   position: absolute;
-  inset: 0;
+  top: 50%;
+  left: 50%;
   z-index: 0;
   display: block;
-  width: 100%;
-  height: 100%;
+  width: var(--hero-image-w, 100%);
+  height: var(--hero-image-h, 100%);
   object-fit: cover;
   opacity: 0;
-  transform: scale(1);
-  transition: opacity 450ms ease, transform 450ms ease;
+  transform: translate(-50%, -50%) scale(1);
+  transition: opacity 450ms ease, transform 450ms ease, height 500ms var(--ease);
 }
 
 .hero-media img.is-visible {
@@ -296,8 +304,9 @@ body.hero-focus .site-header {
   }
 
   .hero:hover .hero-media img {
+    height: var(--hero-hover-height, var(--hero-image-h));
     object-fit: contain;
-    transform: scale(1.04);
+    transform: translate(-50%, -50%) scale(1.04);
     background: #0b0f0d;
   }
 
@@ -643,7 +652,10 @@ body.hero-focus .site-header {
     transition: none;
   }
 
-  .hero:hover .hero-media img,
+  .hero:hover .hero-media img {
+    transform: translate(-50%, -50%);
+  }
+
   .card:hover .card-cover {
     transform: none;
   }

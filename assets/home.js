@@ -31,7 +31,11 @@
     backend: false,
     imageToken: 0,
     activeLayer: "primary",
-    imageSize: null
+    imageSize: null,
+    heroWidth: 0,
+    heroHeight: 0,
+    viewportHeight: 0,
+    heroLocked: false
   };
 
   function normalizeConfig(raw) {
@@ -58,14 +62,30 @@
     return "/home/" + encodeURIComponent(file);
   }
 
+  function lockHeroSize() {
+    if (state.heroLocked) {
+      return;
+    }
+    var rect = els.hero.getBoundingClientRect();
+    if (!rect.width || !rect.height) {
+      return;
+    }
+    state.heroWidth = rect.width;
+    state.heroHeight = rect.height;
+    state.viewportHeight = window.innerHeight;
+    els.hero.style.setProperty("--hero-base-height", Math.round(rect.height) + "px");
+    els.hero.style.setProperty("--hero-image-w", Math.round(rect.width) + "px");
+    els.hero.style.setProperty("--hero-image-h", Math.round(rect.height) + "px");
+    state.heroLocked = true;
+  }
+
   function updateHeroHoverHeight() {
-    if (!state.imageSize) {
+    if (!state.imageSize || !state.heroLocked) {
       els.hero.style.removeProperty("--hero-hover-height");
       return;
     }
-    var width = els.hero.getBoundingClientRect().width;
-    var ideal = width * (state.imageSize.height / state.imageSize.width);
-    var maxHeight = Math.max(320, window.innerHeight * 0.92);
+    var ideal = state.heroWidth * (state.imageSize.height / state.imageSize.width);
+    var maxHeight = Math.max(320, state.viewportHeight * 0.92);
     var height = Math.min(Math.max(ideal, 320), maxHeight);
     els.hero.style.setProperty("--hero-hover-height", Math.round(height) + "px");
   }
@@ -111,6 +131,7 @@
     state.current = null;
     state.activeLayer = "primary";
     state.imageSize = null;
+    state.heroLocked = false;
     [els.image, els.imageNext].forEach(function (layer) {
       layer.classList.remove("is-visible");
       layer.hidden = true;
@@ -118,6 +139,9 @@
     });
     els.hero.classList.remove("has-image");
     els.hero.style.removeProperty("--hero-hover-height");
+    els.hero.style.removeProperty("--hero-base-height");
+    els.hero.style.removeProperty("--hero-image-w");
+    els.hero.style.removeProperty("--hero-image-h");
     els.placeholder.hidden = false;
   }
 
@@ -144,6 +168,7 @@
         ? (state.activeLayer === "primary" ? secondary : primary)
         : primary;
 
+      lockHeroSize();
       target.hidden = false;
       target.src = loader.src;
       target.alt = image.file;
@@ -468,12 +493,6 @@
   }
 
   renderHomeSections();
-
-  var resizeTimer = null;
-  window.addEventListener("resize", function () {
-    window.clearTimeout(resizeTimer);
-    resizeTimer = window.setTimeout(updateHeroHoverHeight, 120);
-  });
 
   var siteHeader = document.querySelector(".site-header");
   if (siteHeader) {
