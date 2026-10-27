@@ -314,7 +314,7 @@ window.HAPPYDAYS_WIKI = (function () {
       updated: "2026-10-25",
       reading: 1,
       tags: [],
-      signatures: [],
+      signatures: [{"author": "smillfox", "at": "2026-10-27T21:51:48+08:00", "action": "update", "title": "森罗物语：厨房", "topic": "进阶教程"}],
       content: `<h2>引言</h2>
 <p>做饭是一门高深的艺术</p>
 <h2>一、食材的获取及储存</h2>
