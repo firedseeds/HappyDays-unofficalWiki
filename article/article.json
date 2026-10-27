@@ -9,7 +9,7 @@
     "domain": "114.55.99.2:8000"
   },
   "topicCount": 9,
-  "articleCount": 32,
+  "articleCount": 33,
   "lastUpdated": "2026-10-28",
   "topics": [
     {
@@ -70,7 +70,7 @@
       "parentId": "history",
       "order": 1,
       "emoji": "👤",
-      "articleCount": 4
+      "articleCount": 5
     },
     {
       "id": "nations",
@@ -523,6 +523,21 @@
       "tags": [],
       "file": "history/godman/666.md",
       "source": "/wiki/#/doc/666"
+    },
+    {
+      "slug": "fish-text",
+      "order": 34,
+      "topic": "people",
+      "title": "fish",
+      "description": "服务器孙笑川",
+      "emoji": "📄",
+      "updated": "2026-10-28",
+      "readingTime": 1,
+      "tags": [
+        "老资历"
+      ],
+      "file": "history/people/fish-text.md",
+      "source": "/wiki/#/doc/fish-text"
     }
   ]
 }

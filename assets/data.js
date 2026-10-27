@@ -53,7 +53,7 @@ window.HAPPYDAYS_WIKI = (function () {
       description: "服务器玩家与人物记录。",
       parentId: "history",
       order: 1,
-      docs: ["matopiraphai", "233-2233", "zzx", "1"]
+      docs: ["matopiraphai", "233-2233", "zzx", "1", "fish-text"]
     },
     {
       id: "nations",
@@ -874,11 +874,26 @@ window.HAPPYDAYS_WIKI = (function () {
       tags: [],
       signatures: [{"author": "smillfox", "at": "2026-10-27T22:37:10+08:00", "action": "update", "title": "666", "topic": "神人堂"}],
       content: `<p>在中国南方城市盗取他人信标基座内的矿物块，并声称自己偶然发现拾取</p>`
+    },
+    "fish-text": {
+      title: "fish",
+      emoji: "📄",
+      category: "people",
+      excerpt: "服务器孙笑川",
+      icon: "/icon.png",
+      updated: "2026-10-28",
+      reading: 1,
+      tags: ["老资历"],
+      signatures: [{"author": "fish", "at": "2026-10-28T01:10:05+08:00", "action": "create", "title": "fish", "topic": "人物志"}],
+      content: `<blockquote>
+<h2>介绍</h2>
+</blockquote>
+<p><strong>服务器知名人物，长时间活跃的老资历，热心善良，助人为乐，温柔和蔼，霸气侧漏，名震八方，<del>无恶不作，灼灼逼人，邪恶至极，孙笑川在世，止小儿夜啼</del></strong></p>`
     }
   };
 
   var allIds = [
-    "intro", "before-joining", "first-arrival", "shop-plugin", "build-town", "about-nations", "first-money", "resource-world-nether", "senluo-kitchen", "senluo-tavern", "money-making-guide", "lottery", "immersive-vehicles", "town-resources", "cheating-response", "behavior-chat", "world-map", "matopiraphai", "233-2233", "zzx", "northeast-economic-alliance", "harbin-chronicle", "rhodes-island", "freedom-union", "dprk", "ok", "qwertyuiop", "gallery-1", "gallery-2", "1", "alex", "666"
+    "intro", "before-joining", "first-arrival", "shop-plugin", "build-town", "about-nations", "first-money", "resource-world-nether", "senluo-kitchen", "senluo-tavern", "money-making-guide", "lottery", "immersive-vehicles", "town-resources", "cheating-response", "behavior-chat", "world-map", "matopiraphai", "233-2233", "zzx", "northeast-economic-alliance", "harbin-chronicle", "rhodes-island", "freedom-union", "dprk", "ok", "qwertyuiop", "gallery-1", "gallery-2", "1", "alex", "666", "fish-text"
   ];
 
   return {
