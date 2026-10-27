@@ -281,9 +281,9 @@ window.HAPPYDAYS_WIKI = (function () {
       updated: "2026-10-25",
       reading: 1,
       tags: [],
-      signatures: [{"author": "233", "at": "2026-10-25T21:19:25+08:00", "action": "update", "title": "第一桶金", "topic": "新手教程"}],
+      signatures: [{"author": "233", "at": "2026-10-25T21:19:25+08:00", "action": "update", "title": "第一桶金", "topic": "新手教程"}, {"author": "smillfox", "at": "2026-10-27T22:13:09+08:00", "action": "update", "title": "第一桶金", "topic": "新手教程"}],
       content: `<p>服务器主要的赚钱方式有以下几种类型：</p>
-<ol class="steps"><li>修路（注意：此选项后续<strong>可能会被废止</strong>，且用且珍惜）由管理员向账户打钱</li><li>通过卖农作物（如小麦，马铃薯等<strong>原版作物</strong>，森罗物语的菜系不会列入收购名单！）、成品矿物（金锭、钻石等）来获得游戏币，主要收购商城在<strong>南京</strong>、<strong>秦皇岛</strong>。</li><li>在城市建立<strong>初期</strong>，腐竹HAPPYAAAA会在各个城市设置初始简单商店，可以通过卖泥土、圆石、小麦等获得初始游戏币。</li><li>当然如果你进来时zzx在线的话，你也可以找zzx索要启动资金，一般一次给5000，要求是加入zzx所在国家，并在zzx换国家时跟随。</li><li>通过帮别人打工来获得游戏币（招工栏在<strong>南京</strong>）</li></ol>`
+<ol class="steps"><li>修路（注意：此选项后续<strong>可能会被废止</strong>，且用且珍惜）由管理员向账户打钱</li><li>通过卖农作物（如小麦，马铃薯等<strong>原版作物</strong>，森罗物语的菜系不会列入收购名单！）、成品矿物（金锭、钻石等）来获得游戏币，主要收购商城在<strong>南京</strong>、<strong>秦皇岛</strong>。</li><li>在城市建立<strong>初期</strong>，腐竹HAPPYAAAA会在各个城市设置初始简单商店，可以通过卖泥土、圆石、小麦等获得初始游戏币。</li><li>通过帮别人打工来获得游戏币（招工栏在<strong>南京</strong>）</li></ol>`
     },
     "resource-world-nether": {
       title: "资源世界/下界",
