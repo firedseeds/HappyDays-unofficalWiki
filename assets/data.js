@@ -752,7 +752,7 @@ window.HAPPYDAYS_WIKI = (function () {
       emoji: "📖",
       category: "nations",
       excerpt: "国家成员：233，zzx(已经叛逃)国家发展：233原...",
-      icon: "/icon.png",
+      icon: "/article/icon/dprk.png",
       updated: "2026-10-25",
       reading: 1,
       tags: [],
