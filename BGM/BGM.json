@@ -1,4 +1,10 @@
 {
   "version": 1,
-  "tracks": []
+  "tracks": [
+    {
+      "file": "削除-Lost Memory.mp3",
+      "title": "Lost Memory",
+      "weight": 1
+    }
+  ]
 }
