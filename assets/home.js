@@ -4,6 +4,7 @@
   var els = {
     hero: document.querySelector(".hero"),
     image: document.getElementById("homeHeroImage"),
+    imageNext: document.getElementById("homeHeroImageNext"),
     placeholder: document.getElementById("homeHeroPlaceholder"),
     edit: document.getElementById("homeImageEdit"),
     dialog: document.getElementById("homeImageDialog"),
@@ -28,7 +29,8 @@
     current: null,
     timer: null,
     backend: false,
-    imageToken: 0
+    imageToken: 0,
+    activeLayer: "primary"
   };
 
   function normalizeConfig(raw) {
@@ -94,10 +96,13 @@
   function showPlaceholder() {
     state.imageToken += 1;
     state.current = null;
+    state.activeLayer = "primary";
+    [els.image, els.imageNext].forEach(function (layer) {
+      layer.classList.remove("is-visible");
+      layer.hidden = true;
+      layer.removeAttribute("src");
+    });
     els.hero.classList.remove("has-image");
-    els.image.classList.remove("is-visible");
-    els.image.hidden = true;
-    els.image.removeAttribute("src");
     els.placeholder.hidden = false;
   }
 
@@ -115,13 +120,37 @@
       if (token !== state.imageToken) {
         return;
       }
+      var primary = els.image;
+      var secondary = els.imageNext;
+      var previous = state.current
+        ? (state.activeLayer === "primary" ? primary : secondary)
+        : null;
+      var target = state.current
+        ? (state.activeLayer === "primary" ? secondary : primary)
+        : primary;
+
+      target.hidden = false;
+      target.src = loader.src;
+      target.alt = image.file;
+      target.classList.remove("is-visible");
+      void target.offsetWidth;
+      target.classList.add("is-visible");
+
       state.current = image;
-      els.image.src = loader.src;
-      els.image.alt = image.file;
-      els.image.hidden = false;
-      els.image.classList.add("is-visible");
+      state.activeLayer = target === primary ? "primary" : "secondary";
       els.hero.classList.add("has-image");
       els.placeholder.hidden = true;
+
+      if (previous) {
+        previous.classList.remove("is-visible");
+        window.setTimeout(function () {
+          if (token !== state.imageToken) {
+            return;
+          }
+          previous.hidden = true;
+          previous.removeAttribute("src");
+        }, 520);
+      }
     };
     loader.onerror = function () {
       if (token !== state.imageToken) {
