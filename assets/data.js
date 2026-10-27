@@ -405,7 +405,7 @@ window.HAPPYDAYS_WIKI = (function () {
       updated: "2026-10-25",
       reading: 2,
       tags: [],
-      signatures: [{"author": "LZnofu", "at": "2026-10-27T23:13:43+08:00", "action": "update", "title": "沉浸车辆", "topic": "进阶教程"}],
+      signatures: [{"author": "LZnofu", "at": "2026-10-27T23:13:43+08:00", "action": "update", "title": "沉浸车辆", "topic": "进阶教程"}, {"author": "LZnofu", "at": "2026-10-27T23:15:40+08:00", "action": "update", "title": "沉浸车辆", "topic": "进阶教程"}],
       content: `<p>当然，服务器是有载具的，不能合成</p>
 <h2>汽车</h2>
 <p>在本服，汽车是一种交通方式。</p>
@@ -423,7 +423,7 @@ window.HAPPYDAYS_WIKI = (function () {
 <p>车在下雨天行驶时，车会沾上污垢 1.可以拿一个水桶，放在车架下中，等待几秒</p>
 <p>2.等待下雨天，停车等待</p>
 <p>3.在洗车站洗车，在SF、金林、威海、武汉、张家界装有</p>
-<p><strong><em>4.把车开到河里，冲出来（不建议，危险）</em></strong></p>
+<p><del><strong>4.把车开到河里，冲出来（不建议，危险）</strong></del></p>
 <h4>发动机异响</h4>
 <p>当发动机出现异响，代表发动机里程达到500km，需要寻找op更换（免费）</p>
 <h4>HP</h4>
