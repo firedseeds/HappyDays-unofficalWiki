@@ -1914,6 +1914,11 @@ class EditorHandler(SimpleHTTPRequestHandler):
         if request_path in ("/bank", "/bank/"):
             self.redirect_to_home()
             return
+        if request_path == "/favicon.ico":
+            self.send_response(302)
+            self.send_header("Location", "/icon.png")
+            self.end_headers()
+            return
         if request_path == BASE_PATH:
             self.redirect_to_base()
             return

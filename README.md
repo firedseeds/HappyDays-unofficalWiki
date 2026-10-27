@@ -887,6 +887,10 @@ location = / {
     return 302 /home;
 }
 
+location = /favicon.ico {
+    return 302 /icon.png;
+}
+
 location = /home {
     try_files /home/home.html =404;
 }
