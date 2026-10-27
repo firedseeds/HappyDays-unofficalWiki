@@ -1,5 +1,10 @@
 {
   "version": 1,
   "intervalSeconds": 5,
-  "images": []
+  "images": [
+    {
+      "file": "640.jpg",
+      "weight": 1
+    }
+  ]
 }
