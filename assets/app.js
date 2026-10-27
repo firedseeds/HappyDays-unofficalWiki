@@ -1828,11 +1828,17 @@
       if (els.sidebar) {
         els.sidebar.removeAttribute("inert");
       }
+      if (state.currentId) {
+        updatePageNavigation();
+      }
       return;
     }
     document.body.classList.remove("sidebar-open");
     if (els.sidebar) {
       els.sidebar.setAttribute("inert", "");
+    }
+    if (state.currentId) {
+      updatePageNavigation();
     }
   }
 
@@ -2010,9 +2016,10 @@
     var index = allIds.indexOf(state.currentId);
     var prevId = index > 0 ? allIds[index - 1] : null;
     var nextId = index < allIds.length - 1 ? allIds[index + 1] : null;
+    var suffix = isSingleView() ? "#single" : "";
 
     if (prevId) {
-      els.prevDoc.href = "#/doc/" + prevId;
+      els.prevDoc.href = "#/doc/" + encodeURIComponent(prevId) + suffix;
       els.prevDocTitle.textContent = docs[prevId].title;
       els.prevDoc.removeAttribute("aria-disabled");
     } else {
@@ -2022,7 +2029,7 @@
     }
 
     if (nextId) {
-      els.nextDoc.href = "#/doc/" + nextId;
+      els.nextDoc.href = "#/doc/" + encodeURIComponent(nextId) + suffix;
       els.nextDocTitle.textContent = docs[nextId].title;
       els.nextDoc.removeAttribute("aria-disabled");
     } else {
