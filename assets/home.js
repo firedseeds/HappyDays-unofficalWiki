@@ -30,7 +30,8 @@
     timer: null,
     backend: false,
     imageToken: 0,
-    activeLayer: "primary"
+    activeLayer: "primary",
+    imageSize: null
   };
 
   function normalizeConfig(raw) {
@@ -55,6 +56,18 @@
 
   function imageUrl(file) {
     return "/home/" + encodeURIComponent(file);
+  }
+
+  function updateHeroHoverHeight() {
+    if (!state.imageSize) {
+      els.hero.style.removeProperty("--hero-hover-height");
+      return;
+    }
+    var width = els.hero.getBoundingClientRect().width;
+    var ideal = width * (state.imageSize.height / state.imageSize.width);
+    var maxHeight = Math.max(320, window.innerHeight * 0.92);
+    var height = Math.min(Math.max(ideal, 320), maxHeight);
+    els.hero.style.setProperty("--hero-hover-height", Math.round(height) + "px");
   }
 
   function pickWeighted(images, currentFile) {
@@ -97,12 +110,14 @@
     state.imageToken += 1;
     state.current = null;
     state.activeLayer = "primary";
+    state.imageSize = null;
     [els.image, els.imageNext].forEach(function (layer) {
       layer.classList.remove("is-visible");
       layer.hidden = true;
       layer.removeAttribute("src");
     });
     els.hero.classList.remove("has-image");
+    els.hero.style.removeProperty("--hero-hover-height");
     els.placeholder.hidden = false;
   }
 
@@ -138,6 +153,11 @@
 
       state.current = image;
       state.activeLayer = target === primary ? "primary" : "secondary";
+      state.imageSize = {
+        width: loader.naturalWidth || 1,
+        height: loader.naturalHeight || 1
+      };
+      updateHeroHoverHeight();
       els.hero.classList.add("has-image");
       els.placeholder.hidden = true;
 
@@ -448,6 +468,12 @@
   }
 
   renderHomeSections();
+
+  var resizeTimer = null;
+  window.addEventListener("resize", function () {
+    window.clearTimeout(resizeTimer);
+    resizeTimer = window.setTimeout(updateHeroHoverHeight, 120);
+  });
 
   els.edit.addEventListener("click", openDialog);
   els.form.addEventListener("submit", saveConfig);

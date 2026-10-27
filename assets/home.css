@@ -218,6 +218,7 @@
 
 .hero-section .hero {
   margin-bottom: 0;
+  transition: height 450ms var(--ease), max-height 450ms var(--ease);
 }
 
 .hero-media {
@@ -260,6 +261,12 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
+  .hero:hover {
+    height: var(--hero-hover-height, 65vh);
+    min-height: 320px;
+    max-height: 92vh;
+  }
+
   .hero:hover .hero-media img {
     object-fit: contain;
     transform: scale(1.04);
@@ -597,6 +604,10 @@
 @media (prefers-reduced-motion: reduce) {
   .hero-media img,
   .card-cover {
+    transition: none;
+  }
+
+  .hero-section .hero {
     transition: none;
   }
 
