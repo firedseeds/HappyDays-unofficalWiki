@@ -255,6 +255,7 @@ python server.py --host 127.0.0.1 --port 8765
 | PUT | `/api/articles/<slug>` | 保存已有文章，必须传 `author`；传 `topicId` 可移动主题 |
 | POST | `/api/articles/<slug>/comments` | 发表评论，必须传 `author` 与 `body` |
 | POST | `/api/articles/<slug>/move` | 在当前主题内上移或下移文章，传 `direction` 与 `author` |
+| POST | `/api/articles/<slug>/icon` | 上传文章 Bank 封面，查询参数 `filename`；支持 PNG/JPG |
 | POST | `/api/bgm` | 上传 MP3/WAV 背景音乐，查询参数 `title`、`weight`、`filename` |
 | GET | `/api/home` | 读取首页图片配置 |
 | PUT | `/api/home` | 保存首页图片权重和轮换间隔 |
@@ -316,6 +317,36 @@ python server.py --host 127.0.0.1 --port 8765
 
 载入旧版本只替换编辑内容，不会立即保存；确认后仍需点击「保存并构建」。
 
+### Bank 模式
+
+首页和 Bank 页面都由 `build.py` 生成的 `assets/data.js` 渲染：
+
+- 首页按 `article.json` 的顶级标题分区
+- 每个标题最多显示 3 篇直属文章
+- 超过 3 篇或存在下级标题时显示「查看更多」
+- 「查看更多」进入 `/bank/<标题ID>`
+- Bank 页面先列出直属文章，再把每个下级标题按同样规则展示
+- Bank 页面支持任意层级，通过继续进入 `/bank/<下级标题ID>` 浏览
+
+每篇文章卡片会使用：
+
+```text
+article/icon/<slug>.png
+article/icon/<slug>.jpg
+article/icon/<slug>.jpeg
+```
+
+找不到时回退到根目录的 `icon.png`。
+
+文章编辑页提供「上传封面」按钮，支持 PNG/JPG/JPEG，单文件最大 10MB。上传后会重新构建 `assets/data.js` 并创建本地 Git commit。
+
+Bank 文章卡片右上角有「显示目录 / 隐藏目录」切换，用于控制打开文章时是否带 `#single`。阅读页顶栏也提供同样的目录切换按钮。
+
+文章顶部的面包屑：
+
+- 「HappyDays非官方文档」链接到 `/home`
+- 分类和文章标题链接到对应的 `/bank/<标题ID>`
+
 ### 首页图片
 
 首页 `/home` 的主视觉上覆盖一张可轮换图片：
@@ -323,6 +354,8 @@ python server.py --host 127.0.0.1 --port 8765
 - 图片文件保存在 `home/`
 - 配置保存在 `home.json`
 - 无图片时显示 `NO IMAGE`
+- 首页支持日间/夜间模式，主题与知识库共用 `happydays-theme`
+- 首页右下角 BGM 播放器与知识库一致
 - 图片右下方有「编辑图片」按钮，后端开启时可见
 - 支持上传 `.png`、`.jpg`、`.jpeg`，单文件最大 20MB
 - 图片按权重随机轮换，并排除当前图片
@@ -477,6 +510,7 @@ BGM.json
 ├─ home.html             # 网站首页，映射到 /home
 ├─ home.json             # 首页图片文件名、权重与轮换间隔
 ├─ home/                 # 首页轮换图片
+├─ bank.html             # Bank 目录页模板，/bank/<id> 复用
 ├─ index.html            # 页面骨架、图标 sprite、阅读器 UI
 ├─ editor.html           # 本地内容管理界面
 ├─ build.py              # 从 article/ 生成 assets/data.js
@@ -499,11 +533,16 @@ BGM.json
 │  ├─ app.js             # 路由、搜索、目录、主题与交互
 │  ├─ editor.js          # 内容管理界面逻辑
 │  ├─ home.css           # 首页图片、编辑弹窗与入口链接样式
-│  ├─ home.js            # 首页图片轮换、上传与配置编辑
+│  ├─ home-base.css      # 首页/Bank 共用的基础视觉样式
+│  ├─ home.js            # 首页图片轮换、首页标题分区渲染
+│  ├─ bank.js            # Bank 层级目录与文章卡片
+│  ├─ site-common.js     # 首页/Bank 与知识库共用的主题同步
+│  ├─ bgm-player.js      # 首页/Bank 共用的 BGM 播放器
 │  └─ image/             # 迁移文章的本地图片
 ├─ article/
-│  ├─ article.json       # 9 个主题、29 篇文章的清单
+│  ├─ article.json       # 9 个主题、32 篇文章的清单
 │  ├─ edits.json         # 各文章的署名记录
+│  ├─ icon/              # 文章 Bank 封面（文件名为 <slug>.png/jpg）
 │  ├─ history.json       # 各文章的最早可见版本设置（可选）
 │  ├─ intro/             # 简介（1 篇）
 │  ├─ beginner/          # 新手教程（6 篇）
@@ -829,9 +868,9 @@ python build.py
 
 ## 部署
 
-网站入口分为两层：`/home` 是首页，`/wiki/` 是非官方文档。`server.py` 会自动把 `/`、`/index.html`、`/home.html`、`/home/` 重定向到 `/home`，把 `/wiki` 重定向到 `/wiki/`，并在内部把 `/wiki/...` 映射到项目文件。
+网站入口分为三层：`/home` 是首页，`/bank/<标题ID>` 是层级目录，`/wiki/` 是非官方文档。`server.py` 会自动把 `/`、`/index.html`、`/home.html`、`/home/` 重定向到 `/home`，把 `/bank`、`/bank/` 重定向到 `/home`，把 `/wiki` 重定向到 `/wiki/`，并在内部把 `/wiki/...` 映射到项目文件。
 
-这是一个运行时无框架依赖的静态项目。修改 `article/` 后先运行 `python build.py` 更新 `assets/data.js`，再把整个目录部署到 `/wiki/` 路径下，同时把 `/home` 映射到根目录的 `home.html`。
+这是一个运行时无框架依赖的静态项目。修改 `article/` 后先运行 `python build.py` 更新 `assets/data.js`，再把整个目录部署到 `/wiki/` 路径下，同时把 `/home` 映射到根目录的 `home.html`，把 `/bank/<id>` 重写到 `bank.html`。
 
 **GitHub Pages**：如果仓库名为 `wiki`，项目地址就是 `https://<user>.github.io/wiki/`，与知识库入口路径一致；首页 `/home` 需要平台 rewrite 或反向代理支持。
 
@@ -856,6 +895,18 @@ location = /home.html {
 
 location /home/ {
     alias /path/to/HappyDays-wiki/home/;
+}
+
+location = /bank {
+    return 302 /home;
+}
+
+location = /bank/ {
+    return 302 /home;
+}
+
+location /bank/ {
+    try_files /bank.html =404;
 }
 
 location = /wiki {

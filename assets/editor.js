@@ -41,6 +41,8 @@
     deleteArticleBtn: document.getElementById("deleteArticleBtn"),
     moveArticleUp: document.getElementById("moveArticleUp"),
     moveArticleDown: document.getElementById("moveArticleDown"),
+    uploadCoverBtn: document.getElementById("uploadCoverBtn"),
+    coverFileInput: document.getElementById("coverFileInput"),
     title: document.getElementById("fieldTitle"),
     topic: document.getElementById("fieldTopic"),
     topicHint: document.getElementById("topicHint"),
@@ -467,6 +469,7 @@
     els.deleteArticleBtn.disabled = busy;
     els.moveArticleUp.disabled = busy;
     els.moveArticleDown.disabled = busy;
+    els.uploadCoverBtn.disabled = busy;
     els.importArticleBtn.disabled = busy || state.topics.length === 0;
     els.saveLabel.textContent = busy
       ? "保存中…"
@@ -488,6 +491,7 @@
     els.deleteArticleBtn.hidden = true;
     els.moveArticleUp.hidden = true;
     els.moveArticleDown.hidden = true;
+    els.uploadCoverBtn.hidden = true;
     setActiveArticle();
     history.replaceState(null, "", "#new");
   }
@@ -745,6 +749,7 @@
     els.deleteArticleBtn.hidden = false;
     els.moveArticleUp.hidden = false;
     els.moveArticleDown.hidden = false;
+    els.uploadCoverBtn.hidden = false;
     setBusy(false);
     setActiveArticle();
     history.replaceState(null, "", "#" + encodeURIComponent(article.slug));
@@ -795,6 +800,7 @@
     els.deleteArticleBtn.hidden = true;
     els.moveArticleUp.hidden = true;
     els.moveArticleDown.hidden = true;
+    els.uploadCoverBtn.hidden = true;
     setBusy(false);
     setActiveArticle();
     history.replaceState(null, "", "#new");
@@ -843,6 +849,55 @@
     }).catch(function (error) {
       showToast(error.message, "error");
     }).finally(function () {
+      setBusy(false);
+    });
+  }
+
+  function uploadArticleCover() {
+    if (!state.currentSlug || state.mode !== "edit" || state.saving) {
+      return;
+    }
+    els.coverFileInput.value = "";
+    els.coverFileInput.click();
+  }
+
+  function handleCoverFile() {
+    var file = els.coverFileInput.files && els.coverFileInput.files[0];
+    if (!file || !state.currentSlug) {
+      return;
+    }
+    if (!/\.(png|jpe?g)$/i.test(file.name)) {
+      showToast("封面只支持 .png、.jpg、.jpeg", "error");
+      return;
+    }
+    if (file.size > 10 * 1024 * 1024) {
+      showToast("封面图片不能超过 10MB", "error");
+      return;
+    }
+    var slug = state.currentSlug;
+    setBusy(true);
+    file.arrayBuffer().then(function (buffer) {
+      return fetch(
+        "/api/articles/" + encodeURIComponent(slug) + "/icon?filename=" + encodeURIComponent(file.name),
+        {
+          method: "POST",
+          headers: { "Content-Type": file.type || "application/octet-stream" },
+          body: buffer
+        }
+      );
+    }).then(function (response) {
+      return response.json().catch(function () { return {}; }).then(function (data) {
+        if (!response.ok) {
+          throw new Error(data.error || "封面上传失败");
+        }
+        return data;
+      });
+    }).then(function () {
+      showToast("首页封面已更新", "success");
+    }).catch(function (error) {
+      showToast(error.message, "error");
+    }).finally(function () {
+      els.coverFileInput.value = "";
       setBusy(false);
     });
   }
@@ -1797,6 +1852,8 @@
     els.moveArticleDown.addEventListener("click", function () {
       moveArticle("down");
     });
+    els.uploadCoverBtn.addEventListener("click", uploadArticleCover);
+    els.coverFileInput.addEventListener("change", handleCoverFile);
     els.retryConnection.addEventListener("click", function () {
       boot();
     });

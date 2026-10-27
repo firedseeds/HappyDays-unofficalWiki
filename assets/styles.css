@@ -3345,6 +3345,18 @@ body.single-view .sidebar-backdrop {
   display: none !important;
 }
 
+.crumb-category,
+.crumb-current {
+  text-decoration: none;
+}
+
+.crumb-category:hover,
+.crumb-current:hover {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 /* =========================================================
    Responsive
    ========================================================= */

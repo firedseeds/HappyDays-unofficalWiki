@@ -23,6 +23,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 ARTICLE_DIR = ROOT / "article"
+ICON_DIR = ARTICLE_DIR / "icon"
 MANIFEST_PATH = ARTICLE_DIR / "article.json"
 EDITS_PATH = ARTICLE_DIR / "edits.json"
 TITLE_PATH = ROOT / "title.json"
@@ -717,6 +718,13 @@ def parse_article(path: Path, manifest_article: dict, topics: dict, articles_by_
     if not content:
         fail(f"{relative_path}: 正文为空")
 
+    icon = None
+    for extension in (".png", ".jpg", ".jpeg"):
+        candidate = ICON_DIR / f"{front['slug']}{extension}"
+        if candidate.is_file():
+            icon = f"/article/icon/{candidate.name}"
+            break
+
     return {
         "slug": front["slug"],
         "order": front["order"],
@@ -727,6 +735,7 @@ def parse_article(path: Path, manifest_article: dict, topics: dict, articles_by_
         "updated": str(front["updated"]),
         "reading": front["reading_time"],
         "tags": front["tags"],
+        "icon": icon or "/icon.png",
         "content": content,
     }
 
@@ -804,6 +813,7 @@ def build_manifest(articles: list[dict], topics: list[dict], site: dict) -> str:
                 f"      emoji: {js_string(article['emoji'])},",
                 f"      category: {js_string(article['topic'])},",
                 f"      excerpt: {js_string(article['excerpt'])},",
+                f"      icon: {js_string(article.get('icon', '/icon.png'))},",
                 f"      updated: {js_string(article['updated'])},",
                 f"      reading: {article['reading']},",
                 f"      tags: {js_string(article['tags'])},",

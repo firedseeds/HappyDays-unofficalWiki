@@ -309,6 +309,93 @@
     });
   }
 
+  function articleCard(doc) {
+    var link = document.createElement("a");
+    link.className = "card";
+    link.href = "/wiki/#/doc/" + encodeURIComponent(doc.slug || doc.id) + "#single";
+    var media = document.createElement("div");
+    media.className = "card-media";
+    var image = document.createElement("img");
+    image.className = "card-cover";
+    image.loading = "lazy";
+    image.alt = "";
+    image.src = doc.icon || "/icon.png";
+    image.onerror = function () {
+      image.onerror = null;
+      image.src = "/icon.png";
+    };
+    media.appendChild(image);
+    var body = document.createElement("div");
+    body.className = "card-body";
+    var title = document.createElement("h3");
+    title.textContent = doc.title;
+    var meta = document.createElement("p");
+    meta.className = "meta";
+    meta.textContent = doc.excerpt || "";
+    body.appendChild(title);
+    body.appendChild(meta);
+    link.appendChild(media);
+    link.appendChild(body);
+    return link;
+  }
+
+  function renderHomeSections() {
+    var container = document.getElementById("homeTopicSections");
+    var data = window.HAPPYDAYS_WIKI;
+    if (!container || !data || !Array.isArray(data.categories) || !data.docs) {
+      return;
+    }
+    var categories = data.categories.slice().sort(function (left, right) {
+      return (left.order || 0) - (right.order || 0);
+    });
+    container.innerHTML = "";
+    categories.filter(function (topic) {
+      return !topic.parentId;
+    }).forEach(function (topic) {
+      var children = categories.filter(function (child) {
+        return child.parentId === topic.id;
+      });
+      var docs = (topic.docs || []).map(function (slug) {
+        return data.docs[slug] ? Object.assign({ slug: slug }, data.docs[slug]) : null;
+      }).filter(Boolean);
+      if (!docs.length && !children.length) {
+        return;
+      }
+      var section = document.createElement("section");
+      section.className = "section";
+      var header = document.createElement("div");
+      header.className = "section-header";
+      var title = document.createElement("h2");
+      title.className = "section-title";
+      title.textContent = topic.name;
+      header.appendChild(title);
+      if (docs.length > 3 || children.length) {
+        var more = document.createElement("a");
+        more.className = "section-more";
+        more.href = "/bank/" + encodeURIComponent(topic.id);
+        more.textContent = "查看更多 →";
+        header.appendChild(more);
+      }
+      section.appendChild(header);
+      if (docs.length) {
+        var grid = document.createElement("div");
+        grid.className = "card-grid";
+        docs.slice(0, 3).forEach(function (doc) {
+          grid.appendChild(articleCard(doc));
+        });
+        section.appendChild(grid);
+      } else {
+        var empty = document.createElement("p");
+        empty.className = "bank-empty";
+        empty.textContent = "此标题下暂无直接文章，点击查看下级目录。";
+        section.appendChild(empty);
+      }
+      container.appendChild(section);
+    });
+  }
+
+  renderHomeSections();
+
   els.edit.addEventListener("click", openDialog);
   els.form.addEventListener("submit", saveConfig);
   els.upload.addEventListener("click", uploadImage);

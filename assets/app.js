@@ -1074,6 +1074,7 @@
     sidebarToggle: document.getElementById("sidebarToggle"),
     sidebarClose: document.getElementById("sidebarClose"),
     sidebarSearch: document.getElementById("sidebarSearch"),
+    crumbHome: document.getElementById("crumbHome"),
     crumbCategory: document.getElementById("crumbCategory"),
     crumbTitle: document.getElementById("crumbTitle"),
     docRoot: document.getElementById("docRoot"),
@@ -1110,6 +1111,8 @@
     tocClose: document.getElementById("tocClose"),
     tocTop: document.getElementById("tocTop"),
     outlineBtn: document.getElementById("outlineBtn"),
+    docTreeToggle: document.getElementById("docTreeToggle"),
+    docTreeToggleLabel: document.getElementById("docTreeToggleLabel"),
     readingProgress: document.getElementById("readingProgress"),
     readingPercent: document.getElementById("readingPercent"),
     backToTop: document.getElementById("backToTop"),
@@ -1814,6 +1817,13 @@
   function applySingleView() {
     var enabled = isSingleView();
     document.body.classList.toggle("single-view", enabled);
+    if (els.docTreeToggle) {
+      els.docTreeToggle.setAttribute("aria-pressed", enabled ? "true" : "false");
+      els.docTreeToggle.setAttribute("aria-label", enabled ? "显示页面目录" : "隐藏页面目录");
+      if (els.docTreeToggleLabel) {
+        els.docTreeToggleLabel.textContent = enabled ? "显示目录" : "隐藏目录";
+      }
+    }
     if (!enabled) {
       if (els.sidebar) {
         els.sidebar.removeAttribute("inert");
@@ -1846,6 +1856,13 @@
     setExternalUrl(id);
     els.crumbCategory.textContent = categoryLabel(category);
     els.crumbTitle.textContent = doc.title;
+    var bankHref = category && category.id ? "/bank/" + encodeURIComponent(category.id) : "/home";
+    if (els.crumbCategory) {
+      els.crumbCategory.href = bankHref;
+    }
+    if (els.crumbTitle) {
+      els.crumbTitle.href = bankHref;
+    }
     els.docCategory.textContent = categoryLabel(category);
     els.docEmoji.textContent = doc.emoji;
     els.docTitle.textContent = doc.title;
@@ -1905,6 +1922,12 @@
 
     els.crumbCategory.textContent = "知识库";
     els.crumbTitle.textContent = "等待迁移";
+    if (els.crumbCategory) {
+      els.crumbCategory.href = "/home";
+    }
+    if (els.crumbTitle) {
+      els.crumbTitle.href = "/home";
+    }
     els.docCategory.textContent = "准备中";
     els.docEmoji.textContent = "🌱";
     els.docTitle.textContent = "知识库正在准备中";
@@ -2741,6 +2764,13 @@
     });
     els.siteTitleClose.addEventListener("click", closeSiteTitleEditor);
     els.siteTitleCancel.addEventListener("click", closeSiteTitleEditor);
+    els.docTreeToggle.addEventListener("click", function () {
+      var id = state.currentId || currentRouteId();
+      if (!id) {
+        return;
+      }
+      window.location.hash = "#/doc/" + encodeURIComponent(id) + (isSingleView() ? "" : "#single");
+    });
     els.themeBtn.addEventListener("click", toggleTheme);
     els.moreBtn.addEventListener("click", function (event) {
       event.stopPropagation();

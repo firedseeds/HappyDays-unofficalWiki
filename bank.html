@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Bank · HappyDays轨道交通服务器</title>
+		<meta name="description" content="HappyDays轨道交通服务器文档目录。">
+		<script>
+			(function () {
+				try {
+					var saved = localStorage.getItem("happydays-theme");
+					if (saved === "dark" || saved === "light") {
+						document.documentElement.setAttribute("data-theme", saved);
+					}
+				} catch (error) {
+					/* 忽略隐私模式下的 localStorage 错误 */
+				}
+			})();
+		</script>
+		<link rel="stylesheet" href="/assets/home-base.css">
+		<link rel="stylesheet" href="/assets/home.css">
+		<link rel="stylesheet" href="/assets/bgm.css">
+	</head>
+	<body class="bank-page">
+
+		<header class="site-header">
+			<div class="container header-inner">
+				<a href="/home" class="logo">HAPPY<span>DAYS</span>服务器</a>
+				<nav>
+					<ul class="nav-links">
+						<li><a href="/home">首页</a></li>
+						<li><a href="/wiki/#/doc/intro#single">简介</a></li>
+						<li><a href="/wiki/#/doc/before-joining#single">新手教程</a></li>
+						<li><a href="/wiki/#/doc/resource-world-nether#single">进阶教程</a></li>
+						<li><a href="/wiki/#/doc/cheating-response#single">服务器规则</a></li>
+						<li><a href="/wiki/#/doc/matopiraphai#single">HAPPYDAYS历史</a></li>
+						<li><a href="/wiki/#/doc/gallery-1#single">妙妙图集</a></li>
+						<li><a href="/wiki/#/doc/world-map#single">大地巡游</a></li>
+						<li><a href="/wiki/#/doc/immersive-vehicles#single">车/机祸启示录</a></li>
+					</ul>
+				</nav>
+				<button class="home-theme-toggle js-theme-toggle" type="button" aria-label="切换到夜间模式" aria-pressed="false">
+					<span class="theme-toggle-text">夜间</span>
+				</button>
+			</div>
+		</header>
+
+		<main class="container bank-main">
+			<nav class="bank-breadcrumb" id="bankBreadcrumb" aria-label="目录路径"></nav>
+			<header class="bank-header">
+				<p class="bank-eyebrow">HappyDays Bank</p>
+				<h1 id="bankTitle">目录</h1>
+				<p id="bankDescription"></p>
+			</header>
+			<div id="bankSections"></div>
+		</main>
+
+		<footer class="site-footer">
+			<div class="container footer-grid">
+				<div>HAPPYDAYS非官方文档 · 版权所有</div>
+				<div>Bank 模式 · <a href="/home">返回首页</a></div>
+			</div>
+		</footer>
+
+		<div id="bgmMount"></div>
+
+		<script src="/assets/data.js" defer></script>
+		<script src="/assets/site-common.js" defer></script>
+		<script src="/assets/bgm-player.js" defer></script>
+		<script src="/assets/bank.js" defer></script>
+	</body>
+</html>

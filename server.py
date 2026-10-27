@@ -44,6 +44,7 @@ BGM_DIR = ROOT / "BGM"
 BGM_PATH = ROOT / "BGM.json"
 HOME_DIR = ROOT / "home"
 HOME_PATH = ROOT / "home.json"
+ARTICLE_ICON_DIR = ARTICLE_DIR / "icon"
 TITLE_PATH = ROOT / "title.json"
 IMAGE_DIR = ROOT / "assets" / "image"
 DATA_PATH = ROOT / "assets" / "data.js"
@@ -52,6 +53,7 @@ BASE_PATH = "/wiki"
 MAX_REQUEST_BYTES = 2 * 1024 * 1024
 MAX_BGM_BYTES = 50 * 1024 * 1024
 MAX_HOME_IMAGE_BYTES = 20 * 1024 * 1024
+MAX_ICON_BYTES = 10 * 1024 * 1024
 MAX_BODY_CHARS = 800_000
 SLUG_RE = re.compile(r"^[a-z0-9][a-z0-9-]{0,63}$")
 TITLE_COLOR_RE = re.compile(r"^#[0-9a-fA-F]{6}$")
@@ -410,6 +412,58 @@ def add_home_image(payload: dict, image: bytes) -> dict:
             f"首页图片上传：{filename}（本地提交={'是' if commit.get('committed') else '否'}）"
         )
         return {"ok": True, "image": image_item, "config": data, "commit": commit}
+
+
+def upload_article_icon(slug: str, filename: str, image: bytes) -> dict:
+    suffix = Path(filename).suffix.lower()
+    if suffix not in (".png", ".jpg", ".jpeg"):
+        raise ApiError(400, "只支持 .png、.jpg、.jpeg 图片")
+    if not image:
+        raise ApiError(400, "封面图片不能为空")
+    with LOCK:
+        record = article_map(read_manifest()).get(slug)
+        if record is None:
+            raise ApiError(404, "文章不存在")
+        ARTICLE_ICON_DIR.mkdir(parents=True, exist_ok=True)
+        target = ARTICLE_ICON_DIR / f"{slug}{suffix}"
+        existing = {
+            path: path.read_bytes()
+            for path in ARTICLE_ICON_DIR.glob(f"{slug}.*")
+            if path.is_file()
+        }
+        data_snapshot = DATA_PATH.read_bytes() if DATA_PATH.is_file() else None
+        try:
+            atomic_write_bytes(target, image)
+            for old_path in existing:
+                if old_path != target and old_path.exists():
+                    old_path.unlink()
+            output = run_build()
+        except Exception as exc:
+            for old_path in ARTICLE_ICON_DIR.glob(f"{slug}.*"):
+                if old_path not in existing and old_path.exists():
+                    old_path.unlink()
+            restore_files(existing)
+            if data_snapshot is not None:
+                atomic_write(DATA_PATH, data_snapshot.decode("utf-8"))
+            elif DATA_PATH.exists():
+                DATA_PATH.unlink()
+            if isinstance(exc, ApiError):
+                raise
+            raise ApiError(500, f"上传封面失败：{exc}")
+        commit = auto_commit(
+            [target, DATA_PATH],
+            f"docs: 更新「{record.get('title', slug)}」封面",
+        )
+        log_change(
+            f"文章封面更新：{record.get('title', slug)}（文件={target.name}，"
+            f"本地提交={'是' if commit.get('committed') else '否'}）"
+        )
+        return {
+            "ok": True,
+            "icon": f"/article/icon/{target.name}",
+            "message": build_output_message(output),
+            "commit": commit,
+        }
 
 
 def read_history_config() -> dict:
@@ -1808,6 +1862,8 @@ class EditorHandler(SimpleHTTPRequestHandler):
         stripped = strip_base_path(unquote(parsed.path))
         if stripped in ("/home", "/home/", "/home.html"):
             stripped = "/home.html"
+        if re.fullmatch(r"/bank/[a-z0-9-]+/?", stripped):
+            stripped = "/bank.html"
         if parsed.query:
             stripped += "?" + parsed.query
         return super().translate_path(stripped)
@@ -1853,6 +1909,9 @@ class EditorHandler(SimpleHTTPRequestHandler):
     def do_GET(self) -> None:
         request_path = unquote(urlparse(self.path).path)
         if request_path in ("/", "/index.html", "/home.html", "/home/"):
+            self.redirect_to_home()
+            return
+        if request_path in ("/bank", "/bank/"):
             self.redirect_to_home()
             return
         if request_path == BASE_PATH:
@@ -1937,6 +1996,23 @@ class EditorHandler(SimpleHTTPRequestHandler):
     def do_POST(self) -> None:
         path = strip_base_path(unquote(urlparse(self.path).path))
         try:
+            icon_match = re.fullmatch(r"/api/articles/([a-z0-9-]+)/icon", path)
+            if icon_match:
+                try:
+                    length = int(self.headers.get("Content-Length", "0"))
+                except ValueError:
+                    raise ApiError(400, "Content-Length 无效")
+                if length <= 0:
+                    raise ApiError(400, "封面图片不能为空")
+                if length > MAX_ICON_BYTES:
+                    raise ApiError(413, "封面图片不能超过 10MB")
+                image = self.rfile.read(length)
+                if len(image) != length:
+                    raise ApiError(400, "封面图片上传不完整")
+                query = parse_qs(urlparse(self.path).query)
+                filename = query.get("filename", [""])[0]
+                self.send_json(200, upload_article_icon(icon_match.group(1), filename, image))
+                return
             if path == "/api/home/images":
                 try:
                     length = int(self.headers.get("Content-Length", "0"))

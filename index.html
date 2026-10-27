@@ -107,11 +107,11 @@
             <svg class="icon" aria-hidden="true"><use href="#i-menu"></use></svg>
           </button>
           <nav class="breadcrumbs" aria-label="面包屑">
-            <a class="crumb-home" href="#/doc/welcome">HappyDays</a>
+            <a class="crumb-home" id="crumbHome" href="/home">HappyDays</a>
             <svg class="crumb-chevron" aria-hidden="true"><use href="#i-chevron-right"></use></svg>
-            <span class="crumb-category" id="crumbCategory">开始使用</span>
+            <a class="crumb-category" id="crumbCategory" href="/home">开始使用</a>
             <svg class="crumb-chevron crumb-chevron--last" aria-hidden="true"><use href="#i-chevron-right"></use></svg>
-            <span class="crumb-current" id="crumbTitle">欢迎来到 HappyDays非官方文档</span>
+            <a class="crumb-current" id="crumbTitle" href="/home">欢迎来到 HappyDays非官方文档</a>
           </nav>
         </div>
 
@@ -140,6 +140,10 @@
           <button class="top-action" id="shareBtn" type="button" aria-label="分享当前文档">
             <svg class="icon" aria-hidden="true"><use href="#i-share"></use></svg>
             <span class="action-label">分享</span>
+          </button>
+          <button class="top-action" id="docTreeToggle" type="button" aria-label="隐藏页面目录" aria-pressed="false">
+            <svg class="icon" aria-hidden="true"><use href="#i-list"></use></svg>
+            <span class="action-label" id="docTreeToggleLabel">隐藏目录</span>
           </button>
           <button class="icon-button outline-trigger" id="outlineBtn" type="button" aria-label="打开页面目录" aria-controls="tocPanel" aria-expanded="false">
             <svg class="icon" aria-hidden="true"><use href="#i-list"></use></svg>
