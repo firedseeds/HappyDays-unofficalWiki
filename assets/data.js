@@ -730,13 +730,13 @@ window.HAPPYDAYS_WIKI = (function () {
       title: "OK",
       emoji: "📄",
       category: "godman",
-      excerpt: "OK：多次破坏服务器",
+      excerpt: "罪孽深重的ok",
       icon: "/icon.png",
       updated: "2026-10-26",
       reading: 5,
       tags: [],
-      signatures: [{"author": "233", "at": "2026-10-26T22:28:21+08:00", "action": "create", "title": "OK", "topic": "简介"}, {"author": "233", "at": "2026-10-26T22:28:28+08:00", "action": "update", "title": "OK", "topic": "intro"}, {"author": "233", "at": "2026-10-26T22:28:30+08:00", "action": "update", "title": "OK", "topic": "intro"}, {"author": "233", "at": "2026-10-26T22:28:43+08:00", "action": "move", "title": "OK", "topic": "神人堂", "fromTopic": "简介"}, {"author": "233", "at": "2026-10-26T22:28:50+08:00", "action": "update", "title": "OK", "topic": "godman"}, {"author": "233", "at": "2026-10-26T22:28:51+08:00", "action": "update", "title": "OK", "topic": "godman"}, {"author": "233", "at": "2026-10-26T22:28:53+08:00", "action": "update", "title": "OK", "topic": "godman"}],
-      content: `<h2>OK：多次破坏服务器，与南宁的dfdf私下交易(10rmb)，盗取他人账号。曾占据南通和秦皇岛，疯狂挖取主世界钻石。</h2>`
+      signatures: [{"author": "233", "at": "2026-10-26T22:28:21+08:00", "action": "create", "title": "OK", "topic": "简介"}, {"author": "233", "at": "2026-10-26T22:28:28+08:00", "action": "update", "title": "OK", "topic": "intro"}, {"author": "233", "at": "2026-10-26T22:28:30+08:00", "action": "update", "title": "OK", "topic": "intro"}, {"author": "233", "at": "2026-10-26T22:28:43+08:00", "action": "move", "title": "OK", "topic": "神人堂", "fromTopic": "简介"}, {"author": "233", "at": "2026-10-26T22:28:50+08:00", "action": "update", "title": "OK", "topic": "godman"}, {"author": "233", "at": "2026-10-26T22:28:51+08:00", "action": "update", "title": "OK", "topic": "godman"}, {"author": "233", "at": "2026-10-26T22:28:53+08:00", "action": "update", "title": "OK", "topic": "godman"}, {"author": "smillfox", "at": "2026-10-27T22:35:52+08:00", "action": "update", "title": "OK", "topic": "神人堂"}],
+      content: `<p>原南通城主/秦皇岛城主，在主世界使用机器人模组挖掘钻石后积攒了家业，对金钱控制欲望极强。与CR400AF狼狈为奸，通过线下交易等形式盗用或创建多个账号，对服务器机械动力铁路及公路设施进行破坏性拆解，被CR400AF被刺后转生为omg再次进行破坏，盗用其他玩家身份拆解了6列机械动力列车。</p>`
     },
     "qwertyuiop": {
       title: "qwertyuiop",
