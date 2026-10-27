@@ -1881,7 +1881,7 @@
     }).join("");
     renderDocSignatures(doc.signatures || []);
     loadDocComments(id);
-    els.editBtn.href = "editor.html#" + encodeURIComponent(id);
+    els.editBtn.href = "editor.html" + (isSingleView() ? "?single=1" : "") + "#" + encodeURIComponent(id);
 
     els.docBody.innerHTML = doc.content;
     els.docBody.querySelectorAll("thead th").forEach(function (headingCell) {

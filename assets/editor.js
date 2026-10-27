@@ -43,6 +43,7 @@
     moveArticleDown: document.getElementById("moveArticleDown"),
     uploadCoverBtn: document.getElementById("uploadCoverBtn"),
     coverFileInput: document.getElementById("coverFileInput"),
+    backToDoc: document.getElementById("backToDoc"),
     title: document.getElementById("fieldTitle"),
     topic: document.getElementById("fieldTopic"),
     topicHint: document.getElementById("topicHint"),
@@ -107,6 +108,26 @@
   };
 
   var AUTHOR_KEY = "happydays-editor-author";
+
+  function singleModeRequested() {
+    try {
+      return new URLSearchParams(window.location.search).get("single") === "1";
+    } catch (error) {
+      return false;
+    }
+  }
+
+  function updateBackToDoc() {
+    if (!els.backToDoc) {
+      return;
+    }
+    if (state.mode === "edit" && state.currentSlug) {
+      els.backToDoc.href = "/wiki/#/doc/" + encodeURIComponent(state.currentSlug) +
+        (singleModeRequested() ? "#single" : "");
+      return;
+    }
+    els.backToDoc.href = "/wiki/";
+  }
   var activeEditorTitle = null;
   var savedEditorTitleRange = null;
   var editorTitleBaseFontSize = 18.5;
@@ -492,6 +513,7 @@
     els.moveArticleUp.hidden = true;
     els.moveArticleDown.hidden = true;
     els.uploadCoverBtn.hidden = true;
+    updateBackToDoc();
     setActiveArticle();
     history.replaceState(null, "", "#new");
   }
@@ -743,6 +765,7 @@
     renderSignatures(signatures);
 
     els.formMode.textContent = "编辑文章 · #" + article.order;
+    updateBackToDoc();
     updateHeadingFromTitle();
     setFormAlert("");
     showEditor();
@@ -801,6 +824,7 @@
     els.moveArticleUp.hidden = true;
     els.moveArticleDown.hidden = true;
     els.uploadCoverBtn.hidden = true;
+    updateBackToDoc();
     setBusy(false);
     setActiveArticle();
     history.replaceState(null, "", "#new");
