@@ -217,6 +217,7 @@ class MarkdownRenderer:
             )
         text = self.wrap_delimited(text, "**", "strong")
         text = self.wrap_delimited(text, "*", "em")
+        text = self.wrap_delimited(text, "~~", "del")
 
         def replace_link(match: re.Match) -> str:
             label = match.group(1)

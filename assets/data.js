@@ -651,10 +651,31 @@ window.HAPPYDAYS_WIKI = (function () {
       excerpt: "服务器最具实力的国家之一。",
       icon: "/icon.png",
       updated: "2026-10-25",
-      reading: 1,
+      reading: 3,
       tags: ["国家"],
       signatures: [{"author": "233", "at": "2026-10-25T20:56:49+08:00", "action": "update", "title": "罗德岛", "topic": "国家/城镇"}, {"author": "fish", "at": "2026-10-26T22:54:26+08:00", "action": "update", "title": "罗德岛", "topic": "国家/城镇"}],
-      content: `<p>123</p>`
+      content: `<h2>截至撰稿日期（2026.10.25）罗德岛为第二大国家</h2>
+<p><strong>其对服务器的影响是巨大的——233</strong></p>
+<p><del>促进了许多东西被ban</del></p>
+<p>在我眼里罗德岛可以拿去当连云港的条目了，附属城镇可以说是很少了——fish</p>
+<hr>
+<h2>国家简介</h2>
+<h3>主要成员：</h3>
+<ul><li>AbaWuwaO —— 国家创始人</li><li>fish —— 核心二把手</li></ul>
+<h3>附属城镇：</h3>
+<p>武汉、舟山、厦门</p>
+<p><del>剩下的不记得了</del></p>
+<h3>建立时间：</h3>
+<p>5 月下旬改名为罗德岛</p>
+<h3>描述：</h3>
+<p>首都连云港的资金与物资储备久居服务器前列；历史悠久；创始人长时间不上线，加上长期招不到新人，因此长期处于 fish 的独裁统治下；长期开放对外投资，有建筑项目可向罗德岛申请投资。</p>
+<hr>
+<h2>国家发展</h2>
+<h3>建设成就：</h3>
+<h4>个人项目</h4>
+<div class="table-wrap"><table><thead><tr><th>名称</th><th>状态</th></tr></thead><tbody><tr><td>连云港大教堂</td><td>已完成</td></tr><tr><td>北极文明的墓碑</td><td>已完工</td></tr><tr><td>罗德岛陆地舰兼高空机场</td><td>已完工</td></tr><tr><td>连云港地下停车场</td><td>已完工</td></tr><tr><td>连云港地下繁茂洞穴</td><td>暂时停工</td></tr></tbody></table></div>
+<h4>公共项目</h4>
+<ul><li>帮助其他地区建造了累计 4 座以上的机场</li><li>建造了连云港——日本的地下高速</li><li>建造了目前服务器唯一的海底隧道，秦皇岛——大连</li></ul>`
     },
     "freedom-union": {
       title: "自由联邦共同体 Freedom Union",
