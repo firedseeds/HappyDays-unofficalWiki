@@ -91,7 +91,7 @@ window.HAPPYDAYS_WIKI = (function () {
       updated: "2026-10-25",
       reading: 1,
       tags: [],
-      signatures: [{"author": "smillfox", "at": "2026-10-26T11:50:49+08:00", "action": "update", "title": "简介", "topic": "简介"}],
+      signatures: [{"author": "smillfox", "at": "2026-10-26T11:50:49+08:00", "action": "update", "title": "简介", "topic": "简介"}, {"author": "zeyu_1150", "at": "2026-10-27T21:30:13+08:00", "action": "update", "title": "简介", "topic": "简介"}],
       content: `<h2>HappyDays轨道交通服务器</h2>
 <p><strong>happydays是在1:326的欧亚地图上以建立发展城市、轨道交通及铁路建设为基础的Minecraft服务器</strong></p>
 <p><strong>游戏版本：Java 1.20.1</strong></p>

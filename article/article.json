@@ -429,6 +429,19 @@
       "source": "/wiki/#/doc/dprk"
     },
     {
+      "slug": "ok",
+      "order": 27,
+      "topic": "godman",
+      "title": "OK",
+      "description": "OK：多次破坏服务器",
+      "emoji": "📄",
+      "updated": "2026-10-26",
+      "readingTime": 5,
+      "tags": [],
+      "file": "history/godman/ok.md",
+      "source": "/wiki/#/doc/ok"
+    },
+    {
       "slug": "qwertyuiop",
       "order": 28,
       "topic": "godman",
@@ -440,19 +453,6 @@
       "tags": [],
       "file": "history/godman/qwertyuiop.md",
       "source": "/wiki/#/doc/qwertyuiop"
-    },
-    {
-      "slug": "alex",
-      "order": 32,
-      "topic": "godman",
-      "title": "Alex",
-      "description": "被zzx带进来的神人，进来不到两天就把火车给实体化了，...",
-      "emoji": "📖",
-      "updated": "2026-10-25",
-      "readingTime": 1,
-      "tags": [],
-      "file": "history/godman/alex.md",
-      "source": "/wiki/#/doc/alex"
     },
     {
       "slug": "gallery-1",
@@ -494,6 +494,19 @@
       "source": "/wiki/#/doc/1"
     },
     {
+      "slug": "alex",
+      "order": 32,
+      "topic": "godman",
+      "title": "Alex",
+      "description": "被zzx带进来的神人，进来不到两天就把火车给实体化了，...",
+      "emoji": "📖",
+      "updated": "2026-10-25",
+      "readingTime": 1,
+      "tags": [],
+      "file": "history/godman/alex.md",
+      "source": "/wiki/#/doc/alex"
+    },
+    {
       "slug": "666",
       "order": 33,
       "topic": "godman",
@@ -505,19 +518,6 @@
       "tags": [],
       "file": "history/godman/666.md",
       "source": "/wiki/#/doc/666"
-    },
-    {
-      "slug": "ok",
-      "order": 27,
-      "topic": "godman",
-      "title": "OK",
-      "description": "OK：多次破坏服务器",
-      "emoji": "📄",
-      "updated": "2026-10-26",
-      "readingTime": 5,
-      "tags": [],
-      "file": "history/godman/ok.md",
-      "source": "/wiki/#/doc/ok"
     }
   ]
 }
