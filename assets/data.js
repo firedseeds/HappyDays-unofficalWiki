@@ -150,7 +150,7 @@ window.HAPPYDAYS_WIKI = (function () {
       updated: "2026-10-25",
       reading: 2,
       tags: [],
-      signatures: [{"author": "smillfox", "at": "2026-10-27T22:06:01+08:00", "action": "update", "title": "初来乍到", "topic": "新手教程"}, {"author": "smillfox", "at": "2026-10-27T22:08:13+08:00", "action": "update", "title": "初来乍到", "topic": "新手教程"}],
+      signatures: [{"author": "smillfox", "at": "2026-10-27T22:06:01+08:00", "action": "update", "title": "初来乍到", "topic": "新手教程"}, {"author": "smillfox", "at": "2026-10-27T22:08:13+08:00", "action": "update", "title": "初来乍到", "topic": "新手教程"}, {"author": "smillfox", "at": "2026-10-27T22:08:22+08:00", "action": "update", "title": "初来乍到", "topic": "新手教程"}],
       content: `<h2>1-最基本的</h2>
 <p><strong>1.1逃出出生点！！！（bushi）</strong></p>
 <p>进入服务器后，<strong>请根据聊天栏的提示</strong>进行账号注册：/reg &lt;密码&gt; &lt;重复密码&gt;</p>
