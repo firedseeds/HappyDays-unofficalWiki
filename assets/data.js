@@ -403,10 +403,47 @@ window.HAPPYDAYS_WIKI = (function () {
       excerpt: "当然，服务器是有载具的，不能合成",
       icon: "/icon.png",
       updated: "2026-10-25",
-      reading: 1,
+      reading: 2,
       tags: [],
-      signatures: [],
-      content: `<p>当然，服务器是有载具的，不能合成</p>`
+      signatures: [{"author": "LZnofu", "at": "2026-10-27T23:13:43+08:00", "action": "update", "title": "沉浸车辆", "topic": "进阶教程"}],
+      content: `<p>当然，服务器是有载具的，不能合成</p>
+<h2>汽车</h2>
+<p>在本服，汽车是一种交通方式。</p>
+<h3>考取驾照</h3>
+<p>首先，来到郑州机铁站旁，阅读显示屏上面的须知，调整键位与CONFIG 调整完后，呼叫教练或op，教练会指引你上车 完成8个项目后，教练会对你评分 如果合格/过了，在屋子门前购买驾照（5000块）； 如果没过，听取教练的<strong>（建议先在单人存档练习，避免不合格过多）</strong></p>
+<h3>买车</h3>
+<p>存钱完后，前往考取驾照的地方，旁边有个4S店 然后，呼叫op，op会问出问题，依次回答即可（谨慎选择卡车）</p>
+<blockquote>
+<p>※车型、车颜色（可以先说颜色）、座椅型号与颜色</p>
+</blockquote>
+<p>如有需要，可以将后面（除赛车）更换成箱子 配完车后，op会给你钥匙，妥善保管</p>
+<h3>开车</h3>
+<p>首先解锁车辆，打开车门，坐到座位上，点火，松开手刹，挂挡，注意进隧道时开灯，出隧道时鸣笛 定好目的地，看路牌，最好不超速（无限速时默认75），过弯时控制速度，避免冲出道路</p>
+<h4>洗车</h4>
+<p>车在下雨天行驶时，车会沾上污垢 1.可以拿一个水桶，放在车架下中，等待几秒</p>
+<p>2.等待下雨天，停车等待</p>
+<p>3.在洗车站洗车，在SF、金林、威海、武汉、张家界装有</p>
+<p><strong><em>4.把车开到河里，冲出来（不建议，危险）</em></strong></p>
+<h4>发动机异响</h4>
+<p>当发动机出现异响，代表发动机里程达到500km，需要寻找op更换（免费）</p>
+<h4>HP</h4>
+<p>车辆的HP值一般为150（卡车250），当车辆HP值小于50时，发动机会冒黑烟，可使用加油站的修车包修复</p>
+<h4>加油</h4>
+<p>在加油站里购买加油券（重庆特惠20），右击加油站，选择价格，等待出油（如果有油则跳过该步骤），再次右击加油站，开始加油</p>
+<p>当显示：<code>Vehicle is full,disconnecting.</code>表示车辆加满油了，如果没有出现提示 ，继续加油</p>
+<h2>飞机</h2>
+<p>（我没开过awa）</p>
+<h2>P菜单设置翻译</h2>
+<h4>第一页 RENDERING（渲染设置）</h4>
+<div class="table-wrap"><table><thead><tr><th>选项</th><th>翻译</th><th>备注</th></tr></thead><tbody><tr><td>renderHUD_1P</td><td>第一人称显示 HUD</td><td>开 = 第一人称屏幕上显示HUD</td></tr><tr><td>renderHUD_3P</td><td>第三人称显示 HUD</td><td>开 = 第三人称屏幕上显示HUD</td></tr><tr><td>fullHUD_1P</td><td>第一人称完整 HUD</td><td>开着会占更多屏幕，但更全</td></tr><tr><td>fullHUD_3P</td><td>第三人称完整 HUD</td><td>同上，仅第三人称生效</td></tr><tr><td>transpHUD_1P</td><td>第一人称 HUD 透明化</td><td>开着 HUD 变半透明，不挡视线</td></tr><tr><td>renderWindows</td><td>渲染车窗玻璃</td><td>关掉能省性能</td></tr><tr><td>freecam_3P</td><td>第三人称自由视角</td><td>镜头独立，不跟车转</td></tr><tr><td>renderBeams</td><td>渲染车灯光束</td><td>夜景灯光效果</td></tr><tr><td>brightLights</td><td>高亮灯光</td><td>灯更亮更明显</td></tr><tr><td>blendedLights</td><td>混合柔光</td><td>灯光柔和</td></tr><tr><td>lightsTransp</td><td>灯光透明</td><td>灯罩半透明效果</td></tr></tbody></table></div>
+<p><strong>渲染模式</strong>：Superfast（极速・性能最好画质差）／ Fast（快速・平衡）／ Slow（慢速・光影兼容最好，细节更多，帧率低）</p>
+<h4>第二页 CONFIG（功能配置）</h4>
+<div class="table-wrap"><table><thead><tr><th>选项</th><th>翻译</th><th>备注</th></tr></thead><tbody><tr><td>kbOverride</td><td>键盘输入覆盖</td><td>接管按键，屏蔽 MC 原版视角</td></tr><tr><td>north360</td><td>方向角 360 度模式</td><td>方向盘无限制</td></tr><tr><td>simpleThrottle</td><td>简易油门</td><td>简化油门，前进后退一键切</td></tr><tr><td>halfThrottle</td><td>半油门模式</td><td>油门只到一半</td></tr><tr><td>autostartEng</td><td>引擎自动启动</td><td>上车直接点火</td></tr><tr><td>autoTrnSignals</td><td>转向灯自动控制</td><td>自动打转向灯</td></tr><tr><td>useShifter</td><td>启用手动换挡器</td><td>默认手动挡</td></tr><tr><td>heliAutoLevel</td><td>直升机自动配平</td><td>开这个没用</td></tr><tr><td>mouseYoke</td><td>鼠标摇杆模式</td><td>鼠标控制方向舵</td></tr><tr><td>classicJystk</td><td>经典旧版摇杆</td><td>用旧摇杆手感</td></tr><tr><td>Sound Volume</td><td>引擎音效音量</td><td>调引擎声大小</td></tr><tr><td>Radio Volume</td><td>车载电台音量</td><td>调电台声大小</td></tr></tbody></table></div>
+<h4>第三页 CONTROLS 按键设置（IV/MTS 沉浸载具）</h4>
+<p><strong>飞机操控</strong></p>
+<div class="table-wrap"><table><thead><tr><th>选项</th><th>翻译</th><th>备注</th></tr></thead><tbody><tr><td>YawRight</td><td>偏航向右（机头右转）</td><td>飞机水平向右转向（地面用）</td></tr><tr><td>YawLeft</td><td>偏航向左（机头左转）</td><td>飞机水平向左转向（地面用）</td></tr><tr><td>PitchUp</td><td>俯仰向上（抬头爬升）</td><td>抬升机头，向上飞</td></tr><tr><td>PitchDown</td><td>俯仰向下（低头俯冲）</td><td>压下机头，向下俯冲</td></tr><tr><td>RollRight</td><td>向右滚转（向右倾斜）</td><td>机身向右侧翻滚</td></tr><tr><td>RollLeft</td><td>向左滚转（向左倾斜）</td><td>机身向左侧翻滚</td></tr><tr><td>ThrottleUp</td><td>加大油门</td><td>提升发动机动力</td></tr><tr><td>ThrottleDown</td><td>减小油门</td><td>降低发动机动力</td></tr><tr><td>FlapsUp</td><td>收起襟翼</td><td>适合高速飞行</td></tr><tr><td>FlapsDown</td><td>放下襟翼</td><td>起降、低速飞行使用</td></tr><tr><td>Mouse Yoke</td><td>鼠标摇杆模式开关</td><td>开启后鼠标直接控制飞机姿态</td></tr><tr><td>Brake</td><td>刹车</td><td>地面滑行制动</td></tr><tr><td>ParkingBrake</td><td>驻车刹车 / 手刹</td><td>停车锁死车轮</td></tr><tr><td>Panel</td><td>打开控制面板</td><td>调出载具配置界面</td></tr><tr><td>Radio</td><td>车载电台</td><td>电台开关</td></tr><tr><td>Gun</td><td>武器开火</td><td>发射载具武器</td></tr><tr><td>Switch Gun</td><td>切换武器</td><td>在多个武器之间轮换</td></tr><tr><td>ZoomIn</td><td>放大视角</td><td>拉近镜头</td></tr><tr><td>ZoomOut</td><td>缩小视角</td><td>拉远镜头</td></tr><tr><td>ChangeView</td><td>切换视角</td><td>第一 / 第三人称切换</td></tr><tr><td>CamLock</td><td>视角锁定</td><td>锁定镜头朝向，搭配自由视角使用</td></tr><tr><td>DisableJoystick</td><td>关闭摇杆输入</td><td>屏蔽外接游戏手柄、摇杆</td></tr></tbody></table></div>
+<p><strong>汽车操控</strong></p>
+<div class="table-wrap"><table><thead><tr><th>选项</th><th>翻译</th><th>备注</th></tr></thead><tbody><tr><td>Mod</td><td>功能修饰键</td><td>组合键，搭配使用</td></tr><tr><td>TurnRight</td><td>向右转向</td><td>车辆向右打方向</td></tr><tr><td>TurnLeft</td><td>向左转向</td><td>车辆向左打方向</td></tr><tr><td>Gas</td><td>油门</td><td>车辆踩油门</td></tr><tr><td>Brake</td><td>刹车</td><td>车辆减速制动</td></tr><tr><td>ParkingBrake</td><td>手刹</td><td>驻车锁止</td></tr><tr><td>Panel</td><td>控制面板</td><td>打开载具设置面板</td></tr><tr><td>ShiftUp</td><td>升挡</td><td>提高挡位</td></tr><tr><td>ShiftDown</td><td>降挡</td><td>降低挡位</td></tr><tr><td>Horn</td><td>喇叭</td><td>鸣笛</td></tr><tr><td>Radio</td><td>电台</td><td>车载电台开关</td></tr><tr><td>Gun</td><td>开火</td><td>车辆武器发射</td></tr><tr><td>Switch Gun</td><td>切换武器</td><td>轮换车载武器</td></tr><tr><td>ZoomIn</td><td>镜头放大</td><td>拉近视角</td></tr><tr><td>ZoomOut</td><td>镜头缩小</td><td>拉远视角</td></tr><tr><td>ChangeView</td><td>切换视角</td><td>第一 / 第三人称切换</td></tr><tr><td>Lights</td><td>车灯</td><td>控制车灯开关</td></tr><tr><td>CamLock</td><td>视角锁定</td><td>锁定镜头方向</td></tr><tr><td>LeftSignal</td><td>左转向灯</td><td>开启左转向提示灯</td></tr><tr><td>RightSignal</td><td>右转向灯</td><td>开启右转向提示灯</td></tr><tr><td>DisableJoystick</td><td>关闭摇杆</td><td>屏蔽外接摇杆设备</td></tr></tbody></table></div>`
     },
     "town-resources": {
       title: "城镇资源",
