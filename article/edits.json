@@ -314,6 +314,15 @@
         "title": "森罗物语：厨房",
         "topic": "进阶教程"
       }
+    ],
+    "first-arrival": [
+      {
+        "author": "smillfox",
+        "at": "2026-10-27T22:06:01+08:00",
+        "action": "update",
+        "title": "初来乍到",
+        "topic": "新手教程"
+      }
     ]
   }
 }
