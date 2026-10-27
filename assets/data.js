@@ -109,7 +109,7 @@ window.HAPPYDAYS_WIKI = (function () {
       updated: "2026-10-25",
       reading: 3,
       tags: [],
-      signatures: [{"author": "smillfox", "at": "2026-10-26T13:27:55+08:00", "action": "update", "title": "进入游戏前", "topic": "新手教程"}, {"author": "zeyu_1145", "at": "2026-10-27T21:37:58+08:00", "action": "update", "title": "进入游戏前", "topic": "新手教程"}, {"author": "zeyu_1145", "at": "2026-10-27T21:38:03+08:00", "action": "update", "title": "进入游戏前", "topic": "新手教程"}, {"author": "smillfox", "at": "2026-10-27T21:59:32+08:00", "action": "update", "title": "进入游戏前", "topic": "新手教程"}],
+      signatures: [{"author": "smillfox", "at": "2026-10-26T13:27:55+08:00", "action": "update", "title": "进入游戏前", "topic": "新手教程"}, {"author": "zeyu_1145", "at": "2026-10-27T21:37:58+08:00", "action": "update", "title": "进入游戏前", "topic": "新手教程"}, {"author": "zeyu_1145", "at": "2026-10-27T21:38:03+08:00", "action": "update", "title": "进入游戏前", "topic": "新手教程"}, {"author": "smillfox", "at": "2026-10-27T21:59:32+08:00", "action": "update", "title": "进入游戏前", "topic": "新手教程"}, {"author": "smillfox", "at": "2026-10-27T21:59:38+08:00", "action": "update", "title": "进入游戏前", "topic": "新手教程"}],
       content: `<h2>1 - 准备</h2>
 <p><strong>1.1 配置</strong></p>
 <p><strong>推荐使用强劲的电脑、笔记本或手机游玩</strong></p>
