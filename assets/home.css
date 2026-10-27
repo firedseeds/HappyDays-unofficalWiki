@@ -5,6 +5,7 @@
 :root {
   --color-card: #ffffff;
   --color-card-soft: #ece8e0;
+  --ease: cubic-bezier(0.22, 0.8, 0.28, 1);
   --surface: var(--color-bg);
   --canvas: #ffffff;
   --input-bg: #ffffff;
@@ -218,7 +219,34 @@
 
 .hero-section .hero {
   margin-bottom: 0;
-  transition: height 450ms var(--ease), max-height 450ms var(--ease);
+  transition: height 500ms var(--ease), max-height 500ms var(--ease);
+}
+
+.site-header {
+  height: 76px;
+  overflow: hidden;
+  border-bottom-color: var(--color-border);
+  transition:
+    height 320ms var(--ease),
+    transform 320ms var(--ease),
+    opacity 320ms var(--ease),
+    border-color 320ms var(--ease),
+    border-bottom-width 320ms var(--ease);
+}
+
+body.hero-focus .site-header {
+  height: 0;
+  border-bottom-color: transparent;
+  border-bottom-width: 0;
+  transform: translateY(-100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (max-width: 900px) {
+  .site-header {
+    height: 64px;
+  }
 }
 
 .hero-media {
@@ -608,6 +636,10 @@
   }
 
   .hero-section .hero {
+    transition: none;
+  }
+
+  .site-header {
     transition: none;
   }
 

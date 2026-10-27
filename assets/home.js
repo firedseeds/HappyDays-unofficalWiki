@@ -475,6 +475,18 @@
     resizeTimer = window.setTimeout(updateHeroHoverHeight, 120);
   });
 
+  var siteHeader = document.querySelector(".site-header");
+  if (siteHeader) {
+    els.hero.addEventListener("mouseenter", function () {
+      if (state.current) {
+        document.body.classList.add("hero-focus");
+      }
+    });
+    els.hero.addEventListener("mouseleave", function () {
+      document.body.classList.remove("hero-focus");
+    });
+  }
+
   els.edit.addEventListener("click", openDialog);
   els.form.addEventListener("submit", saveConfig);
   els.upload.addEventListener("click", uploadImage);
