@@ -167,7 +167,7 @@
   }
 
   function loadTracks() {
-    fetch("/BGM.json", { cache: "no-store" })
+    fetch("/BGM/BGM.json", { cache: "no-store" })
       .then(function (response) {
         return response.ok ? response.json() : { tracks: [] };
       })

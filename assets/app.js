@@ -1306,7 +1306,7 @@
   }
 
   function loadBgmTracks() {
-    fetch("BGM.json", { cache: "no-store" }).then(function (response) {
+    fetch("BGM/BGM.json", { cache: "no-store" }).then(function (response) {
       if (!response.ok) {
         throw new Error("BGM 加载失败");
       }

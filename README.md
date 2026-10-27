@@ -399,7 +399,7 @@ BGM/
 配置保存在：
 
 ```text
-BGM.json
+BGM/BGM.json
 ```
 
 格式：
@@ -426,7 +426,7 @@ BGM.json
 - 只有一首音乐时循环播放
 - 页面不可见时暂停，回到页面后仅在之前正在播放时恢复
 - 上传成功后自动创建本地 Git commit（不会 push）
-- 纯静态部署可以读取 `BGM.json` 并播放已有音乐，但不能上传
+- 纯静态部署可以读取 `BGM/BGM.json` 并播放已有音乐，但不能上传
 
 ### 文章评论
 
@@ -521,8 +521,9 @@ BGM.json
 ├─ sync.sh               # Linux 启动/停止同步与每日 push
 ├─ sync.ps1              # Windows 启动/停止同步与每日 push
 ├─ title.json            # 页眉滚动标题、权重、默认字号与轮换间隔
-├─ BGM.json              # 背景音乐文件名、歌名与权重
 ├─ BGM/                  # 背景音乐文件目录
+│  ├─ BGM.json           # 背景音乐文件名、歌名与权重
+│  └─ 音乐文件            # mp3 / wav
 ├─ comment/              # 评论元数据与每条评论的 Markdown 文件
 │  ├─ comment.json       # 各文章的评论索引
 │  └─ <slug>/<id>.md     # 单条评论正文
