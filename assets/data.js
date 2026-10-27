@@ -109,7 +109,7 @@ window.HAPPYDAYS_WIKI = (function () {
       updated: "2026-10-25",
       reading: 3,
       tags: [],
-      signatures: [{"author": "smillfox", "at": "2026-10-26T13:27:55+08:00", "action": "update", "title": "进入游戏前", "topic": "新手教程"}, {"author": "zeyu_1145", "at": "2026-10-27T21:37:58+08:00", "action": "update", "title": "进入游戏前", "topic": "新手教程"}, {"author": "zeyu_1145", "at": "2026-10-27T21:38:03+08:00", "action": "update", "title": "进入游戏前", "topic": "新手教程"}],
+      signatures: [{"author": "smillfox", "at": "2026-10-26T13:27:55+08:00", "action": "update", "title": "进入游戏前", "topic": "新手教程"}, {"author": "zeyu_1145", "at": "2026-10-27T21:37:58+08:00", "action": "update", "title": "进入游戏前", "topic": "新手教程"}, {"author": "zeyu_1145", "at": "2026-10-27T21:38:03+08:00", "action": "update", "title": "进入游戏前", "topic": "新手教程"}, {"author": "smillfox", "at": "2026-10-27T21:59:32+08:00", "action": "update", "title": "进入游戏前", "topic": "新手教程"}],
       content: `<h2>1 - 准备</h2>
 <p><strong>1.1 配置</strong></p>
 <p><strong>推荐使用强劲的电脑、笔记本或手机游玩</strong></p>
@@ -139,7 +139,7 @@ window.HAPPYDAYS_WIKI = (function () {
 <p><strong>2.3 连接服务器</strong></p>
 <p>在启动器点击启动游戏后，将会弹出游戏窗口请遵循以下步骤：</p>
 <p>①在游戏界面中点击<strong>多人游戏</strong>，然后点击第一个服务器</p>
-<p><strong>至此，你学会了怎么进入服务器👏🏻</strong></p>`
+<p><strong>至此，你学会了怎么进入服务器</strong></p>`
     },
     "first-arrival": {
       title: "初来乍到",
