@@ -394,11 +394,13 @@
       "order": 23,
       "topic": "nations",
       "title": "罗德岛",
-      "description": "此文档在语雀中暂无正文。",
+      "description": "服务器最具实力的国家之一。",
       "emoji": "📖",
       "updated": "2026-10-25",
       "readingTime": 1,
-      "tags": [],
+      "tags": [
+        "国家"
+      ],
       "file": "history/nations/rhodes-island.md",
       "source": "/wiki/#/doc/rhodes-island"
     },

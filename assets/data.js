@@ -91,7 +91,7 @@ window.HAPPYDAYS_WIKI = (function () {
       updated: "2026-10-25",
       reading: 1,
       tags: [],
-      signatures: [{"author": "smillfox", "at": "2026-10-26T11:50:49+08:00", "action": "update", "title": "简介", "topic": "简介"}, {"author": "zeyu_1150", "at": "2026-10-27T21:30:13+08:00", "action": "update", "title": "简介", "topic": "简介"}, {"author": "zeyu_1150", "at": "2026-10-27T21:30:17+08:00", "action": "update", "title": "简介", "topic": "简介"}, {"author": "zeyu_1150", "at": "2026-10-27T21:30:21+08:00", "action": "update", "title": "简介", "topic": "简介"}],
+      signatures: [{"author": "smillfox", "at": "2026-10-26T11:50:49+08:00", "action": "update", "title": "简介", "topic": "简介"}],
       content: `<h2>HappyDays轨道交通服务器</h2>
 <p><strong>happydays是在1:326的欧亚地图上以建立发展城市、轨道交通及铁路建设为基础的Minecraft服务器</strong></p>
 <p><strong>游戏版本：Java 1.20.1</strong></p>
@@ -111,9 +111,9 @@ window.HAPPYDAYS_WIKI = (function () {
       updated: "2026-10-25",
       reading: 3,
       tags: [],
-      signatures: [{"author": "smillfox", "at": "2026-10-26T13:27:55+08:00", "action": "update", "title": "进入游戏前", "topic": "新手教程"}],
+      signatures: [{"author": "smillfox", "at": "2026-10-26T13:27:55+08:00", "action": "update", "title": "进入游戏前", "topic": "新手教程"}, {"author": "zeyu_1145", "at": "2026-10-27T21:37:58+08:00", "action": "update", "title": "进入游戏前", "topic": "新手教程"}],
       content: `<h2>1 - 准备</h2>
-<p><strong>1.1 配置</strong></p>
+<p>1 <strong>1.1 配置</strong></p>
 <p><strong>推荐使用强劲的电脑、笔记本或手机游玩</strong></p>
 <p>根据Minecraft的性能需求，不建议使用过于古老的机器进行游玩，否则会造成加载时间过长，游玩掉帧等令人不适的问题。</p>
 <p><strong>1.2 系统</strong></p>
@@ -650,15 +650,13 @@ window.HAPPYDAYS_WIKI = (function () {
       title: "罗德岛",
       emoji: "📖",
       category: "nations",
-      excerpt: "此文档在语雀中暂无正文。",
+      excerpt: "服务器最具实力的国家之一。",
       icon: "/icon.png",
       updated: "2026-10-25",
       reading: 1,
-      tags: [],
-      signatures: [{"author": "233", "at": "2026-10-25T20:56:49+08:00", "action": "update", "title": "罗德岛", "topic": "国家/城镇"}],
-      content: `<h2>截至撰稿日期（2026.10.25）罗德岛为第二大国家</h2>
-<p><strong>其对服务器的影响是巨大的——233</strong></p>
-<p>让我们有请罗德岛成员来编辑（</p>`
+      tags: ["国家"],
+      signatures: [{"author": "233", "at": "2026-10-25T20:56:49+08:00", "action": "update", "title": "罗德岛", "topic": "国家/城镇"}, {"author": "fish", "at": "2026-10-26T22:54:26+08:00", "action": "update", "title": "罗德岛", "topic": "国家/城镇"}],
+      content: `<p>123</p>`
     },
     "freedom-union": {
       title: "自由联邦共同体 Freedom Union",

@@ -8,27 +8,6 @@
         "action": "update",
         "title": "简介",
         "topic": "简介"
-      },
-      {
-        "author": "zeyu_1150",
-        "at": "2026-10-27T21:30:13+08:00",
-        "action": "update",
-        "title": "简介",
-        "topic": "简介"
-      },
-      {
-        "author": "zeyu_1150",
-        "at": "2026-10-27T21:30:17+08:00",
-        "action": "update",
-        "title": "简介",
-        "topic": "简介"
-      },
-      {
-        "author": "zeyu_1150",
-        "at": "2026-10-27T21:30:21+08:00",
-        "action": "update",
-        "title": "简介",
-        "topic": "简介"
       }
     ],
     "about-nations": [
@@ -135,6 +114,13 @@
         "action": "update",
         "title": "罗德岛",
         "topic": "国家/城镇"
+      },
+      {
+        "author": "fish",
+        "at": "2026-10-26T22:54:26+08:00",
+        "action": "update",
+        "title": "罗德岛",
+        "topic": "国家/城镇"
       }
     ],
     "resource-world-nether": [
@@ -221,6 +207,13 @@
       {
         "author": "smillfox",
         "at": "2026-10-26T13:27:55+08:00",
+        "action": "update",
+        "title": "进入游戏前",
+        "topic": "新手教程"
+      },
+      {
+        "author": "zeyu_1145",
+        "at": "2026-10-27T21:37:58+08:00",
         "action": "update",
         "title": "进入游戏前",
         "topic": "新手教程"
