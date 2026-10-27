@@ -27,7 +27,8 @@
     config: { intervalSeconds: 5, images: [] },
     current: null,
     timer: null,
-    backend: false
+    backend: false,
+    imageToken: 0
   };
 
   function normalizeConfig(raw) {
@@ -91,6 +92,7 @@
   }
 
   function showPlaceholder() {
+    state.imageToken += 1;
     state.current = null;
     els.hero.classList.remove("has-image");
     els.image.classList.remove("is-visible");
@@ -104,21 +106,32 @@
       showPlaceholder();
       return;
     }
-    state.current = image;
-    els.image.classList.remove("is-visible");
-    els.image.hidden = false;
-    els.image.alt = image.file;
-    els.placeholder.hidden = false;
-    els.hero.classList.remove("has-image");
-    els.image.onload = function () {
-      els.hero.classList.add("has-image");
+    if (state.current && state.current.file === image.file) {
+      return;
+    }
+    var token = ++state.imageToken;
+    var loader = new Image();
+    loader.onload = function () {
+      if (token !== state.imageToken) {
+        return;
+      }
+      state.current = image;
+      els.image.src = loader.src;
+      els.image.alt = image.file;
+      els.image.hidden = false;
       els.image.classList.add("is-visible");
+      els.hero.classList.add("has-image");
       els.placeholder.hidden = true;
     };
-    els.image.onerror = function () {
-      showPlaceholder();
+    loader.onerror = function () {
+      if (token !== state.imageToken) {
+        return;
+      }
+      if (!state.current) {
+        showPlaceholder();
+      }
     };
-    els.image.src = imageUrl(image.file);
+    loader.src = imageUrl(image.file);
   }
 
   function startRotation() {
