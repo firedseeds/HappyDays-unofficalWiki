@@ -150,7 +150,7 @@ window.HAPPYDAYS_WIKI = (function () {
       updated: "2026-10-25",
       reading: 2,
       tags: [],
-      signatures: [{"author": "smillfox", "at": "2026-10-27T22:06:01+08:00", "action": "update", "title": "初来乍到", "topic": "新手教程"}],
+      signatures: [{"author": "smillfox", "at": "2026-10-27T22:06:01+08:00", "action": "update", "title": "初来乍到", "topic": "新手教程"}, {"author": "smillfox", "at": "2026-10-27T22:08:13+08:00", "action": "update", "title": "初来乍到", "topic": "新手教程"}],
       content: `<h2>1-最基本的</h2>
 <p><strong>1.1逃出出生点！！！（bushi）</strong></p>
 <p>进入服务器后，<strong>请根据聊天栏的提示</strong>进行账号注册：/reg &lt;密码&gt; &lt;重复密码&gt;</p>
@@ -171,8 +171,8 @@ window.HAPPYDAYS_WIKI = (function () {
 <p>服务器以轨道交通和建造城镇为主要玩法</p>
 <p>可以在<strong>手机</strong>上看到时刻表</p>
 <p><strong>主要铁路线路：</strong></p>
-<ol class="steps"><li>哈鲁线： 哈尔滨 - 长春 - 沈阳 - 秦皇岛 - 北京 - 济南</li><li>中央环线: 连云港 - 南京 - 武汉 - 重庆 - 西安 - 三门峡 - 郑州 - 济南 - 连云港</li><li>西南环线：广州 - 南宁 - 昆明 - 成都 - 重庆 - 长沙 - 广州</li><li>西连线： 大连 - 秦皇岛 - 北京 - 呼和浩特 - 西安</li><li>沪广线： 上海 - 南京 - 武汉 - 长沙 - 广州</li><li>川藏线： 成都 - 拉萨 - 纳木错</li><li>中欧线： 西安 - 金林 - 青海湖 - 青海湖 - 青海湖 - 青海湖 - 青海湖</li></ol>
-<p><strong>至此，你初步了解了这个世界👏🏻</strong></p>`
+<ol class="steps"><li>哈鲁线： 哈尔滨 - 长春 - 沈阳 - 秦皇岛 - 北京 - 济南</li><li>中央环线: 连云港 - 南京 - 武汉 - 重庆 - 西安 - 三门峡 - 郑州 - 济南 - 连云港</li><li>西南环线：广州 - 南宁 - 昆明 - 成都 - 重庆 - 长沙 - 广州</li><li>西连线： 大连 - 秦皇岛 - 北京 - 呼和浩特 - 西安</li><li>沪广线： 上海 - 南京 - 武汉 - 长沙 - 广州</li><li>川藏线： 成都 - 拉萨 - 纳木错</li><li>中欧线： 西安 - 金林 - 青海湖 - 罗布泊 - 莎车 - 里海大坝纪念塔 - 安卡拉 - 君士坦丁堡 - 汉诺威 - 奥地利</li><li>特急线： 北京 - 南京</li></ol>
+<p><strong>至此，你初步了解了这个世界</strong></p>`
     },
     "shop-plugin": {
       title: "商店插件",
