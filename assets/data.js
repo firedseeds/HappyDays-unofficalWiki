@@ -687,7 +687,7 @@ window.HAPPYDAYS_WIKI = (function () {
       emoji: "📖",
       category: "nations",
       excerpt: "详见zzx人物志",
-      icon: "/icon.png",
+      icon: "/article/icon/harbin-chronicle.png",
       updated: "2026-10-25",
       reading: 1,
       tags: [],
