@@ -1,6 +1,6 @@
 ---
 title: "森罗物语：厨房"
-description: "引言做饭是一门高深的艺术一、食材的获取及储存1.1植物..."
+description: "做饭是一门高深的艺术一"
 topic: "进阶教程"
 topic_id: "advanced"
 updated: "2026-10-25"
