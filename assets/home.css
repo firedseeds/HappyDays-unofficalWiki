@@ -256,6 +256,18 @@
   display: none;
 }
 
+@media (hover: hover) and (pointer: fine) {
+  .hero:hover .hero-media img {
+    object-fit: contain;
+    background: #0b0f0d;
+  }
+
+  .card:hover .card-cover {
+    object-fit: contain;
+    background: var(--color-card-soft);
+  }
+}
+
 .hero-placeholder {
   position: absolute;
   inset: 0;
