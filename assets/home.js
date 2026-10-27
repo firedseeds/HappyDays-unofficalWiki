@@ -278,6 +278,10 @@
     }
     els.upload.disabled = true;
     setStatus("上传中…");
+    var controller = new AbortController();
+    var timeout = window.setTimeout(function () {
+      controller.abort();
+    }, 90000);
     file.arrayBuffer().then(function (buffer) {
       return fetch(
         "/api/home/images?filename=" + encodeURIComponent(file.name) +
@@ -285,7 +289,8 @@
         {
           method: "POST",
           headers: { "Content-Type": file.type || "application/octet-stream" },
-          body: buffer
+          body: buffer,
+          signal: controller.signal
         }
       );
     }).then(function (response) {
@@ -303,8 +308,14 @@
       els.uploadWeight.value = "1";
       setStatus("图片已上传");
     }).catch(function (error) {
-      setStatus(error.message, true);
+      setStatus(
+        error && error.name === "AbortError"
+          ? "上传超时，请查看服务日志"
+          : error.message,
+        true
+      );
     }).finally(function () {
+      window.clearTimeout(timeout);
       els.upload.disabled = false;
     });
   }

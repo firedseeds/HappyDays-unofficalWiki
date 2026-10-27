@@ -404,14 +404,18 @@ def add_home_image(payload: dict, image: bytes) -> dict:
             if target.exists():
                 target.unlink()
             raise
-        commit = auto_commit(
+        log_change(f"首页图片上传完成：{filename}（Git 提交转到后台）")
+        commit_in_background(
             [target, HOME_PATH],
             f"docs: 添加首页图片「{filename}」",
+            f"首页图片上传：{filename}",
         )
-        log_change(
-            f"首页图片上传：{filename}（本地提交={'是' if commit.get('committed') else '否'}）"
-        )
-        return {"ok": True, "image": image_item, "config": data, "commit": commit}
+        return {
+            "ok": True,
+            "image": image_item,
+            "config": data,
+            "commit": {"committed": False, "pending": True},
+        }
 
 
 def upload_article_icon(slug: str, filename: str, image: bytes) -> dict:
@@ -1095,6 +1099,16 @@ def auto_commit(paths: list[Path], message: str, author: str | None = None) -> d
         return {"committed": False, "skipped": "未找到 Git 命令"}
     except subprocess.TimeoutExpired:
         return {"committed": False, "error": "Git 操作超时"}
+
+
+def commit_in_background(paths: list[Path], message: str, label: str) -> None:
+    def worker() -> None:
+        commit = auto_commit(paths, message)
+        log_change(
+            f"{label}（本地提交={'是' if commit.get('committed') else '否'}）"
+        )
+
+    threading.Thread(target=worker, daemon=True).start()
 
 
 def normalize_title_runs(item: dict) -> tuple[str, list[dict]]:
