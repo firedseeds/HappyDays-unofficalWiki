@@ -756,7 +756,7 @@ window.HAPPYDAYS_WIKI = (function () {
       updated: "2026-10-25",
       reading: 1,
       tags: [],
-      signatures: [],
+      signatures: [{"author": "zzx", "at": "2026-10-27T23:39:41+08:00", "action": "update", "title": "朝鲜民主主义人民共和国DPRK", "topic": "国家/城镇"}],
       content: `<p>国家成员：233，zzx(已经叛逃)</p>
 <p>国家发展：</p>
 <p>233原话：当时第1条轨道其实是从日本进口的 从大连接过来的 现在大连到平壤那么绕就是因为这个 然后被4a拆了 还帮忙换成矿车轨道了</p>
