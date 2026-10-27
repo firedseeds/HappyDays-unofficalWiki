@@ -87,7 +87,7 @@ window.HAPPYDAYS_WIKI = (function () {
       emoji: "🚇",
       category: "intro",
       excerpt: "happydays是在1:326的欧亚地图上以...",
-      icon: "/icon.png",
+      icon: "/article/icon/intro.jpg",
       updated: "2026-10-25",
       reading: 1,
       tags: [],
