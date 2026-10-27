@@ -525,7 +525,7 @@
   min-width: 0;
   border: 1px solid var(--border);
   border-radius: 7px;
-  background: var(--canvas);
+  background: var(--input-bg);
   color: var(--text);
   font-size: 12.5px;
   line-height: 1.5;
@@ -915,7 +915,7 @@
   padding: 0 8px;
   border: 1px solid var(--border);
   border-radius: 6px;
-  background: var(--surface);
+  background: var(--input-bg);
   color: var(--text);
   font-size: 12px;
   text-align: right;
@@ -956,7 +956,7 @@
   padding: 0 9px;
   border: 1px solid var(--border);
   border-radius: 7px;
-  background: var(--canvas);
+  background: var(--input-bg);
   color: var(--text);
   font-size: 12px;
   line-height: 1.5;

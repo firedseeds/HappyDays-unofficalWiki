@@ -7,6 +7,7 @@
   --color-card-soft: #ece8e0;
   --surface: var(--color-bg);
   --canvas: #ffffff;
+  --input-bg: #ffffff;
   --border: var(--color-border);
   --border-strong: #c8c1b7;
   --text: var(--color-text);
@@ -26,6 +27,7 @@
   --color-card: #181c1a;
   --color-card-soft: #242a27;
   --canvas: #171b19;
+  --input-bg: #1f2a24;
   --border-strong: #4a514c;
   --text-secondary: #c7c2b8;
   --text-tertiary: #b8b3a9;
@@ -195,8 +197,6 @@
 }
 
 [data-theme="dark"] .home-image-dialog,
-[data-theme="dark"] .home-image-field input,
-[data-theme="dark"] .home-image-row input,
 [data-theme="dark"] .home-image-secondary {
   background: var(--color-card);
   color: var(--color-text);
@@ -412,7 +412,7 @@
   padding: 0 9px;
   border: 1px solid var(--color-border);
   border-radius: 7px;
-  background: #fff;
+  background: var(--input-bg);
   color: var(--color-text);
   font: inherit;
   font-size: 11.5px;
@@ -469,7 +469,7 @@
   padding: 0 8px;
   border: 1px solid var(--color-border);
   border-radius: 6px;
-  background: #fff;
+  background: var(--input-bg);
   color: var(--color-text);
   font: inherit;
   font-size: 10.5px;

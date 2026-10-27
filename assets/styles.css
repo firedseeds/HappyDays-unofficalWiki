@@ -17,6 +17,7 @@
   --surface-raised: #ffffff;
   --sidebar: #f8faf8;
   --canvas: #f4f7f4;
+  --input-bg: #f4f7f4;
   --text: #1c2822;
   --text-body: #344139;
   --text-secondary: #5c6b62;
@@ -57,6 +58,7 @@
   --surface-raised: #1a221d;
   --sidebar: #111814;
   --canvas: #0f1512;
+  --input-bg: #1f2a24;
   --text: #e8eee9;
   --text-body: #c7d1ca;
   --text-secondary: #a4b2a9;
@@ -885,7 +887,7 @@ kbd {
   padding: 0 8px;
   border: 1px solid var(--border);
   border-radius: 6px;
-  background: var(--surface);
+  background: var(--input-bg);
   color: var(--text);
   font-size: 12px;
   text-align: right;
@@ -927,7 +929,7 @@ kbd {
   padding: 0 9px;
   border: 1px solid var(--border);
   border-radius: 7px;
-  background: var(--canvas);
+  background: var(--input-bg);
   color: var(--text);
   font-size: 12px;
 }
