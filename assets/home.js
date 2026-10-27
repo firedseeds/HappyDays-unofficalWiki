@@ -154,7 +154,7 @@
   }
 
   function loadConfig() {
-    fetch("/home.json", { cache: "no-store" }).then(function (response) {
+    fetch("/home/home.json", { cache: "no-store" }).then(function (response) {
       if (!response.ok) {
         throw new Error("home.json 加载失败");
       }

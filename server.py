@@ -43,7 +43,7 @@ COMMENT_PATH = COMMENT_DIR / "comment.json"
 BGM_DIR = ROOT / "BGM"
 BGM_PATH = BGM_DIR / "BGM.json"
 HOME_DIR = ROOT / "home"
-HOME_PATH = ROOT / "home.json"
+HOME_PATH = HOME_DIR / "home.json"
 ARTICLE_ICON_DIR = ARTICLE_DIR / "icon"
 TITLE_PATH = ROOT / "title.json"
 IMAGE_DIR = ROOT / "assets" / "image"
@@ -1860,8 +1860,8 @@ class EditorHandler(SimpleHTTPRequestHandler):
     def translate_path(self, path: str) -> str:
         parsed = urlparse(path)
         stripped = strip_base_path(unquote(parsed.path))
-        if stripped in ("/home", "/home/", "/home.html"):
-            stripped = "/home.html"
+        if stripped == "/home":
+            stripped = "/home/home.html"
         if re.fullmatch(r"/bank/[a-z0-9-]+/?", stripped):
             stripped = "/bank.html"
         if parsed.query:

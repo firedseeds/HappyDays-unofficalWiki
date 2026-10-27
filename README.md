@@ -24,7 +24,7 @@ http://127.0.0.1:8000/home      -> 首页
 http://127.0.0.1:8000/wiki/     -> 非官方文档
 ```
 
-如果只需要静态预览，必须把首页映射到 `/home`，并把整个项目部署到 `/wiki/` 路径下，而不是直接打开根目录或 `index.html`。例如在项目父目录创建一个 `wiki` 子目录指向本项目，再从父目录启动 `python -m http.server 8080`；首页需要单独通过反向代理或 rewrite 把 `/home` 指向 `home.html`。
+如果只需要静态预览，必须把首页映射到 `/home`，并把整个项目部署到 `/wiki/` 路径下，而不是直接打开根目录或 `index.html`。例如在项目父目录创建一个 `wiki` 子目录指向本项目，再从父目录启动 `python -m http.server 8080`；首页需要单独通过反向代理或 rewrite 把 `/home` 指向 `home/home.html`。
 
 如需在网页中编辑文章和添加主题，请运行编辑服务：
 
@@ -352,7 +352,7 @@ Bank 文章卡片右上角有「显示目录 / 隐藏目录」切换，用于控
 首页 `/home` 的主视觉上覆盖一张可轮换图片：
 
 - 图片文件保存在 `home/`
-- 配置保存在 `home.json`
+- 配置保存在 `home/home.json`
 - 无图片时显示 `NO IMAGE`
 - 首页支持日间/夜间模式，主题与知识库共用 `happydays-theme`
 - 首页右下角 BGM 播放器与知识库一致
@@ -364,7 +364,7 @@ Bank 文章卡片右上角有「显示目录 / 隐藏目录」切换，用于控
 - 首页的导航、主视觉、教程卡片和“浏览更多”等文章入口默认进入 `#single` 单篇阅读模式
 - 图片下方提供「更喜欢wiki式的操作方式？跳转至传统页面」链接到 `/wiki/`
 
-`home.json` 格式：
+`home/home.json` 格式：
 
 ```json
 {
@@ -507,9 +507,10 @@ BGM/BGM.json
 
 ```text
 .
-├─ home.html             # 网站首页，映射到 /home
-├─ home.json             # 首页图片文件名、权重与轮换间隔
-├─ home/                 # 首页轮换图片
+├─ home/
+│  ├─ home.html          # 网站首页，映射到 /home
+│  ├─ home.json          # 首页图片文件名、权重与轮换间隔
+│  └─ 图片文件            # 首页轮换图片
 ├─ bank.html             # Bank 目录页模板，/bank/<id> 复用
 ├─ index.html            # 页面骨架、图标 sprite、阅读器 UI
 ├─ editor.html           # 本地内容管理界面
@@ -871,11 +872,11 @@ python build.py
 
 网站入口分为三层：`/home` 是首页，`/bank/<标题ID>` 是层级目录，`/wiki/` 是非官方文档。`server.py` 会自动把 `/`、`/index.html`、`/home.html`、`/home/` 重定向到 `/home`，把 `/bank`、`/bank/` 重定向到 `/home`，把 `/wiki` 重定向到 `/wiki/`，并在内部把 `/wiki/...` 映射到项目文件。
 
-这是一个运行时无框架依赖的静态项目。修改 `article/` 后先运行 `python build.py` 更新 `assets/data.js`，再把整个目录部署到 `/wiki/` 路径下，同时把 `/home` 映射到根目录的 `home.html`，把 `/bank/<id>` 重写到 `bank.html`。
+这是一个运行时无框架依赖的静态项目。修改 `article/` 后先运行 `python build.py` 更新 `assets/data.js`，再把整个目录部署到 `/wiki/` 路径下，同时把 `/home` 映射到 `home/home.html`，把 `/bank/<id>` 重写到 `bank.html`。
 
 **GitHub Pages**：如果仓库名为 `wiki`，项目地址就是 `https://<user>.github.io/wiki/`，与知识库入口路径一致；首页 `/home` 需要平台 rewrite 或反向代理支持。
 
-**Netlify / Vercel**：构建命令可设为 `python build.py`，发布目录为 `.`，并通过平台的 rewrite/redirect 功能把 `/wiki/*` 映射到站点文件、把 `/home` 映射到 `home.html`。
+**Netlify / Vercel**：构建命令可设为 `python build.py`，发布目录为 `.`，并通过平台的 rewrite/redirect 功能把 `/wiki/*` 映射到站点文件、把 `/home` 映射到 `home/home.html`。
 
 **Nginx / Apache**：首页和知识库需要同时映射，例如 Nginx：
 
@@ -887,7 +888,11 @@ location = / {
 }
 
 location = /home {
-    try_files /home.html =404;
+    try_files /home/home.html =404;
+}
+
+location = /home/ {
+    return 302 /home;
 }
 
 location = /home.html {
