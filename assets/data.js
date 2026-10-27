@@ -691,7 +691,7 @@ window.HAPPYDAYS_WIKI = (function () {
       updated: "2026-10-25",
       reading: 1,
       tags: [],
-      signatures: [{"author": "233", "at": "2026-10-25T20:47:38+08:00", "action": "update", "title": "哈尔滨地方志", "topic": "国家/城镇"}, {"author": "zzx", "at": "2026-10-27T23:38:28+08:00", "action": "update", "title": "哈尔滨地方志", "topic": "国家/城镇"}],
+      signatures: [{"author": "233", "at": "2026-10-25T20:47:38+08:00", "action": "update", "title": "哈尔滨地方志", "topic": "国家/城镇"}, {"author": "zzx", "at": "2026-10-27T23:38:28+08:00", "action": "update", "title": "哈尔滨地方志", "topic": "国家/城镇"}, {"author": "zzx", "at": "2026-10-27T23:38:31+08:00", "action": "update", "title": "哈尔滨地方志", "topic": "国家/城镇"}],
       content: `<h2>详见zzx人物志</h2>
 <p><strong>你知道吗 这个文档原本在朝鲜民主主义人民共和国，后来又改到了自由联邦共同体，现在变成了泛东北经济联盟。</strong></p>`
     },
