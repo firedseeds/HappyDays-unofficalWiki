@@ -819,14 +819,13 @@ window.HAPPYDAYS_WIKI = (function () {
       title: "666",
       emoji: "🐭",
       category: "godman",
-      excerpt: "此人掏走了钻石信标，被土豆审判后ban IP",
+      excerpt: "自动拾取忘关了",
       icon: "/icon.png",
       updated: "2026-10-25",
       reading: 5,
       tags: [],
-      signatures: [],
-      content: `<h3>此人掏走了钻石信标，被土豆审判后ban IP</h3>
-<p><em>由于群内消息已被自动删除，而编者的记忆力与鱼相当，所以只记得上面了</em></p>`
+      signatures: [{"author": "smillfox", "at": "2026-10-27T22:37:10+08:00", "action": "update", "title": "666", "topic": "神人堂"}],
+      content: `<p>在中国南方城市盗取他人信标基座内的矿物块，并声称自己偶然发现拾取</p>`
     }
   };
 
