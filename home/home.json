@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "intervalSeconds": 5,
+  "intervalSeconds": 3,
   "images": [
     {
       "file": "640.jpg",
