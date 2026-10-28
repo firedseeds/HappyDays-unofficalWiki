@@ -378,7 +378,7 @@
     },
     {
       "slug": "harbin-chronicle",
-      "order": 25,
+      "order": 24,
       "topic": "nations",
       "title": "哈尔滨地方志",
       "description": "详见zzx人物志",
@@ -419,7 +419,7 @@
     },
     {
       "slug": "dprk",
-      "order": 24,
+      "order": 25,
       "topic": "nations",
       "title": "朝鲜民主主义人民共和国DPRK",
       "description": "国家成员：233，zzx(已经叛逃)国家发展：233原...",
