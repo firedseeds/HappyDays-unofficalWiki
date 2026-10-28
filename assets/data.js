@@ -418,7 +418,7 @@ window.HAPPYDAYS_WIKI = (function () {
       emoji: "📜",
       category: "rules",
       excerpt: "作弊与应对1.1 作弊客户端和其他修改可以在原本的整合...",
-      icon: "/icon.png",
+      icon: "/article/icon/cheating-response.jpg",
       updated: "2026-10-25",
       reading: 2,
       tags: [],
