@@ -98,7 +98,8 @@
 					</label>
 					<label class="photos-field">
 						<span>所在图库</span>
-						<select id="photosAlbumGallery"></select>
+						<input id="photosAlbumGallery" type="text" maxlength="80" list="photosGalleryOptions" required placeholder="选择或输入图库名称">
+						<datalist id="photosGalleryOptions"></datalist>
 					</label>
 					<p class="photos-dialog-status" id="photosAlbumStatus"></p>
 				</div>

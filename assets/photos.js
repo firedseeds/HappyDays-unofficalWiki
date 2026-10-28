@@ -33,6 +33,7 @@
     albumName: document.getElementById("photosAlbumName"),
     albumFolder: document.getElementById("photosAlbumFolder"),
     albumGallery: document.getElementById("photosAlbumGallery"),
+    albumGalleryOptions: document.getElementById("photosGalleryOptions"),
     albumStatus: document.getElementById("photosAlbumStatus"),
     albumSubmit: document.getElementById("photosAlbumSubmit"),
     albumCancel: document.getElementById("photosAlbumCancel"),
@@ -336,15 +337,13 @@
     els.albumStatus.textContent = "";
     els.albumStatus.classList.remove("is-error");
     els.albumGallery.innerHTML = "";
+    els.albumGalleryOptions.innerHTML = "";
     state.data.galleries.forEach(function (gallery) {
       var option = document.createElement("option");
       option.value = gallery.name;
-      option.textContent = gallery.name;
-      els.albumGallery.appendChild(option);
+      els.albumGalleryOptions.appendChild(option);
     });
-    if (currentGallery()) {
-      els.albumGallery.value = currentGallery().name;
-    }
+    els.albumGallery.value = currentGallery() ? currentGallery().name : "默认图库";
     els.albumDialog.showModal();
     els.albumName.focus();
   }
