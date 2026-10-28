@@ -1283,8 +1283,101 @@ def clean_git_identity(value: str | None, fallback: str) -> str:
     return cleaned or fallback
 
 
+PUSH_EVENT = threading.Event()
+PUSH_GUARD = threading.Lock()
+PUSH_THREAD = None
+
+
+def auto_push_enabled() -> bool:
+    return os.environ.get("AUTO_PUSH", "1").strip().lower() not in (
+        "0",
+        "false",
+        "no",
+        "off",
+    )
+
+
+def auto_push_once() -> None:
+    try:
+        branch_result = subprocess.run(
+            ["git", "symbolic-ref", "--short", "HEAD"],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            timeout=10,
+        )
+        branch = (branch_result.stdout or "").strip()
+        if branch_result.returncode != 0 or not branch:
+            log_change("自动 push 跳过：当前不在分支上")
+            return
+        remote_result = subprocess.run(
+            ["git", "remote", "get-url", "origin"],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            timeout=10,
+        )
+        if remote_result.returncode != 0 or not (remote_result.stdout or "").strip():
+            log_change("自动 push 跳过：未配置 origin")
+            return
+        env = os.environ.copy()
+        env["GIT_TERMINAL_PROMPT"] = "0"
+        result = subprocess.run(
+            ["git", "push", "origin", branch],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            timeout=90,
+            env=env,
+        )
+        if result.returncode == 0:
+            log_change(f"自动 push 完成：{branch}")
+        else:
+            log_change(f"自动 push 失败：{git_error_text(result, 'git push 失败')}")
+    except FileNotFoundError:
+        log_change("自动 push 跳过：未找到 Git 命令")
+    except subprocess.TimeoutExpired:
+        log_change("自动 push 失败：Git 操作超时")
+    except Exception as exc:
+        log_change(f"自动 push 失败：{exc}")
+
+
+def auto_push_worker() -> None:
+    global PUSH_THREAD
+    while True:
+        PUSH_EVENT.wait()
+        PUSH_EVENT.clear()
+        auto_push_once()
+        with PUSH_GUARD:
+            if not PUSH_EVENT.is_set():
+                PUSH_THREAD = None
+                return
+
+
+def schedule_auto_push() -> None:
+    global PUSH_THREAD
+    if not auto_push_enabled():
+        return
+    with PUSH_GUARD:
+        PUSH_EVENT.set()
+        if PUSH_THREAD is not None and PUSH_THREAD.is_alive():
+            return
+        PUSH_THREAD = threading.Thread(
+            target=auto_push_worker,
+            name="happydays-auto-push",
+            daemon=True,
+        )
+        PUSH_THREAD.start()
+
+
 def auto_commit(paths: list[Path], message: str, author: str | None = None) -> dict:
-    """Create a local Git commit for the saved files. Never push."""
+    """Create a local Git commit and schedule a background push."""
     if not (ROOT / ".git").exists():
         return {"committed": False, "skipped": "当前目录不是 Git 仓库"}
 
@@ -1365,6 +1458,7 @@ def auto_commit(paths: list[Path], message: str, author: str | None = None) -> d
             timeout=10,
         )
         commit_hash = (hash_result.stdout or "").strip() if hash_result.returncode == 0 else ""
+        schedule_auto_push()
         return {"committed": True, "hash": commit_hash, "message": message}
     except FileNotFoundError:
         return {"committed": False, "skipped": "未找到 Git 命令"}
