@@ -752,7 +752,7 @@ window.HAPPYDAYS_WIKI = (function () {
       emoji: "🖼️",
       category: "gallery",
       excerpt: "妙妙图片集图片记录。",
-      icon: "/icon.png",
+      icon: "/article/icon/gallery-1.png",
       updated: "2026-10-25",
       reading: 1,
       tags: [],
