@@ -290,7 +290,7 @@ window.HAPPYDAYS_WIKI = (function () {
       emoji: "🧭",
       category: "advanced",
       excerpt: "暂无摘要",
-      icon: "/icon.png",
+      icon: "/article/icon/resource-world-nether.png",
       updated: "2026-10-25",
       reading: 1,
       tags: [],
