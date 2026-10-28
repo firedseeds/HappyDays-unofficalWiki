@@ -105,7 +105,7 @@ window.HAPPYDAYS_WIKI = (function () {
       emoji: "🌱",
       category: "beginner",
       excerpt: "配置推荐使用强劲的电脑、笔记本或手...",
-      icon: "/icon.png",
+      icon: "/article/icon/before-joining.png",
       updated: "2026-10-25",
       reading: 3,
       tags: [],
