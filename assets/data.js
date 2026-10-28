@@ -29,7 +29,7 @@ window.HAPPYDAYS_WIKI = (function () {
       description: "资源、经济、载具与城镇发展。",
       parentId: null,
       order: 3,
-      docs: ["resource-world-nether", "senluo-kitchen", "senluo-tavern", "money-making-guide", "lottery", "immersive-vehicles", "town-resources"]
+      docs: ["resource-world-nether", "senluo-kitchen", "senluo-tavern", "money-making-guide", "lottery", "immersive-vehicles", "town-resources", "fish-text2"]
     },
     {
       id: "rules",
@@ -349,7 +349,7 @@ window.HAPPYDAYS_WIKI = (function () {
       updated: "2026-10-25",
       reading: 1,
       tags: [],
-      signatures: [],
+      signatures: [{"author": "smillfox", "at": "2026-10-27T22:30:38+08:00", "action": "update", "title": "森罗物语：酒馆", "topic": "进阶教程"}],
       content: `<p>此文档在语雀中暂无正文。</p>`
     },
     "money-making-guide": {
@@ -390,7 +390,7 @@ window.HAPPYDAYS_WIKI = (function () {
       updated: "2026-10-25",
       reading: 1,
       tags: [],
-      signatures: [],
+      signatures: [{"author": "LZnofu", "at": "2026-10-27T23:13:43+08:00", "action": "update", "title": "沉浸车辆", "topic": "进阶教程"}, {"author": "LZnofu", "at": "2026-10-27T23:15:40+08:00", "action": "update", "title": "沉浸车辆", "topic": "进阶教程"}],
       content: `<p>当然，服务器是有载具的，不能合成</p>`
     },
     "town-resources": {
@@ -700,7 +700,7 @@ window.HAPPYDAYS_WIKI = (function () {
       updated: "2026-10-25",
       reading: 1,
       tags: [],
-      signatures: [],
+      signatures: [{"author": "zzx", "at": "2026-10-27T23:39:41+08:00", "action": "update", "title": "朝鲜民主主义人民共和国DPRK", "topic": "国家/城镇"}],
       content: `<p>国家成员：233，zzx(已经叛逃)</p>
 <p>国家发展：</p>
 <p>233原话：当时第1条轨道其实是从日本进口的 从大连接过来的 现在大连到平壤那么绕就是因为这个 然后被4a拆了 还帮忙换成矿车轨道了</p>
@@ -809,14 +809,28 @@ window.HAPPYDAYS_WIKI = (function () {
       updated: "2026-10-25",
       reading: 5,
       tags: [],
-      signatures: [],
+      signatures: [{"author": "smillfox", "at": "2026-10-27T22:37:10+08:00", "action": "update", "title": "666", "topic": "神人堂"}],
       content: `<h3>此人掏走了钻石信标，被土豆审判后ban IP</h3>
 <p><em>由于群内消息已被自动删除，而编者的记忆力与鱼相当，所以只记得上面了</em></p>`
+    },
+    "fish-text2": {
+      title: "简单语音",
+      emoji: "📄",
+      category: "advanced",
+      excerpt: "选装mod，可以和一定范围内装了此mod的玩家进行语音通话",
+      icon: "/icon.png",
+      updated: "2026-10-28",
+      reading: 5,
+      tags: ["可选模组"],
+      signatures: [{"author": "fish", "at": "2026-10-28T12:29:41+08:00", "action": "create", "title": "简单语音", "topic": "进阶教程"}],
+      content: `<h2>使用方法</h2>
+<p>装上mod后第一次进游戏会有提示</p>
+<p><del>剩下以后再补充</del></p>`
     }
   };
 
   var allIds = [
-    "intro", "before-joining", "first-arrival", "shop-plugin", "build-town", "about-nations", "first-money", "resource-world-nether", "senluo-kitchen", "senluo-tavern", "money-making-guide", "lottery", "immersive-vehicles", "town-resources", "cheating-response", "behavior-chat", "world-map", "matopiraphai", "233-2233", "zzx", "northeast-economic-alliance", "harbin-chronicle", "rhodes-island", "freedom-union", "dprk", "ok", "qwertyuiop", "gallery-1", "gallery-2", "1", "alex", "666"
+    "intro", "before-joining", "first-arrival", "shop-plugin", "build-town", "about-nations", "first-money", "resource-world-nether", "senluo-kitchen", "senluo-tavern", "money-making-guide", "lottery", "immersive-vehicles", "town-resources", "cheating-response", "behavior-chat", "world-map", "matopiraphai", "233-2233", "zzx", "northeast-economic-alliance", "harbin-chronicle", "rhodes-island", "freedom-union", "dprk", "ok", "qwertyuiop", "gallery-1", "gallery-2", "1", "alex", "666", "fish-text2"
   ];
 
   return {

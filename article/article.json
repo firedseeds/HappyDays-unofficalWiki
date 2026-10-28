@@ -9,8 +9,8 @@
     "domain": "114.55.99.2:8000"
   },
   "topicCount": 9,
-  "articleCount": 32,
-  "lastUpdated": "2026-10-26",
+  "articleCount": 33,
+  "lastUpdated": "2026-10-28",
   "topics": [
     {
       "id": "intro",
@@ -39,7 +39,7 @@
       "order": 3,
       "description": "资源、经济、载具与城镇发展。",
       "emoji": "🧭",
-      "articleCount": 7,
+      "articleCount": 8,
       "parentId": null
     },
     {
@@ -520,6 +520,21 @@
       "tags": [],
       "file": "history/godman/666.md",
       "source": "/wiki/#/doc/666"
+    },
+    {
+      "slug": "fish-text2",
+      "order": 34,
+      "topic": "advanced",
+      "title": "简单语音",
+      "description": "选装mod，可以和一定范围内装了此mod的玩家进行语音通话",
+      "emoji": "📄",
+      "updated": "2026-10-28",
+      "readingTime": 5,
+      "tags": [
+        "可选模组"
+      ],
+      "file": "advanced/fish-text2.md",
+      "source": "/wiki/#/doc/fish-text2"
     }
   ]
 }
