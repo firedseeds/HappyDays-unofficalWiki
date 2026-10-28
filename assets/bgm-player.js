@@ -60,8 +60,119 @@
     tracks: [],
     current: null,
     backend: false,
-    resumeOnVisible: false
+    resumeOnVisible: false,
+    restorePending: true,
+    restoring: false,
+    resumeOnGesture: false,
+    gestureBound: false,
+    lastProgressSave: 0
   };
+
+  var PROGRESS_KEY = "happydays-bgm-progress";
+
+  function readProgress() {
+    try {
+      var saved = JSON.parse(localStorage.getItem(PROGRESS_KEY) || "null");
+      if (!saved || typeof saved.file !== "string" || !saved.file) {
+        return null;
+      }
+      var time = Number(saved.currentTime);
+      return {
+        file: saved.file,
+        currentTime: Number.isFinite(time) && time > 0 ? time : 0,
+        playing: !!saved.playing
+      };
+    } catch (error) {
+      return null;
+    }
+  }
+
+  function saveProgress() {
+    if (!state.current || state.restoring) {
+      return;
+    }
+    try {
+      var time = Number(els.audio.currentTime);
+      localStorage.setItem(PROGRESS_KEY, JSON.stringify({
+        file: state.current.file,
+        currentTime: Number.isFinite(time) && time > 0 ? time : 0,
+        playing: !els.audio.paused || state.resumeOnVisible,
+        updatedAt: Date.now()
+      }));
+      state.lastProgressSave = Date.now();
+    } catch (error) {
+      /* 忽略隐私模式下的 localStorage 错误 */
+    }
+  }
+
+  function resumeAfterGesture() {
+    if (state.gestureBound) {
+      return;
+    }
+    state.gestureBound = true;
+    var resume = function () {
+      document.removeEventListener("pointerdown", resume, true);
+      document.removeEventListener("keydown", resume, true);
+      if (state.resumeOnGesture && state.current) {
+        state.resumeOnGesture = false;
+        play();
+      }
+    };
+    document.addEventListener("pointerdown", resume, true);
+    document.addEventListener("keydown", resume, true);
+  }
+
+  function restoreTrack(track, saved) {
+    state.restoring = true;
+    els.audio.preload = "auto";
+    setTrack(track, false);
+    var audio = els.audio;
+    var target = Math.max(0, Number(saved.currentTime) || 0);
+    var shouldPlay = !!saved.playing;
+    var apply = function () {
+      if (audio.readyState < 2) {
+        audio.addEventListener("canplay", apply, { once: true });
+        return;
+      }
+      var max = Number.isFinite(audio.duration) && audio.duration > 0
+        ? Math.max(0, audio.duration - 0.25)
+        : target;
+      var seekTarget = Math.min(target, max);
+      var finished = false;
+      var finish = function () {
+        if (finished) {
+          return;
+        }
+        finished = true;
+        state.restoring = false;
+        syncButton();
+        if (shouldPlay) {
+          play();
+        }
+      };
+      if (seekTarget <= 0.1) {
+        try {
+          audio.currentTime = 0;
+        } catch (error) {
+          /* 忽略 seek 错误 */
+        }
+        finish();
+        return;
+      }
+      audio.addEventListener("seeked", finish, { once: true });
+      window.setTimeout(finish, 1200);
+      try {
+        audio.currentTime = seekTarget;
+      } catch (error) {
+        finish();
+      }
+    };
+    if (audio.readyState >= 2) {
+      apply();
+    } else {
+      audio.addEventListener("canplay", apply, { once: true });
+    }
+  }
 
   function normalizeTracks(data) {
     var tracks = Array.isArray(data && data.tracks) ? data.tracks : [];
@@ -118,7 +229,11 @@
     }
     var promise = els.audio.play();
     if (promise && typeof promise.catch === "function") {
-      promise.catch(syncButton);
+      promise.catch(function () {
+        state.resumeOnGesture = true;
+        resumeAfterGesture();
+        syncButton();
+      });
     }
   }
 
@@ -236,6 +351,18 @@
       return;
     }
     els.player.hidden = false;
+    if (state.restorePending) {
+      state.restorePending = false;
+      var saved = readProgress();
+      var restored = saved
+        ? tracks.filter(function (track) { return track.file === saved.file; })[0]
+        : null;
+      if (restored) {
+        restoreTrack(restored, saved);
+        renderList();
+        return;
+      }
+    }
     var existing = state.current
       ? tracks.filter(function (track) { return track.file === state.current.file; })[0]
       : null;
@@ -365,8 +492,21 @@
       closeDialog();
     }
   });
-  els.audio.addEventListener("play", syncButton);
-  els.audio.addEventListener("pause", syncButton);
+  els.audio.addEventListener("play", function () {
+    syncButton();
+    saveProgress();
+  });
+  els.audio.addEventListener("pause", function () {
+    syncButton();
+    saveProgress();
+  });
+  els.audio.addEventListener("timeupdate", function () {
+    if (Date.now() - state.lastProgressSave >= 1000) {
+      saveProgress();
+    }
+  });
+  window.addEventListener("pagehide", saveProgress);
+  window.addEventListener("beforeunload", saveProgress);
   els.audio.addEventListener("ended", function () {
     if (state.tracks.length <= 1) {
       els.audio.currentTime = 0;
@@ -380,6 +520,7 @@
       if (!els.audio.paused) {
         state.resumeOnVisible = true;
         els.audio.pause();
+        saveProgress();
       }
       return;
     }
