@@ -6,7 +6,7 @@ topic_id: "nations"
 updated: "2026-10-25"
 reading_time: 1
 emoji: "📖"
-order: 24
+order: 23
 slug: "northeast-economic-alliance"
 source: "/wiki/#/doc/northeast-economic-alliance"
 tags:
