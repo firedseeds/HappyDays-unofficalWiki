@@ -4,11 +4,11 @@
   "images": [
     {
       "file": "NR8AVjViQ1FBME9UZzNOVEF3T0RkUXhhWnE4dWJHRmchIQUAcXVuZ3o!.png",
-      "weight": 1
+      "weight": 2
     },
     {
       "file": "NR8AVjViQ1FBME9UZzNOVEF3T0RleU5ONXFONUdJRmchIQUAcXVuZ3o!.png",
-      "weight": 1
+      "weight": 3
     },
     {
       "file": "NR8AVjViQ1FBME9UZzNOVEF3T0RmKk1xZHFhYkVKSEEhIQUAcXVuZ3o!.jpeg",
@@ -16,7 +16,7 @@
     },
     {
       "file": "NR8AVjViQ1FBME9UZzNOVEF3T0RmKkx0NXFiQnhyTmchIQUAcXVuZ3o!.png",
-      "weight": 1
+      "weight": 2
     },
     {
       "file": "NR8AVjViQ1FBME9UZzNOVEF3T0RmNkx0NXFGMzlxTmchIQUAcXVuZ3o!.png",
@@ -28,7 +28,7 @@
     },
     {
       "file": "NR8AVjViQ1FBME9UZzNOVEF3T0RmOU1xZHFHN1VOSEEhIQUAcXVuZ3o!.jpeg",
-      "weight": 1
+      "weight": 2
     },
     {
       "file": "NR8AVjViQ1FBME9UZzNOVEF3T0RmVXAwdHFTM3VwQlEhIQUAcXVuZ3o!.jpeg",
@@ -36,19 +36,19 @@
     },
     {
       "file": "NR8AVjViQ1FBME9UZzNOVEF3T0RmWEx0NXF1RFJhTkEhIQUAcXVuZ3o!.png",
-      "weight": 1
+      "weight": 2
     },
     {
       "file": "NR8AVjViQ1FBME9UZzNOVEF3T0RmYnAwdHEqT0tIQlEhIQUAcXVuZ3o!.jpeg",
-      "weight": 1
+      "weight": 2
     },
     {
       "file": "NR8AVjViQ1FBME9UZzNOVEF3T0RmYXAwdHFhcmlHQlEhIQUAcXVuZ3o!.jpeg",
-      "weight": 1
+      "weight": 2
     },
     {
       "file": "NR8AVjViQ1FBME9UZzNOVEF3T0RmZkx0NXFiREZhTkEhIQUAcXVuZ3o!.png",
-      "weight": 1
+      "weight": 3
     }
   ]
 }
