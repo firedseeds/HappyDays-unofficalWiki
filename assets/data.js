@@ -146,7 +146,7 @@ window.HAPPYDAYS_WIKI = (function () {
       emoji: "🌱",
       category: "beginner",
       excerpt: "1-最基本的1.1逃出出生点！！！（bushi）进入服...",
-      icon: "/icon.png",
+      icon: "/article/icon/first-arrival.png",
       updated: "2026-10-25",
       reading: 2,
       tags: [],
