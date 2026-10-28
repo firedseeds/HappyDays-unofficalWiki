@@ -257,6 +257,7 @@ python server.py --host 127.0.0.1 --port 8765
 | POST | `/api/articles/<slug>/move` | 在当前主题内上移或下移文章，传 `direction` 与 `author` |
 | POST | `/api/articles/<slug>/icon` | 上传文章 Bank 封面，查询参数 `filename`；支持 PNG/JPG |
 | POST | `/api/bgm` | 上传 MP3/WAV 背景音乐，查询参数 `title`、`weight`、`filename` |
+| DELETE | `/api/bgm/<filename>` | 删除 BGM 文件及 `BGM/BGM.json` 条目 |
 | GET | `/api/home` | 读取首页图片配置 |
 | PUT | `/api/home` | 保存首页图片权重和轮换间隔 |
 | POST | `/api/home/images` | 上传首页 PNG/JPG 图片，查询参数 `filename`、`weight` |
@@ -395,6 +396,7 @@ Bank 文章卡片右上角有「显示目录 / 隐藏目录」切换，用于控
 - 播放 / 暂停
 - 下一首
 - 后端开启时显示上传按钮
+- 上传弹窗内显示音乐列表，可直接选择播放或删除音乐
 
 音乐文件放在：
 

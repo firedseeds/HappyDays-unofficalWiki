@@ -1,14 +1,4 @@
 {
   "version": 2,
-  "articles": {
-    "fish-text": [
-      {
-        "id": "16a6bd6a-f9a8-468c-8849-e85af0efd494",
-        "author": "233",
-        "at": "2026-10-28T07:50:34+08:00",
-        "file": "fish-text/16a6bd6a-f9a8-468c-8849-e85af0efd494.md",
-        "body": "绷"
-      }
-    ]
-  }
+  "articles": {}
 }

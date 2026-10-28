@@ -4,15 +4,19 @@
   "images": [
     {
       "file": "640.jpg",
-      "weight": 100
+      "weight": 1
+    },
+    {
+      "file": "A8A4903BFF37EFFC88903219CC9AA3D2.jpg",
+      "weight": 1
     },
     {
       "file": "jianjie.jpeg",
-      "weight": 100
+      "weight": 1
     },
     {
       "file": "11e6d6a741405a1c7d417e0c78dcc5fa.png",
-      "weight": 2
+      "weight": 5
     }
   ]
 }

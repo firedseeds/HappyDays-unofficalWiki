@@ -1,30 +1,4 @@
 {
   "version": 1,
-  "tracks": [
-    {
-      "file": "削除-Lost Memory.mp3",
-      "title": "Lost Memory",
-      "weight": 1
-    },
-    {
-      "file": "See you soon - .mp3",
-      "title": "see you soon",
-      "weight": 1
-    },
-    {
-      "file": "Surface Pension - .mp3",
-      "title": "Surface Pension",
-      "weight": 1
-    },
-    {
-      "file": "Misty Memory - .mp3",
-      "title": "Misty Memory (night)",
-      "weight": 1
-    },
-    {
-      "file": "Titanium - .mp3",
-      "title": "Titanium",
-      "weight": 1
-    }
-  ]
+  "tracks": []
 }

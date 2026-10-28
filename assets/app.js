@@ -1164,6 +1164,7 @@
     bgmFile: document.getElementById("bgmFile"),
     bgmFormTitle: document.getElementById("bgmFormTitle"),
     bgmFormWeight: document.getElementById("bgmFormWeight"),
+    bgmList: document.getElementById("bgmList"),
     bgmFormStatus: document.getElementById("bgmFormStatus"),
     bgmSubmit: document.getElementById("bgmSubmit"),
     bgmCancel: document.getElementById("bgmCancel"),
@@ -1275,6 +1276,90 @@
     if (autoplay) {
       playBgm();
     }
+    renderBgmList();
+  }
+
+  function renderBgmList() {
+    if (!els.bgmList) {
+      return;
+    }
+    els.bgmList.innerHTML = "";
+    if (!bgmState.tracks.length) {
+      var empty = document.createElement("p");
+      empty.className = "bgm-list-empty";
+      empty.textContent = "暂无音乐";
+      els.bgmList.appendChild(empty);
+      return;
+    }
+    var heading = document.createElement("p");
+    heading.className = "bgm-list-title";
+    heading.textContent = "音乐列表";
+    els.bgmList.appendChild(heading);
+    bgmState.tracks.forEach(function (track) {
+      var row = document.createElement("div");
+      row.className = "bgm-track";
+      if (bgmState.current && bgmState.current.file === track.file) {
+        row.classList.add("is-current");
+      }
+      var select = document.createElement("button");
+      select.type = "button";
+      select.className = "bgm-track-main";
+      select.title = "播放 " + track.title;
+      var title = document.createElement("span");
+      title.className = "bgm-track-title";
+      title.textContent = track.title;
+      var meta = document.createElement("span");
+      meta.className = "bgm-track-meta";
+      meta.textContent = track.file + " · 权重 " + track.weight;
+      select.appendChild(title);
+      select.appendChild(meta);
+      select.addEventListener("click", function () {
+        setBgmTrack(track, true);
+        els.bgmFormStatus.textContent = "正在播放：" + track.title;
+        els.bgmFormStatus.classList.remove("is-error");
+      });
+      var remove = document.createElement("button");
+      remove.type = "button";
+      remove.className = "bgm-track-delete";
+      remove.textContent = "×";
+      remove.title = "删除 " + track.title;
+      remove.setAttribute("aria-label", "删除 " + track.title);
+      remove.addEventListener("click", function () {
+        deleteBgmTrack(track);
+      });
+      row.appendChild(select);
+      row.appendChild(remove);
+      els.bgmList.appendChild(row);
+    });
+  }
+
+  function deleteBgmTrack(track) {
+    if (!window.confirm("确定删除音乐「" + track.title + "」吗？")) {
+      return;
+    }
+    var wasPlaying = !els.bgmAudio.paused;
+    els.bgmFormStatus.textContent = "删除中…";
+    els.bgmFormStatus.classList.remove("is-error");
+    fetch("api/bgm/" + encodeURIComponent(track.file), {
+      method: "DELETE",
+      cache: "no-store"
+    }).then(function (response) {
+      return response.json().catch(function () { return {}; }).then(function (data) {
+        if (!response.ok) {
+          throw new Error(data.error || "删除失败");
+        }
+        return data;
+      });
+    }).then(function (data) {
+      applyBgmTracks(normalizeBgmTracks({ tracks: data.tracks }));
+      if (wasPlaying && bgmState.current) {
+        playBgm();
+      }
+      els.bgmFormStatus.textContent = "音乐已删除";
+    }).catch(function (error) {
+      els.bgmFormStatus.textContent = error.message;
+      els.bgmFormStatus.classList.add("is-error");
+    });
   }
 
   function applyBgmTracks(tracks) {
@@ -1288,6 +1373,7 @@
       els.bgmTitle.title = "";
       els.bgmPlayer.hidden = !bgmState.backend;
       syncBgmButton();
+      renderBgmList();
       return;
     }
     els.bgmPlayer.hidden = false;
@@ -1300,6 +1386,7 @@
       els.bgmTitle.textContent = existing.title;
       els.bgmTitle.title = existing.title;
       syncBgmButton();
+      renderBgmList();
       return;
     }
     setBgmTrack(pickWeightedBgm(tracks, null), false);
@@ -1328,6 +1415,7 @@
     els.bgmFormStatus.textContent = "";
     els.bgmFormStatus.classList.remove("is-error");
     els.bgmSubmit.disabled = false;
+    renderBgmList();
     els.bgmDialog.showModal();
   }
 
@@ -1392,8 +1480,9 @@
     }).then(function (data) {
       applyBgmTracks(normalizeBgmTracks(data));
       setBgmTrack(data.track, true);
-      closeBgmDialog();
-      showToast("BGM 已上传");
+      renderBgmList();
+      els.bgmFormStatus.textContent = "BGM 已上传";
+      els.bgmFormStatus.classList.remove("is-error");
     }).catch(function (error) {
       els.bgmFormStatus.textContent = error.message;
       els.bgmFormStatus.classList.add("is-error");

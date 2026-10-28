@@ -300,6 +300,44 @@ def add_bgm_track(payload: dict, audio: bytes) -> dict:
     return {"ok": True, "track": track, "tracks": data["tracks"], "commit": commit}
 
 
+def delete_bgm_track(filename: str) -> dict:
+    filename = str(filename or "").strip()
+    if not filename or "/" in filename or "\\" in filename or filename in (".", ".."):
+        raise ApiError(400, "文件名无效")
+    if Path(filename).suffix.lower() not in (".mp3", ".wav"):
+        raise ApiError(400, "只支持 .mp3 和 .wav")
+    with LOCK:
+        target = BGM_DIR / filename
+        if not target.is_file():
+            raise ApiError(404, "音乐不存在")
+        data = read_bgm_config()
+        remaining = [track for track in data["tracks"] if track.get("file") != filename]
+        if len(remaining) == len(data["tracks"]):
+            raise ApiError(404, "音乐不在 BGM.json 中")
+        audio_snapshot = target.read_bytes()
+        config_snapshot = BGM_PATH.read_bytes()
+        try:
+            data["tracks"] = remaining
+            write_bgm_config(data)
+            target.unlink()
+        except Exception:
+            atomic_write_bytes(target, audio_snapshot)
+            atomic_write(BGM_PATH, config_snapshot.decode("utf-8"))
+            raise
+        log_change(f"BGM 删除完成：{filename}（Git 提交转到后台）")
+        commit_in_background(
+            [target, BGM_PATH],
+            f"docs: 删除 BGM「{filename}」",
+            f"BGM 删除：{filename}",
+        )
+        return {
+            "ok": True,
+            "deleted": filename,
+            "tracks": data["tracks"],
+            "commit": {"committed": False, "pending": True},
+        }
+
+
 def read_home_config() -> dict:
     if not HOME_PATH.is_file():
         return {"version": 1, "intervalSeconds": 5, "images": []}
@@ -2150,6 +2188,10 @@ class EditorHandler(SimpleHTTPRequestHandler):
     def do_DELETE(self) -> None:
         path = strip_base_path(unquote(urlparse(self.path).path))
         try:
+            if path.startswith("/api/bgm/"):
+                filename = path[len("/api/bgm/"):]
+                self.send_json(200, delete_bgm_track(filename))
+                return
             if path.startswith("/api/home/images/"):
                 filename = path[len("/api/home/images/"):]
                 self.send_json(200, delete_home_image(filename))

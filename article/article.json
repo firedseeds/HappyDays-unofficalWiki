@@ -9,8 +9,8 @@
     "domain": "114.55.99.2:8000"
   },
   "topicCount": 9,
-  "articleCount": 33,
-  "lastUpdated": "2026-10-28",
+  "articleCount": 32,
+  "lastUpdated": "2026-10-26",
   "topics": [
     {
       "id": "intro",
@@ -70,7 +70,7 @@
       "parentId": "history",
       "order": 1,
       "emoji": "👤",
-      "articleCount": 5
+      "articleCount": 4
     },
     {
       "id": "nations",
@@ -225,7 +225,7 @@
       "order": 10,
       "topic": "advanced",
       "title": "森罗物语：酒馆",
-      "description": "不列不列不列！",
+      "description": "此文档在语雀中暂无正文。",
       "emoji": "🧭",
       "updated": "2026-10-25",
       "readingTime": 1,
@@ -251,14 +251,11 @@
       "order": 12,
       "topic": "advanced",
       "title": "彩票",
-      "description": "赚钱的歪门邪道",
+      "description": "此文档在语雀中暂无正文。",
       "emoji": "🧭",
-      "updated": "2026-10-28",
+      "updated": "2026-10-25",
       "readingTime": 1,
-      "tags": [
-        "教程",
-        "赚钱"
-      ],
+      "tags": [],
       "file": "advanced/lottery.md",
       "source": "/wiki/#/doc/lottery"
     },
@@ -270,7 +267,7 @@
       "description": "当然，服务器是有载具的，不能合成",
       "emoji": "🧭",
       "updated": "2026-10-25",
-      "readingTime": 2,
+      "readingTime": 1,
       "tags": [],
       "file": "advanced/immersive-vehicles.md",
       "source": "/wiki/#/doc/immersive-vehicles"
@@ -399,7 +396,7 @@
       "title": "罗德岛",
       "description": "服务器最具实力的国家之一。",
       "emoji": "📖",
-      "updated": "2026-10-27",
+      "updated": "2026-10-25",
       "readingTime": 3,
       "tags": [
         "国家"
@@ -438,7 +435,7 @@
       "order": 27,
       "topic": "godman",
       "title": "OK",
-      "description": "罪孽深重的ok",
+      "description": "OK：多次破坏服务器",
       "emoji": "📄",
       "updated": "2026-10-26",
       "readingTime": 5,
@@ -516,28 +513,13 @@
       "order": 33,
       "topic": "godman",
       "title": "666",
-      "description": "自动拾取忘关了",
+      "description": "此人掏走了钻石信标，被土豆审判后ban IP",
       "emoji": "🐭",
       "updated": "2026-10-25",
       "readingTime": 5,
       "tags": [],
       "file": "history/godman/666.md",
       "source": "/wiki/#/doc/666"
-    },
-    {
-      "slug": "fish-text",
-      "order": 34,
-      "topic": "people",
-      "title": "fish",
-      "description": "服务器孙笑川",
-      "emoji": "📄",
-      "updated": "2026-10-28",
-      "readingTime": 1,
-      "tags": [
-        "老资历"
-      ],
-      "file": "history/people/fish-text.md",
-      "source": "/wiki/#/doc/fish-text"
     }
   ]
 }

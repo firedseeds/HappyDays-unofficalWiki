@@ -234,6 +234,97 @@
   opacity: 0.55;
 }
 
+.bgm-list {
+  display: flex;
+  max-height: 220px;
+  flex-direction: column;
+  gap: 5px;
+  padding: 2px 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.bgm-list-title {
+  margin: 0 0 2px;
+  color: var(--text-tertiary);
+  font-size: 9.5px;
+  font-weight: 650;
+}
+
+.bgm-list-empty {
+  margin: 0;
+  padding: 10px 0;
+  color: var(--text-faint);
+  font-size: 10px;
+}
+
+.bgm-track {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 28px;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--canvas);
+}
+
+.bgm-track.is-current {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 8%, var(--canvas));
+}
+
+.bgm-track-main {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 1px;
+  padding: 7px 9px;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+}
+
+.bgm-track-title {
+  overflow: hidden;
+  color: var(--text);
+  font-size: 10.5px;
+  font-weight: 650;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.bgm-track.is-current .bgm-track-title {
+  color: var(--accent);
+}
+
+.bgm-track-meta {
+  overflow: hidden;
+  color: var(--text-faint);
+  font-size: 9px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.bgm-track-delete {
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--text-faint);
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.bgm-track-delete:hover {
+  border-color: rgba(210, 85, 85, 0.28);
+  background: rgba(210, 85, 85, 0.08);
+  color: #d25555;
+}
+
 @media (max-width: 620px) {
   .bgm-player {
     right: 10px;

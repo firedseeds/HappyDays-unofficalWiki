@@ -53,7 +53,7 @@ window.HAPPYDAYS_WIKI = (function () {
       description: "服务器玩家与人物记录。",
       parentId: "history",
       order: 1,
-      docs: ["matopiraphai", "233-2233", "zzx", "1", "fish-text"]
+      docs: ["matopiraphai", "233-2233", "zzx", "1"]
     },
     {
       id: "nations",
@@ -87,11 +87,11 @@ window.HAPPYDAYS_WIKI = (function () {
       emoji: "🚇",
       category: "intro",
       excerpt: "happydays是在1:326的欧亚地图上以...",
-      icon: "/article/icon/intro.jpg",
+      icon: "/icon.png",
       updated: "2026-10-25",
       reading: 1,
       tags: [],
-      signatures: [{"author": "smillfox", "at": "2026-10-26T11:50:49+08:00", "action": "update", "title": "简介", "topic": "简介"}, {"author": "smillfox", "at": "2026-10-27T21:55:11+08:00", "action": "update", "title": "简介", "topic": "简介"}, {"author": "smillfox", "at": "2026-10-27T21:55:47+08:00", "action": "update", "title": "简介", "topic": "简介"}, {"author": "smillfox", "at": "2026-10-27T22:55:43+08:00", "action": "update", "title": "简介", "topic": "简介"}],
+      signatures: [{"author": "smillfox", "at": "2026-10-26T11:50:49+08:00", "action": "update", "title": "简介", "topic": "简介"}, {"author": "smillfox", "at": "2026-10-27T21:55:11+08:00", "action": "update", "title": "简介", "topic": "简介"}, {"author": "smillfox", "at": "2026-10-27T21:55:47+08:00", "action": "update", "title": "简介", "topic": "简介"}],
       content: `<h2>HappyDays轨道交通服务器</h2>
 <p><strong>happydays是在1:326的欧亚地图上以建立发展城市、轨道交通及铁路建设为基础的Minecraft服务器</strong></p>
 <p><strong>游戏版本：Java 1.20.1</strong></p>
@@ -344,28 +344,13 @@ window.HAPPYDAYS_WIKI = (function () {
       title: "森罗物语：酒馆",
       emoji: "🧭",
       category: "advanced",
-      excerpt: "不列不列不列！",
+      excerpt: "此文档在语雀中暂无正文。",
       icon: "/icon.png",
       updated: "2026-10-25",
       reading: 1,
       tags: [],
-      signatures: [{"author": "smillfox", "at": "2026-10-27T22:30:38+08:00", "action": "update", "title": "森罗物语：酒馆", "topic": "进阶教程"}],
-      content: `<h2>引言</h2>
-<p>不列不列不列！</p>
-<h2>一、原料的获取及储存</h2>
-<p><strong>1 葡萄藤的获取/种植</strong></p>
-<p>在橡树上寻找野生葡萄藤蔓，打掉获取葡萄藤，葡萄藤可在背包或合成台合成为藤架，用于种植葡萄。</p>
-<p><strong> 2 葡萄的种类 </strong></p>
-<p>藤架在地上树立时，下方一格如果为草方块，会产出葡萄和青提葡萄；下方一格为雪方块，会产出冰葡萄和青提葡萄；下方一格为地狱岩，会产出黄金葡萄和青提葡萄。</p>
-<p><strong>3 葡萄汁的榨取</strong></p>
-<p>森罗酒馆的葡萄榨汁使用了古老的人力压榨法。即：放入果盆后在果盆上方跳跃，用脚将果盆里的葡萄踩成汁。</p>
-<p>果盆需要将原版的木桶放在背包或者工作台中合成。</p>
-<p>不同的葡萄不能相互堆叠。</p>
-<p><strong>4 葡萄酒的酿造</strong></p>
-<p>使用九个木桶合成出一个酒桶，将葡萄汁和对应配方的配料从酒桶顶部加入后空手右键桶开始酿造，时间越长品质越好。</p>
-<p>当然也可以使用其他原料酿造其他酒水（没有啤酒）。</p>
-<p><strong>5 葡萄酒的取出</strong></p>
-<p>使用拉杆和漏斗在工作台或背包合成龙头，蹲下右键放在酒桶侧面预留的位置，龙头下方放置用玻璃瓶合成的空瓶子（1玻璃瓶合成1空瓶子），酒酿造到最高品质后右键龙头即可取出葡萄酒。</p>`
+      signatures: [],
+      content: `<p>此文档在语雀中暂无正文。</p>`
     },
     "money-making-guide": {
       title: "一些杂七杂八的赚钱野路子",
@@ -387,21 +372,14 @@ window.HAPPYDAYS_WIKI = (function () {
       title: "彩票",
       emoji: "🧭",
       category: "advanced",
-      excerpt: "赚钱的歪门邪道",
+      excerpt: "此文档在语雀中暂无正文。",
       icon: "/icon.png",
-      updated: "2026-10-28",
+      updated: "2026-10-25",
       reading: 1,
-      tags: ["教程", "赚钱"],
-      signatures: [{"author": "233", "at": "2026-10-25T21:22:00+08:00", "action": "update", "title": "彩票", "topic": "进阶教程"}, {"author": "fish", "at": "2026-10-28T00:36:13+08:00", "action": "update", "title": "彩票", "topic": "进阶教程"}, {"author": "fish", "at": "2026-10-28T00:48:55+08:00", "action": "update", "title": "彩票", "topic": "进阶教程"}],
-      content: `<blockquote>
-<p>彩票系统</p>
-</blockquote>
-<p><strong>老实赚钱，很枯燥吧——fish</strong></p>
-<ul><li>使用方式为指令输入</li></ul>
-<p>指令格式：<code> /lt &lt;下注量&gt; &lt;5个随机数字&gt; </code></p>
-<ol class="steps"><li>&lt;下注量&gt;填1-100随意</li><li>5个随机数字可填1-18，之间用空格隔开</li><li>5个随机数字也可以用random代替，会随机选择</li><li>一注15游戏币</li><li>直接输入<code>/lt</code>可以查看具体规则</li></ol>
-<p><strong>示例：</strong> <code>/lt 100 6 4 9 13 15</code></p>
-<p><code>/lt 50 random</code></p>`
+      tags: [],
+      signatures: [{"author": "233", "at": "2026-10-25T21:22:00+08:00", "action": "update", "title": "彩票", "topic": "进阶教程"}],
+      content: `<p><strong>输入：/lt</strong></p>
+<p><strong>查看详情</strong></p>`
     },
     "immersive-vehicles": {
       title: "沉浸车辆",
@@ -410,47 +388,10 @@ window.HAPPYDAYS_WIKI = (function () {
       excerpt: "当然，服务器是有载具的，不能合成",
       icon: "/icon.png",
       updated: "2026-10-25",
-      reading: 2,
+      reading: 1,
       tags: [],
-      signatures: [{"author": "LZnofu", "at": "2026-10-27T23:13:43+08:00", "action": "update", "title": "沉浸车辆", "topic": "进阶教程"}, {"author": "LZnofu", "at": "2026-10-27T23:15:40+08:00", "action": "update", "title": "沉浸车辆", "topic": "进阶教程"}],
-      content: `<p>当然，服务器是有载具的，不能合成</p>
-<h2>汽车</h2>
-<p>在本服，汽车是一种交通方式。</p>
-<h3>考取驾照</h3>
-<p>首先，来到郑州机铁站旁，阅读显示屏上面的须知，调整键位与CONFIG 调整完后，呼叫教练或op，教练会指引你上车 完成8个项目后，教练会对你评分 如果合格/过了，在屋子门前购买驾照（5000块）； 如果没过，听取教练的<strong>（建议先在单人存档练习，避免不合格过多）</strong></p>
-<h3>买车</h3>
-<p>存钱完后，前往考取驾照的地方，旁边有个4S店 然后，呼叫op，op会问出问题，依次回答即可（谨慎选择卡车）</p>
-<blockquote>
-<p>※车型、车颜色（可以先说颜色）、座椅型号与颜色</p>
-</blockquote>
-<p>如有需要，可以将后面（除赛车）更换成箱子 配完车后，op会给你钥匙，妥善保管</p>
-<h3>开车</h3>
-<p>首先解锁车辆，打开车门，坐到座位上，点火，松开手刹，挂挡，注意进隧道时开灯，出隧道时鸣笛 定好目的地，看路牌，最好不超速（无限速时默认75），过弯时控制速度，避免冲出道路</p>
-<h4>洗车</h4>
-<p>车在下雨天行驶时，车会沾上污垢 1.可以拿一个水桶，放在车架下中，等待几秒</p>
-<p>2.等待下雨天，停车等待</p>
-<p>3.在洗车站洗车，在SF、金林、威海、武汉、张家界装有</p>
-<p><del><strong>4.把车开到河里，冲出来（不建议，危险）</strong></del></p>
-<h4>发动机异响</h4>
-<p>当发动机出现异响，代表发动机里程达到500km，需要寻找op更换（免费）</p>
-<h4>HP</h4>
-<p>车辆的HP值一般为150（卡车250），当车辆HP值小于50时，发动机会冒黑烟，可使用加油站的修车包修复</p>
-<h4>加油</h4>
-<p>在加油站里购买加油券（重庆特惠20），右击加油站，选择价格，等待出油（如果有油则跳过该步骤），再次右击加油站，开始加油</p>
-<p>当显示：<code>Vehicle is full,disconnecting.</code>表示车辆加满油了，如果没有出现提示 ，继续加油</p>
-<h2>飞机</h2>
-<p>（我没开过awa）</p>
-<h2>P菜单设置翻译</h2>
-<h4>第一页 RENDERING（渲染设置）</h4>
-<div class="table-wrap"><table><thead><tr><th>选项</th><th>翻译</th><th>备注</th></tr></thead><tbody><tr><td>renderHUD_1P</td><td>第一人称显示 HUD</td><td>开 = 第一人称屏幕上显示HUD</td></tr><tr><td>renderHUD_3P</td><td>第三人称显示 HUD</td><td>开 = 第三人称屏幕上显示HUD</td></tr><tr><td>fullHUD_1P</td><td>第一人称完整 HUD</td><td>开着会占更多屏幕，但更全</td></tr><tr><td>fullHUD_3P</td><td>第三人称完整 HUD</td><td>同上，仅第三人称生效</td></tr><tr><td>transpHUD_1P</td><td>第一人称 HUD 透明化</td><td>开着 HUD 变半透明，不挡视线</td></tr><tr><td>renderWindows</td><td>渲染车窗玻璃</td><td>关掉能省性能</td></tr><tr><td>freecam_3P</td><td>第三人称自由视角</td><td>镜头独立，不跟车转</td></tr><tr><td>renderBeams</td><td>渲染车灯光束</td><td>夜景灯光效果</td></tr><tr><td>brightLights</td><td>高亮灯光</td><td>灯更亮更明显</td></tr><tr><td>blendedLights</td><td>混合柔光</td><td>灯光柔和</td></tr><tr><td>lightsTransp</td><td>灯光透明</td><td>灯罩半透明效果</td></tr></tbody></table></div>
-<p><strong>渲染模式</strong>：Superfast（极速・性能最好画质差）／ Fast（快速・平衡）／ Slow（慢速・光影兼容最好，细节更多，帧率低）</p>
-<h4>第二页 CONFIG（功能配置）</h4>
-<div class="table-wrap"><table><thead><tr><th>选项</th><th>翻译</th><th>备注</th></tr></thead><tbody><tr><td>kbOverride</td><td>键盘输入覆盖</td><td>接管按键，屏蔽 MC 原版视角</td></tr><tr><td>north360</td><td>方向角 360 度模式</td><td>方向盘无限制</td></tr><tr><td>simpleThrottle</td><td>简易油门</td><td>简化油门，前进后退一键切</td></tr><tr><td>halfThrottle</td><td>半油门模式</td><td>油门只到一半</td></tr><tr><td>autostartEng</td><td>引擎自动启动</td><td>上车直接点火</td></tr><tr><td>autoTrnSignals</td><td>转向灯自动控制</td><td>自动打转向灯</td></tr><tr><td>useShifter</td><td>启用手动换挡器</td><td>默认手动挡</td></tr><tr><td>heliAutoLevel</td><td>直升机自动配平</td><td>开这个没用</td></tr><tr><td>mouseYoke</td><td>鼠标摇杆模式</td><td>鼠标控制方向舵</td></tr><tr><td>classicJystk</td><td>经典旧版摇杆</td><td>用旧摇杆手感</td></tr><tr><td>Sound Volume</td><td>引擎音效音量</td><td>调引擎声大小</td></tr><tr><td>Radio Volume</td><td>车载电台音量</td><td>调电台声大小</td></tr></tbody></table></div>
-<h4>第三页 CONTROLS 按键设置（IV/MTS 沉浸载具）</h4>
-<p><strong>飞机操控</strong></p>
-<div class="table-wrap"><table><thead><tr><th>选项</th><th>翻译</th><th>备注</th></tr></thead><tbody><tr><td>YawRight</td><td>偏航向右（机头右转）</td><td>飞机水平向右转向（地面用）</td></tr><tr><td>YawLeft</td><td>偏航向左（机头左转）</td><td>飞机水平向左转向（地面用）</td></tr><tr><td>PitchUp</td><td>俯仰向上（抬头爬升）</td><td>抬升机头，向上飞</td></tr><tr><td>PitchDown</td><td>俯仰向下（低头俯冲）</td><td>压下机头，向下俯冲</td></tr><tr><td>RollRight</td><td>向右滚转（向右倾斜）</td><td>机身向右侧翻滚</td></tr><tr><td>RollLeft</td><td>向左滚转（向左倾斜）</td><td>机身向左侧翻滚</td></tr><tr><td>ThrottleUp</td><td>加大油门</td><td>提升发动机动力</td></tr><tr><td>ThrottleDown</td><td>减小油门</td><td>降低发动机动力</td></tr><tr><td>FlapsUp</td><td>收起襟翼</td><td>适合高速飞行</td></tr><tr><td>FlapsDown</td><td>放下襟翼</td><td>起降、低速飞行使用</td></tr><tr><td>Mouse Yoke</td><td>鼠标摇杆模式开关</td><td>开启后鼠标直接控制飞机姿态</td></tr><tr><td>Brake</td><td>刹车</td><td>地面滑行制动</td></tr><tr><td>ParkingBrake</td><td>驻车刹车 / 手刹</td><td>停车锁死车轮</td></tr><tr><td>Panel</td><td>打开控制面板</td><td>调出载具配置界面</td></tr><tr><td>Radio</td><td>车载电台</td><td>电台开关</td></tr><tr><td>Gun</td><td>武器开火</td><td>发射载具武器</td></tr><tr><td>Switch Gun</td><td>切换武器</td><td>在多个武器之间轮换</td></tr><tr><td>ZoomIn</td><td>放大视角</td><td>拉近镜头</td></tr><tr><td>ZoomOut</td><td>缩小视角</td><td>拉远镜头</td></tr><tr><td>ChangeView</td><td>切换视角</td><td>第一 / 第三人称切换</td></tr><tr><td>CamLock</td><td>视角锁定</td><td>锁定镜头朝向，搭配自由视角使用</td></tr><tr><td>DisableJoystick</td><td>关闭摇杆输入</td><td>屏蔽外接游戏手柄、摇杆</td></tr></tbody></table></div>
-<p><strong>汽车操控</strong></p>
-<div class="table-wrap"><table><thead><tr><th>选项</th><th>翻译</th><th>备注</th></tr></thead><tbody><tr><td>Mod</td><td>功能修饰键</td><td>组合键，搭配使用</td></tr><tr><td>TurnRight</td><td>向右转向</td><td>车辆向右打方向</td></tr><tr><td>TurnLeft</td><td>向左转向</td><td>车辆向左打方向</td></tr><tr><td>Gas</td><td>油门</td><td>车辆踩油门</td></tr><tr><td>Brake</td><td>刹车</td><td>车辆减速制动</td></tr><tr><td>ParkingBrake</td><td>手刹</td><td>驻车锁止</td></tr><tr><td>Panel</td><td>控制面板</td><td>打开载具设置面板</td></tr><tr><td>ShiftUp</td><td>升挡</td><td>提高挡位</td></tr><tr><td>ShiftDown</td><td>降挡</td><td>降低挡位</td></tr><tr><td>Horn</td><td>喇叭</td><td>鸣笛</td></tr><tr><td>Radio</td><td>电台</td><td>车载电台开关</td></tr><tr><td>Gun</td><td>开火</td><td>车辆武器发射</td></tr><tr><td>Switch Gun</td><td>切换武器</td><td>轮换车载武器</td></tr><tr><td>ZoomIn</td><td>镜头放大</td><td>拉近视角</td></tr><tr><td>ZoomOut</td><td>镜头缩小</td><td>拉远视角</td></tr><tr><td>ChangeView</td><td>切换视角</td><td>第一 / 第三人称切换</td></tr><tr><td>Lights</td><td>车灯</td><td>控制车灯开关</td></tr><tr><td>CamLock</td><td>视角锁定</td><td>锁定镜头方向</td></tr><tr><td>LeftSignal</td><td>左转向灯</td><td>开启左转向提示灯</td></tr><tr><td>RightSignal</td><td>右转向灯</td><td>开启右转向提示灯</td></tr><tr><td>DisableJoystick</td><td>关闭摇杆</td><td>屏蔽外接摇杆设备</td></tr></tbody></table></div>`
+      signatures: [],
+      content: `<p>当然，服务器是有载具的，不能合成</p>`
     },
     "town-resources": {
       title: "城镇资源",
@@ -504,7 +445,7 @@ window.HAPPYDAYS_WIKI = (function () {
       emoji: "📜",
       category: "rules",
       excerpt: "2.1 命名国家名称：可以是虚构的，尽量不要与当前的国...",
-      icon: "/article/icon/behavior-chat.png",
+      icon: "/icon.png",
       updated: "2026-10-25",
       reading: 3,
       tags: [],
@@ -694,11 +635,11 @@ window.HAPPYDAYS_WIKI = (function () {
       emoji: "📖",
       category: "nations",
       excerpt: "详见zzx人物志",
-      icon: "/article/icon/harbin-chronicle.png",
+      icon: "/icon.png",
       updated: "2026-10-25",
       reading: 1,
       tags: [],
-      signatures: [{"author": "233", "at": "2026-10-25T20:47:38+08:00", "action": "update", "title": "哈尔滨地方志", "topic": "国家/城镇"}, {"author": "zzx", "at": "2026-10-27T23:38:28+08:00", "action": "update", "title": "哈尔滨地方志", "topic": "国家/城镇"}, {"author": "zzx", "at": "2026-10-27T23:38:31+08:00", "action": "update", "title": "哈尔滨地方志", "topic": "国家/城镇"}],
+      signatures: [{"author": "233", "at": "2026-10-25T20:47:38+08:00", "action": "update", "title": "哈尔滨地方志", "topic": "国家/城镇"}],
       content: `<h2>详见zzx人物志</h2>
 <p><strong>你知道吗 这个文档原本在朝鲜民主主义人民共和国，后来又改到了自由联邦共同体，现在变成了泛东北经济联盟。</strong></p>`
     },
@@ -707,19 +648,17 @@ window.HAPPYDAYS_WIKI = (function () {
       emoji: "📖",
       category: "nations",
       excerpt: "服务器最具实力的国家之一。",
-      icon: "/article/icon/rhodes-island.jpg",
-      updated: "2026-10-27",
+      icon: "/icon.png",
+      updated: "2026-10-25",
       reading: 3,
       tags: ["国家"],
-      signatures: [{"author": "233", "at": "2026-10-25T20:56:49+08:00", "action": "update", "title": "罗德岛", "topic": "国家/城镇"}, {"author": "fish", "at": "2026-10-26T22:54:26+08:00", "action": "update", "title": "罗德岛", "topic": "国家/城镇"}, {"author": "fish", "at": "2026-10-27T23:36:44+08:00", "action": "update", "title": "罗德岛", "topic": "国家/城镇"}],
+      signatures: [{"author": "233", "at": "2026-10-25T20:56:49+08:00", "action": "update", "title": "罗德岛", "topic": "国家/城镇"}, {"author": "fish", "at": "2026-10-26T22:54:26+08:00", "action": "update", "title": "罗德岛", "topic": "国家/城镇"}],
       content: `<h2>截至撰稿日期（2026.10.25）罗德岛为第二大国家</h2>
 <p><strong>其对服务器的影响是巨大的——233</strong></p>
 <p><del>促进了许多东西被ban</del></p>
 <p>在我眼里罗德岛可以拿去当连云港的条目了，附属城镇可以说是很少了——fish</p>
 <hr>
-<blockquote>
 <h2>国家简介</h2>
-</blockquote>
 <h3>主要成员：</h3>
 <ul><li>AbaWuwaO —— 国家创始人</li><li>fish —— 核心二把手</li></ul>
 <h3>附属城镇：</h3>
@@ -730,9 +669,7 @@ window.HAPPYDAYS_WIKI = (function () {
 <h3>描述：</h3>
 <p>首都连云港的资金与物资储备久居服务器前列；历史悠久；创始人长时间不上线，加上长期招不到新人，因此长期处于 fish 的独裁统治下；长期开放对外投资，有建筑项目可向罗德岛申请投资。</p>
 <hr>
-<blockquote>
 <h2>国家发展</h2>
-</blockquote>
 <h3>建设成就：</h3>
 <h4>个人项目</h4>
 <div class="table-wrap"><table><thead><tr><th>名称</th><th>状态</th></tr></thead><tbody><tr><td>连云港大教堂</td><td>已完成</td></tr><tr><td>北极文明的墓碑</td><td>已完工</td></tr><tr><td>罗德岛陆地舰兼高空机场</td><td>已完工</td></tr><tr><td>连云港地下停车场</td><td>已完工</td></tr><tr><td>连云港地下繁茂洞穴</td><td>暂时停工</td></tr></tbody></table></div>
@@ -759,11 +696,11 @@ window.HAPPYDAYS_WIKI = (function () {
       emoji: "📖",
       category: "nations",
       excerpt: "国家成员：233，zzx(已经叛逃)国家发展：233原...",
-      icon: "/article/icon/dprk.png",
+      icon: "/icon.png",
       updated: "2026-10-25",
       reading: 1,
       tags: [],
-      signatures: [{"author": "zzx", "at": "2026-10-27T23:39:41+08:00", "action": "update", "title": "朝鲜民主主义人民共和国DPRK", "topic": "国家/城镇"}],
+      signatures: [],
       content: `<p>国家成员：233，zzx(已经叛逃)</p>
 <p>国家发展：</p>
 <p>233原话：当时第1条轨道其实是从日本进口的 从大连接过来的 现在大连到平壤那么绕就是因为这个 然后被4a拆了 还帮忙换成矿车轨道了</p>
@@ -778,13 +715,13 @@ window.HAPPYDAYS_WIKI = (function () {
       title: "OK",
       emoji: "📄",
       category: "godman",
-      excerpt: "罪孽深重的ok",
+      excerpt: "OK：多次破坏服务器",
       icon: "/icon.png",
       updated: "2026-10-26",
       reading: 5,
       tags: [],
-      signatures: [{"author": "233", "at": "2026-10-26T22:28:21+08:00", "action": "create", "title": "OK", "topic": "简介"}, {"author": "233", "at": "2026-10-26T22:28:28+08:00", "action": "update", "title": "OK", "topic": "intro"}, {"author": "233", "at": "2026-10-26T22:28:30+08:00", "action": "update", "title": "OK", "topic": "intro"}, {"author": "233", "at": "2026-10-26T22:28:43+08:00", "action": "move", "title": "OK", "topic": "神人堂", "fromTopic": "简介"}, {"author": "233", "at": "2026-10-26T22:28:50+08:00", "action": "update", "title": "OK", "topic": "godman"}, {"author": "233", "at": "2026-10-26T22:28:51+08:00", "action": "update", "title": "OK", "topic": "godman"}, {"author": "233", "at": "2026-10-26T22:28:53+08:00", "action": "update", "title": "OK", "topic": "godman"}, {"author": "smillfox", "at": "2026-10-27T22:35:52+08:00", "action": "update", "title": "OK", "topic": "神人堂"}],
-      content: `<p>原南通城主/秦皇岛城主，在主世界使用机器人模组挖掘钻石后积攒了家业，对金钱控制欲望极强。与CR400AF狼狈为奸，通过线下交易等形式盗用或创建多个账号，对服务器机械动力铁路及公路设施进行破坏性拆解，被CR400AF被刺后转生为omg再次进行破坏，盗用其他玩家身份拆解了6列机械动力列车。</p>`
+      signatures: [{"author": "233", "at": "2026-10-26T22:28:21+08:00", "action": "create", "title": "OK", "topic": "简介"}, {"author": "233", "at": "2026-10-26T22:28:28+08:00", "action": "update", "title": "OK", "topic": "intro"}, {"author": "233", "at": "2026-10-26T22:28:30+08:00", "action": "update", "title": "OK", "topic": "intro"}, {"author": "233", "at": "2026-10-26T22:28:43+08:00", "action": "move", "title": "OK", "topic": "神人堂", "fromTopic": "简介"}, {"author": "233", "at": "2026-10-26T22:28:50+08:00", "action": "update", "title": "OK", "topic": "godman"}, {"author": "233", "at": "2026-10-26T22:28:51+08:00", "action": "update", "title": "OK", "topic": "godman"}, {"author": "233", "at": "2026-10-26T22:28:53+08:00", "action": "update", "title": "OK", "topic": "godman"}],
+      content: `<h2>OK：多次破坏服务器，与南宁的dfdf私下交易(10rmb)，盗取他人账号。曾占据南通和秦皇岛，疯狂挖取主世界钻石。</h2>`
     },
     "qwertyuiop": {
       title: "qwertyuiop",
@@ -867,33 +804,19 @@ window.HAPPYDAYS_WIKI = (function () {
       title: "666",
       emoji: "🐭",
       category: "godman",
-      excerpt: "自动拾取忘关了",
+      excerpt: "此人掏走了钻石信标，被土豆审判后ban IP",
       icon: "/icon.png",
       updated: "2026-10-25",
       reading: 5,
       tags: [],
-      signatures: [{"author": "smillfox", "at": "2026-10-27T22:37:10+08:00", "action": "update", "title": "666", "topic": "神人堂"}],
-      content: `<p>在中国南方城市盗取他人信标基座内的矿物块，并声称自己偶然发现拾取</p>`
-    },
-    "fish-text": {
-      title: "fish",
-      emoji: "📄",
-      category: "people",
-      excerpt: "服务器孙笑川",
-      icon: "/icon.png",
-      updated: "2026-10-28",
-      reading: 1,
-      tags: ["老资历"],
-      signatures: [{"author": "fish", "at": "2026-10-28T01:10:05+08:00", "action": "create", "title": "fish", "topic": "人物志"}],
-      content: `<blockquote>
-<h2>介绍</h2>
-</blockquote>
-<p><strong>服务器知名人物，长时间活跃的老资历，热心善良，助人为乐，温柔和蔼，霸气侧漏，名震八方，<del>无恶不作，灼灼逼人，邪恶至极，孙笑川在世，止小儿夜啼</del></strong></p>`
+      signatures: [],
+      content: `<h3>此人掏走了钻石信标，被土豆审判后ban IP</h3>
+<p><em>由于群内消息已被自动删除，而编者的记忆力与鱼相当，所以只记得上面了</em></p>`
     }
   };
 
   var allIds = [
-    "intro", "before-joining", "first-arrival", "shop-plugin", "build-town", "about-nations", "first-money", "resource-world-nether", "senluo-kitchen", "senluo-tavern", "money-making-guide", "lottery", "immersive-vehicles", "town-resources", "cheating-response", "behavior-chat", "world-map", "matopiraphai", "233-2233", "zzx", "northeast-economic-alliance", "harbin-chronicle", "rhodes-island", "freedom-union", "dprk", "ok", "qwertyuiop", "gallery-1", "gallery-2", "1", "alex", "666", "fish-text"
+    "intro", "before-joining", "first-arrival", "shop-plugin", "build-town", "about-nations", "first-money", "resource-world-nether", "senluo-kitchen", "senluo-tavern", "money-making-guide", "lottery", "immersive-vehicles", "town-resources", "cheating-response", "behavior-chat", "world-map", "matopiraphai", "233-2233", "zzx", "northeast-economic-alliance", "harbin-chronicle", "rhodes-island", "freedom-union", "dprk", "ok", "qwertyuiop", "gallery-1", "gallery-2", "1", "alex", "666"
   ];
 
   return {

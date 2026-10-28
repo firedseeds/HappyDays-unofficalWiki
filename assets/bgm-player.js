@@ -29,6 +29,7 @@
     '      <label class="bgm-field"><span>音频文件</span><input id="bgmFile" type="file" accept=".mp3,.wav,audio/mpeg,audio/wav" required><small>仅支持 .mp3 和 .wav，最大 50MB</small></label>',
     '      <label class="bgm-field"><span>歌名</span><input id="bgmFormTitle" type="text" maxlength="120" autocomplete="off" required placeholder="显示在播放器中的歌名"></label>',
     '      <label class="bgm-field"><span>权重</span><input id="bgmFormWeight" type="number" min="0.1" max="1000000" step="0.1" value="1" required></label>',
+    '      <div class="bgm-list" id="bgmList"></div>',
     '      <p class="bgm-form-status" id="bgmFormStatus"></p>',
     '    </div>',
     '    <footer class="bgm-dialog-actions"><button class="bgm-secondary" id="bgmCancel" type="button">取消</button><button class="bgm-primary" id="bgmSubmit" type="submit">上传</button></footer>',
@@ -48,6 +49,7 @@
     file: document.getElementById("bgmFile"),
     formTitle: document.getElementById("bgmFormTitle"),
     formWeight: document.getElementById("bgmFormWeight"),
+    list: document.getElementById("bgmList"),
     status: document.getElementById("bgmFormStatus"),
     submit: document.getElementById("bgmSubmit"),
     cancel: document.getElementById("bgmCancel"),
@@ -136,6 +138,87 @@
     if (autoplay) {
       play();
     }
+    renderList();
+  }
+
+  function renderList() {
+    if (!els.list) {
+      return;
+    }
+    els.list.innerHTML = "";
+    if (!state.tracks.length) {
+      var empty = document.createElement("p");
+      empty.className = "bgm-list-empty";
+      empty.textContent = "暂无音乐";
+      els.list.appendChild(empty);
+      return;
+    }
+    var heading = document.createElement("p");
+    heading.className = "bgm-list-title";
+    heading.textContent = "音乐列表";
+    els.list.appendChild(heading);
+    state.tracks.forEach(function (track) {
+      var row = document.createElement("div");
+      row.className = "bgm-track";
+      if (state.current && state.current.file === track.file) {
+        row.classList.add("is-current");
+      }
+      var select = document.createElement("button");
+      select.type = "button";
+      select.className = "bgm-track-main";
+      select.title = "播放 " + track.title;
+      var title = document.createElement("span");
+      title.className = "bgm-track-title";
+      title.textContent = track.title;
+      var meta = document.createElement("span");
+      meta.className = "bgm-track-meta";
+      meta.textContent = track.file + " · 权重 " + track.weight;
+      select.appendChild(title);
+      select.appendChild(meta);
+      select.addEventListener("click", function () {
+        setTrack(track, true);
+        setStatus("正在播放：" + track.title);
+      });
+      var remove = document.createElement("button");
+      remove.type = "button";
+      remove.className = "bgm-track-delete";
+      remove.textContent = "×";
+      remove.title = "删除 " + track.title;
+      remove.setAttribute("aria-label", "删除 " + track.title);
+      remove.addEventListener("click", function () {
+        deleteTrack(track);
+      });
+      row.appendChild(select);
+      row.appendChild(remove);
+      els.list.appendChild(row);
+    });
+  }
+
+  function deleteTrack(track) {
+    if (!window.confirm("确定删除音乐「" + track.title + "」吗？")) {
+      return;
+    }
+    var wasPlaying = !els.audio.paused;
+    setStatus("删除中…");
+    fetch("/api/bgm/" + encodeURIComponent(track.file), {
+      method: "DELETE",
+      cache: "no-store"
+    }).then(function (response) {
+      return response.json().catch(function () { return {}; }).then(function (data) {
+        if (!response.ok) {
+          throw new Error(data.error || "删除失败");
+        }
+        return data;
+      });
+    }).then(function (data) {
+      applyTracks(normalizeTracks({ tracks: data.tracks }));
+      if (wasPlaying && state.current) {
+        play();
+      }
+      setStatus("音乐已删除");
+    }).catch(function (error) {
+      setStatus(error.message, true);
+    });
   }
 
   function applyTracks(tracks) {
@@ -149,6 +232,7 @@
       els.title.title = "";
       els.player.hidden = !state.backend;
       syncButton();
+      renderList();
       return;
     }
     els.player.hidden = false;
@@ -161,6 +245,7 @@
       els.title.textContent = existing.title;
       els.title.title = existing.title;
       syncButton();
+      renderList();
       return;
     }
     setTrack(pickWeighted(tracks, null), false);
@@ -191,6 +276,7 @@
     els.form.reset();
     els.formWeight.value = "1";
     setStatus("");
+    renderList();
     els.dialog.showModal();
   }
 
@@ -246,8 +332,8 @@
     }).then(function (data) {
       applyTracks(normalizeTracks(data));
       setTrack(data.track, true);
+      renderList();
       setStatus("BGM 已上传");
-      window.setTimeout(closeDialog, 450);
     }).catch(function (error) {
       setStatus(error.message, true);
     }).finally(function () {
