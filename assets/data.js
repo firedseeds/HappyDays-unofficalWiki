@@ -307,7 +307,7 @@ window.HAPPYDAYS_WIKI = (function () {
       emoji: "🧭",
       category: "advanced",
       excerpt: "做饭是一门高深的艺术一",
-      icon: "/icon.png",
+      icon: "/article/icon/senluo-kitchen.png",
       updated: "2026-10-25",
       reading: 1,
       tags: [],
