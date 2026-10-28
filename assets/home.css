@@ -297,13 +297,15 @@ body.hero-focus .site-header {
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .hero:hover {
+  .hero:hover,
+  body.hero-focus .hero {
     height: var(--hero-hover-height, 65vh);
     min-height: 320px;
     max-height: 92vh;
   }
 
-  .hero:hover .hero-media img {
+  .hero:hover .hero-media img,
+  body.hero-focus .hero-media img {
     height: var(--hero-hover-height, var(--hero-image-h));
     object-fit: contain;
     transform: translate(-50%, -50%) scale(1.04);
@@ -684,7 +686,8 @@ body.hero-focus .site-header {
     transition: none;
   }
 
-  .hero:hover .hero-media img {
+  .hero:hover .hero-media img,
+  body.hero-focus .hero-media img {
     transform: translate(-50%, -50%);
   }
 

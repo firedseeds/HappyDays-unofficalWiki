@@ -540,14 +540,14 @@
 
   renderHomeSections();
 
-  var siteHeader = document.querySelector(".site-header");
-  if (siteHeader) {
-    els.hero.addEventListener("mouseenter", function () {
+  var heroFrame = document.querySelector(".hero-frame");
+  if (heroFrame) {
+    heroFrame.addEventListener("mouseenter", function () {
       if (state.current) {
         document.body.classList.add("hero-focus");
       }
     });
-    els.hero.addEventListener("mouseleave", function () {
+    heroFrame.addEventListener("mouseleave", function () {
       document.body.classList.remove("hero-focus");
     });
   }
