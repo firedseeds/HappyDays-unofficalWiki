@@ -648,7 +648,7 @@ window.HAPPYDAYS_WIKI = (function () {
       emoji: "📖",
       category: "nations",
       excerpt: "服务器最具实力的国家之一。",
-      icon: "/icon.png",
+      icon: "/article/icon/rhodes-island.jpg",
       updated: "2026-10-25",
       reading: 3,
       tags: ["国家"],
