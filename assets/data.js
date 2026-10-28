@@ -61,7 +61,7 @@ window.HAPPYDAYS_WIKI = (function () {
       description: "服务器中的国家、城镇与编年记录。",
       parentId: "history",
       order: 2,
-      docs: ["rhodes-island", "freedom-union", "northeast-economic-alliance", "harbin-chronicle", "dprk"]
+      docs: ["rhodes-island", "freedom-union", "northeast-economic-alliance", "dprk", "harbin-chronicle"]
     },
     {
       id: "godman",
@@ -678,19 +678,6 @@ window.HAPPYDAYS_WIKI = (function () {
 <h2>你知道吗？这其实是zzx的第2次蟠桃</h2>
 <p><strong>由自由联邦共同体（FU）独立而来，详见zzx人物志</strong></p>`
     },
-    "harbin-chronicle": {
-      title: "哈尔滨地方志",
-      emoji: "📖",
-      category: "nations",
-      excerpt: "详见zzx人物志",
-      icon: "/icon.png",
-      updated: "2026-10-25",
-      reading: 1,
-      tags: [],
-      signatures: [{"author": "233", "at": "2026-10-25T20:47:38+08:00", "action": "update", "title": "哈尔滨地方志", "topic": "国家/城镇"}, {"author": "233", "at": "2026-10-28T21:10:32+08:00", "action": "update", "title": "哈尔滨地方志", "topic": "nations"}, {"author": "233", "at": "2026-10-28T21:10:40+08:00", "action": "update", "title": "哈尔滨地方志", "topic": "nations"}, {"author": "233", "at": "2026-10-28T21:10:42+08:00", "action": "update", "title": "哈尔滨地方志", "topic": "nations"}, {"author": "233", "at": "2026-10-28T21:10:58+08:00", "action": "update", "title": "哈尔滨地方志", "topic": "nations"}, {"author": "233", "at": "2026-10-28T21:11:29+08:00", "action": "update", "title": "哈尔滨地方志", "topic": "nations"}],
-      content: `<h2>详见zzx人物志</h2>
-<p><strong>你知道吗 这个文档原本在朝鲜民主主义人民共和国，后来又改到了自由联邦共同体，现在变成了泛东北经济联盟。</strong></p>`
-    },
     "dprk": {
       title: "朝鲜民主主义人民共和国DPRK",
       emoji: "📖",
@@ -710,6 +697,19 @@ window.HAPPYDAYS_WIKI = (function () {
 <ol class="steps"><li>zzx蟠桃了</li><li>新建巨型建筑柳京饭店，共51层</li><li>不要叛逃（——zzx</li></ol>
 <p>26年10月8日更新：</p>
 <ol class="steps"><li>将军指正柳京饭店为55层\\o/\\o/\\o/</li></ol>`
+    },
+    "harbin-chronicle": {
+      title: "哈尔滨地方志",
+      emoji: "📖",
+      category: "nations",
+      excerpt: "详见zzx人物志",
+      icon: "/icon.png",
+      updated: "2026-10-25",
+      reading: 1,
+      tags: [],
+      signatures: [{"author": "233", "at": "2026-10-25T20:47:38+08:00", "action": "update", "title": "哈尔滨地方志", "topic": "国家/城镇"}, {"author": "233", "at": "2026-10-28T21:10:32+08:00", "action": "update", "title": "哈尔滨地方志", "topic": "nations"}, {"author": "233", "at": "2026-10-28T21:10:40+08:00", "action": "update", "title": "哈尔滨地方志", "topic": "nations"}, {"author": "233", "at": "2026-10-28T21:10:42+08:00", "action": "update", "title": "哈尔滨地方志", "topic": "nations"}, {"author": "233", "at": "2026-10-28T21:10:58+08:00", "action": "update", "title": "哈尔滨地方志", "topic": "nations"}, {"author": "233", "at": "2026-10-28T21:11:29+08:00", "action": "update", "title": "哈尔滨地方志", "topic": "nations"}, {"author": "233", "at": "2026-10-28T21:11:34+08:00", "action": "update", "title": "哈尔滨地方志", "topic": "nations"}],
+      content: `<h2>详见zzx人物志</h2>
+<p><strong>你知道吗 这个文档原本在朝鲜民主主义人民共和国，后来又改到了自由联邦共同体，现在变成了泛东北经济联盟。</strong></p>`
     },
     "ok": {
       title: "OK",
@@ -830,7 +830,7 @@ window.HAPPYDAYS_WIKI = (function () {
   };
 
   var allIds = [
-    "intro", "before-joining", "first-arrival", "shop-plugin", "build-town", "about-nations", "first-money", "resource-world-nether", "senluo-kitchen", "senluo-tavern", "money-making-guide", "lottery", "immersive-vehicles", "town-resources", "cheating-response", "behavior-chat", "world-map", "matopiraphai", "233-2233", "zzx", "rhodes-island", "freedom-union", "northeast-economic-alliance", "harbin-chronicle", "dprk", "ok", "qwertyuiop", "gallery-1", "gallery-2", "1", "alex", "666", "fish-text2"
+    "intro", "before-joining", "first-arrival", "shop-plugin", "build-town", "about-nations", "first-money", "resource-world-nether", "senluo-kitchen", "senluo-tavern", "money-making-guide", "lottery", "immersive-vehicles", "town-resources", "cheating-response", "behavior-chat", "world-map", "matopiraphai", "233-2233", "zzx", "rhodes-island", "freedom-union", "northeast-economic-alliance", "dprk", "harbin-chronicle", "ok", "qwertyuiop", "gallery-1", "gallery-2", "1", "alex", "666", "fish-text2"
   ];
 
   return {
