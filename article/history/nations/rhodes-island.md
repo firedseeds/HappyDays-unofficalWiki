@@ -6,7 +6,7 @@ topic_id: "nations"
 updated: "2026-10-25"
 reading_time: 3
 emoji: "📖"
-order: 23
+order: 22
 slug: "rhodes-island"
 source: "/wiki/#/doc/rhodes-island"
 tags:

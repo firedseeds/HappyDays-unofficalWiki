@@ -378,7 +378,7 @@
     },
     {
       "slug": "harbin-chronicle",
-      "order": 22,
+      "order": 23,
       "topic": "nations",
       "title": "哈尔滨地方志",
       "description": "详见zzx人物志",
@@ -391,7 +391,7 @@
     },
     {
       "slug": "rhodes-island",
-      "order": 23,
+      "order": 22,
       "topic": "nations",
       "title": "罗德岛",
       "description": "服务器最具实力的国家之一。",

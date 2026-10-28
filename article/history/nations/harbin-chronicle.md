@@ -6,7 +6,7 @@ topic_id: "nations"
 updated: "2026-10-25"
 reading_time: 1
 emoji: "📖"
-order: 22
+order: 23
 slug: "harbin-chronicle"
 source: "/wiki/#/doc/harbin-chronicle"
 tags:

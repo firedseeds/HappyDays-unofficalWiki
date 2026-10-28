@@ -61,7 +61,7 @@ window.HAPPYDAYS_WIKI = (function () {
       description: "服务器中的国家、城镇与编年记录。",
       parentId: "history",
       order: 2,
-      docs: ["northeast-economic-alliance", "harbin-chronicle", "rhodes-island", "freedom-union", "dprk"]
+      docs: ["northeast-economic-alliance", "rhodes-island", "harbin-chronicle", "freedom-union", "dprk"]
     },
     {
       id: "godman",
@@ -630,19 +630,6 @@ window.HAPPYDAYS_WIKI = (function () {
 <h2>你知道吗？这其实是zzx的第2次蟠桃</h2>
 <p><strong>由自由联邦共同体（FU）独立而来，详见zzx人物志</strong></p>`
     },
-    "harbin-chronicle": {
-      title: "哈尔滨地方志",
-      emoji: "📖",
-      category: "nations",
-      excerpt: "详见zzx人物志",
-      icon: "/icon.png",
-      updated: "2026-10-25",
-      reading: 1,
-      tags: [],
-      signatures: [{"author": "233", "at": "2026-10-25T20:47:38+08:00", "action": "update", "title": "哈尔滨地方志", "topic": "国家/城镇"}],
-      content: `<h2>详见zzx人物志</h2>
-<p><strong>你知道吗 这个文档原本在朝鲜民主主义人民共和国，后来又改到了自由联邦共同体，现在变成了泛东北经济联盟。</strong></p>`
-    },
     "rhodes-island": {
       title: "罗德岛",
       emoji: "📖",
@@ -675,6 +662,19 @@ window.HAPPYDAYS_WIKI = (function () {
 <div class="table-wrap"><table><thead><tr><th>名称</th><th>状态</th></tr></thead><tbody><tr><td>连云港大教堂</td><td>已完成</td></tr><tr><td>北极文明的墓碑</td><td>已完工</td></tr><tr><td>罗德岛陆地舰兼高空机场</td><td>已完工</td></tr><tr><td>连云港地下停车场</td><td>已完工</td></tr><tr><td>连云港地下繁茂洞穴</td><td>暂时停工</td></tr></tbody></table></div>
 <h4>公共项目</h4>
 <ul><li>帮助其他地区建造了累计 4 座以上的机场</li><li>建造了连云港——日本的地下高速</li><li>建造了目前服务器唯一的海底隧道，秦皇岛——大连</li></ul>`
+    },
+    "harbin-chronicle": {
+      title: "哈尔滨地方志",
+      emoji: "📖",
+      category: "nations",
+      excerpt: "详见zzx人物志",
+      icon: "/icon.png",
+      updated: "2026-10-25",
+      reading: 1,
+      tags: [],
+      signatures: [{"author": "233", "at": "2026-10-25T20:47:38+08:00", "action": "update", "title": "哈尔滨地方志", "topic": "国家/城镇"}, {"author": "233", "at": "2026-10-28T21:10:32+08:00", "action": "update", "title": "哈尔滨地方志", "topic": "nations"}],
+      content: `<h2>详见zzx人物志</h2>
+<p><strong>你知道吗 这个文档原本在朝鲜民主主义人民共和国，后来又改到了自由联邦共同体，现在变成了泛东北经济联盟。</strong></p>`
     },
     "freedom-union": {
       title: "自由联邦共同体 Freedom Union",
@@ -830,7 +830,7 @@ window.HAPPYDAYS_WIKI = (function () {
   };
 
   var allIds = [
-    "intro", "before-joining", "first-arrival", "shop-plugin", "build-town", "about-nations", "first-money", "resource-world-nether", "senluo-kitchen", "senluo-tavern", "money-making-guide", "lottery", "immersive-vehicles", "town-resources", "cheating-response", "behavior-chat", "world-map", "matopiraphai", "233-2233", "zzx", "northeast-economic-alliance", "harbin-chronicle", "rhodes-island", "freedom-union", "dprk", "ok", "qwertyuiop", "gallery-1", "gallery-2", "1", "alex", "666", "fish-text2"
+    "intro", "before-joining", "first-arrival", "shop-plugin", "build-town", "about-nations", "first-money", "resource-world-nether", "senluo-kitchen", "senluo-tavern", "money-making-guide", "lottery", "immersive-vehicles", "town-resources", "cheating-response", "behavior-chat", "world-map", "matopiraphai", "233-2233", "zzx", "northeast-economic-alliance", "rhodes-island", "harbin-chronicle", "freedom-union", "dprk", "ok", "qwertyuiop", "gallery-1", "gallery-2", "1", "alex", "666", "fish-text2"
   ];
 
   return {
