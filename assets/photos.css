@@ -185,7 +185,6 @@
 .photos-album-card:hover {
   border-color: var(--border-strong);
   box-shadow: var(--shadow-sm);
-  transform: translateY(-3px);
 }
 
 .photos-album-cover {
