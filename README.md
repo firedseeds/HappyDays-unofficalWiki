@@ -262,6 +262,9 @@ python server.py --host 127.0.0.1 --port 8765
 | PUT | `/api/home` | 保存首页图片权重和轮换间隔 |
 | POST | `/api/home/images` | 上传首页 PNG/JPG 图片，查询参数 `filename`、`weight` |
 | DELETE | `/api/home/images/<filename>` | 删除首页图片及配置条目 |
+| POST | `/api/photos/albums` | 创建相册，传 `name`、`folder`、`gallery` |
+| POST | `/api/photos/albums/<folder>/images` | 上传相册图片，查询参数 `filename` |
+| DELETE | `/api/photos/albums/<folder>/images/<filename>` | 删除相册图片 |
 | POST | `/api/articles` | 新建文章，必须传 `author` |
 | GET | `/api/titles` | 读取页眉标题配置 |
 | PUT | `/api/titles` | 保存页眉标题与权重 |
@@ -436,6 +439,53 @@ BGM/BGM.json
 - 上传成功后自动创建本地 Git commit（不会 push）
 - 纯静态部署可以读取 `BGM/BGM.json` 并播放已有音乐，但不能上传
 
+### 相册
+
+相册入口为 `/photos`，页面风格与知识库一致，左侧列出各图库，底部 `+` 用于添加相册。
+
+数据目录：
+
+```text
+photos/
+├─ photos.json           # 图库、相册、图片与顺序
+└─ <相册文件夹>/          # 相册图片
+```
+
+`photos/photos.json` 格式：
+
+```json
+{
+  "version": 1,
+  "galleries": [
+    {
+      "name": "默认图库",
+      "albums": [
+        {
+          "name": "测试相册",
+          "folder": "test-album",
+          "order": 1,
+          "images": [
+            { "file": "photo1.jpg", "order": 1 }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
+
+规则：
+
+- 图库名称显示在左侧导航
+- 添加相册时填写相册名称、相册文件夹名和所在图库
+- 相册和图片按 `order`（上传顺序）显示
+- 相册视图支持增删图片
+- 点击图片打开大图；第一张不显示「上一张」，最后一张不显示「下一张」
+- 相册页同样加载页眉滚动标题和 BGM 播放器
+- 新建相册、上传图片、删除图片都会在后台创建本地 Git commit，不会 push
+- 图片支持 `.png`、`.jpg`、`.jpeg`、`.webp`、`.gif`，单张最大 25MB
+
+
 ### 文章评论
 
 每篇文章底部都有评论区：
@@ -520,6 +570,7 @@ BGM/BGM.json
 │  ├─ home.json          # 首页图片文件名、权重与轮换间隔
 │  └─ 图片文件            # 首页轮换图片
 ├─ bank.html             # Bank 目录页模板，/bank/<id> 复用
+├─ photos.html           # 相册页面，映射到 /photos
 ├─ index.html            # 页面骨架、图标 sprite、阅读器 UI
 ├─ editor.html           # 本地内容管理界面
 ├─ build.py              # 从 article/ 生成 assets/data.js
@@ -533,6 +584,9 @@ BGM/BGM.json
 ├─ BGM/                  # 背景音乐文件目录
 │  ├─ BGM.json           # 背景音乐文件名、歌名与权重
 │  └─ 音乐文件            # mp3 / wav
+├─ photos/               # 相册数据与图片
+│  ├─ photos.json        # 图库、相册、图片文件名与顺序
+│  └─ <相册文件夹>/       # 相册图片
 ├─ comment/              # 评论元数据与每条评论的 Markdown 文件
 │  ├─ comment.json       # 各文章的评论索引
 │  └─ <slug>/<id>.md     # 单条评论正文
@@ -546,6 +600,8 @@ BGM/BGM.json
 │  ├─ home-base.css      # 首页/Bank 共用的基础视觉样式
 │  ├─ home.js            # 首页图片轮换、首页标题分区渲染
 │  ├─ bank.js            # Bank 层级目录与文章卡片
+│  ├─ photos.js          # 相册页面逻辑
+│  ├─ photos.css         # 相册页面样式
 │  ├─ site-common.js     # 首页/Bank 与知识库共用的主题同步
 │  ├─ bgm-player.js      # 首页/Bank 共用的 BGM 播放器
 │  └─ image/             # 迁移文章的本地图片
@@ -878,7 +934,7 @@ python build.py
 
 ## 部署
 
-网站入口分为三层：`/home` 是首页，`/bank/<标题ID>` 是层级目录，`/wiki/` 是非官方文档。`server.py` 会自动把 `/`、`/index.html`、`/home.html`、`/home/` 重定向到 `/home`，把 `/bank`、`/bank/` 重定向到 `/home`，把 `/wiki` 重定向到 `/wiki/`，并在内部把 `/wiki/...` 映射到项目文件。
+网站入口分为四层：`/home` 是首页，`/bank/<标题ID>` 是层级目录，`/wiki/` 是非官方文档，`/photos` 是相册。`server.py` 会自动把 `/`、`/index.html`、`/home.html`、`/home/` 重定向到 `/home`，把 `/bank`、`/bank/` 重定向到 `/home`，把 `/wiki` 重定向到 `/wiki/`，把 `/photos/`、`/photos.html` 重定向到 `/photos`，并在内部把 `/wiki/...` 映射到项目文件。
 
 这是一个运行时无框架依赖的静态项目。修改 `article/` 后先运行 `python build.py` 更新 `assets/data.js`，再把整个目录部署到 `/wiki/` 路径下，同时把 `/home` 映射到 `home/home.html`，把 `/bank/<id>` 重写到 `bank.html`。
 
@@ -925,6 +981,22 @@ location = /bank/ {
 
 location /bank/ {
     try_files /bank.html =404;
+}
+
+location = /photos {
+    try_files /photos.html =404;
+}
+
+location = /photos/ {
+    return 302 /photos;
+}
+
+location = /photos.html {
+    return 302 /photos;
+}
+
+location /photos/ {
+    alias /path/to/HappyDays-wiki/photos/;
 }
 
 location = /wiki {

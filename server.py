@@ -44,6 +44,8 @@ BGM_DIR = ROOT / "BGM"
 BGM_PATH = BGM_DIR / "BGM.json"
 HOME_DIR = ROOT / "home"
 HOME_PATH = HOME_DIR / "home.json"
+PHOTOS_DIR = ROOT / "photos"
+PHOTOS_PATH = PHOTOS_DIR / "photos.json"
 ARTICLE_ICON_DIR = ARTICLE_DIR / "icon"
 TITLE_PATH = ROOT / "title.json"
 IMAGE_DIR = ROOT / "assets" / "image"
@@ -53,6 +55,7 @@ BASE_PATH = "/wiki"
 MAX_REQUEST_BYTES = 2 * 1024 * 1024
 MAX_BGM_BYTES = 50 * 1024 * 1024
 MAX_HOME_IMAGE_BYTES = 20 * 1024 * 1024
+MAX_PHOTO_BYTES = 25 * 1024 * 1024
 MAX_ICON_BYTES = 10 * 1024 * 1024
 MAX_BODY_CHARS = 800_000
 SLUG_RE = re.compile(r"^[a-z0-9][a-z0-9-]{0,63}$")
@@ -336,6 +339,198 @@ def delete_bgm_track(filename: str) -> dict:
             "tracks": data["tracks"],
             "commit": {"committed": False, "pending": True},
         }
+
+
+def default_photos_config() -> dict:
+    return {"version": 1, "galleries": [{"name": "默认图库", "albums": []}]}
+
+
+def read_photos_config() -> dict:
+    if not PHOTOS_PATH.is_file():
+        return default_photos_config()
+    try:
+        data = json.loads(PHOTOS_PATH.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise ApiError(500, f"无法读取 photos/photos.json: {exc}")
+    if not isinstance(data, dict) or not isinstance(data.get("galleries"), list):
+        raise ApiError(500, "photos/photos.json 格式无效")
+    galleries = []
+    for gallery in data["galleries"]:
+        if not isinstance(gallery, dict) or not isinstance(gallery.get("name"), str):
+            raise ApiError(500, "photos/photos.json 图库格式无效")
+        albums = []
+        for album in gallery.get("albums", []):
+            if (
+                not isinstance(album, dict)
+                or not isinstance(album.get("name"), str)
+                or not isinstance(album.get("folder"), str)
+                or not isinstance(album.get("images", []), list)
+            ):
+                raise ApiError(500, "photos/photos.json 相册格式无效")
+            images = []
+            for image in album.get("images", []):
+                if not isinstance(image, dict) or not isinstance(image.get("file"), str):
+                    raise ApiError(500, "photos/photos.json 图片格式无效")
+                images.append(
+                    {
+                        "file": image["file"],
+                        "order": int(image.get("order", len(images) + 1)),
+                    }
+                )
+            images.sort(key=lambda item: (item["order"], item["file"]))
+            albums.append(
+                {
+                    "name": album["name"],
+                    "folder": album["folder"],
+                    "order": int(album.get("order", len(albums) + 1)),
+                    "images": images,
+                }
+            )
+        albums.sort(key=lambda item: (item["order"], item["folder"]))
+        galleries.append({"name": gallery["name"], "albums": albums})
+    if not galleries:
+        galleries = [{"name": "默认图库", "albums": []}]
+    return {"version": 1, "galleries": galleries}
+
+
+def write_photos_config(data: dict) -> None:
+    atomic_write(
+        PHOTOS_PATH,
+        json.dumps(data, ensure_ascii=False, indent=2) + "\n",
+    )
+
+
+def find_photo_album(data: dict, folder: str) -> tuple[dict | None, dict | None]:
+    for gallery in data["galleries"]:
+        for album in gallery["albums"]:
+            if album.get("folder") == folder:
+                return gallery, album
+    return None, None
+
+
+def add_photos_album(payload: dict) -> dict:
+    name = require_text(payload.get("name"), "相册名称", 80)
+    folder = str(payload.get("folder") or "").strip()
+    if not folder or "/" in folder or "\\" in folder or folder in (".", ".."):
+        raise ApiError(400, "相册文件夹名无效")
+    if len(folder) > 120 or any(ord(character) < 32 for character in folder):
+        raise ApiError(400, "相册文件夹名包含非法字符")
+    gallery_name = str(payload.get("gallery") or "").strip() or "默认图库"
+    if len(gallery_name) > 80 or any(ord(character) < 32 for character in gallery_name):
+        raise ApiError(400, "图库名称无效")
+    with LOCK:
+        data = read_photos_config()
+        _, existing = find_photo_album(data, folder)
+        if existing is not None:
+            raise ApiError(409, "相册文件夹名已存在")
+        target = (PHOTOS_DIR / folder).resolve()
+        try:
+            target.relative_to(PHOTOS_DIR.resolve())
+        except ValueError:
+            raise ApiError(400, "相册文件夹路径无效")
+        if target.exists() and any(target.iterdir()):
+            raise ApiError(409, "photos 目录中已存在同名非空文件夹")
+        target.mkdir(parents=True, exist_ok=True)
+        gallery = next((item for item in data["galleries"] if item["name"] == gallery_name), None)
+        if gallery is None:
+            gallery = {"name": gallery_name, "albums": []}
+            data["galleries"].append(gallery)
+        order = max((album.get("order", 0) for album in gallery["albums"]), default=0) + 1
+        album = {"name": name, "folder": folder, "order": order, "images": []}
+        gallery["albums"].append(album)
+        try:
+            write_photos_config(data)
+        except Exception:
+            raise
+        log_change(f"相册创建：{name}（文件夹={folder}，图库={gallery_name}）")
+        commit_in_background(
+            [PHOTOS_PATH],
+            f"docs: 创建相册「{name}」",
+            f"相册创建：{name}",
+        )
+        return {"ok": True, "album": album, "gallery": gallery_name}
+
+
+def upload_photos_image(folder: str, filename: str, image: bytes) -> dict:
+    folder = str(folder or "").strip()
+    filename = str(filename or "").strip()
+    if not folder or "/" in folder or "\\" in folder or folder in (".", ".."):
+        raise ApiError(400, "相册文件夹名无效")
+    if not filename or "/" in filename or "\\" in filename or filename in (".", ".."):
+        raise ApiError(400, "图片文件名无效")
+    if Path(filename).suffix.lower() not in (".png", ".jpg", ".jpeg", ".webp", ".gif"):
+        raise ApiError(400, "只支持 .png、.jpg、.jpeg、.webp、.gif 图片")
+    if not image:
+        raise ApiError(400, "图片文件不能为空")
+    with LOCK:
+        data = read_photos_config()
+        gallery, album = find_photo_album(data, folder)
+        if album is None:
+            raise ApiError(404, "相册不存在")
+        album_dir = (PHOTOS_DIR / folder).resolve()
+        try:
+            album_dir.relative_to(PHOTOS_DIR.resolve())
+        except ValueError:
+            raise ApiError(400, "相册文件夹路径无效")
+        album_dir.mkdir(parents=True, exist_ok=True)
+        target = album_dir / filename
+        if target.exists():
+            raise ApiError(409, "相册中已存在同名图片")
+        order = max((item.get("order", 0) for item in album["images"]), default=0) + 1
+        image_item = {"file": filename, "order": order}
+        try:
+            atomic_write_bytes(target, image)
+            album["images"].append(image_item)
+            write_photos_config(data)
+        except Exception:
+            if target.exists():
+                target.unlink()
+            raise
+        log_change(f"相册图片上传：{album['name']} / {filename}（本地提交转到后台）")
+        commit_in_background(
+            [target, PHOTOS_PATH],
+            f"docs: 上传相册图片「{album['name']} / {filename}」",
+            f"相册图片上传：{album['name']} / {filename}",
+        )
+        return {"ok": True, "album": album, "image": image_item}
+
+
+def delete_photos_image(folder: str, filename: str) -> dict:
+    folder = str(folder or "").strip()
+    filename = str(filename or "").strip()
+    if not folder or "/" in folder or "\\" in folder or folder in (".", ".."):
+        raise ApiError(400, "相册文件夹名无效")
+    if not filename or "/" in filename or "\\" in filename or filename in (".", ".."):
+        raise ApiError(400, "图片文件名无效")
+    with LOCK:
+        data = read_photos_config()
+        gallery, album = find_photo_album(data, folder)
+        if album is None:
+            raise ApiError(404, "相册不存在")
+        target = (PHOTOS_DIR / folder / filename).resolve()
+        try:
+            target.relative_to(PHOTOS_DIR.resolve())
+        except ValueError:
+            raise ApiError(400, "图片路径无效")
+        if not target.is_file():
+            raise ApiError(404, "图片不存在")
+        config_snapshot = PHOTOS_PATH.read_bytes()
+        audio_snapshot = target.read_bytes()
+        album["images"] = [item for item in album["images"] if item.get("file") != filename]
+        try:
+            write_photos_config(data)
+            target.unlink()
+        except Exception:
+            atomic_write(PHOTOS_PATH, config_snapshot.decode("utf-8"))
+            atomic_write_bytes(target, audio_snapshot)
+            raise
+        log_change(f"相册图片删除：{album['name']} / {filename}（本地提交转到后台）")
+        commit_in_background(
+            [target, PHOTOS_PATH],
+            f"docs: 删除相册图片「{album['name']} / {filename}」",
+            f"相册图片删除：{album['name']} / {filename}",
+        )
+        return {"ok": True, "album": album, "deleted": filename}
 
 
 def read_home_config() -> dict:
@@ -1952,6 +2147,8 @@ class EditorHandler(SimpleHTTPRequestHandler):
         stripped = strip_base_path(unquote(parsed.path))
         if stripped == "/home":
             stripped = "/home/home.html"
+        if stripped == "/photos":
+            stripped = "/photos.html"
         if re.fullmatch(r"/bank/[a-z0-9-]+/?", stripped):
             stripped = "/bank.html"
         if parsed.query:
@@ -2003,6 +2200,11 @@ class EditorHandler(SimpleHTTPRequestHandler):
             return
         if request_path in ("/bank", "/bank/"):
             self.redirect_to_home()
+            return
+        if request_path in ("/photos/", "/photos.html"):
+            self.send_response(302)
+            self.send_header("Location", "/photos")
+            self.end_headers()
             return
         if request_path == "/favicon.ico":
             self.send_response(302)
@@ -2091,6 +2293,30 @@ class EditorHandler(SimpleHTTPRequestHandler):
     def do_POST(self) -> None:
         path = strip_base_path(unquote(urlparse(self.path).path))
         try:
+            if path == "/api/photos/albums":
+                payload = self.read_json()
+                self.send_json(200, add_photos_album(payload))
+                return
+            photo_image_match = re.fullmatch(r"/api/photos/albums/([^/]+)/images", path)
+            if photo_image_match:
+                try:
+                    length = int(self.headers.get("Content-Length", "0"))
+                except ValueError:
+                    raise ApiError(400, "Content-Length 无效")
+                if length <= 0:
+                    raise ApiError(400, "图片文件不能为空")
+                if length > MAX_PHOTO_BYTES:
+                    raise ApiError(413, "图片文件不能超过 25MB")
+                image = self.rfile.read(length)
+                if len(image) != length:
+                    raise ApiError(400, "图片文件上传不完整")
+                query = parse_qs(urlparse(self.path).query)
+                filename = query.get("filename", [""])[0]
+                self.send_json(
+                    200,
+                    upload_photos_image(photo_image_match.group(1), filename, image),
+                )
+                return
             icon_match = re.fullmatch(r"/api/articles/([a-z0-9-]+)/icon", path)
             if icon_match:
                 try:
@@ -2195,6 +2421,13 @@ class EditorHandler(SimpleHTTPRequestHandler):
             if path.startswith("/api/home/images/"):
                 filename = path[len("/api/home/images/"):]
                 self.send_json(200, delete_home_image(filename))
+                return
+            photo_image_match = re.fullmatch(r"/api/photos/albums/([^/]+)/images/([^/]+)", path)
+            if photo_image_match:
+                self.send_json(
+                    200,
+                    delete_photos_image(photo_image_match.group(1), photo_image_match.group(2)),
+                )
                 return
             article_match = re.fullmatch(r"/api/articles/([a-z0-9-]+)", path)
             if article_match:

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>相册 · HappyDays轨道交通服务器</title>
+		<meta name="description" content="HappyDays轨道交通服务器相册。">
+		<link rel="icon" type="image/png" href="/icon.png?v=2">
+		<script>
+			(function () {
+				try {
+					var saved = localStorage.getItem("happydays-theme");
+					if (saved === "dark" || saved === "light") {
+						document.documentElement.setAttribute("data-theme", saved);
+					}
+				} catch (error) {
+					/* 忽略隐私模式下的 localStorage 错误 */
+				}
+			})();
+		</script>
+		<link rel="stylesheet" href="/assets/styles.css">
+		<link rel="stylesheet" href="/assets/title-format.css">
+		<link rel="stylesheet" href="/assets/bgm.css">
+		<link rel="stylesheet" href="/assets/photos.css">
+	</head>
+	<body class="photos-page">
+		<div class="app photos-app">
+			<aside class="sidebar photos-sidebar" id="photosSidebar">
+				<div class="sidebar-head">
+					<a class="brand" href="/home" aria-label="返回首页">
+						<img class="photos-brand-icon" src="/icon.png" alt="">
+						<span class="brand-copy">
+							<span class="brand-name">HappyDays</span>
+							<span class="brand-suffix">相册</span>
+						</span>
+					</a>
+				</div>
+				<div class="sidebar-scroll">
+					<div class="nav-section">
+						<div class="nav-section-head">
+							<span class="nav-section-title">图库</span>
+							<span class="nav-section-count" id="photosGalleryCount"></span>
+						</div>
+						<nav class="photos-galleries" id="photosGalleries" aria-label="图库列表"></nav>
+					</div>
+				</div>
+				<button class="photos-add-album" id="photosAddAlbum" type="button" title="添加相册" aria-label="添加相册" hidden>+</button>
+			</aside>
+
+			<div class="app-main">
+				<header class="topbar photos-topbar">
+					<div class="topbar-left">
+						<button class="icon-button menu-button" id="photosMenu" type="button" aria-label="展开图库导航" aria-controls="photosSidebar" aria-expanded="false">☰</button>
+						<nav class="breadcrumbs photos-breadcrumbs" aria-label="面包屑">
+							<a class="crumb-home" href="/home">HappyDays</a>
+							<span class="crumb-chevron">/</span>
+							<a class="crumb-category" id="photosCrumbGallery" href="/photos">相册</a>
+							<span class="crumb-chevron" id="photosCrumbDivider" hidden>/</span>
+							<span class="crumb-current" id="photosCrumbAlbum" hidden></span>
+						</nav>
+					</div>
+					<div class="title-roll" id="photosTitleRoll" aria-label="站点标题">
+						<span class="title-roll-window">
+							<span class="title-roll-text" id="photosTitleText">HappyDays 非官方文档</span>
+						</span>
+					</div>
+					<div class="topbar-actions">
+						<button class="icon-button theme-toggle js-theme-toggle" id="photosThemeBtn" type="button" aria-label="切换到夜间模式">
+							<svg class="icon icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M12 2.8v2.1M12 19.1v2.1M4.5 4.5 6 6M18 18l1.5 1.5M2.8 12h2.1M19.1 12h2.1M4.5 19.5 6 18M18 6l1.5-1.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+							<svg class="icon icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.2 14.2A8.1 8.1 0 0 1 9.8 3.8a8.1 8.1 0 1 0 10.4 10.4Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+						</button>
+					</div>
+				</header>
+
+				<main class="main photos-main">
+					<div class="photos-content" id="photosContent"></div>
+				</main>
+			</div>
+		</div>
+
+		<dialog class="photos-dialog" id="photosAlbumDialog" aria-labelledby="photosAlbumDialogTitle">
+			<form class="photos-dialog-form" id="photosAlbumForm">
+				<header class="photos-dialog-head">
+					<div>
+						<p class="photos-eyebrow">Photo library</p>
+						<h2 id="photosAlbumDialogTitle">添加相册</h2>
+					</div>
+					<button class="photos-dialog-close" id="photosAlbumCancelX" type="button" aria-label="关闭">×</button>
+				</header>
+				<div class="photos-dialog-body">
+					<label class="photos-field">
+						<span>相册名称</span>
+						<input id="photosAlbumName" type="text" maxlength="80" required placeholder="例如：第一次远行">
+					</label>
+					<label class="photos-field">
+						<span>相册文件夹名</span>
+						<input id="photosAlbumFolder" type="text" maxlength="120" required placeholder="例如：first-trip">
+					</label>
+					<label class="photos-field">
+						<span>所在图库</span>
+						<select id="photosAlbumGallery"></select>
+					</label>
+					<p class="photos-dialog-status" id="photosAlbumStatus"></p>
+				</div>
+				<footer class="photos-dialog-actions">
+					<button class="photos-secondary" id="photosAlbumCancel" type="button">取消</button>
+					<button class="photos-primary" id="photosAlbumSubmit" type="submit">创建相册</button>
+				</footer>
+			</form>
+		</dialog>
+
+		<dialog class="photos-lightbox" id="photosLightbox" aria-label="查看大图">
+			<button class="photos-lightbox-close" id="photosLightboxClose" type="button" aria-label="关闭">×</button>
+			<button class="photos-lightbox-nav photos-lightbox-prev" id="photosLightboxPrev" type="button" aria-label="上一张">‹</button>
+			<img id="photosLightboxImage" alt="">
+			<button class="photos-lightbox-nav photos-lightbox-next" id="photosLightboxNext" type="button" aria-label="下一张">›</button>
+			<p class="photos-lightbox-caption" id="photosLightboxCaption"></p>
+		</dialog>
+
+		<input id="photosImageInput" type="file" accept=".png,.jpg,.jpeg,.webp,.gif,image/*" multiple hidden>
+		<div class="photos-toast" id="photosToast" hidden></div>
+		<div id="bgmMount"></div>
+
+		<script src="/assets/title-format.js" defer></script>
+		<script src="/assets/site-common.js" defer></script>
+		<script src="/assets/bgm-player.js" defer></script>
+		<script src="/assets/photos.js" defer></script>
+	</body>
+</html>
