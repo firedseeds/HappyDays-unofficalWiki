@@ -504,7 +504,7 @@ window.HAPPYDAYS_WIKI = (function () {
       emoji: "📜",
       category: "rules",
       excerpt: "2.1 命名国家名称：可以是虚构的，尽量不要与当前的国...",
-      icon: "/icon.png",
+      icon: "/article/icon/behavior-chat.png",
       updated: "2026-10-25",
       reading: 3,
       tags: [],
