@@ -832,7 +832,7 @@ window.HAPPYDAYS_WIKI = (function () {
       emoji: "📄",
       category: "people",
       excerpt: "孙笑川一般的存在",
-      icon: "/icon.png",
+      icon: "/article/icon/fish-text3.png",
       updated: "2026-10-28",
       reading: 5,
       tags: ["老资历", "活跃玩家"],
