@@ -260,6 +260,7 @@ python server.py --host 127.0.0.1 --port 8765
 | GET | `/api/home` | 读取首页图片配置 |
 | PUT | `/api/home` | 保存首页图片权重和轮换间隔 |
 | POST | `/api/home/images` | 上传首页 PNG/JPG 图片，查询参数 `filename`、`weight` |
+| DELETE | `/api/home/images/<filename>` | 删除首页图片及配置条目 |
 | POST | `/api/articles` | 新建文章，必须传 `author` |
 | GET | `/api/titles` | 读取页眉标题配置 |
 | PUT | `/api/titles` | 保存页眉标题与权重 |
@@ -384,7 +385,7 @@ Bank 文章卡片右上角有「显示目录 / 隐藏目录」切换，用于控
 }
 ```
 
-点击「编辑图片」可以修改轮换间隔、各图片权重，并上传新图片。保存和上传会创建本地 Git commit，不会 push；图片上传先返回结果，本地提交在后台执行，避免 Git 卡住页面。
+点击「编辑图片」会列出所有图片、缩略图和当前权重，可以修改权重、删除图片或上传新图片。保存和上传会创建本地 Git commit，不会 push；图片上传先返回结果，本地提交在后台执行，避免 Git 卡住页面。
 
 ### 背景音乐
 

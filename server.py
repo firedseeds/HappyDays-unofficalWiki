@@ -418,6 +418,44 @@ def add_home_image(payload: dict, image: bytes) -> dict:
         }
 
 
+def delete_home_image(filename: str) -> dict:
+    filename = str(filename or "").strip()
+    if not filename or "/" in filename or "\\" in filename or filename in (".", ".."):
+        raise ApiError(400, "图片文件名无效")
+    if Path(filename).suffix.lower() not in (".png", ".jpg", ".jpeg"):
+        raise ApiError(400, "只支持 .png、.jpg、.jpeg 图片")
+    with LOCK:
+        target = HOME_DIR / filename
+        if not target.is_file():
+            raise ApiError(404, "图片不存在")
+        data = read_home_config()
+        remaining = [item for item in data["images"] if item.get("file") != filename]
+        if len(remaining) == len(data["images"]):
+            raise ApiError(404, "图片不在首页配置中")
+        image_snapshot = target.read_bytes()
+        config_snapshot = HOME_PATH.read_bytes()
+        try:
+            data["images"] = remaining
+            write_home_config(data)
+            target.unlink()
+        except Exception:
+            atomic_write_bytes(target, image_snapshot)
+            atomic_write(HOME_PATH, config_snapshot.decode("utf-8"))
+            raise
+        log_change(f"首页图片删除完成：{filename}（Git 提交转到后台）")
+        commit_in_background(
+            [target, HOME_PATH],
+            f"docs: 删除首页图片「{filename}」",
+            f"首页图片删除：{filename}",
+        )
+        return {
+            "ok": True,
+            "deleted": filename,
+            "config": data,
+            "commit": {"committed": False, "pending": True},
+        }
+
+
 def upload_article_icon(slug: str, filename: str, image: bytes) -> dict:
     suffix = Path(filename).suffix.lower()
     if suffix not in (".png", ".jpg", ".jpeg"):
@@ -2112,6 +2150,10 @@ class EditorHandler(SimpleHTTPRequestHandler):
     def do_DELETE(self) -> None:
         path = strip_base_path(unquote(urlparse(self.path).path))
         try:
+            if path.startswith("/api/home/images/"):
+                filename = path[len("/api/home/images/"):]
+                self.send_json(200, delete_home_image(filename))
+                return
             article_match = re.fullmatch(r"/api/articles/([a-z0-9-]+)", path)
             if article_match:
                 self.send_json(200, delete_article(article_match.group(1)))

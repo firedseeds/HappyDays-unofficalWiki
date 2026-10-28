@@ -515,9 +515,22 @@ body.hero-focus .site-header {
 
 .home-image-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 92px;
+  grid-template-columns: 38px minmax(0, 1fr) 88px 28px;
   align-items: center;
-  gap: 10px;
+  gap: 9px;
+}
+
+.home-image-thumb {
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  object-fit: cover;
+  background: var(--color-card-soft);
+}
+
+.home-image-info {
+  min-width: 0;
 }
 
 .home-image-name {
@@ -526,6 +539,25 @@ body.hero-focus .site-header {
   font-size: 10.5px;
   white-space: nowrap;
   text-overflow: ellipsis;
+}
+
+.home-image-remove {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--color-muted);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.home-image-remove:hover {
+  border-color: rgba(210, 85, 85, 0.28);
+  background: rgba(210, 85, 85, 0.08);
+  color: #d25555;
 }
 
 .home-image-row input {

@@ -271,10 +271,22 @@
     state.config.images.forEach(function (image) {
       var row = document.createElement("div");
       row.className = "home-image-row";
+      var thumb = document.createElement("img");
+      thumb.className = "home-image-thumb";
+      thumb.src = imageUrl(image.file);
+      thumb.alt = "";
+      thumb.loading = "lazy";
+      thumb.onerror = function () {
+        thumb.onerror = null;
+        thumb.src = "/icon.png";
+      };
+      var info = document.createElement("div");
+      info.className = "home-image-info";
       var name = document.createElement("span");
       name.className = "home-image-name";
       name.textContent = image.file;
       name.title = image.file;
+      info.appendChild(name);
       var weight = document.createElement("input");
       weight.type = "number";
       weight.min = "0.1";
@@ -283,9 +295,43 @@
       weight.value = String(image.weight);
       weight.dataset.file = image.file;
       weight.setAttribute("aria-label", image.file + " 的权重");
-      row.appendChild(name);
+      var remove = document.createElement("button");
+      remove.type = "button";
+      remove.className = "home-image-remove";
+      remove.textContent = "×";
+      remove.title = "删除这张图片";
+      remove.setAttribute("aria-label", "删除 " + image.file);
+      remove.addEventListener("click", function () {
+        deleteHomeImage(image.file);
+      });
+      row.appendChild(thumb);
+      row.appendChild(info);
       row.appendChild(weight);
+      row.appendChild(remove);
       els.list.appendChild(row);
+    });
+  }
+
+  function deleteHomeImage(file) {
+    if (!window.confirm("确定删除图片「" + file + "」吗？")) {
+      return;
+    }
+    setStatus("删除中…");
+    fetch("/api/home/images/" + encodeURIComponent(file), {
+      method: "DELETE"
+    }).then(function (response) {
+      return response.json().catch(function () { return {}; }).then(function (data) {
+        if (!response.ok) {
+          throw new Error(data.error || "删除失败");
+        }
+        return data;
+      });
+    }).then(function (data) {
+      applyConfig(normalizeConfig(data));
+      renderEditorRows();
+      setStatus("图片已删除");
+    }).catch(function (error) {
+      setStatus(error.message, true);
     });
   }
 
