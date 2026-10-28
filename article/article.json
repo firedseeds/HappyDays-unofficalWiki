@@ -378,7 +378,7 @@
     },
     {
       "slug": "harbin-chronicle",
-      "order": 23,
+      "order": 24,
       "topic": "nations",
       "title": "哈尔滨地方志",
       "description": "详见zzx人物志",
@@ -406,7 +406,7 @@
     },
     {
       "slug": "freedom-union",
-      "order": 24,
+      "order": 23,
       "topic": "nations",
       "title": "自由联邦共同体 Freedom Union",
       "description": "此国家由 瑞士联邦 和 CALIFORNIA 合并而成...",
