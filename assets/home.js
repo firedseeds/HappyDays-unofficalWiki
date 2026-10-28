@@ -74,6 +74,12 @@
     state.heroHeight = rect.height;
     state.viewportHeight = window.innerHeight;
     els.hero.style.setProperty("--hero-base-height", Math.round(rect.height) + "px");
+    var frame = els.hero.closest(".hero-frame");
+    if (frame) {
+      frame.style.setProperty("--hero-base-height", Math.round(rect.height) + "px");
+      var header = document.querySelector(".site-header");
+      frame.style.setProperty("--hero-header-height", (header ? header.offsetHeight : 0) + "px");
+    }
     els.hero.style.setProperty("--hero-image-w", Math.round(rect.width) + "px");
     els.hero.style.setProperty("--hero-image-h", Math.round(rect.height) + "px");
     state.heroLocked = true;
@@ -140,6 +146,11 @@
     els.hero.classList.remove("has-image");
     els.hero.style.removeProperty("--hero-hover-height");
     els.hero.style.removeProperty("--hero-base-height");
+    var frame = els.hero.closest(".hero-frame");
+    if (frame) {
+      frame.style.removeProperty("--hero-base-height");
+      frame.style.removeProperty("--hero-header-height");
+    }
     els.hero.style.removeProperty("--hero-image-w");
     els.hero.style.removeProperty("--hero-image-h");
     els.placeholder.hidden = false;

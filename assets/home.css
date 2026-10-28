@@ -213,8 +213,17 @@
   background: rgba(0, 0, 0, 0.62);
 }
 
+html {
+  scrollbar-gutter: stable;
+}
+
 .hero-frame {
   position: relative;
+  min-height: var(--hero-base-height, 0);
+}
+
+body.hero-focus .hero-frame {
+  min-height: calc(var(--hero-base-height, 0px) + var(--hero-header-height, 0px));
 }
 
 .hero-section .hero {
