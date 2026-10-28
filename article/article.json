@@ -9,7 +9,7 @@
     "domain": "114.55.99.2:8000"
   },
   "topicCount": 9,
-  "articleCount": 33,
+  "articleCount": 34,
   "lastUpdated": "2026-10-28",
   "topics": [
     {
@@ -70,7 +70,7 @@
       "parentId": "history",
       "order": 1,
       "emoji": "👤",
-      "articleCount": 4
+      "articleCount": 5
     },
     {
       "id": "nations",
@@ -364,32 +364,6 @@
       "source": "/wiki/#/doc/zzx"
     },
     {
-      "slug": "northeast-economic-alliance",
-      "order": 24,
-      "topic": "nations",
-      "title": "泛东北经济同盟",
-      "description": "此文档在语雀中暂无正文。",
-      "emoji": "📖",
-      "updated": "2026-10-25",
-      "readingTime": 1,
-      "tags": [],
-      "file": "history/nations/northeast-economic-alliance.md",
-      "source": "/wiki/#/doc/northeast-economic-alliance"
-    },
-    {
-      "slug": "harbin-chronicle",
-      "order": 25,
-      "topic": "nations",
-      "title": "哈尔滨地方志",
-      "description": "详见zzx人物志",
-      "emoji": "📖",
-      "updated": "2026-10-25",
-      "readingTime": 1,
-      "tags": [],
-      "file": "history/nations/harbin-chronicle.md",
-      "source": "/wiki/#/doc/harbin-chronicle"
-    },
-    {
       "slug": "rhodes-island",
       "order": 21,
       "topic": "nations",
@@ -429,6 +403,32 @@
       "tags": [],
       "file": "history/nations/dprk.md",
       "source": "/wiki/#/doc/dprk"
+    },
+    {
+      "slug": "northeast-economic-alliance",
+      "order": 24,
+      "topic": "nations",
+      "title": "泛东北经济同盟",
+      "description": "此文档在语雀中暂无正文。",
+      "emoji": "📖",
+      "updated": "2026-10-25",
+      "readingTime": 1,
+      "tags": [],
+      "file": "history/nations/northeast-economic-alliance.md",
+      "source": "/wiki/#/doc/northeast-economic-alliance"
+    },
+    {
+      "slug": "harbin-chronicle",
+      "order": 25,
+      "topic": "nations",
+      "title": "哈尔滨地方志",
+      "description": "详见zzx人物志",
+      "emoji": "📖",
+      "updated": "2026-10-25",
+      "readingTime": 1,
+      "tags": [],
+      "file": "history/nations/harbin-chronicle.md",
+      "source": "/wiki/#/doc/harbin-chronicle"
     },
     {
       "slug": "ok",
@@ -535,6 +535,22 @@
       ],
       "file": "advanced/fish-text2.md",
       "source": "/wiki/#/doc/fish-text2"
+    },
+    {
+      "slug": "fish-text3",
+      "order": 35,
+      "topic": "people",
+      "title": "fish",
+      "description": "孙笑川一般的存在",
+      "emoji": "📄",
+      "updated": "2026-10-28",
+      "readingTime": 5,
+      "tags": [
+        "老资历",
+        "活跃玩家"
+      ],
+      "file": "history/people/fish-text3.md",
+      "source": "/wiki/#/doc/fish-text3"
     }
   ]
 }

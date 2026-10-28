@@ -53,7 +53,7 @@ window.HAPPYDAYS_WIKI = (function () {
       description: "服务器玩家与人物记录。",
       parentId: "history",
       order: 1,
-      docs: ["matopiraphai", "233-2233", "zzx", "1"]
+      docs: ["matopiraphai", "233-2233", "zzx", "1", "fish-text3"]
     },
     {
       id: "nations",
@@ -826,11 +826,23 @@ window.HAPPYDAYS_WIKI = (function () {
       content: `<h2>使用方法</h2>
 <p>装上mod后第一次进游戏会有提示</p>
 <p><del>剩下以后再补充</del></p>`
+    },
+    "fish-text3": {
+      title: "fish",
+      emoji: "📄",
+      category: "people",
+      excerpt: "孙笑川一般的存在",
+      icon: "/icon.png",
+      updated: "2026-10-28",
+      reading: 5,
+      tags: ["老资历", "活跃玩家"],
+      signatures: [{"author": "fish", "at": "2026-10-28T23:49:26+08:00", "action": "create", "title": "fish", "topic": "人物志"}],
+      content: `<p><strong>服务器老资历，人见人爱，花见花开，热心善良，助人为乐，和蔼可亲，宽容大度，<del>无恶不作，邪恶至极，阴险狡诈，逼良为娼（？，止小儿夜啼，孙笑川在世，屁股烫开花，多看一眼就会爆炸</del></strong></p>`
     }
   };
 
   var allIds = [
-    "intro", "before-joining", "first-arrival", "shop-plugin", "build-town", "about-nations", "first-money", "resource-world-nether", "senluo-kitchen", "senluo-tavern", "money-making-guide", "lottery", "immersive-vehicles", "town-resources", "cheating-response", "behavior-chat", "world-map", "matopiraphai", "233-2233", "zzx", "rhodes-island", "freedom-union", "dprk", "northeast-economic-alliance", "harbin-chronicle", "ok", "qwertyuiop", "gallery-1", "gallery-2", "1", "alex", "666", "fish-text2"
+    "intro", "before-joining", "first-arrival", "shop-plugin", "build-town", "about-nations", "first-money", "resource-world-nether", "senluo-kitchen", "senluo-tavern", "money-making-guide", "lottery", "immersive-vehicles", "town-resources", "cheating-response", "behavior-chat", "world-map", "matopiraphai", "233-2233", "zzx", "rhodes-island", "freedom-union", "dprk", "northeast-economic-alliance", "harbin-chronicle", "ok", "qwertyuiop", "gallery-1", "gallery-2", "1", "alex", "666", "fish-text2", "fish-text3"
   ];
 
   return {
