@@ -3,10 +3,6 @@
   "intervalSeconds": 3,
   "images": [
     {
-      "file": "640.jpg",
-      "weight": 1
-    },
-    {
       "file": "A8A4903BFF37EFFC88903219CC9AA3D2.jpg",
       "weight": 1
     },
