@@ -1,10 +1,5 @@
 {
   "version": 1,
   "intervalSeconds": 3,
-  "images": [
-    {
-      "file": "jianjie.jpeg",
-      "weight": 1
-    }
-  ]
+  "images": []
 }
