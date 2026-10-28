@@ -6,7 +6,7 @@ topic_id: "nations"
 updated: "2026-10-25"
 reading_time: 1
 emoji: "📖"
-order: 25
+order: 24
 slug: "dprk"
 source: "/wiki/#/doc/dprk"
 tags:
