@@ -6,7 +6,7 @@ topic_id: "advanced"
 updated: "2026-10-28"
 reading_time: 5
 emoji: "📄"
-order: 34
+order: 35
 slug: "fish-text2"
 source: "/wiki/#/doc/fish-text2"
 tags:

@@ -9,8 +9,13 @@
     "domain": "114.55.99.2:8000"
   },
   "topicCount": 9,
-  "articleCount": 33,
+<<<<<<< HEAD
+  "articleCount": 32,
+  "lastUpdated": "2026-10-26",
+=======
+  "articleCount": 34,
   "lastUpdated": "2026-10-28",
+>>>>>>> ad3bae0 (docs: 新建「简单语音」（fish）)
   "topics": [
     {
       "id": "intro",
@@ -520,10 +525,27 @@
       "tags": [],
       "file": "history/godman/666.md",
       "source": "/wiki/#/doc/666"
+<<<<<<< HEAD
+=======
+    },
+    {
+      "slug": "fish-text",
+      "order": 34,
+      "topic": "people",
+      "title": "fish",
+      "description": "服务器孙笑川",
+      "emoji": "📄",
+      "updated": "2026-10-28",
+      "readingTime": 1,
+      "tags": [
+        "老资历"
+      ],
+      "file": "history/people/fish-text.md",
+      "source": "/wiki/#/doc/fish-text"
     },
     {
       "slug": "fish-text2",
-      "order": 34,
+      "order": 35,
       "topic": "advanced",
       "title": "简单语音",
       "description": "选装mod，可以和一定范围内装了此mod的玩家进行语音通话",
@@ -535,6 +557,7 @@
       ],
       "file": "advanced/fish-text2.md",
       "source": "/wiki/#/doc/fish-text2"
+>>>>>>> ad3bae0 (docs: 新建「简单语音」（fish）)
     }
   ]
 }
