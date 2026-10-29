@@ -274,14 +274,6 @@ body.hero-focus .site-header {
     linear-gradient(135deg, #3a3a3a 0%, #1a1a1a 100%);
 }
 
-.hero-media::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.42));
-  pointer-events: none;
-}
-
 .hero-media img {
   position: absolute;
   top: 50%;
