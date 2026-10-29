@@ -341,6 +341,12 @@ body.hero-focus .site-header {
 .hero-caption {
   position: relative;
   z-index: 2;
+  transition: opacity 220ms ease;
+}
+
+.hero:hover .hero-caption,
+body.hero-focus .hero-caption {
+  opacity: 0;
 }
 
 .hero-edit {
