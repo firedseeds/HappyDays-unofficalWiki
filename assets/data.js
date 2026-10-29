@@ -183,7 +183,7 @@ window.HAPPYDAYS_WIKI = (function () {
       updated: "2026-10-25",
       reading: 3,
       tags: [],
-      signatures: [],
+      signatures: [{"author": "smillfox", "at": "2026-10-29T21:05:13+08:00", "action": "update", "title": "商店插件", "topic": "新手教程"}],
       content: `<p>本服务器使用QuickShop插件，如何使用请看下文：</p>
 <h2>认识商店</h2>
 <h3>商店由什么组成?</h3>

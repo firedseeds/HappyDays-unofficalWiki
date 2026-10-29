@@ -533,6 +533,15 @@
         "title": "fish",
         "topic": "人物志"
       }
+    ],
+    "shop-plugin": [
+      {
+        "author": "smillfox",
+        "at": "2026-10-29T21:05:13+08:00",
+        "action": "update",
+        "title": "商店插件",
+        "topic": "新手教程"
+      }
     ]
   }
 }
