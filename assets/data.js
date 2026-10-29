@@ -179,7 +179,7 @@ window.HAPPYDAYS_WIKI = (function () {
       emoji: "🌱",
       category: "beginner",
       excerpt: "本服务器使用QuickShop插件，如何使用请看下文：...",
-      icon: "/icon.png",
+      icon: "/article/icon/shop-plugin.jpg",
       updated: "2026-10-25",
       reading: 3,
       tags: [],
