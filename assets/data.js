@@ -345,7 +345,7 @@ window.HAPPYDAYS_WIKI = (function () {
       emoji: "🧭",
       category: "advanced",
       excerpt: "此文档在语雀中暂无正文。",
-      icon: "/icon.png",
+      icon: "/article/icon/senluo-tavern.png",
       updated: "2026-10-25",
       reading: 1,
       tags: [],
