@@ -349,7 +349,7 @@ window.HAPPYDAYS_WIKI = (function () {
       updated: "2026-10-25",
       reading: 1,
       tags: [],
-      signatures: [{"author": "smillfox", "at": "2026-10-27T22:30:38+08:00", "action": "update", "title": "森罗物语：酒馆", "topic": "进阶教程"}],
+      signatures: [{"author": "smillfox", "at": "2026-10-27T22:30:38+08:00", "action": "update", "title": "森罗物语：酒馆", "topic": "进阶教程"}, {"author": "zzx", "at": "2026-10-30T21:23:48+08:00", "action": "update", "title": "森罗物语：酒馆", "topic": "进阶教程"}],
       content: `<p>此文档在语雀中暂无正文。</p>`
     },
     "money-making-guide": {
